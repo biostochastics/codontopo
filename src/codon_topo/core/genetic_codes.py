@@ -1,4 +1,4 @@
-"""All 23 NCBI translation tables.
+"""NCBI translation tables.
 
 Reference: https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 """
