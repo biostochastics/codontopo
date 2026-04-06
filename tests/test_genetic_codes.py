@@ -20,7 +20,7 @@ def test_all_table_ids():
     ids = all_table_ids()
     assert 1 in ids
     assert 2 in ids
-    assert len(ids) == 24
+    assert len(ids) == 25
 
 def test_get_code_table1_is_standard():
     assert get_code(1) == STANDARD

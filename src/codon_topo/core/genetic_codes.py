@@ -35,6 +35,7 @@ _CODES: dict[int, tuple[str, dict[str, str]]] = {
     12: ("Alternative Yeast Nuclear", {'CUG':'Ser'}),
     13: ("Ascidian Mitochondrial", {'AGA':'Gly','AGG':'Gly','AUA':'Met','UGA':'Trp'}),
     14: ("Alternative Flatworm Mito", {'AAA':'Asn','AGA':'Ser','AGG':'Ser','UAA':'Tyr','UGA':'Trp'}),
+    15: ("Blepharisma Macronuclear", {'UAG':'Gln'}),
     16: ("Chlorophycean Mito", {'UAG':'Leu'}),
     21: ("Trematode Mitochondrial", {'AAA':'Asn','AGA':'Ser','AGG':'Ser','AUA':'Met','UGA':'Trp'}),
     22: ("Scenedesmus obliquus Mito", {'UAG':'Leu','UCA':'Stop'}),

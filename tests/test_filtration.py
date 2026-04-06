@@ -23,7 +23,7 @@ def test_fourfold_standard_all_pass():
     for aa, passed in results:
         assert passed, f"{aa} failed four-fold check"
 
-@pytest.mark.parametrize("table_id", [1,2,3,4,5,6,9,10,11,12,13,14,16,21,22,23,24,25,26,27,29,30,31,33])
+@pytest.mark.parametrize("table_id", all_table_ids())
 def test_twofold_universal(table_id):
     """Two-fold filtration is 100% invariant across all 24 codes."""
     code = get_code(table_id)
