@@ -180,19 +180,27 @@ class CBioPortalClient:
         self,
         study_id: str = "msk_impact_2017",
     ) -> list[dict]:
-        """Fetch KRAS mutations from a cBioPortal study."""
+        """Fetch KRAS mutations from a cBioPortal study.
+
+        Uses the /mutations/fetch POST endpoint which accepts a filter
+        specifying the gene and sample list.
+        """
         if self.offline:
             return []
 
         import requests  # type: ignore[import-untyped]
 
-        url = f"{self.base_url}/molecular-profiles/{study_id}_mutations/mutations"
-        params = {
-            "entrezGeneId": 3845,
-            "projection": "DETAILED",
+        url = f"{self.base_url}/molecular-profiles/{study_id}_mutations/mutations/fetch"
+        params = {"projection": "DETAILED"}
+        body = {
+            "entrezGeneIds": [3845],
+            "sampleListId": f"{study_id}_all",
         }
         try:
-            resp = requests.get(url, params=params, timeout=30)
+            resp = requests.post(
+                url, json=body, params=params, timeout=60,
+                headers={"Content-Type": "application/json"},
+            )
             resp.raise_for_status()
             return resp.json()
         except requests.exceptions.RequestException as exc:
