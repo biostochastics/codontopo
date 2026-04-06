@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 23 NCBI translation tables.
+**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 24 NCBI translation tables.
 
 The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
 
@@ -27,7 +27,7 @@ The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
 | `verify_embedding.py` | Holomorphic embedding phi: GF(2)^6 -> C^3, base->fourth-root-of-unity | `core/embedding.py` |
 | `verify_kras.py` | KRAS G12V Fano line (GGU XOR GUU XOR CAC = 0), all single-bit mutations | `core/fano.py`, `analysis/cosmic_query.py` |
 | `verify_mitochondrial.py` | 6-code cross-validation, Serine persistence, Thr disconnection discovery | `core/genetic_codes.py` + analysis pipeline |
-| `all_codes.py` | All 23 NCBI tables, disconnection catalogue, filtration breakage | Integration tests, `analysis/reassignment_db.py` |
+| `all_codes.py` | All 24 NCBI tables, disconnection catalogue, filtration breakage | Integration tests, `analysis/reassignment_db.py` |
 | `summary_table.py` | Disconnection-depth catalogue with evolutionary dating context | Reports |
 
 Shared utilities duplicated across scripts (must be consolidated):
@@ -36,35 +36,44 @@ Shared utilities duplicated across scripts (must be consolidated):
 - `hamming_distance(a, b)` — bitwise Hamming distance
 - `connected_components(bits_list, epsilon)` — union-find at threshold
 - `STANDARD` / `GENETIC_CODE` — standard code dict (duplicated 4 times)
-- `all_codes.py` has all 23 NCBI tables via `make_code(changes)` pattern
+- `all_codes.py` has all 24 NCBI tables via `make_code(changes)` pattern
 
-## Target Package Structure
+## Package Structure (Implemented)
 
 ```
-codon_topo/
+src/codon_topo/
+  __init__.py            # Public API re-exports
   core/
-    encoding.py        # Base->bit mappings, codon->vector conversion, all 24 encodings
-    genetic_codes.py   # All NCBI translation tables as dictionaries
-    filtration.py      # Projection tower, fibre computation, filtration checks
-    homology.py        # Connected components, persistent homology (Betti numbers)
-    embedding.py       # Holomorphic embedding phi: GF(2)^6 -> C^3
-    fano.py            # Fano-line computation, XOR triples
+    encoding.py          # Base->bit mappings, codon->vector conversion, all 24 encodings
+    genetic_codes.py     # All 24 NCBI translation tables as dictionaries
+    filtration.py        # Two-fold (bit-5) and four-fold (prefix) degeneracy checks
+    homology.py          # Connected components, persistent homology, disconnection catalogue
+    embedding.py         # Holomorphic embedding phi: GF(2)^6 -> C^3
+    fano.py              # Fano-line computation, XOR triples
   analysis/
-    null_models.py     # Random assignment, block shuffle, encoding permutation
-    reassignment_db.py # Reassignment database construction and querying
-    cosmic_query.py    # COSMIC/cBioPortal API integration
-    synbio_meta.py     # Synthetic biology literature meta-analysis
-  visualization/
-    hypercube.py       # 6D->2D/3D projections with amino acid coloring
-    barcodes.py        # Persistent homology barcode plots
-    embedding_viz.py   # C^3 scatter plots with degeneracy coloring
-    reassignment_flow.py # Hamming-path flow diagrams
+    null_models.py       # Null Model A (random), B (block shuffle), C (24 encodings)
+tests/
+  test_encoding.py       # Encoding primitives + hypothesis property tests
+  test_genetic_codes.py  # All 24 NCBI tables
+  test_filtration.py     # Two-fold/four-fold checks across all tables
+  test_homology.py       # Serine invariant, novel disconnections
+  test_embedding.py      # C^3 embedding properties
+  test_fano.py           # KRAS Fano line, XOR triples
+  test_null_models.py    # Null model smoke tests
+  test_regression.py     # Full PRD Appendix 8 regression (105 tests)
+```
+
+### Future Modules (WS2-WS6)
+
+```
+src/codon_topo/
+  analysis/
+    reassignment_db.py   # Reassignment database construction and querying
+    cosmic_query.py      # COSMIC/cBioPortal API integration
+    synbio_meta.py       # Synthetic biology literature meta-analysis
+  visualization/R/       # ggplot2 + ggpubr scripts (not Python)
   reports/
-    templates/         # Report generation templates
-  tests/
-    test_core.py       # Unit tests for all core computations
-    test_null.py       # Null model validation tests
-    test_regression.py # Regression tests against known results from Appendix 8
+    templates/           # Report generation templates
 ```
 
 ## Technology Stack
@@ -80,12 +89,14 @@ codon_topo/
 ## Build & Test Commands
 
 ```bash
-pip install -e ".[dev]"          # Install in development mode
-pytest                           # Run all tests
-pytest tests/test_core.py        # Run core computation tests only
-pytest tests/test_core.py::test_name -v  # Run a single test
-pytest --cov=codon_topo          # Run with coverage
+pip install -e ".[dev]"                              # Install in development mode
+python3.11 -m pytest                                  # Run all tests (203 tests)
+python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
+python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
+python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (98%)
 ```
+
+Note: Use `python3.11 -m pytest` (not bare `pytest`) because the system default Python is 3.14 but dev dependencies are installed under 3.11.
 
 ## Workstreams (WS1-WS6)
 
@@ -101,9 +112,9 @@ Dependency order: WS1 (foundation) -> WS4 (fast-fail KRAS test) -> WS2/WS3 (inde
 ## Regression Test Values (from Appendix 8)
 
 These must be reproduced exactly:
-- Two-fold filtration: 100% bit-5 pattern across all 23 NCBI tables, zero exceptions
+- Two-fold filtration: 100% bit-5 pattern across all 24 NCBI tables, zero exceptions
 - Four-fold filtration: 100% prefix uniformity, breaks only on stop->amino acid reassignments
-- Serine: disconnected at epsilon=1 in all 23 tables, min inter-block Hamming = 4, reconnects at epsilon=4
+- Serine: disconnected at epsilon=1 in all 24 tables, min inter-block Hamming = 4, reconnects at epsilon=4
 - Non-Serine disconnections: Thr (yeast mito, epsilon=2), Leu (chlorophycean mito, epsilon=2), Ala (Pachysolen nuclear, epsilon=3), three-component Ser (Candida nuclear, epsilon=3)
 - KRAS Fano line: GGU XOR GUU XOR CAC = 0 in GF(2)^6
 
