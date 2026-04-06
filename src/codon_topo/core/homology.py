@@ -3,15 +3,14 @@ from collections import defaultdict
 from codon_topo.core.encoding import codon_to_vector, hamming_distance, DEFAULT_ENCODING
 
 
-def connected_components(vectors: list[tuple[int, ...]], epsilon: int) -> int:
-    """Count connected components at Hamming distance threshold epsilon.
+def _partition(vectors: list[tuple[int, ...]], epsilon: int) -> list[list[int]]:
+    """Partition vector indices into connected components at Hamming threshold.
 
-    Two vectors are in the same component if there is a path of vectors
-    where each consecutive pair has Hamming distance <= epsilon.
+    Returns list of clusters, where each cluster is a list of indices.
     """
     n = len(vectors)
     if n == 0:
-        return 0
+        return []
     parent = list(range(n))
 
     def find(x: int) -> int:
@@ -30,7 +29,19 @@ def connected_components(vectors: list[tuple[int, ...]], epsilon: int) -> int:
             if hamming_distance(vectors[i], vectors[j]) <= epsilon:
                 union(i, j)
 
-    return len(set(find(i) for i in range(n)))
+    clusters: dict[int, list[int]] = defaultdict(list)
+    for i in range(n):
+        clusters[find(i)].append(i)
+    return list(clusters.values())
+
+
+def connected_components(vectors: list[tuple[int, ...]], epsilon: int) -> int:
+    """Count connected components at Hamming distance threshold epsilon.
+
+    Two vectors are in the same component if there is a path of vectors
+    where each consecutive pair has Hamming distance <= epsilon.
+    """
+    return len(_partition(vectors, epsilon))
 
 
 def persistent_homology(
@@ -65,37 +76,23 @@ def disconnection_catalogue(
         if len(codons) < 2:
             continue
         vectors = [codon_to_vector(c, enc) for c in codons]
-        n_comp = connected_components(vectors, 1)
-        if n_comp <= 1:
+        clusters = _partition(vectors, 1)
+        if len(clusters) <= 1:
             continue
 
-        # Find blocks via union-find at eps=1
+        blocks = [[codons[i] for i in cluster] for cluster in clusters]
+
+        # Build index-to-cluster map for inter-block distance
+        idx_to_cluster = {}
+        for ci, cluster in enumerate(clusters):
+            for i in cluster:
+                idx_to_cluster[i] = ci
+
         n = len(vectors)
-        parent = list(range(n))
-        def find(x, p=parent):
-            while p[x] != x:
-                p[x] = p[p[x]]
-                x = p[x]
-            return x
-        def union(x, y, p=parent):
-            px, py = find(x), find(y)
-            if px != py:
-                p[px] = py
-        for i in range(n):
-            for j in range(i + 1, n):
-                if hamming_distance(vectors[i], vectors[j]) <= 1:
-                    union(i, j)
-
-        clusters: dict[int, list[str]] = defaultdict(list)
-        for i in range(n):
-            clusters[find(i)].append(codons[i])
-        blocks = list(clusters.values())
-
-        # Min inter-block Hamming distance
         min_inter = min(
             hamming_distance(vectors[i], vectors[j])
             for i in range(n) for j in range(i + 1, n)
-            if find(i) != find(j)
+            if idx_to_cluster[i] != idx_to_cluster[j]
         )
 
         # Reconnection epsilon
@@ -107,7 +104,7 @@ def disconnection_catalogue(
 
         catalogue.append({
             'aa': aa,
-            'n_components': n_comp,
+            'n_components': len(clusters),
             'reconnect_eps': reconnect_eps,
             'min_inter_distance': min_inter,
             'blocks': blocks,
