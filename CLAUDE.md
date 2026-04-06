@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 24 NCBI translation tables.
+**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 25 NCBI translation tables.
 
 The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
 
@@ -45,7 +45,7 @@ src/codon_topo/
   __init__.py            # Public API re-exports
   core/
     encoding.py          # Base->bit mappings, codon->vector conversion, all 24 encodings
-    genetic_codes.py     # All 24 NCBI translation tables as dictionaries
+    genetic_codes.py     # All 25 NCBI translation tables as dictionaries
     filtration.py        # Two-fold (bit-5) and four-fold (prefix) degeneracy checks
     homology.py          # Connected components, persistent homology, disconnection catalogue
     embedding.py         # Holomorphic embedding phi: GF(2)^6 -> C^3
