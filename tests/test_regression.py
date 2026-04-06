@@ -100,6 +100,7 @@ class TestNovelDisconnections:
         ser = [e for e in cat if e['aa'] == 'Ser']
         assert len(ser) == 1
         assert ser[0]['n_components'] == 3
+        assert ser[0]['reconnect_eps'] == 3
 
 
 class TestEmbedding:
@@ -136,3 +137,27 @@ class TestKRAS:
 
     def test_ggu_guu_cac(self):
         assert is_fano_line('GGU', 'GUU', 'CAC')
+
+
+class TestSerineEncodingInvariance:
+    """Serine disconnection should hold across all 24 base-to-bit encodings."""
+
+    def test_serine_disconnected_all_encodings(self):
+        from codon_topo.core.encoding import all_encodings
+        for enc in all_encodings():
+            ser_codons = [c for c, aa in STANDARD.items() if aa == 'Ser']
+            vectors = [codon_to_vector(c, enc) for c in ser_codons]
+            n_comp = connected_components(vectors, 1)
+            assert n_comp > 1, f"Serine connected at eps=1 with encoding {enc}"
+
+
+class TestNullModelValidation:
+    """Validate that null models produce low p-values for observed invariants."""
+
+    @pytest.mark.slow
+    def test_model_a_serine_rare(self):
+        from codon_topo.analysis.null_models import null_model_a
+        result = null_model_a(n_permutations=1000, seed=42)
+        assert result['p_value_serine_unique'] < 0.05, (
+            f"Serine uniqueness p={result['p_value_serine_unique']} >= 0.05"
+        )
