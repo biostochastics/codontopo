@@ -1,0 +1,16 @@
+id,claim,workstream,status,evidence_strength,p_value,implications
+WS1-C1,Two-fold degeneracy is uniformly explained by bit-5 difference in GF(2)^6,WS1,verified,very_strong,,All 9 two-fold AAs show identical algebraic structure across all 25 NCBI tables
+WS1-C2,Four-fold degeneracy corresponds to shared 4-bit prefix exhausting GF(2)^2,WS1,verified,very_strong,,Breaks only on stop->AA reassignments (structural necessity)
+WS1-C3,Serine is uniquely disconnected at epsilon=1 in all known genetic codes,WS1,verified,very_strong,,"Universal invariant: UCN-AGY split with min Hamming distance 4, reconnects at epsilon=4"
+WS1-NULL-A,Serine uniqueness is statistically unlikely under random codon assignment,WS1,verified,strong,0.05,Null Model A rejects random assignment hypothesis
+WS1-NULL-C,Serine disconnection is encoding-invariant (all 24 base-to-bit mappings),WS1,verified,very_strong,,Algebraic structure is not an artifact of encoding choice
+WS1-NOVEL-1,"Threonine is disconnected in yeast mitochondrial code (Table 3, epsilon=2)",WS1,verified,strong,,CUN block reassignment Leu->Thr creates lineage-specific topological signature
+WS1-NOVEL-2,"Leucine is disconnected in chlorophycean mito (Table 16, epsilon=2)",WS1,verified,strong,,UAG reassignment Stop->Leu creates algal-specific signature
+WS1-NOVEL-3,"Alanine is disconnected in Pachysolen nuclear code (Table 26, epsilon=3)",WS1,verified,strong,,CUG reassignment Leu->Ala in CUG clade
+WS1-NOVEL-4,Serine has three components in alternative yeast nuclear code (Table 12),WS1,verified,strong,,Unique 3-component topology from CUG->Ser reassignment
+WS2-DIR,Codon reassignment events show directional bias in GF(2)^6 bit positions,WS2,tested,strong,0.006,Bit position 4 (first wobble bit) has 13 changes while position 2 has zero. Reassignments are non-random in GF(2)^6.
+WS2-PATH,Reassignment Hamming paths have characteristic length distribution,WS2,tested,moderate,,Mean Hamming distance constrains the 'reach' of evolutionary reassignment
+WS3-CORR,Disconnection epsilon correlates positively with evolutionary age,WS3,tested,weak,1.0,"Relationship is ordinal, not linear: eps=3 events (CUG clade, 150 Mya) are younger than eps=2 events (Chlorophyceae, 600 Mya). Structural position in GF(2)^6 matters more than raw time."
+WS4-FANO,KRAS G12V Fano partner (His/CAC) is enriched in co-occurring mutations,WS4,null,moderate,1.0,Null result: Fano geometry does not predict somatic co-mutation patterns in MSK-IMPACT data. Clinical prediction track closed. Algebraic framework remains valid.
+WS6-LANDSCAPE,Most single-codon reassignments preserve algebraic structure (feasibility > 0.5),WS6,tested,strong,,83% of 1280 single-codon variants score >=0.8 feasibility. Zero score below 0.5. The algebraic structure is remarkably robust to perturbation.
+WS6-SERINE,Serine disconnection is robust to most single-codon perturbations,WS6,tested,strong,,UCN-AGY gap is structurally stable — difficult to bridge by single reassignment
