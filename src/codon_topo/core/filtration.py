@@ -36,6 +36,11 @@ def check_twofold(
 ) -> list[tuple[str, bool, list[int]]]:
     """Check two-fold degeneracy: synonymous codons differ at exactly bit 5.
 
+    Only tests amino acids with exactly 2 codons. The 3-fold (Ile) and
+    6-fold (Leu, Arg, Ser) degeneracy classes are not subject to Claims 1-2
+    per the PRD — Ile's mixed wobble pattern and Ser's cross-block structure
+    are analyzed via persistent homology instead.
+
     Returns list of (aa, passed, differing_positions).
     """
     groups = _group_by_aa(code, encoding)
@@ -55,6 +60,11 @@ def check_fourfold(
     encoding: dict | None = None,
 ) -> list[tuple[str, bool]]:
     """Check four-fold degeneracy: identical 4-bit prefix, last 2 exhaust GF(2)^2.
+
+    Only tests amino acids with exactly 4 codons. The 6-fold AAs
+    (Leu, Arg, Ser) contain a 4-codon block plus a 2-codon block;
+    their structure is captured by the homology module's disconnection
+    catalogue rather than this uniform-prefix check.
 
     Returns list of (aa, passed).
     """
