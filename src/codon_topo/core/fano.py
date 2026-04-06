@@ -7,35 +7,60 @@ from codon_topo.core.encoding import (
     codon_to_vector, ALL_CODONS, DEFAULT_ENCODING,
 )
 
-# Reverse lookup: vector -> codon (default encoding)
-_VECTOR_TO_CODON: dict[tuple[int, ...], str] = {
-    codon_to_vector(c): c for c in ALL_CODONS
-}
+# Cache for reverse lookups per encoding (encoding values are unhashable tuples,
+# so we key on the frozenset of items).
+_REVERSE_CACHE: dict[frozenset, dict[tuple[int, ...], str]] = {}
+
+
+def _reverse_lookup(
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> dict[tuple[int, ...], str]:
+    """Return vector->codon mapping for a given encoding, with caching."""
+    enc = encoding or DEFAULT_ENCODING
+    key = frozenset(enc.items())
+    if key not in _REVERSE_CACHE:
+        _REVERSE_CACHE[key] = {
+            codon_to_vector(c, enc): c for c in ALL_CODONS
+        }
+    return _REVERSE_CACHE[key]
 
 
 def _xor(a: tuple[int, ...], b: tuple[int, ...]) -> tuple[int, ...]:
     return tuple((x + y) % 2 for x, y in zip(a, b))
 
 
-def is_fano_line(c1: str, c2: str, c3: str) -> bool:
+def is_fano_line(
+    c1: str, c2: str, c3: str,
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> bool:
     """Check if three codons form a Fano line (XOR = 0)."""
-    v1, v2, v3 = codon_to_vector(c1), codon_to_vector(c2), codon_to_vector(c3)
+    enc = encoding or DEFAULT_ENCODING
+    v1, v2, v3 = codon_to_vector(c1, enc), codon_to_vector(c2, enc), codon_to_vector(c3, enc)
     return all(x == 0 for x in _xor(_xor(v1, v2), v3))
 
 
-def fano_partner(c1: str, c2: str) -> str:
+def fano_partner(
+    c1: str, c2: str,
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> str:
     """Return the third codon completing the Fano line through c1 and c2."""
-    v1, v2 = codon_to_vector(c1), codon_to_vector(c2)
+    enc = encoding or DEFAULT_ENCODING
+    v1, v2 = codon_to_vector(c1, enc), codon_to_vector(c2, enc)
     v3 = _xor(v1, v2)
-    return _VECTOR_TO_CODON[v3]
+    return _reverse_lookup(enc)[v3]
 
 
-def all_single_bit_fano_lines(codon: str) -> list[dict]:
+def all_single_bit_fano_lines(
+    codon: str,
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> list[dict]:
     """For each single-bit mutation from codon, compute the Fano partner.
 
     Returns list of dicts: {bit_pos, mutant_codon, fano_partner}.
     """
-    v = codon_to_vector(codon)
+    enc = encoding or DEFAULT_ENCODING
+    rev = _reverse_lookup(enc)
+    v = codon_to_vector(codon, enc)
     results = []
     for bit_pos in range(6):
         mutant = list(v)
@@ -44,7 +69,7 @@ def all_single_bit_fano_lines(codon: str) -> list[dict]:
         partner = _xor(v, mutant)
         results.append({
             'bit_pos': bit_pos,
-            'mutant_codon': _VECTOR_TO_CODON[mutant],
-            'fano_partner': _VECTOR_TO_CODON[partner],
+            'mutant_codon': rev[mutant],
+            'fano_partner': rev[partner],
         })
     return results
