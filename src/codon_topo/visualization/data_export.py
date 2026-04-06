@@ -23,6 +23,11 @@ from codon_topo.core.genetic_codes import (
 )
 from codon_topo.core.homology import persistent_homology, disconnection_catalogue
 from codon_topo.core.embedding import embed_codon
+from codon_topo.analysis.reassignment_db import build_reassignment_db
+from codon_topo.analysis.depth_calibration import depth_calibration_table
+from codon_topo.analysis.cosmic_query import fano_predictions_for_kras
+from codon_topo.analysis.synbio_feasibility import single_reassignment_landscape
+from codon_topo.reports.catalogue import build_catalogue
 
 
 def export_persistent_homology(
@@ -180,4 +185,133 @@ def export_hamming_matrix(
                 hamming_distance(vectors[i], vectors[j]) for j in range(len(codons))
             ]
             writer.writerow(row)
+    return output
+
+
+def export_reassignment_db(output_path: str | Path) -> Path:
+    """Export reassignment database as CSV for R visualization."""
+    output = Path(output_path)
+    db = build_reassignment_db()
+    fieldnames = [
+        "table_id",
+        "table_name",
+        "codon",
+        "source_aa",
+        "target_aa",
+        "hamming_to_nearest_target",
+    ]
+    with open(output, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for e in db:
+            writer.writerow(
+                {
+                    "table_id": e.table_id,
+                    "table_name": e.table_name,
+                    "codon": e.codon,
+                    "source_aa": e.source_aa,
+                    "target_aa": e.target_aa,
+                    "hamming_to_nearest_target": e.hamming_to_nearest_target,
+                }
+            )
+    return output
+
+
+def export_depth_calibration(output_path: str | Path) -> Path:
+    """Export evolutionary depth calibration data as CSV."""
+    output = Path(output_path)
+    table = depth_calibration_table()
+    fieldnames = [
+        "aa",
+        "table_id",
+        "table_name",
+        "reconnect_eps",
+        "age_mya_low",
+        "age_mya_high",
+        "age_midpoint_mya",
+        "lineage",
+    ]
+    with open(output, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(table)
+    return output
+
+
+def export_fano_predictions(output_path: str | Path) -> Path:
+    """Export KRAS Fano-line predictions as CSV."""
+    output = Path(output_path)
+    preds = fano_predictions_for_kras()
+    fieldnames = [
+        "variant",
+        "wt_codon",
+        "mutant_codon",
+        "fano_partner_codon",
+        "fano_partner_aa",
+        "fano_partner_aa_1letter",
+    ]
+    with open(output, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for variant, data in sorted(preds.items()):
+            writer.writerow({"variant": variant, **data})
+    return output
+
+
+def export_synbio_landscape(
+    output_path: str | Path,
+    max_variants: int | None = None,
+) -> Path:
+    """Export synthetic biology feasibility landscape as CSV."""
+    output = Path(output_path)
+    landscape = single_reassignment_landscape()
+    landscape.sort(key=lambda x: x["feasibility_score"], reverse=True)
+    if max_variants is not None:
+        landscape = landscape[:max_variants]
+
+    fieldnames = [
+        "codon",
+        "original_aa",
+        "new_aa",
+        "feasibility_score",
+        "twofold_intact",
+        "fourfold_intact",
+        "serine_disconnected",
+        "n_disconnected_aas",
+    ]
+    with open(output, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(landscape)
+    return output
+
+
+def export_catalogue(output_path: str | Path) -> Path:
+    """Export prediction catalogue as CSV."""
+    output = Path(output_path)
+    cat = build_catalogue()
+    fieldnames = [
+        "id",
+        "claim",
+        "workstream",
+        "status",
+        "evidence_strength",
+        "p_value",
+        "implications",
+    ]
+    with open(output, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for p in cat:
+            writer.writerow(
+                {
+                    "id": p.id,
+                    "claim": p.claim,
+                    "workstream": p.workstream,
+                    "status": p.status,
+                    "evidence_strength": p.evidence_strength,
+                    "p_value": p.p_value if p.p_value is not None else "",
+                    "implications": p.implications,
+                }
+            )
     return output

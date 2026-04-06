@@ -143,6 +143,15 @@ def get_code_name(table_id: int) -> str:
     return _CODES[table_id][0]
 
 
+def get_changes(table_id: int) -> dict[str, str]:
+    """Return the codon changes from STANDARD for a translation table.
+
+    Each key is a codon, each value is the reassigned amino acid.
+    Returns an empty dict for tables identical to standard (e.g., Table 1).
+    """
+    return dict(_CODES[table_id][1])
+
+
 def all_table_ids() -> list[int]:
     """Return sorted list of all available NCBI table IDs."""
     return sorted(_CODES.keys())

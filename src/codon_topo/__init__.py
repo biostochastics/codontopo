@@ -20,3 +20,23 @@ from codon_topo.core.homology import (
     disconnection_catalogue as disconnection_catalogue,
     persistent_homology as persistent_homology,
 )
+from codon_topo.analysis.reassignment_db import (
+    build_reassignment_db as build_reassignment_db,
+    ReassignmentEvent as ReassignmentEvent,
+)
+from codon_topo.analysis.depth_calibration import (
+    compute_correlation as compute_correlation,
+    CALIBRATION_POINTS as CALIBRATION_POINTS,
+)
+from codon_topo.analysis.cosmic_query import (
+    fano_predictions_for_kras as fano_predictions_for_kras,
+    CBioPortalClient as CBioPortalClient,
+    ws4_gate_decision as ws4_gate_decision,
+)
+from codon_topo.analysis.synbio_feasibility import (
+    score_variant_code as score_variant_code,
+)
+from codon_topo.reports.catalogue import (
+    build_catalogue as build_catalogue,
+    Prediction as Prediction,
+)

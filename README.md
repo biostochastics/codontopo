@@ -9,8 +9,8 @@ The genetic code maps 64 codons to 20 amino acids + Stop. When you encode each n
 - **Two-fold filtration**: All 9 two-fold degenerate amino acids differ at exactly bit 5 (the wobble position parity bit) — across ALL 25 known genetic codes
 - **Four-fold filtration**: All 5 four-fold degenerate amino acids share an identical 4-bit prefix, with the last 2 bits exhausting GF(2)^2
 - **Serine invariant**: Serine is the *only* amino acid whose codon graph is topologically disconnected at Hamming distance 1 — a universal invariant across every known genetic code
-- **KRAS Fano line**: The cancer-relevant KRAS G12V mutation (GGU→GUU) forms a Fano line with CAC (Histidine): GGU ⊕ GUU ⊕ CAC = 0 in GF(2)^6
-- **Holomorphic embedding**: Mapping bases to fourth roots of unity (C→1, U→i, A→-1, G→-i) sends codons to C^3, preserving degeneracy structure
+- **KRAS Fano line**: The cancer-relevant KRAS G12V mutation (GGU->GUU) forms a Fano line with CAC (Histidine): GGU XOR GUU XOR CAC = 0 in GF(2)^6
+- **Holomorphic embedding**: Mapping bases to fourth roots of unity (C->1, U->i, A->-1, G->-i) sends codons to C^3, preserving degeneracy structure
 
 ## Quick Start
 
@@ -18,10 +18,10 @@ The genetic code maps 64 codons to 20 amino acids + Stop. When you encode each n
 # Install
 pip install -e ".[dev]"
 
-# Run all 221 tests
+# Run all 280 tests
 python3.11 -m pytest
 
-# Run with coverage (99%)
+# Run with coverage (96%)
 python3.11 -m pytest --cov=codon_topo --cov-report=term-missing
 
 # Run just the regression suite (105 tests against PRD Appendix 8)
@@ -29,6 +29,17 @@ python3.11 -m pytest tests/test_regression.py -v
 ```
 
 > **Note**: Use `python3.11 -m pytest` if your system default Python differs from where dev dependencies are installed.
+
+## Workstreams
+
+| WS | Name | Status | Description |
+|----|------|--------|-------------|
+| **WS1** | Core Replication | Complete | Filtration, homology, embedding, Fano lines, null models A/B/C |
+| **WS2** | Reassignment Directionality | Complete | Database of ~55 codon reassignment events, Hamming path analysis, bit-position bias test |
+| **WS3** | Evolutionary Depth Calibration | Complete | Epsilon-age Spearman correlation across 6 calibration points (Serine 3.5 Gya to CUG clade 150 Mya) |
+| **WS4** | KRAS/COSMIC Fast-Fail Gate | Complete | cBioPortal API client, Fano-line co-occurrence prediction, Fisher's exact test with Bonferroni correction |
+| **WS5** | Prediction Catalogue | Complete | 15 predictions across all workstreams with evidence grading (verified/tested/pending) |
+| **WS6** | Synthetic Biology Feasibility | Complete | Feasibility scoring for ~1280 single-codon reassignment variants |
 
 ## Package Structure
 
@@ -43,9 +54,14 @@ src/codon_topo/
     fano.py              # Fano-line (XOR triple) computation
   analysis/
     null_models.py       # Statistical null models A (random), B (block shuffle), C (24 encodings)
+    reassignment_db.py   # Reassignment database, Hamming path analysis, directionality stats
+    cosmic_query.py      # cBioPortal API client, KRAS Fano co-occurrence, WS4 gate decision
+    depth_calibration.py # Evolutionary depth calibration, epsilon-age correlation
+    synbio_feasibility.py # Feasibility scoring for alternative genetic codes
   visualization/
-    data_export.py       # CSV export for R visualization scripts
-    R/                   # ggplot2 + ggpubr scripts for publication figures
+    data_export.py       # CSV export for R visualization scripts (all workstreams)
+  reports/
+    catalogue.py         # Prediction catalogue with evidence grading
 ```
 
 ## Usage Examples
@@ -74,30 +90,63 @@ catalogue = disconnection_catalogue(STANDARD)
 
 # Embed a codon in C^3
 embed_codon('GGU')  # (-i, -i, i)
+```
 
-# Run null model A (statistical validation)
-from codon_topo.analysis.null_models import null_model_a
-result = null_model_a(n_permutations=10_000, seed=42)
-print(f"p(Serine unique) = {result['p_value_serine_unique']}")
-print(f"p(bit-5 uniform) = {result['p_value_bit5_uniform']}")
+### WS2-WS6 Examples
 
-# Export data for R visualization
-from codon_topo.visualization.data_export import export_persistent_homology
-export_persistent_homology('output/persistent_homology.csv')
-# Then: Rscript src/codon_topo/visualization/R/barcode_plot.R output/persistent_homology.csv output/barcode.pdf
+```python
+# WS2: Reassignment database
+from codon_topo import build_reassignment_db
+db = build_reassignment_db()
+# 55 events: ReassignmentEvent(table_id=2, codon='AGA', source_aa='Arg', target_aa='Stop', ...)
+
+# WS3: Evolutionary depth calibration
+from codon_topo import compute_correlation
+result = compute_correlation()
+# {'spearman_rho': ..., 'spearman_p': ..., 'n_points': 6}
+
+# WS4: KRAS Fano predictions
+from codon_topo import fano_predictions_for_kras
+preds = fano_predictions_for_kras()
+# {'G12V': {'fano_partner_codon': 'CAC', 'fano_partner_aa': 'His', ...}, ...}
+
+# WS4: Run the decision gate (requires cBioPortal data or mock)
+from codon_topo import ws4_gate_decision
+result = ws4_gate_decision(mutation_data, p_threshold=0.01)
+# {'pass': True/False, 'corrected_threshold': 0.00167, 'significant_variants': [...]}
+
+# WS6: Score a variant genetic code
+from codon_topo import score_variant_code, get_code
+score = score_variant_code(get_code(3))  # Yeast mitochondrial
+# {'feasibility_score': 0.55, 'serine_disconnected': True, 'n_disconnected_aas': 2, ...}
+
+# WS5: Full prediction catalogue
+from codon_topo import build_catalogue
+cat = build_catalogue()  # 15 predictions with evidence grading
+
+# Export any workstream data for R visualization
+from codon_topo.visualization.data_export import (
+    export_reassignment_db, export_depth_calibration,
+    export_fano_predictions, export_catalogue,
+)
+export_reassignment_db('output/reassignments.csv')
+export_depth_calibration('output/depth_calibration.csv')
+export_fano_predictions('output/fano_predictions.csv')
+export_catalogue('output/catalogue.csv')
 ```
 
 ## Null Models
 
 | Model | What it tests | Method |
 |-------|---------------|--------|
-| **A** | Is the codon→AA assignment special? | Fix degeneracy structure, randomly reassign codons (100k permutations) |
-| **B** | Is the block structure special? | Preserve 4-codon blocks, shuffle block→AA assignments |
-| **C** | Is the binary encoding special? | Test all 24 possible base→bit-pair mappings |
+| **A** | Is the codon->AA assignment special? | Fix degeneracy structure, randomly reassign codons (100k permutations) |
+| **B** | Is the block structure special? | Preserve 4-codon blocks, shuffle block->AA assignments |
+| **C** | Is the binary encoding special? | Test all 24 possible base->bit-pair mappings |
 
 ## Technology
 
-- **Python 3.11+**, NumPy, SciPy
+- **Python 3.11+**, NumPy, SciPy, requests
 - **pytest + hypothesis** for property-based testing
 - **ggplot2 + ggpubr** (R) for publication figures
 - **ruff** for linting/formatting, **mypy** for type checking
+- **SciPy.stats** for Spearman correlation, Fisher's exact test, chi-squared, bootstrap CIs

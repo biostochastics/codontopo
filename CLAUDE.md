@@ -52,28 +52,32 @@ src/codon_topo/
     fano.py              # Fano-line computation, XOR triples
   analysis/
     null_models.py       # Null Model A (random), B (block shuffle), C (24 encodings)
+    reassignment_db.py   # Reassignment database, Hamming path analysis, directionality stats
+    cosmic_query.py      # cBioPortal API client, KRAS Fano-line co-occurrence, WS4 gate
+    depth_calibration.py # Evolutionary depth calibration, epsilon-age Spearman correlation
+    synbio_feasibility.py # Synthetic biology feasibility scoring, reassignment landscape
+  visualization/
+    data_export.py       # CSV export for R visualization (all workstreams)
+  reports/
+    catalogue.py         # Prediction catalogue with evidence grading (WS5 synthesis)
 tests/
   test_encoding.py       # Encoding primitives + hypothesis property tests
-  test_genetic_codes.py  # All 24 NCBI tables
+  test_genetic_codes.py  # All 25 NCBI tables
   test_filtration.py     # Two-fold/four-fold checks across all tables
   test_homology.py       # Serine invariant, novel disconnections
   test_embedding.py      # C^3 embedding properties
   test_fano.py           # KRAS Fano line, XOR triples
   test_null_models.py    # Null model smoke tests
   test_regression.py     # Full PRD Appendix 8 regression (105 tests)
-```
-
-### Future Modules (WS2-WS6)
-
-```
-src/codon_topo/
-  analysis/
-    reassignment_db.py   # Reassignment database construction and querying
-    cosmic_query.py      # COSMIC/cBioPortal API integration
-    synbio_meta.py       # Synthetic biology literature meta-analysis
-  visualization/R/       # ggplot2 + ggpubr scripts (not Python)
-  reports/
-    templates/           # Report generation templates
+  test_reassignment_db.py       # WS2 reassignment database
+  test_reassignment_stats.py    # WS2 directionality statistics
+  test_depth_calibration.py     # WS3 evolutionary depth calibration
+  test_cosmic_query.py          # WS4 cBioPortal client
+  test_kras_enrichment.py       # WS4 Fano enrichment test
+  test_synbio_feasibility.py    # WS6 feasibility scoring
+  test_catalogue.py             # WS5 prediction catalogue
+  test_ws_exports.py            # WS2-WS6 data exports
+  test_integration_ws2_ws6.py   # Cross-workstream integration tests
 ```
 
 ## Technology Stack
@@ -90,10 +94,10 @@ src/codon_topo/
 
 ```bash
 pip install -e ".[dev]"                              # Install in development mode
-python3.11 -m pytest                                  # Run all tests (203 tests)
+python3.11 -m pytest                                  # Run all tests (280 tests)
 python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
 python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
-python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (98%)
+python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (96%)
 ```
 
 Note: Use `python3.11 -m pytest` (not bare `pytest`) because the system default Python is 3.14 but dev dependencies are installed under 3.11.
