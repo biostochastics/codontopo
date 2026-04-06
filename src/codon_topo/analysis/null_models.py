@@ -15,7 +15,6 @@ from codon_topo.core.encoding import (
     DEFAULT_ENCODING,
 )
 from codon_topo.core.genetic_codes import STANDARD
-from codon_topo.core.filtration import check_twofold, check_fourfold
 from codon_topo.core.homology import connected_components
 
 
@@ -28,32 +27,60 @@ def _degeneracy_structure(code: dict[str, str]) -> list[int]:
     return sorted(aa_counts.values())
 
 
-def _score_code(code: dict[str, str], encoding=None) -> dict:
-    """Compute filtration and topology metrics for a code."""
+_VECTOR_CACHE: dict[frozenset, dict[str, tuple[int, ...]]] = {}
+
+
+def _get_vectors(
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> dict[str, tuple[int, ...]]:
+    """Return cached codon->vector mapping for a given encoding."""
     enc = encoding or DEFAULT_ENCODING
-    # Group codons by AA
-    aa_codons: dict[str, list[str]] = defaultdict(list)
+    key = frozenset(enc.items())
+    if key not in _VECTOR_CACHE:
+        _VECTOR_CACHE[key] = {c: codon_to_vector(c, enc) for c in ALL_CODONS}
+    return _VECTOR_CACHE[key]
+
+
+def _score_code(
+    code: dict[str, str],
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> dict:
+    """Compute filtration and topology metrics for a code.
+
+    Uses cached vector lookups to avoid redundant codon_to_vector calls
+    inside permutation loops.
+    """
+    vec_map = _get_vectors(encoding)
+    expected_suffixes = {(0, 0), (0, 1), (1, 0), (1, 1)}
+
+    # Group codon vectors by AA
+    groups: dict[str, list[tuple[int, ...]]] = defaultdict(list)
     for codon, aa in code.items():
         if aa != "Stop":
-            aa_codons[aa].append(codon)
+            groups[aa].append(vec_map[codon])
 
-    # Two-fold bit-5 check
-    tw_results = check_twofold(code, enc)
-    tw_all_pass = all(ok for _, ok, _ in tw_results) if tw_results else True
-
-    # Four-fold prefix check
-    ff_results = check_fourfold(code, enc)
-    ff_all_pass = all(ok for _, ok in ff_results) if ff_results else True
-
-    # Count disconnected AAs at eps=1
+    tw_all_pass = True
+    ff_all_pass = True
     disconnected = []
-    for aa, codons in aa_codons.items():
-        if len(codons) < 2:
-            continue
-        vectors = [codon_to_vector(c, enc) for c in codons]
-        n_comp = connected_components(vectors, 1)
-        if n_comp > 1:
-            disconnected.append(aa)
+
+    for aa, vectors in groups.items():
+        n_codons = len(vectors)
+
+        if n_codons == 2:
+            v1, v2 = vectors
+            differing = [i for i in range(6) if v1[i] != v2[i]]
+            if differing != [5]:
+                tw_all_pass = False
+
+        elif n_codons == 4:
+            prefixes = set(v[:4] for v in vectors)
+            suffixes = set(v[4:] for v in vectors)
+            if len(prefixes) != 1 or suffixes != expected_suffixes:
+                ff_all_pass = False
+
+        if n_codons >= 2:
+            if connected_components(vectors, 1) > 1:
+                disconnected.append(aa)
 
     return {
         "twofold_all_pass": tw_all_pass,

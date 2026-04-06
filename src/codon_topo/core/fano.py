@@ -27,7 +27,7 @@ def _reverse_lookup(
 
 
 def _xor(a: tuple[int, ...], b: tuple[int, ...]) -> tuple[int, ...]:
-    return tuple((x + y) % 2 for x, y in zip(a, b))
+    return tuple(x ^ y for x, y in zip(a, b))
 
 
 def is_fano_line(

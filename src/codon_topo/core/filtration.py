@@ -20,7 +20,7 @@ def classify_degeneracy(
 
 def _group_by_aa(
     code: dict[str, str],
-    encoding: dict | None = None,
+    encoding: dict[str, tuple[int, int]] | None = None,
 ) -> dict[str, list[tuple[str, tuple[int, ...]]]]:
     """Return {aa: [(codon, vector), ...]} excluding stops."""
     enc = encoding or DEFAULT_ENCODING
@@ -33,7 +33,7 @@ def _group_by_aa(
 
 def check_twofold(
     code: dict[str, str],
-    encoding: dict | None = None,
+    encoding: dict[str, tuple[int, int]] | None = None,
 ) -> list[tuple[str, bool, list[int]]]:
     """Check two-fold degeneracy: synonymous codons differ at exactly bit 5.
 
@@ -58,7 +58,7 @@ def check_twofold(
 
 def check_fourfold(
     code: dict[str, str],
-    encoding: dict | None = None,
+    encoding: dict[str, tuple[int, int]] | None = None,
 ) -> list[tuple[str, bool]]:
     """Check four-fold degeneracy: identical 4-bit prefix, last 2 exhaust GF(2)^2.
 
@@ -86,7 +86,7 @@ def check_fourfold(
 
 def analyze_filtration(
     code: dict[str, str],
-    encoding: dict | None = None,
+    encoding: dict[str, tuple[int, int]] | None = None,
 ) -> dict:
     """Full filtration report for a genetic code."""
     tw = check_twofold(code, encoding)

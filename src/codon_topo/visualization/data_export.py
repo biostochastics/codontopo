@@ -28,7 +28,7 @@ from codon_topo.core.embedding import embed_codon
 def export_persistent_homology(
     output_path: str | Path,
     code: dict[str, str] | None = None,
-    encoding: dict | None = None,
+    encoding: dict[str, tuple[int, int]] | None = None,
 ) -> Path:
     """Export persistent homology data for barcode plots.
 

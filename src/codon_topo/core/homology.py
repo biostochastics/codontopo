@@ -58,7 +58,7 @@ def persistent_homology(
 
 def disconnection_catalogue(
     code: dict[str, str],
-    encoding: dict | None = None,
+    encoding: dict[str, tuple[int, int]] | None = None,
 ) -> list[dict]:
     """Find all amino acids with disconnected codon graphs at epsilon=1.
 
