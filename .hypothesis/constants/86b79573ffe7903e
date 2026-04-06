@@ -1,0 +1,4 @@
+# file: /Users/biostochastics/clayworth/src/codon_topo/core/filtration.py
+# hypothesis_version: 6.139.1
+
+['Stop', 'fourfold_detail', 'fourfold_fail', 'fourfold_pass', 'twofold_detail', 'twofold_fail', 'twofold_pass']

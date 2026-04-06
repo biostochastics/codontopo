@@ -1,4 +1,5 @@
 """Persistent homology: connected components at Hamming distance thresholds."""
+
 from collections import defaultdict
 from codon_topo.core.encoding import codon_to_vector, hamming_distance, DEFAULT_ENCODING
 
@@ -67,7 +68,7 @@ def disconnection_catalogue(
     enc = encoding or DEFAULT_ENCODING
     aa_codons: dict[str, list[str]] = defaultdict(list)
     for codon, aa in code.items():
-        if aa != 'Stop':
+        if aa != "Stop":
             aa_codons[aa].append(codon)
 
     catalogue = []
@@ -91,7 +92,8 @@ def disconnection_catalogue(
         n = len(vectors)
         min_inter = min(
             hamming_distance(vectors[i], vectors[j])
-            for i in range(n) for j in range(i + 1, n)
+            for i in range(n)
+            for j in range(i + 1, n)
             if idx_to_cluster[i] != idx_to_cluster[j]
         )
 
@@ -102,12 +104,14 @@ def disconnection_catalogue(
                 reconnect_eps = eps
                 break
 
-        catalogue.append({
-            'aa': aa,
-            'n_components': len(clusters),
-            'reconnect_eps': reconnect_eps,
-            'min_inter_distance': min_inter,
-            'blocks': blocks,
-        })
+        catalogue.append(
+            {
+                "aa": aa,
+                "n_components": len(clusters),
+                "reconnect_eps": reconnect_eps,
+                "min_inter_distance": min_inter,
+                "blocks": blocks,
+            }
+        )
 
     return catalogue

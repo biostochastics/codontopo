@@ -1,4 +1,5 @@
 """Filtration analysis: two-fold (bit-5) and four-fold (prefix uniformity) checks."""
+
 from collections import defaultdict
 from codon_topo.core.encoding import codon_to_vector, DEFAULT_ENCODING
 
@@ -9,7 +10,7 @@ def classify_degeneracy(
     """Group amino acids by degeneracy (number of codons)."""
     aa_codons: dict[str, list[str]] = defaultdict(list)
     for codon, aa in code.items():
-        if aa != 'Stop':
+        if aa != "Stop":
             aa_codons[aa].append(codon)
     result: dict[int, list[str]] = defaultdict(list)
     for aa, codons in sorted(aa_codons.items()):
@@ -25,7 +26,7 @@ def _group_by_aa(
     enc = encoding or DEFAULT_ENCODING
     groups: dict[str, list[tuple[str, tuple[int, ...]]]] = defaultdict(list)
     for codon, aa in code.items():
-        if aa != 'Stop':
+        if aa != "Stop":
             groups[aa].append((codon, codon_to_vector(codon, enc)))
     return dict(groups)
 
@@ -69,7 +70,7 @@ def check_fourfold(
     Returns list of (aa, passed).
     """
     groups = _group_by_aa(code, encoding)
-    expected_suffixes = {(0,0),(0,1),(1,0),(1,1)}
+    expected_suffixes = {(0, 0), (0, 1), (1, 0), (1, 1)}
     results = []
     for aa in sorted(groups):
         members = groups[aa]
@@ -91,10 +92,10 @@ def analyze_filtration(
     tw = check_twofold(code, encoding)
     ff = check_fourfold(code, encoding)
     return {
-        'twofold_pass': sum(1 for _, p, _ in tw if p),
-        'twofold_fail': sum(1 for _, p, _ in tw if not p),
-        'fourfold_pass': sum(1 for _, p in ff if p),
-        'fourfold_fail': sum(1 for _, p in ff if not p),
-        'twofold_detail': tw,
-        'fourfold_detail': ff,
+        "twofold_pass": sum(1 for _, p, _ in tw if p),
+        "twofold_fail": sum(1 for _, p, _ in tw if not p),
+        "fourfold_pass": sum(1 for _, p in ff if p),
+        "fourfold_fail": sum(1 for _, p in ff if not p),
+        "twofold_detail": tw,
+        "fourfold_detail": ff,
     }

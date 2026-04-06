@@ -1,0 +1,4 @@
+# file: /Users/biostochastics/clayworth/src/codon_topo/core/genetic_codes.py
+# hypothesis_version: 6.139.1
+
+['AAA', 'AAC', 'AAG', 'AAU', 'ACA', 'ACC', 'ACG', 'ACU', 'AGA', 'AGC', 'AGG', 'AGU', 'AUA', 'AUC', 'AUG', 'AUU', 'Ala', 'Arg', 'Asn', 'Asp', 'CAA', 'CAC', 'CAG', 'CAU', 'CCA', 'CCC', 'CCG', 'CCU', 'CGA', 'CGC', 'CGG', 'CGU', 'CUA', 'CUC', 'CUG', 'CUU', 'Cephalodiscidae Mito', 'Chlorophycean Mito', 'Ciliate Nuclear', 'Cys', 'Euplotid Nuclear', 'GAA', 'GAC', 'GAG', 'GAU', 'GCA', 'GCC', 'GCG', 'GCU', 'GGA', 'GGC', 'GGG', 'GGU', 'GUA', 'GUC', 'GUG', 'GUU', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Mesodinium Nuclear', 'Met', 'Peritrich Nuclear', 'Phe', 'Pro', 'Rhabdopleuridae Mito', 'Ser', 'Standard', 'Stop', 'Thr', 'Trp', 'Tyr', 'UAA', 'UAC', 'UAG', 'UAU', 'UCA', 'UCC', 'UCG', 'UCU', 'UGA', 'UGC', 'UGG', 'UGU', 'UUA', 'UUC', 'UUG', 'UUU', 'Val', 'Yeast Mitochondrial']

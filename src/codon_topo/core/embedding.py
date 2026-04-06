@@ -6,17 +6,16 @@ then a codon (3 bases) maps to a point in C^3.
 The mapping derives from the binary encoding: a base with bit pair
 (b0, b1) maps to i^(2*b0 + b1), where i is the imaginary unit.
 """
-from codon_topo.core.encoding import DEFAULT_ENCODING
 
 _I = complex(0, 1)
-_ROOTS = [_I ** k for k in range(4)]  # [1, i, -1, -i]
+_ROOTS = [_I**k for k in range(4)]  # [1, i, -1, -i]
 
 # Default base->complex for the standard encoding C=(0,0)->1, U=(0,1)->i, etc.
 BASE_TO_COMPLEX: dict[str, complex] = {
-    'C': complex(1, 0),    # i^0 = 1
-    'U': complex(0, 1),    # i^1 = i
-    'A': complex(-1, 0),   # i^2 = -1
-    'G': complex(0, -1),   # i^3 = -i
+    "C": complex(1, 0),  # i^0 = 1
+    "U": complex(0, 1),  # i^1 = i
+    "A": complex(-1, 0),  # i^2 = -1
+    "G": complex(0, -1),  # i^3 = -i
 }
 
 

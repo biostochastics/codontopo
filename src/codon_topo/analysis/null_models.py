@@ -4,11 +4,15 @@ Model A: Fix degeneracy structure, randomly assign codons to AAs.
 Model B: Preserve block structure, shuffle block-to-AA assignments.
 Model C: Test all 24 base-to-bit encodings.
 """
+
 import random
 from collections import defaultdict
 
 from codon_topo.core.encoding import (
-    ALL_CODONS, codon_to_vector, all_encodings, DEFAULT_ENCODING,
+    ALL_CODONS,
+    codon_to_vector,
+    all_encodings,
+    DEFAULT_ENCODING,
 )
 from codon_topo.core.genetic_codes import STANDARD
 from codon_topo.core.filtration import check_twofold, check_fourfold
@@ -19,7 +23,7 @@ def _degeneracy_structure(code: dict[str, str]) -> list[int]:
     """Extract degeneracy counts: how many codons each AA has."""
     aa_counts: dict[str, int] = defaultdict(int)
     for codon, aa in code.items():
-        if aa != 'Stop':
+        if aa != "Stop":
             aa_counts[aa] += 1
     return sorted(aa_counts.values())
 
@@ -30,7 +34,7 @@ def _score_code(code: dict[str, str], encoding=None) -> dict:
     # Group codons by AA
     aa_codons: dict[str, list[str]] = defaultdict(list)
     for codon, aa in code.items():
-        if aa != 'Stop':
+        if aa != "Stop":
             aa_codons[aa].append(codon)
 
     # Two-fold bit-5 check
@@ -52,11 +56,11 @@ def _score_code(code: dict[str, str], encoding=None) -> dict:
             disconnected.append(aa)
 
     return {
-        'twofold_all_pass': tw_all_pass,
-        'fourfold_all_pass': ff_all_pass,
-        'n_disconnected': len(disconnected),
-        'exactly_one_disconnected': len(disconnected) == 1,
-        'disconnected_aas': sorted(disconnected),
+        "twofold_all_pass": tw_all_pass,
+        "fourfold_all_pass": ff_all_pass,
+        "n_disconnected": len(disconnected),
+        "exactly_one_disconnected": len(disconnected) == 1,
+        "disconnected_aas": sorted(disconnected),
     }
 
 
@@ -77,8 +81,8 @@ def null_model_a(
     ref = code or STANDARD
 
     aa_sizes = _degeneracy_structure(ref)
-    sense_codons = [c for c in ALL_CODONS if ref[c] != 'Stop']
-    stop_codons = [c for c in ALL_CODONS if ref[c] == 'Stop']
+    sense_codons = [c for c in ALL_CODONS if ref[c] != "Stop"]
+    stop_codons = [c for c in ALL_CODONS if ref[c] == "Stop"]
 
     obs = _score_code(ref)
 
@@ -90,30 +94,30 @@ def null_model_a(
         shuffled = list(sense_codons)
         rng.shuffle(shuffled)
 
-        perm_code = {c: 'Stop' for c in stop_codons}
+        perm_code = {c: "Stop" for c in stop_codons}
         idx = 0
         for i, size in enumerate(aa_sizes):
-            aa_name = f'AA{i}'
-            for c in shuffled[idx:idx + size]:
+            aa_name = f"AA{i}"
+            for c in shuffled[idx : idx + size]:
                 perm_code[c] = aa_name
             idx += size
 
         score = _score_code(perm_code)
-        if score['exactly_one_disconnected']:
+        if score["exactly_one_disconnected"]:
             count_serine_unique += 1
-        if score['twofold_all_pass']:
+        if score["twofold_all_pass"]:
             count_bit5_uniform += 1
-        if score['fourfold_all_pass']:
+        if score["fourfold_all_pass"]:
             count_fourfold_uniform += 1
 
     return {
-        'n_permutations': n_permutations,
-        'p_value_serine_unique': count_serine_unique / n_permutations,
-        'p_value_bit5_uniform': count_bit5_uniform / n_permutations,
-        'p_value_fourfold_uniform': count_fourfold_uniform / n_permutations,
-        'observed_exactly_one_disconnected': obs['exactly_one_disconnected'],
-        'observed_twofold_all_pass': obs['twofold_all_pass'],
-        'observed_fourfold_all_pass': obs['fourfold_all_pass'],
+        "n_permutations": n_permutations,
+        "p_value_serine_unique": count_serine_unique / n_permutations,
+        "p_value_bit5_uniform": count_bit5_uniform / n_permutations,
+        "p_value_fourfold_uniform": count_fourfold_uniform / n_permutations,
+        "observed_exactly_one_disconnected": obs["exactly_one_disconnected"],
+        "observed_twofold_all_pass": obs["twofold_all_pass"],
+        "observed_fourfold_all_pass": obs["fourfold_all_pass"],
     }
 
 
@@ -154,7 +158,7 @@ def null_model_b(
         std_block_aas.append(tuple(aas))
 
     # Identify which blocks contain stops
-    has_stop = [any(aa == 'Stop' for aa in pattern) for pattern in std_block_aas]
+    has_stop = [any(aa == "Stop" for aa in pattern) for pattern in std_block_aas]
 
     count_serine_unique = 0
 
@@ -177,13 +181,13 @@ def null_model_b(
                 perm_code[codon] = aa
 
         score = _score_code(perm_code)
-        if score['exactly_one_disconnected']:
+        if score["exactly_one_disconnected"]:
             count_serine_unique += 1
 
     return {
-        'n_permutations': n_permutations,
-        'p_value_serine_unique': count_serine_unique / n_permutations,
-        'exclude_stops': exclude_stops,
+        "n_permutations": n_permutations,
+        "p_value_serine_unique": count_serine_unique / n_permutations,
+        "exclude_stops": exclude_stops,
     }
 
 
@@ -205,19 +209,21 @@ def null_model_c(
 
     for enc in encodings:
         score = _score_code(ref, encoding=enc)
-        results.append({
-            'encoding': enc,
-            'twofold_all_pass': score['twofold_all_pass'],
-            'fourfold_all_pass': score['fourfold_all_pass'],
-            'exactly_one_disconnected': score['exactly_one_disconnected'],
-            'n_disconnected': score['n_disconnected'],
-            'disconnected_aas': score['disconnected_aas'],
-        })
-        if score['twofold_all_pass']:
+        results.append(
+            {
+                "encoding": enc,
+                "twofold_all_pass": score["twofold_all_pass"],
+                "fourfold_all_pass": score["fourfold_all_pass"],
+                "exactly_one_disconnected": score["exactly_one_disconnected"],
+                "n_disconnected": score["n_disconnected"],
+                "disconnected_aas": score["disconnected_aas"],
+            }
+        )
+        if score["twofold_all_pass"]:
             twofold_invariant += 1
 
     return {
-        'n_encodings': len(encodings),
-        'twofold_invariant_count': twofold_invariant,
-        'encoding_results': results,
+        "n_encodings": len(encodings),
+        "twofold_invariant_count": twofold_invariant,
+        "encoding_results": results,
     }

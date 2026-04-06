@@ -1,0 +1,4 @@
+# file: /Users/biostochastics/clayworth/src/codon_topo/analysis/null_models.py
+# hypothesis_version: 6.139.1
+
+[100000, 'Stop', 'disconnected_aas', 'encoding', 'encoding_results', 'exclude_stops', 'fourfold_all_pass', 'n_disconnected', 'n_encodings', 'n_permutations', 'p_value_bit5_uniform', 'twofold_all_pass']

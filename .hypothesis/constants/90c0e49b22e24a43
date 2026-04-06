@@ -1,0 +1,4 @@
+# file: /Users/biostochastics/clayworth/src/codon_topo/visualization/data_export.py
+# hypothesis_version: 6.139.1
+
+['Stop', 'aa', 'beta_0', 'codon', 'degeneracy', 'epsilon', 'min_inter_distance', 'n_components', 'reconnect_eps', 'table_id', 'table_name', 'w', 'z1_im', 'z1_re', 'z2_im', 'z2_re', 'z3_im', 'z3_re']
