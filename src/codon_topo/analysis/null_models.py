@@ -263,8 +263,8 @@ def null_model_c_extended(
     """Null Model C EXTENDED: emit per-encoding MIN INTER-BLOCK HAMMING DISTANCE
     for every disconnected amino acid.
 
-    Addresses the kimi-k2.5 counterexample: the original claim "Serine min distance 4
-    invariant across 24 encodings" is FALSE. What survives is "disconnected at eps=1."
+    The claim "Serine min distance 4 across all 24 encodings" is false (16/24
+    give min=2). What is universal: disconnected at eps=1 in all encodings.
 
     For each of the 24 encodings and each amino acid whose codon graph is
     disconnected at eps=1, this emits:

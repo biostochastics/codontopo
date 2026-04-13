@@ -235,6 +235,8 @@ write_csv(OUT / "T9_topology_avoidance.csv", [{
     "possible_total": ta["possible_total"],
     "rate_possible_pct": round(100 * ta["rate_possible"], 1),
     "hypergeom_p": ta["hypergeom_p"],
+    "permutation_p": ta["permutation_p"],
+    "n_permutations": ta["n_permutations"],
     "fisher_p": ta["fisher_p"],
     "odds_ratio": ta["odds_ratio"],
 }])

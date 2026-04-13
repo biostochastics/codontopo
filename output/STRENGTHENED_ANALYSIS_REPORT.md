@@ -9,13 +9,14 @@
 
 ## Executive Summary
 
-Following multi-model adversarial review (10 LLMs, 12 passes) and a GPT-5.2-pro-guided strengthening round, the codon-topo framework now presents **4 supported findings** (up from 1), validated by 4-model code review (droid, gemini, codex, crush).
+The codon-topo framework evaluates 15 claims about the algebraic structure of the genetic code in GF(2)^6. Four findings are supported by rigorous null models.
 
 | Status | Count | Key claims |
 |--------|-------|-----------|
-| **SUPPORTED** | 4 | Coloring optimality; per-table preservation; topology avoidance; tRNA enrichment |
-| **EXPLORATORY** | 2 | Bit-position bias; disconnection catalogue |
-| **Clean negative** | 3 | Local mismatch cost; KRAS-Fano; depth calibration |
+| **SUPPORTED** | 4 | Coloring optimality (p=0.006); per-table preservation (24/25); rho robustness (p=0.003); topology avoidance (perm p=0.0001) |
+| **SUGGESTIVE** | 1 | tRNA enrichment (independent Stouffer p=0.033) |
+| **EXPLORATORY** | 4 | Bit-position bias; mechanism boundaries; Atchley F3; disconnection catalogue |
+| **FALSIFIED** | 1 | KRAS-Fano (p=1.0) |
 | **REJECTED** | 3 | Serine min-distance invariant; PSL(2,7); holomorphic embedding |
 | **TAUTOLOGICAL** | 2 | Two-fold/four-fold filtration |
 
@@ -184,7 +185,7 @@ All figures: ggplot2 + ggpubr, viridis palette, 300 DPI.
 
 | Table | Content | File |
 |-------|---------|------|
-| T1 | Claim hierarchy (10 claims) | T1_claim_hierarchy.csv |
+| T1 | Claim hierarchy (15 claims) | T1_claim_hierarchy.csv |
 | T2 | Disconnection catalogue (29 entries, 25 tables) | T2_disconnection_catalogue.csv |
 | T3 | Coloring optimality Monte Carlo (n=10,000) | T3_coloring_optimality.json |
 | T4 | Per-table optimality (25 tables, n=1,000) | T4_per_table_optimality.csv |
@@ -205,7 +206,7 @@ All figures: ggplot2 + ggpubr, viridis palette, 300 DPI.
 - **Rho robustness**: Extends Q_6 Hamming-1 edges with within-nucleotide distance-2 diagonal edges, weighted by rho in [0,1]. Common-random-numbers design for paired comparison.
 - **Per-table optimality**: Each variant code tested against its own block-preserving null. Seeds: base_seed + table_id.
 - **tRNA enrichment**: Fisher's exact test (one-sided, greater) per pairing; Stouffer's Z combination with symmetric p-value clipping [10^-10, 1-10^-10]. Independent-pairings variant reported separately. AA-label exact enumeration test: compares reassigned AA's share-difference against all 20 AAs within each pairing.
-- **Topology avoidance**: Hypergeometric depletion test. N = 1,280 possible single-codon reassignments, K = 931 create new disconnections, n = 27 observed (de-duplicated), x = 6 observed create disconnections.
+- **Topology avoidance**: Table-preserving permutation null (n=10,000, seed=135325) plus hypergeometric depletion test. N = 1,280 possible single-codon reassignments, K = 931 create new disconnections, n = 27 observed (de-duplicated), x = 6 observed create disconnections. Permutation p=0.0001; hypergeometric p=4.8e-8.
 - **Bit-position bias**: Chi-square with uniform and Ts/Tv-weighted nulls. De-duplication to unique (codon, target_aa) pairs. Empirical permutation nulls (table-preserving, codon-preserving).
 
 ### Software
@@ -214,13 +215,14 @@ All figures: ggplot2 + ggpubr, viridis palette, 300 DPI.
 - R 4.5.3, ggplot2, ggpubr, viridis, patchwork
 - All analyses reproducible via `codon-topo all --output-dir=./output --seed=135325`
 
-### Multi-model review
+### Statistical corrections applied
 
-Code reviewed by 4 external LLMs (droid/claude-opus-4.6, gemini-3.1-pro, codex/gpt-5.2-codex, crush/glm-5) for statistical correctness. Issues identified and fixed:
 1. Stouffer's Z non-independence (shared controls) -- added independent-pairings variant
 2. Permutation test null -- rewritten as exact AA-label enumeration
-3. Topology avoidance -- Fisher replaced with hypergeometric (finite-landscape null)
+3. Topology avoidance -- hypergeometric (finite-landscape null) plus table-preserving permutation
 4. P-value clipping -- made symmetric
+5. BH-FDR correction for per-table optimality
+6. De-duplication of bit-position bias events across shared tables
 
 ---
 

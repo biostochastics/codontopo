@@ -1,9 +1,8 @@
 """Claim hierarchy for the Clayworth codon-topo framework.
 
-Following gpt-5.4-pro's review recommendation: make the status of every
-claim explicit and machine-readable. This module is the single source of
-truth for what the paper supports, suggests, treats as exploratory, or
-has rejected outright.
+Single source of truth for every scientific claim's status: supported,
+suggestive, exploratory, rejected, falsified, or tautological. Each claim
+carries its p-value, null model, sample size, and justification.
 
 Usage:
     from codon_topo.reports.claim_hierarchy import CLAIM_HIERARCHY, supported_claims
@@ -16,7 +15,7 @@ from enum import Enum
 
 
 class ClaimStatus(Enum):
-    """Status of a claim after multi-model adversarial review."""
+    """Status of a scientific claim."""
 
     SUPPORTED = "supported"  # Passes rigorous null; cite as finding
     SUGGESTIVE = "suggestive"  # Trend-level; cite as supporting evidence
@@ -56,19 +55,22 @@ CLAIM_HIERARCHY: list[Claim] = [
     Claim(
         id="hypercube_coloring_optimality",
         statement=(
-            "The standard genetic code sits in the top 0.6% of random "
-            "colorings of Q_6 under a block-preserving (Freeland-Hurst) "
-            "null for physicochemical edge-mismatch"
+            "The standard genetic code is significantly error-minimizing "
+            "under four independent physicochemical distance metrics: "
+            "Grantham (p=0.003), Miyata (p=0.001), Woese polar requirement "
+            "(p=0.004), and Kyte-Doolittle hydropathy (p=0.001)"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=0.006,
-        null_model="freeland_hurst_block_preserving_stops_fixed",
+        evidence_p_value=0.004,  # max p across all 4 metrics
+        null_model="freeland_hurst_block_preserving_x4_metrics",
         sample_size=10_000,
         justification=(
-            "Monte Carlo under a stricter-than-Freeland-Hurst null still "
-            "places the standard code in the top percentile. Replicates the "
-            "phenomenon (optimality) but not the magnitude (10^-6) of the "
-            "original Freeland-Hurst 1998 finding."
+            "Cross-metric sensitivity analysis under block-preserving null. "
+            "Freeland & Hurst (1998) used polar requirement only; we confirm "
+            "optimality holds across 4 independent metrics (Grantham, Miyata, "
+            "polar requirement, Kyte-Doolittle). Stop penalty sensitivity "
+            "tested (0/150/215/300): immaterial. Establishes code error-"
+            "minimization as a general structural property."
         ),
         citation_key="FreelandHurst1998",
     ),
@@ -109,6 +111,28 @@ CLAIM_HIERARCHY: list[Claim] = [
             "Addresses reviewer concern: 'you ignored 1/3 of mutations.'"
         ),
     ),
+    Claim(
+        id="topology_avoidance_depletion",
+        statement=(
+            "Natural codon reassignments are depleted for topology-breaking "
+            "changes: 22% create new disconnections vs 73% of all possible "
+            "single-codon reassignments"
+        ),
+        status=ClaimStatus.SUPPORTED,
+        evidence_p_value=0.0001,  # Table-preserving permutation (n=10,000)
+        null_model="table_preserving_permutation_10k",
+        sample_size=27,
+        justification=(
+            "Table-preserving permutation null (n=10,000, seed=135325): "
+            "p=0.0001 (0/10,000 permutations as extreme as observed). "
+            "Hypergeometric p=4.8e-8 (finite-landscape effect size). "
+            "Both tests confirm strong depletion: observed 6/27 (22%) "
+            "topology-breaking vs 73% of all possible single-codon "
+            "reassignments. Phylogenetic clade-exclusion sensitivity "
+            "(Sengupta et al. 2007): all exclusions significant at p<1e-5. "
+            "Result not driven by any single clade."
+        ),
+    ),
     # ============================================================
     # SUGGESTIVE — cite as supporting evidence, not primary
     # ============================================================
@@ -117,42 +141,25 @@ CLAIM_HIERARCHY: list[Claim] = [
         statement=(
             "Organisms with variant genetic codes show elevated tRNA gene "
             "copy numbers for the reassigned amino acid, verified by "
-            "tRNAscan-SE 2.0.12 on 6 NCBI genome assemblies across 4 "
-            "eukaryotic supergroups (11 pairings, 5 independent)"
+            "tRNAscan-SE 2.0.12 on 17 NCBI genome assemblies across "
+            "5 variant genetic codes (24 pairings, 6 independent)"
         ),
         status=ClaimStatus.SUGGESTIVE,
-        evidence_p_value=0.033,  # Independent-only Stouffer (conservative primary)
-        null_model="fisher_exact_stouffer_independent_pairings",
-        sample_size=5,
+        evidence_p_value=0.045,  # MIS worst-case Stouffer (conservative primary)
+        null_model="fisher_exact_stouffer_MIS_worst_case",
+        sample_size=6,
         justification=(
-            "Conservative primary: 5 independent pairings give Fisher+ "
-            "Stouffer Z=1.84, p=0.033. All-pairings (n=11): p=0.00026. "
-            "AA-label exact test (reassigned AA rank among 20 AAs): "
-            "Z=4.64, p=1.7e-6 — but Stouffer on discrete p-values "
-            "inflates precision (p_min=0.05 per pairing). Alternative "
-            "interpretation: rank-1 in 8/11, binomial p=0.0002 under p0=0.05. "
-            "Pairings not fully independent (some share controls)."
+            "Conservative primary: MIS (maximal independent set) worst-case "
+            "Stouffer p=0.045. Bron-Kerbosch enumeration of all 2 MIS from "
+            "conflict graph; both significant at p<0.05. Eliminates greedy-"
+            "selection bias. All-pairings (n=24): p=1.7e-7. Independent "
+            "greedy (n=6): p=0.017. 17 tRNAscan-SE verified assemblies: "
+            "5 Table 6 (Gln), 6 Table 10 (Cys), 1 Table 15 (Trp), "
+            "1 Table 31 (Trp/Glu), 2 Table 4 (Trp/bacterial), plus "
+            "3 standard-code controls. Covers 5 variant genetic codes "
+            "across Alveolata, Opisthokonta, Excavata, and Mollicutes."
         ),
         citation_key="Su2011PMC3113583",
-    ),
-    Claim(
-        id="topology_avoidance_depletion",
-        statement=(
-            "Natural codon reassignments are depleted for topology-breaking "
-            "changes: 22% create new disconnections vs 73% of all possible "
-            "single-codon reassignments"
-        ),
-        status=ClaimStatus.SUGGESTIVE,
-        evidence_p_value=None,  # Hypergeometric p=4.8e-8 but assumptions violated
-        null_model="finite_landscape_hypergeometric_plus_permutation",
-        sample_size=27,
-        justification=(
-            "Hypergeometric p=4.8e-8 (finite-landscape null), but observed "
-            "events are phylogenetically structured and evaluated as single-step "
-            "edits on the Standard code. Table-preserving permutation null "
-            "provides structure-respecting p-value. Upgrade to SUPPORTED "
-            "pending permutation result."
-        ),
     ),
     # ============================================================
     # EXPLORATORY — include with caveats, frame as hypothesis
@@ -182,20 +189,23 @@ CLAIM_HIERARCHY: list[Claim] = [
         statement=(
             "tRNA gene duplication accompanies codon reassignment in large "
             "nuclear genomes (ciliates, yeasts) but not in streamlined "
-            "genomes (Blastocrithidia: tRNA import; Mycoplasma: anticodon "
-            "modification)"
+            "genomes (Blastocrithidia: anticodon stem shortening; "
+            "Mycoplasma: anticodon modification)"
         ),
         status=ClaimStatus.EXPLORATORY,
         evidence_p_value=None,
         null_model=None,
-        sample_size=6,  # 6 tRNAscan-SE verified organisms
+        sample_size=7,
         justification=(
-            "Three-tier pattern: (1) T. thermophila (54 Gln tRNAs, 39 "
-            "suppressor) — massive gene duplication; (2) Blastocrithidia "
-            "(0 Trp tRNAs) — imports tRNAs; (3) Mycoplasma (1 Trp tRNA "
-            "reads both UGA+UGG) — anticodon modification. Consistent with "
-            "genome-architecture constraint hypothesis but n=1 for boundary "
-            "cases. Descriptive, not inferential."
+            "Three-tier pattern: (1) Ciliates (T. thermophila 54 Gln tRNAs, "
+            "39 suppressor) — massive gene duplication; (2) Blastocrithidia "
+            "nonstop P57 (GCA_028554745.1, 24.7 Mb genome, 68 tRNAs: "
+            "UGA→Trp via tRNA-Trp(CCA) anticodon stem shortening 5bp→4bp "
+            "+ eRF1 Ser74Gly mutation; UAA/UAG→Glu via 2 new suppressor "
+            "tRNAs; Kachale 2023 Nature 613:751-758); (3) Mycoplasma "
+            "(1 Trp tRNA reads both UGA+UGG — anticodon modification). "
+            "Consistent with multiple evolutionary routes to reassignment. "
+            "Descriptive, not inferential."
         ),
     ),
     Claim(
@@ -222,8 +232,7 @@ CLAIM_HIERARCHY: list[Claim] = [
             "codon distribution). Correctly framed as: the geometric "
             "framework provides a structural explanation for why Serine is "
             "an F3 outlier — two complementary views of the same anomaly, "
-            "not two independent detections. Proposed by P. Clayworth "
-            "(April 2026); encoding-dependence caveat (distance-4 holds for "
+            "not two independent detections. Encoding-dependence caveat (distance-4 holds for "
             "8/24 encodings; disconnection at ε=1 is universal) applies."
         ),
         citation_key="Atchley2005",
@@ -281,7 +290,7 @@ CLAIM_HIERARCHY: list[Claim] = [
         null_model="counterexample_verification",
         sample_size=24,
         justification=(
-            "Counterexample (kimi-k2.5): phi(U)=00, phi(C)=11, phi(A)=01, "
+            "Counterexample: phi(U)=00, phi(C)=11, phi(A)=01, "
             "phi(G)=10 gives min distance 2. Verified in repository code. "
             "Across 24 encodings: 16 give min=2, 8 give min=4. Distance-4 "
             "obtains exactly when U⊕A = (1,1) and C⊕G = (1,1), i.e. both "

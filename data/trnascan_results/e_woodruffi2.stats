@@ -1,0 +1,84 @@
+
+tRNAscan-SE v.2.0.12 (Nov 2022) scan results (on host Sergeys-MacBook-Pro.local)
+Started: Mon Apr 13 13:46:44 PDT 2026
+
+------------------------------------------------------------
+Sequence file(s) to search:        data/assemblies/e_woodruffi2_data/ncbi_dataset/data/GCA_021439945.1/GCA_021439945.1_ASM2143994v1_genomic.fna
+Search Mode:                       Eukaryotic
+Results written to:                data/trnascan_results/e_woodruffi2.out
+Output format:                     Tabular
+Searching with:                    Infernal First Pass->Infernal
+Isotype-specific model scan:       Yes
+Covariance model:                  /Users/biostochastics/.local/lib/tRNAscan-SE/models/TRNAinf-euk.cm
+                                   /Users/biostochastics/.local/lib/tRNAscan-SE/models/TRNAinf-euk-SeC.cm
+Infernal first pass cutoff score:  10
+
+Temporary directory:               /var/folders/1f/73w085tx1dx4dz6h971cm7qr0000gn/T/
+Search statistics saved in:        data/trnascan_results/e_woodruffi2.stats
+------------------------------------------------------------
+
+First-pass Stats:
+---------------
+Sequences read:         60697
+Seqs w/at least 1 hit:  80
+Bases read:             86619285 (x2 for both strands)
+Bases in tRNAs:         7022
+tRNAs predicted:        86
+Av. tRNA length:        81
+Script CPU time:        29.79 s
+Scan CPU time:          641.88 s
+Scan speed:             269.9 Kbp/sec
+
+First pass search(es) ended: Mon Apr 13 14:16:11 PDT 2026
+
+Infernal Stats:
+-----------
+Candidate tRNAs read:     86
+Infernal-confirmed tRNAs:     83
+Bases scanned by Infernal:  8678
+% seq scanned by Infernal:  0.0 %
+Script CPU time:          0.35 s
+Infernal CPU time:            9.91 s
+Scan speed:               875.7 bp/sec
+
+Infernal analysis of tRNAs ended: Mon Apr 13 14:16:23 PDT 2026
+
+Overall scan speed: 254041.6 bp/sec
+
+tRNAs decoding Standard 20 AA:              69
+Selenocysteine tRNAs (TCA):                 1
+Possible suppressor tRNAs (CTA,TTA,TCA):    4
+tRNAs with undetermined/unknown isotypes:   0
+Predicted pseudogenes:                      9
+                                            -------
+Total tRNAs:                                83
+
+tRNAs with introns:     	5
+
+| Thr-TGT: 1 | Arg-TCG: 1 | Tyr-GTA: 1 | Supres-TTA: 1 | Supres-TCA: 1 |
+
+Isotype / Anticodon Counts:
+
+Ala     : 4	  AGC: 1       GGC:         CGC: 1       TGC: 2     
+Gly     : 1	  ACC:         GCC: 1       CCC:         TCC:       
+Pro     : 3	  AGG: 1       GGG:         CGG: 1       TGG: 1     
+Thr     : 9	  AGT: 4       GGT:         CGT: 2       TGT: 3     
+Val     : 4	  AAC: 1       GAC: 1       CAC: 1       TAC: 1     
+Ser     : 8	  AGA: 1       GGA:         CGA: 1       TGA: 5       ACT:         GCT: 1     
+Arg     : 6	  ACG:         GCG:         CCG: 1       TCG: 1       CCT: 1       TCT: 3     
+Leu     : 9	  AAG: 1       GAG: 1       CAG: 2       TAG: 1       CAA: 2       TAA: 2     
+Phe     : 2	  AAA:         GAA: 2                               
+Asn     : 0	  ATT:         GTT:                                 
+Lys     : 4	                            CTT:         TTT: 4     
+Asp     : 4	  ATC:         GTC: 4                               
+Glu     : 3	                            CTC: 1       TTC: 2     
+His     : 3	  ATG:         GTG: 3                               
+Gln     : 6	                            CTG:         TTG: 6     
+Ile     : 3	  AAT: 1       GAT: 1       CAT:         TAT: 1     
+Met/iMet: 5	                            CAT: 5                  
+Tyr     : 1	  ATA:         GTA: 1                               
+Supres  : 5	               CTA:         TTA: 1       TCA: 4     
+Cys     : 1	  ACA:         GCA: 1                               
+Trp     : 1	                            CCA: 1                  
+SelCys  : 1	                                         TCA: 1     
+

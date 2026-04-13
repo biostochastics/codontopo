@@ -258,3 +258,172 @@ def topology_avoidance_test() -> dict:
             "table structure. Both reported for transparency."
         ),
     }
+
+
+# ====================================================================
+# Phylogenetic lineage groupings per Sengupta, Yang & Higgs (2007)
+# J Mol Evol 64:662-688, and Abascal et al. (2006) PLoS Biol 4:e127
+# ====================================================================
+
+# Maps each NCBI table to its major independent lineage.
+# Tables sharing a lineage reflect the SAME ancestral reassignment event.
+# ~15 independent lineages across 25 tables.
+PHYLOGENETIC_LINEAGES: dict[int, str] = {
+    1: "standard",  # no reassignment
+    2: "vertebrate_mito",
+    3: "yeast_mito",
+    4: "mold_protozoan_mito",
+    5: "invertebrate_mito",
+    6: "ciliate_nuclear_UAR_Gln",  # multiple independent origins within
+    9: "echinoderm_mito",
+    10: "euplotid_nuclear_UGA_Cys",
+    11: "bacterial_chloroplast",  # essentially standard
+    12: "CUG_Ser_clade_1",
+    13: "ascidian_mito",
+    14: "flatworm_mito",
+    15: "blepharisma_nuclear_UGA_Trp",
+    16: "chlorophycean_mito",
+    21: "trematode_mito",
+    22: "scenedesmus_mito",
+    23: "thraustochytrium_mito",
+    24: "rhabdopleurid_mito",
+    26: "CUG_Ala_pachysolen",
+    27: "karyorelict_nuclear",
+    28: "condylostoma_nuclear",
+    29: "mesodinium_nuclear",
+    30: "peritrich_nuclear",
+    31: "blastocrithidia_nuclear",
+    33: "cephalodiscus_mito",
+}
+
+# Major clade groups for exclusion sensitivity analysis
+CLADE_GROUPS: dict[str, list[int]] = {
+    "all_ciliates": [6, 10, 15, 27, 28, 29, 30],
+    "all_yeast_mito": [3],
+    "all_CUG_clade": [12, 26],
+    "all_metazoan_mito": [2, 5, 9, 13, 14, 21],
+    "all_algal_mito": [16, 22],
+    "all_protist_mito": [4, 23],
+    "all_hemichordate_mito": [24, 33],
+}
+
+
+def topology_avoidance_phylogenetic_sensitivity() -> dict:
+    """Re-run topology avoidance test with phylogenetic corrections.
+
+    Addresses the reviewer concern about non-independence of reassignment
+    events across NCBI tables sharing evolutionary ancestry.
+
+    Three analyses:
+    1. Lineage-collapsed: one event per unique (lineage, codon, target_aa)
+    2. Clade-exclusion: iteratively remove major clades and retest
+    3. Conservative: one event per lineage (most extreme reduction)
+
+    Reference: Sengupta, Yang & Higgs (2007) J Mol Evol 64:662-688
+    """
+    from scipy.stats import hypergeom
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db
+
+    db = build_reassignment_db()
+    standard_cat = disconnection_catalogue(STANDARD)
+    standard_disc_aas = {e["aa"] for e in standard_cat}
+
+    # Compute full landscape once
+    landscape = single_reassignment_landscape(STANDARD)
+    possible_creates_disc = 0
+    possible_total = 0
+    for entry in landscape:
+        variant = dict(STANDARD)
+        variant[entry["codon"]] = entry["new_aa"]
+        new_cat = disconnection_catalogue(variant)
+        new_disc_aas = {e["aa"] for e in new_cat}
+        if new_disc_aas - standard_disc_aas:
+            possible_creates_disc += 1
+        possible_total += 1
+    rate_possible = possible_creates_disc / max(possible_total, 1)
+
+    def _count_disc_events(
+        events: list,
+    ) -> tuple[int, int]:
+        """Count disc-creating vs non-disc events."""
+        creates = 0
+        no_disc = 0
+        seen: set[tuple[str, str]] = set()
+        for e in events:
+            key = (e.codon, e.target_aa)
+            if key in seen:
+                continue
+            seen.add(key)
+            variant = dict(STANDARD)
+            variant[e.codon] = e.target_aa
+            new_cat = disconnection_catalogue(variant)
+            new_disc = {entry["aa"] for entry in new_cat}
+            if new_disc - standard_disc_aas:
+                creates += 1
+            else:
+                no_disc += 1
+        return creates, no_disc
+
+    # 1. Lineage-collapsed: de-dup by (lineage, codon, target_aa)
+    seen_lineage: set[tuple[str, str, str]] = set()
+    lineage_events = []
+    for e in db:
+        lineage = PHYLOGENETIC_LINEAGES.get(e.table_id, f"unknown_{e.table_id}")
+        key = (lineage, e.codon, e.target_aa)
+        if key not in seen_lineage:
+            seen_lineage.add(key)
+            lineage_events.append(e)
+
+    lc_creates, lc_no_disc = _count_disc_events(lineage_events)
+    lc_total = lc_creates + lc_no_disc
+    lc_rate = lc_creates / max(lc_total, 1)
+    lc_hyper_p = float(
+        hypergeom.cdf(lc_creates, possible_total, possible_creates_disc, lc_total)
+    )
+
+    # 2. Clade-exclusion sensitivity
+    clade_results = []
+    for clade_name, table_ids in CLADE_GROUPS.items():
+        excluded_tables = set(table_ids)
+        filtered = [e for e in db if e.table_id not in excluded_tables]
+        fc, fn = _count_disc_events(filtered)
+        ft = fc + fn
+        if ft == 0:
+            continue
+        fr = fc / ft
+        fp = float(
+            hypergeom.cdf(fc, possible_total, possible_creates_disc, ft)
+        )
+        clade_results.append(
+            {
+                "excluded_clade": clade_name,
+                "excluded_tables": sorted(table_ids),
+                "n_events_remaining": ft,
+                "creates_disc": fc,
+                "rate_observed": fr,
+                "hypergeom_p": fp,
+                "significant_p05": fp < 0.05,
+            }
+        )
+
+    return {
+        "lineage_collapsed": {
+            "n_events": lc_total,
+            "creates_disc": lc_creates,
+            "rate_observed": lc_rate,
+            "rate_possible": rate_possible,
+            "depletion_fold": rate_possible / max(lc_rate, 0.001),
+            "hypergeom_p": lc_hyper_p,
+        },
+        "clade_exclusion": clade_results,
+        "all_clade_exclusions_significant": all(
+            r["significant_p05"] for r in clade_results
+        ),
+        "method": (
+            "Phylogenetic sensitivity per Sengupta et al. 2007 (J Mol Evol "
+            "64:662-688). Lineage-collapsed: one event per (lineage, codon, "
+            "target_aa). Clade-exclusion: remove major taxonomic groups and "
+            "retest."
+        ),
+    }

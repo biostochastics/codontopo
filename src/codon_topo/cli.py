@@ -396,6 +396,73 @@ def per_table(n_samples: int, seed: int, as_json: bool) -> None:
     _try_rich_table(headers, rows, title="Per-Table Optimality")
 
 
+@main.command("metric-sensitivity")
+@click.option("--n", "n_samples", default=1_000, help="Monte Carlo sample size per metric.")
+@click.option("--seed", default=DEFAULT_SEED, help="Random seed.")
+@click.option("--json", "as_json", is_flag=True, help="JSON output.")
+def metric_sensitivity(n_samples: int, seed: int, as_json: bool) -> None:
+    """Test coloring optimality across multiple distance metrics."""
+    from codon_topo.analysis.coloring_optimality import multi_metric_sensitivity
+
+    results = multi_metric_sensitivity(n_samples=n_samples, seed=seed)
+    if as_json:
+        _json_out(results)
+    else:
+        _try_rich_table(
+            ["Metric", "Quantile", "p-value", "Effect size (z)"],
+            [
+                [r["metric"], f"{r['quantile']:.1f}%",
+                 f"{r['p_value_conservative']:.4f}", f"{r['effect_size_z']:.2f}"]
+                for r in results["per_metric"]
+            ],
+            title="Multi-Metric Sensitivity Analysis",
+        )
+        click.echo(f"\nAll significant at p<0.01: {results['all_significant_p01']}")
+
+
+@main.command("mis-analysis")
+@click.option("--json", "as_json", is_flag=True, help="JSON output.")
+def mis_analysis(as_json: bool) -> None:
+    """Enumerate all maximal independent sets for tRNA enrichment."""
+    from codon_topo.analysis.trna_evidence import maximal_independent_set_analysis
+
+    results = maximal_independent_set_analysis()
+    if as_json:
+        _json_out(results)
+    else:
+        click.echo(f"MIS enumerated: {results['n_mis_size_ge2']}")
+        click.echo(f"Median Stouffer p: {results['median_stouffer_p']:.4f}")
+        click.echo(f"Worst-case Stouffer p: {results['worst_case_stouffer_p']:.4f}")
+        click.echo(f"Fraction significant (p<0.05): {results['fraction_significant_p05']:.0%}")
+        click.echo(f"\n{results['interpretation']}")
+
+
+@main.command("phylo-sensitivity")
+@click.option("--json", "as_json", is_flag=True, help="JSON output.")
+def phylo_sensitivity(as_json: bool) -> None:
+    """Test topology avoidance robustness to phylogenetic clade exclusion."""
+    from codon_topo.analysis.synbio_feasibility import (
+        topology_avoidance_phylogenetic_sensitivity,
+    )
+
+    results = topology_avoidance_phylogenetic_sensitivity()
+    if as_json:
+        _json_out(results)
+    else:
+        lc = results["lineage_collapsed"]
+        click.echo(f"Lineage-collapsed: {lc['n_events']} events, "
+                    f"{lc['depletion_fold']:.1f}x depletion, p={lc['hypergeom_p']:.2e}")
+        _try_rich_table(
+            ["Excluded Clade", "n remaining", "p-value", "Significant"],
+            [
+                [r["excluded_clade"], str(r["n_events_remaining"]),
+                 f"{r['hypergeom_p']:.2e}", "YES" if r["significant_p05"] else "NO"]
+                for r in results["clade_exclusion"]
+            ],
+            title="Clade-Exclusion Sensitivity",
+        )
+
+
 @main.command("all")
 @click.option("--output-dir", default="./output", help="Directory for CSV/JSON output.")
 @click.option("--seed", default=DEFAULT_SEED, help="Random seed for Monte Carlo.")
@@ -408,6 +475,10 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     from codon_topo.analysis.coloring_optimality import (
         monte_carlo_null,
         cross_table_optimality,
+        multi_metric_sensitivity,
+        stop_penalty_sensitivity,
+        codon_usage_vs_local_mismatch,
+        mechanistic_discriminant_test,
     )
     from codon_topo.analysis.reassignment_db import (
         build_reassignment_db,
@@ -415,10 +486,17 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         bit_position_bias_weighted as _bit_bias_weighted,
         directionality_summary,
     )
-    from codon_topo.analysis.trna_evidence import trna_duplication_correlation_test
+    from codon_topo.analysis.trna_evidence import (
+        trna_duplication_correlation_test,
+        maximal_independent_set_analysis,
+        fisher_exact_per_pairing,
+    )
     from codon_topo.analysis.depth_calibration import (
         compute_correlation,
         depth_calibration_table,
+    )
+    from codon_topo.analysis.synbio_feasibility import (
+        topology_avoidance_phylogenetic_sensitivity,
     )
     from codon_topo.analysis.cosmic_query import fano_predictions_for_kras
     from codon_topo.reports.claim_hierarchy import CLAIM_HIERARCHY
@@ -430,7 +508,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     click.echo("Running all analyses...")
 
     # Filtration across all tables
-    click.echo("  [1/8] Filtration...")
+    click.echo("  [1/11] Filtration...")
     filt_results = []
     for tid in all_table_ids():
         code = get_code(tid)
@@ -440,7 +518,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     _write_json(out / "filtration.json", filt_results)
 
     # Disconnection catalogue
-    click.echo("  [2/8] Disconnections...")
+    click.echo("  [2/11] Disconnections...")
     disc_results = []
     for tid in all_table_ids():
         code = get_code(tid)
@@ -450,20 +528,26 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         disc_results.extend(cat)
     _write_json(out / "disconnections.json", disc_results)
 
-    # Coloring optimality
-    click.echo(f"  [3/8] Coloring optimality (n={n_samples})...")
+    # Coloring optimality + multi-metric sensitivity
+    click.echo(f"  [3/11] Coloring optimality (n={n_samples})...")
     coloring_result = monte_carlo_null(n_samples=n_samples, seed=seed)
     cross_table = cross_table_optimality()
+    click.echo(f"  [4/11] Multi-metric sensitivity (n=1000)...")
+    metric_results = multi_metric_sensitivity(n_samples=1_000, seed=seed)
+    click.echo(f"  [5/11] Stop penalty sensitivity...")
+    stop_results = stop_penalty_sensitivity(n_samples=1_000, seed=seed)
     _write_json(
         out / "coloring_optimality.json",
         {
             "monte_carlo": coloring_result,
             "cross_table": cross_table,
+            "multi_metric": metric_results,
+            "stop_penalty": stop_results,
         },
     )
 
     # Reassignment DB + bit bias
-    click.echo("  [4/8] Reassignment analysis...")
+    click.echo("  [6/11] Reassignment analysis...")
     db = build_reassignment_db()
     paths = hamming_path_lengths()
     bit_bias_mito = _bit_bias_weighted("mitochondrial")
@@ -478,13 +562,27 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         },
     )
 
-    # tRNA evidence
-    click.echo("  [5/8] tRNA evidence...")
+    # tRNA evidence (with MIS analysis)
+    click.echo("  [7/11] tRNA evidence + MIS analysis...")
     trna_result = trna_duplication_correlation_test()
-    _write_json(out / "trna_evidence.json", trna_result)
+    fisher_result = fisher_exact_per_pairing()
+    mis_result = maximal_independent_set_analysis()
+    _write_json(
+        out / "trna_evidence.json",
+        {
+            "sign_test": trna_result,
+            "fisher_stouffer": fisher_result,
+            "mis_analysis": mis_result,
+        },
+    )
+
+    # Phylogenetic sensitivity
+    click.echo("  [8/11] Phylogenetic sensitivity...")
+    phylo_result = topology_avoidance_phylogenetic_sensitivity()
+    _write_json(out / "phylogenetic_sensitivity.json", phylo_result)
 
     # Depth calibration
-    click.echo("  [6/8] Depth calibration...")
+    click.echo("  [9/11] Depth calibration...")
     corr = compute_correlation()
     cal_table = depth_calibration_table()
     _write_json(
@@ -495,19 +593,13 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         },
     )
 
-    # KRAS-Fano predictions (offline — no API call in batch)
-    click.echo("  [7/8] KRAS-Fano predictions (offline)...")
+    # KRAS-Fano predictions (offline)
+    click.echo("  [10/11] KRAS-Fano predictions (offline)...")
     fano_preds = fano_predictions_for_kras()
-    _write_json(
-        out / "kras_fano.json",
-        {
-            "mode": "offline",
-            "predictions": fano_preds,
-        },
-    )
+    _write_json(out / "kras_fano.json", {"mode": "offline", "predictions": fano_preds})
 
-    # Claim hierarchy + catalogue
-    click.echo("  [8/8] Claims & catalogue...")
+    # Claim hierarchy + catalogue + exploratory tests
+    click.echo("  [11/11] Claims, catalogue & exploratory tests...")
     claims_data = [
         {
             "id": c.id,
@@ -532,22 +624,21 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         }
         for p in catalogue
     ]
+    cub_result = codon_usage_vs_local_mismatch()
+    mech_result = mechanistic_discriminant_test()
     _write_json(out / "claims.json", claims_data)
     _write_json(out / "catalogue.json", catalogue_data)
+    _write_json(
+        out / "exploratory_tests.json",
+        {"cub_correlation": cub_result, "mechanistic_discriminant": mech_result},
+    )
 
     # Summary
     click.echo(f"\nDone. {len(list(out.glob('*.json')))} JSON files written to {out}/")
-    click.echo(
-        f"  Coloring: quantile={coloring_result['quantile_of_observed']:.2f}%, "
-        f"p={coloring_result['p_value_conservative']:.6f}"
-    )
-    click.echo(
-        f"  tRNA:     {trna_result['n_with_elevated_trna']}/4 elevated, "
-        f"p={trna_result['binomial_p_value']:.4f}"
-    )
-    click.echo(
-        f"  Depth:    rho={corr['spearman_rho']:.3f}, p={corr['spearman_p']:.3f}"
-    )
+    for m in metric_results["per_metric"]:
+        click.echo(f"  {m['metric']:20s}  quantile={m['quantile']:.1f}%  p={m['p_value_conservative']:.4f}")
+    click.echo(f"  MIS worst-case p: {mis_result.get('worst_case_stouffer_p', 'N/A')}")
+    click.echo(f"  Phylo clade-exclusion: all significant = {phylo_result['all_clade_exclusions_significant']}")
 
 
 def _write_json(path: Path, data: dict | list) -> None:

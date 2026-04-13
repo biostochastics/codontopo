@@ -218,9 +218,10 @@ pF <- ggplot(df_ta, aes(x = category, y = rate, fill = group)) +
   scale_y_continuous(limits = c(0, 100)) +
   labs(
     title = "Natural Reassignments Avoid Topology-Breaking Changes",
-    subtitle = paste0("Hypergeometric p = ",
-                      format(ta$hypergeom_p[1], digits = 2, scientific = TRUE),
-                      " | OR = ", round(ta$odds_ratio[1], 3)),
+    subtitle = paste0("Permutation p = ",
+                      format(ta$permutation_p[1], digits = 2, scientific = TRUE),
+                      " (n=10,000) | Hypergeometric p = ",
+                      format(ta$hypergeom_p[1], digits = 2, scientific = TRUE)),
     x = "",
     y = "Fraction creating new disconnections (%)"
   ) +
@@ -239,8 +240,8 @@ cat("  [G] Bit-position bias...\n")
 bb <- read.csv(file.path(table_dir, "T8_bit_bias.csv"))
 # Manually build the 6-bin histogram from the "6-bin de-duplicated" row
 # Using the full dataset for the figure
-obs_str <- bb$observed[bb$test == "6-bin uniform"]
-obs_vals <- as.numeric(strsplit(gsub("[\\[\\] ]", "", obs_str), ",")[[1]])
+obs_str <- as.character(bb$observed[bb$test == "6-bin uniform"])
+obs_vals <- as.numeric(strsplit(gsub("\\[|\\]| ", "", obs_str), ",")[[1]])
 
 df_bb <- data.frame(
   bit = paste0("Bit ", 0:5),

@@ -14,3 +14,7 @@ build/
 .playwright-mcp/
 viz_*.png
 web/
+
+# Large genome assembly downloads (reproducible via scripts/run_trnascan.sh)
+data/assemblies/*.zip
+data/assemblies/*_data/

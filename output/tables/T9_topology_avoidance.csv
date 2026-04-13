@@ -1,2 +1,2 @@
-observed_creates_disc,observed_total,rate_observed_pct,possible_creates_disc,possible_total,rate_possible_pct,hypergeom_p,fisher_p,odds_ratio
-6,27,22.2,931,1280,72.7,4.776789702630534e-08,4.776789702630534e-08,0.10131274131274132
+observed_creates_disc,observed_total,rate_observed_pct,possible_creates_disc,possible_total,rate_possible_pct,hypergeom_p,permutation_p,n_permutations,fisher_p,odds_ratio
+6,27,22.2,931,1280,72.7,4.776789702630534e-08,9.999000099990002e-05,10000,4.776789702630534e-08,0.10131274131274132

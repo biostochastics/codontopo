@@ -323,7 +323,7 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
             "chlorophyte pairing (phylogenetically too distant)."
         ),
     ),
-    # === EXPANDED: CILIATE NUCLEAR CODE ORGANISMS (April 2026) ===
+    # === CILIATE NUCLEAR CODE ORGANISMS (tRNAscan-SE verified) ===
     #
     # Ciliates use variant nuclear genetic codes with stop codon reassignments.
     # tRNA duplication is the documented mechanism (Hanyu et al. 1986 EMBO J).
@@ -450,8 +450,118 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         notes=(
             "UGA reassigned to Cys. tRNA-Cys(GCA) reads UGA codons. "
             "Nanochromosome genome makes total counts approximate. "
-            "Counts from Wang et al. 2016 transcriptome-guided tRNA scan."
+            "Counts from Wang et al. 2016 transcriptome-guided tRNA scan. "
+            "Superseded by tRNAscan-SE verified Euplotes species below."
         ),
+    ),
+    # === EUPLOTES SPECIES (Table 10, UGA→Cys, tRNAscan-SE verified) ===
+    "eaediculatus_nuclear": TRNARepertoire(
+        organism="Euplotes aediculatus",
+        compartment="nuclear",
+        ncbi_table_id=10,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_030463445.1
+        # 97.3 Mb MAC genome. 80 total tRNAs, 76 std20.
+        by_amino_acid={
+            "Ala": 4, "Arg": 7, "Asn": 3, "Asp": 3,
+            "Cys": 4,  # 3 GCA + 1 TCA reading UGA
+            "Gln": 3, "Glu": 4, "Gly": 3, "His": 4, "Ile": 1,
+            "Leu": 6, "Lys": 5, "Met": 10, "Phe": 2, "Pro": 4,
+            "Ser": 4, "Thr": 2, "Trp": 1, "Tyr": 2, "Val": 5,
+        },
+        has_disconnection=True,
+        reassigned_aa="Cys",
+        source="tRNAscan-SE 2.0.12 on GCA_030463445.1 (April 2026); Jin et al. 2023",
+        notes="UGA→Cys (Table 10). Spirotrichea. 80 tRNAs. Cys = 3 GCA + 1 TCA(UGA).",
+    ),
+    "eamieti_nuclear": TRNARepertoire(
+        organism="Euplotes amieti",
+        compartment="nuclear",
+        ncbi_table_id=10,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_048569255.1
+        # 88.5 Mb. 120 total tRNAs, 103 std20.
+        by_amino_acid={
+            "Ala": 6, "Arg": 6, "Asn": 4, "Asp": 3,
+            "Cys": 8,  # 4 GCA + 4 TCA reading UGA
+            "Gln": 9, "Glu": 7, "Gly": 4, "His": 3, "Ile": 7,
+            "Leu": 10, "Lys": 10, "Met": 4, "Phe": 4, "Pro": 5,
+            "Ser": 8, "Thr": 10, "Trp": 1, "Tyr": 4, "Val": 3,
+        },
+        has_disconnection=True,
+        reassigned_aa="Cys",
+        source="tRNAscan-SE 2.0.12 on GCA_048569255.1 (April 2026)",
+        notes="UGA→Cys (Table 10). Spirotrichea. 120 tRNAs. Cys = 4 GCA + 4 TCA(UGA).",
+    ),
+    "efocardii_nuclear": TRNARepertoire(
+        organism="Euplotes focardii",
+        compartment="nuclear",
+        ncbi_table_id=10,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_001880345.2
+        # 49.3 Mb Antarctic psychrophile. 62 total tRNAs, 56 std20.
+        by_amino_acid={
+            "Ala": 5, "Arg": 5, "Asn": 2, "Asp": 1,
+            "Cys": 3,  # 1 GCA + 2 TCA reading UGA
+            "Gln": 2, "Glu": 3, "Gly": 5, "His": 1, "Ile": 3,
+            "Leu": 6, "Lys": 2, "Met": 3, "Phe": 3, "Pro": 2,
+            "Ser": 4, "Thr": 3, "Trp": 2, "Tyr": 1, "Val": 3,
+        },
+        has_disconnection=True,
+        reassigned_aa="Cys",
+        source="tRNAscan-SE 2.0.12 on GCA_001880345.2 (April 2026); Mozzicafreddo et al. 2021",
+        notes="UGA→Cys (Table 10). Spirotrichea. Antarctic. 62 tRNAs. Cys = 1 GCA + 2 TCA(UGA).",
+    ),
+    "eparawoodruffi_nuclear": TRNARepertoire(
+        organism="Euplotes parawoodruffi",
+        compartment="nuclear",
+        ncbi_table_id=10,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_021440025.1
+        # 74.2 Mb. 149 total tRNAs, 128 std20.
+        by_amino_acid={
+            "Ala": 10, "Arg": 15, "Asn": 5, "Asp": 3,
+            "Cys": 9,  # 5 GCA + 4 TCA reading UGA
+            "Gln": 2, "Glu": 11, "Gly": 10, "His": 3, "Ile": 6,
+            "Leu": 16, "Lys": 2, "Met": 14, "Phe": 4, "Pro": 8,
+            "Ser": 7, "Thr": 11, "Trp": 0, "Tyr": 4, "Val": 5,
+        },
+        has_disconnection=True,
+        reassigned_aa="Cys",
+        source="tRNAscan-SE 2.0.12 on GCA_021440025.1 (April 2026)",
+        notes="UGA→Cys (Table 10). Spirotrichea. 149 tRNAs. Cys = 5 GCA + 4 TCA(UGA).",
+    ),
+    "eweissei_nuclear": TRNARepertoire(
+        organism="Euplotes weissei",
+        compartment="nuclear",
+        ncbi_table_id=10,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_021440005.1
+        # 82.1 Mb. 495 total tRNAs (large/polyploid MAC), 390 std20.
+        by_amino_acid={
+            "Ala": 14, "Arg": 35, "Asn": 19, "Asp": 15,
+            "Cys": 20,  # 17 GCA + 3 TCA reading UGA
+            "Gln": 28, "Glu": 26, "Gly": 22, "His": 18, "Ile": 22,
+            "Leu": 42, "Lys": 25, "Met": 35, "Phe": 11, "Pro": 23,
+            "Ser": 27, "Thr": 39, "Trp": 14, "Tyr": 10, "Val": 18,
+        },
+        has_disconnection=True,
+        reassigned_aa="Cys",
+        source="tRNAscan-SE 2.0.12 on GCA_021440005.1 (April 2026)",
+        notes="UGA→Cys (Table 10). Spirotrichea. 495 tRNAs (large MAC). Cys = 17 GCA + 3 TCA(UGA).",
+    ),
+    "ewoodruffi_nuclear": TRNARepertoire(
+        organism="Euplotes woodruffi",
+        compartment="nuclear",
+        ncbi_table_id=10,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_027382605.1
+        # 72.2 Mb. 83 total tRNAs, 74 std20.
+        by_amino_acid={
+            "Ala": 7, "Arg": 11, "Asn": 2, "Asp": 1,
+            "Cys": 4,  # 2 GCA + 2 TCA reading UGA
+            "Gln": 3, "Glu": 3, "Gly": 3, "His": 1, "Ile": 3,
+            "Leu": 6, "Lys": 5, "Met": 8, "Phe": 1, "Pro": 3,
+            "Ser": 6, "Thr": 6, "Trp": 1, "Tyr": 1, "Val": 4,
+        },
+        has_disconnection=True,
+        reassigned_aa="Cys",
+        source="tRNAscan-SE 2.0.12 on GCA_027382605.1 (April 2026)",
+        notes="UGA→Cys (Table 10). Spirotrichea. 83 tRNAs. Cys = 2 GCA + 2 TCA(UGA).",
     ),
     "oxytricha_nuclear": TRNARepertoire(
         organism="Oxytricha trifallax",
@@ -610,46 +720,300 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
             "Gln-reassignment ciliates."
         ),
     ),
-    # === BOUNDARY CASES: organisms where tRNA duplication does NOT occur ===
-    "blastocrithidia_nuclear": TRNARepertoire(
-        organism="Blastocrithidia sp.",
+    # === ADDITIONAL CILIATE SPECIES (tRNAscan-SE verified) ===
+    #
+    # Species from Heaphy et al. 2016 survey and subsequent publications
+    # with NCBI genome assemblies available for tRNAscan-SE verification.
+    #
+    "fsalina_nuclear": TRNARepertoire(
+        organism="Fabrea salina",
         compartment="nuclear",
-        ncbi_table_id=31,
-        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_000436035.1
-        # Tiny genome (3 Mb), 34 tRNAs total. Trp = 0!
-        # UGA→Trp reassignment uses tRNA IMPORT, not gene duplication.
-        # Informative boundary: gene duplication mechanism requires
-        # large genomes tolerant of tRNA gene amplification.
+        ncbi_table_id=1,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_022984795.1 (ASM2298479v1)
+        # 18.3 Mb MAC genome — smallest free-living heterotrophic ciliate
+        # Standard code confirmed by Codetta (Zhang et al. MBE 2022)
+        # Class Heterotrichea — same as Stentor, Blepharisma
+        # 85 standard-20-AA tRNAs + 1 suppressor + 1 SelCys + 1 undetermined
+        # + 1 pseudogene = 89 total
         by_amino_acid={
-            "Ala": 0,
-            "Arg": 3,
-            "Asn": 2,
-            "Asp": 2,
-            "Cys": 0,
-            "Gln": 2,
-            "Glu": 1,
-            "Gly": 4,
-            "His": 1,
-            "Ile": 0,
-            "Leu": 5,
-            "Lys": 1,
+            "Ala": 4,
+            "Arg": 8,
+            "Asn": 3,
+            "Asp": 4,
+            "Cys": 1,
+            "Gln": 3,  # Standard Gln only (CTG:1, TTG:2)
+            "Glu": 6,
+            "Gly": 5,
+            "His": 3,
+            "Ile": 4,
+            "Leu": 9,
+            "Lys": 5,
             "Met": 3,
             "Phe": 2,
-            "Pro": 2,
-            "Ser": 4,
-            "Thr": 1,
-            "Trp": 0,  # <-- ZERO: imports tRNA, no duplication
-            "Tyr": 1,
-            "Val": 0,
+            "Pro": 4,
+            "Ser": 6,
+            "Thr": 4,
+            "Trp": 2,
+            "Tyr": 4,
+            "Val": 6,
+        },
+        has_disconnection=False,
+        source=(
+            "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); "
+            "Zhang et al. 2022 MBE (PMID 35325184)"
+        ),
+        notes=(
+            "Standard nuclear code (Table 1) confirmed by Codetta analysis "
+            "(Zhang et al. MBE 2022). Smallest free-living heterotrophic "
+            "eukaryote genome (18.3 Mb). Class Heterotrichea — phylogenetically "
+            "close to Stentor and Blepharisma. 89 total tRNAs (85 standard "
+            "20-AA + 1 suppressor + 1 SelCys + 1 undetermined + 1 pseudo). "
+            "Ideal standard-code control within Heterotrichea."
+        ),
+    ),
+    "ppersalinus_nuclear": TRNARepertoire(
+        organism="Pseudocohnilembus persalinus",
+        compartment="nuclear",
+        ncbi_table_id=6,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_001447515.1 (ASM144751v1)
+        # 55.5 Mb MAC genome. Class Oligohymenophorea (Scuticociliatia).
+        # UAA/UAG reassigned to Gln (Table 6).
+        # 228 standard-20-AA tRNAs + 15 suppressor (CTA:3 + TTA:12) +
+        # 1 SelCys + 18 pseudogenes = 262 total
+        by_amino_acid={
+            "Ala": 13,
+            "Arg": 17,
+            "Asn": 14,
+            "Asp": 15,
+            "Cys": 5,
+            "Gln": 20,  # VERIFIED: 5 normal (CTG:1, TTG:4) + 15 suppressor (CTA:3, TTA:12)
+            "Glu": 14,
+            "Gly": 16,
+            "His": 5,
+            "Ile": 16,
+            "Leu": 20,
+            "Lys": 20,
+            "Met": 9,
+            "Phe": 15,
+            "Pro": 11,
+            "Ser": 11,
+            "Thr": 11,
+            "Trp": 6,
+            "Tyr": 9,
+            "Val": 13,
+        },
+        has_disconnection=True,
+        reassigned_aa="Gln",
+        source=(
+            "tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); "
+            "Ensembl Protists"
+        ),
+        notes=(
+            "UAA/UAG reassigned to Gln (Table 6). Class Oligohymenophorea "
+            "(Scuticociliatia). Same class as Tetrahymena and Paramecium but "
+            "phylogenetically distant (Scuticociliatia vs Hymenostomatia). "
+            "tRNAscan-SE confirms 15 suppressor tRNAs (CTA:3 reading UAG, "
+            "TTA:12 reading UAA) plus 5 normal Gln tRNAs. Total effective "
+            "Gln = 20. Adds a third independent Gln-reassignment lineage."
+        ),
+    ),
+    "hgrandinella_nuclear": TRNARepertoire(
+        organism="Halteria grandinella",
+        compartment="nuclear",
+        ncbi_table_id=6,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_006369765.1 (ASM636976v1)
+        # 64 Mb genome, ~40,422 contigs (nanochromosomes).
+        # Class Spirotrichea (Oligotrichia). UAA/UAG reassigned to Gln.
+        # 121 standard-20-AA tRNAs + 3 suppressor (CTA:1, TTA:2) +
+        # 1 SelCys + 5 pseudogenes = 130 total.
+        by_amino_acid={
+            "Ala": 7,
+            "Arg": 10,
+            "Asn": 6,
+            "Asp": 3,
+            "Cys": 2,
+            "Gln": 9,  # VERIFIED: 6 normal (CTG:3, TTG:3) + 3 suppressor (CTA:1, TTA:2)
+            "Glu": 8,
+            "Gly": 7,
+            "His": 4,
+            "Ile": 11,
+            "Leu": 9,
+            "Lys": 10,
+            "Met": 6,
+            "Phe": 1,
+            "Pro": 5,
+            "Ser": 9,
+            "Thr": 8,
+            "Trp": 3,
+            "Tyr": 5,
+            "Val": 6,
+        },
+        has_disconnection=True,
+        reassigned_aa="Gln",
+        source=(
+            "tRNAscan-SE 2.0.12 on GCA_006369765.1 (April 2026); "
+            "Zheng et al. MBE 2021 (PMID 33500338)"
+        ),
+        notes=(
+            "UAA/UAG reassigned to Gln (Table 6). Class Spirotrichea "
+            "(Oligotrichia) — phylogenetically distinct from Oxytricha "
+            "(Stichotrichia). ~40,422 nanochromosomes, 64 Mb genome. "
+            "tRNAscan-SE confirms 3 suppressor tRNAs (CTA:1 reading UAG, "
+            "TTA:2 reading UAA) plus 6 normal Gln tRNAs. Total effective "
+            "Gln = 9. Independent Spirotrichea Gln-reassignment lineage."
+        ),
+    ),
+    "bstoltei_nuclear": TRNARepertoire(
+        organism="Blepharisma stoltei",
+        compartment="nuclear",
+        ncbi_table_id=15,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_965603825.1
+        # (Bstoltei_ATCC30299_MAC_1.00)
+        # 41.5 Mb MAC genome. Class Heterotrichea.
+        # UGA reassigned to Trp (Table 15). UAA/UAG remain stops.
+        # 165 standard-20-AA tRNAs + 0 suppressor + 1 SelCys +
+        # 1 undetermined + 2 pseudogenes = 169 total
+        by_amino_acid={
+            "Ala": 11,
+            "Arg": 12,
+            "Asn": 7,
+            "Asp": 5,
+            "Cys": 3,
+            "Gln": 8,  # Standard Gln only (CTG:3, TTG:5), no suppressors
+            "Glu": 9,
+            "Gly": 10,
+            "His": 4,
+            "Ile": 9,
+            "Leu": 16,
+            "Lys": 11,
+            "Met": 9,
+            "Phe": 5,
+            "Pro": 9,
+            "Ser": 12,
+            "Thr": 7,
+            "Trp": 6,  # VERIFIED: CCA:6 — reads both UGG + UGA (Table 15)
+            "Tyr": 4,
+            "Val": 9,
         },
         has_disconnection=True,
         reassigned_aa="Trp",
-        source="tRNAscan-SE 2.0.12 on GCA_000436035.1 (April 2026)",
+        source=(
+            "tRNAscan-SE 2.0.12 on GCA_965603825.1 (April 2026); "
+            "Singh et al. PNAS 2023 (PMID 36669098)"
+        ),
         notes=(
-            "UGA→Trp in nuclear code. Kinetoplastid with extreme genome "
-            "reduction. Zero Trp tRNA genes — reassignment uses imported "
-            "tRNAs, not gene duplication. Boundary case demonstrating "
-            "that duplication mechanism is specific to large-genome organisms."
+            "UGA reassigned to Trp (Table 15). UAA/UAG remain stops. "
+            "Class Heterotrichea — closely related to B. japonicum. "
+            "MAC genome 41.5 Mb (Singh et al. PNAS 2023). tRNAscan-SE "
+            "confirms 6 tRNA-Trp(CCA) genes, 0 suppressors. 169 total "
+            "tRNAs (165 standard 20-AA + 1 SelCys + 1 undetermined + "
+            "2 pseudogenes). Replaces literature-estimated B. japonicum."
+        ),
+    ),
+    # === BOUNDARY CASES: organisms where tRNA duplication does NOT occur ===
+    "blastocrithidia_nuclear": TRNARepertoire(
+        organism="Blastocrithidia nonstop",
+        compartment="nuclear",
+        ncbi_table_id=31,
+        # VERIFIED: tRNAscan-SE 2.0.12 on GCA_028554745.1 (B. nonstop P57)
+        # 24.7 Mb genome, 77 contigs. 68 tRNAs total (65 standard AA +
+        # 2 suppressor + 1 SelCys).
+        # Trp = 2 (both CCA anticodon): shortened anticodon stem (5bp→4bp)
+        # reads both UGA and UGG. Not gene duplication — structural modification.
+        # 2 suppressor tRNAs (CTA:1 = UAG→Glu, TTA:1 = UAA→Glu).
+        by_amino_acid={
+            "Ala": 5,
+            "Arg": 7,
+            "Asn": 3,
+            "Asp": 3,
+            "Cys": 1,
+            "Gln": 2,
+            "Glu": 4,  # 2 standard + 2 suppressor (CTA + TTA reading UAG/UAA)
+            "Gly": 4,
+            "His": 1,
+            "Ile": 3,
+            "Leu": 7,
+            "Lys": 4,
+            "Met": 2,
+            "Phe": 2,
+            "Pro": 3,
+            "Ser": 5,
+            "Thr": 4,
+            "Trp": 2,  # tRNA-Trp(CCA) with shortened anticodon stem
+            "Tyr": 2,
+            "Val": 3,
+        },
+        has_disconnection=True,
+        reassigned_aa="Trp",
+        source=(
+            "tRNAscan-SE 2.0.12 on GCA_028554745.1 (B. nonstop P57); "
+            "Kachale et al. 2023 Nature 613:751-758; "
+            "BioProject PRJNA790628"
+        ),
+        notes=(
+            "UGA→Trp via anticodon stem shortening (5bp→4bp) of "
+            "tRNA-Trp(CCA), not gene duplication (Kachale 2023). "
+            "UAA/UAG→Glu via 2 new suppressor tRNAs (CTA + TTA). "
+            "eRF1 Ser74Gly mutation reduces stop codon recognition. "
+            "UAA is context-dependent: terminates AND encodes Glu "
+            "in-frame. All 3 stops reassigned (Table 31). Boundary "
+            "case: Trp tRNAs present (n=2) but mechanism is structural "
+            "modification, not gene amplification."
+        ),
+    ),
+    # === BACTERIAL UGA→Trp ORGANISMS (Table 4, tRNAscan-SE verified) ===
+    #
+    # Mycoplasma/Mycoplasmoides use Table 4 (UGA→Trp). Single tRNA-Trp(CCA)
+    # reads both UGG and UGA via post-transcriptional anticodon modification
+    # (not gene duplication). Minimal genomes, minimal tRNA repertoires.
+    #
+    "mgenitalium_bacterial": TRNARepertoire(
+        organism="Mycoplasmoides genitalium G37",
+        compartment="nuclear",  # bacterial chromosome, not compartmentalized
+        ncbi_table_id=4,
+        # VERIFIED: tRNAscan-SE 2.0.12 (-B mode) on GCA_000027325.1
+        # 580 kb genome. 36 total tRNAs. Single tRNA-Trp(CCA).
+        by_amino_acid={
+            "Ala": 1, "Arg": 4, "Asn": 1, "Asp": 1, "Cys": 1,
+            "Gln": 1, "Glu": 1, "Gly": 2, "His": 1, "Ile": 2,
+            "Leu": 4, "Lys": 2, "Met": 2, "Phe": 1, "Pro": 1,
+            "Ser": 4, "Thr": 3, "Trp": 1, "Tyr": 1, "Val": 1,
+        },
+        has_disconnection=True,
+        reassigned_aa="Trp",
+        source=(
+            "tRNAscan-SE 2.0.12 (-B mode) on GCA_000027325.1 (April 2026); "
+            "Himmelreich et al. 1996 Science 270:397-403"
+        ),
+        notes=(
+            "UGA→Trp (Table 4). 580 kb genome — smallest known free-living "
+            "organism. Single tRNA-Trp(CCA) reads both UGG and UGA via "
+            "post-transcriptional anticodon modification, NOT gene "
+            "duplication. 36 total tRNAs. Boundary case: confirms that "
+            "minimal genomes use modification rather than duplication."
+        ),
+    ),
+    "mpneumoniae_bacterial": TRNARepertoire(
+        organism="Mycoplasmoides pneumoniae M129",
+        compartment="nuclear",
+        ncbi_table_id=4,
+        # VERIFIED: tRNAscan-SE 2.0.12 (-B mode) on GCF_910574535.1
+        # 816 kb genome. 37 total tRNAs. Single tRNA-Trp(CCA).
+        by_amino_acid={
+            "Ala": 1, "Arg": 4, "Asn": 1, "Asp": 1, "Cys": 1,
+            "Gln": 1, "Glu": 1, "Gly": 2, "His": 1, "Ile": 2,
+            "Leu": 4, "Lys": 2, "Met": 2, "Phe": 1, "Pro": 1,
+            "Ser": 5, "Thr": 3, "Trp": 1, "Tyr": 1, "Val": 1,
+        },
+        has_disconnection=True,
+        reassigned_aa="Trp",
+        source=(
+            "tRNAscan-SE 2.0.12 (-B mode) on GCF_910574535.1 (April 2026)"
+        ),
+        notes=(
+            "UGA→Trp (Table 4). 816 kb genome. Single tRNA-Trp(CCA) reads "
+            "both UGG and UGA via post-transcriptional modification. 37 "
+            "total tRNAs. Confirms Mycoplasma boundary case."
         ),
     ),
     # === CROSS-KINGDOM CONTROLS (GtRNAdb, for non-ciliate comparisons) ===
@@ -829,7 +1193,7 @@ def compare_aa_gene_counts(
 
 # Mapping of disconnection cases to their controls.
 # Controls chosen for phylogenetic proximity to the disconnection organism,
-# per feedback from adversarial review (gemini 2026-04-13):
+# Phylogenetic proximity criteria:
 #   - Yeast mito (Saccharomycetales) paired with Yarrowia lipolytica (Dipodascaceae
 #     fungi, same subphylum Saccharomycotina) — NOT Chlamydomonas
 #   - Chlorophycean mito paired with C. reinhardtii (sister green alga)
@@ -853,11 +1217,29 @@ DISCONNECTION_PAIRINGS: list[tuple[str, str, str]] = [
     # Cross-class: variant vs S. coeruleus (Heterotrichea, standard)
     ("tthermophila_nuclear", "scoeruleus_nuclear", "Gln"),  # VERIFIED
     ("ptetraurelia_nuclear", "scoeruleus_nuclear", "Gln"),  # VERIFIED
-    # Spirotrichea (estimated, pending tRNAscan-SE on Oxytricha)
+    # Spirotrichea: O. trifallax verified by tRNAscan-SE
     ("oxytricha_nuclear", "scoeruleus_nuclear", "Gln"),
-    # Non-Gln ciliates (estimated, pending genome verification)
+    # Non-Gln ciliates (literature-estimated, kept for comparison)
     ("eoctocarinatus_nuclear", "scoeruleus_nuclear", "Cys"),
     ("bjaponicum_nuclear", "scoeruleus_nuclear", "Trp"),
+    # --- Euplotes (Table 10, UGA→Cys, tRNAscan-SE verified) ---
+    ("eaediculatus_nuclear", "scoeruleus_nuclear", "Cys"),
+    ("eaediculatus_nuclear", "fsalina_nuclear", "Cys"),
+    ("eamieti_nuclear", "scoeruleus_nuclear", "Cys"),
+    ("efocardii_nuclear", "fsalina_nuclear", "Cys"),
+    ("eparawoodruffi_nuclear", "scoeruleus_nuclear", "Cys"),
+    ("eweissei_nuclear", "fsalina_nuclear", "Cys"),
+    ("ewoodruffi_nuclear", "scoeruleus_nuclear", "Cys"),
+    # --- Additional ciliate pairings ---
+    # Pseudocohnilembus: Oligohymenophorea scuticociliate, independent lineage
+    ("ppersalinus_nuclear", "imultifiliis_nuclear", "Gln"),
+    ("ppersalinus_nuclear", "fsalina_nuclear", "Gln"),
+    # Halteria: Spirotrichea (Oligotrichia), independent from Oxytricha
+    ("hgrandinella_nuclear", "scoeruleus_nuclear", "Gln"),
+    ("hgrandinella_nuclear", "fsalina_nuclear", "Gln"),
+    # Blepharisma stoltei: replaces literature-estimated B. japonicum
+    ("bstoltei_nuclear", "scoeruleus_nuclear", "Trp"),
+    ("bstoltei_nuclear", "fsalina_nuclear", "Trp"),
 ]
 
 # Negative control: test a non-reassigned AA in a variant-code organism.
@@ -967,10 +1349,13 @@ def fisher_exact_per_pairing() -> dict:
     combined_z = sum(z_scores) / (len(z_scores) ** 0.5)
     combined_p = float(1 - norm.cdf(combined_z))
 
-    # Also compute on independent pairings only (no shared organisms)
+    # Also compute on independent pairings only (no shared organisms).
+    # Sort by Fisher p-value (ascending) for deterministic greedy selection
+    # that favors the strongest-effect pairings.
     seen_organisms: set[str] = set()
     independent_p: list[float] = []
-    for pp in per_pairing:
+    sorted_pairings = sorted(per_pairing, key=lambda x: float(x["fisher_p"]))
+    for pp in sorted_pairings:
         if (
             pp["disconnection_key"] in seen_organisms
             or pp["control_key"] in seen_organisms
@@ -1004,6 +1389,149 @@ def fisher_exact_per_pairing() -> dict:
         "caveat": (
             "Pairings are not fully independent (some share control organisms). "
             "The stouffer_p_independent field uses only pairings with no shared organisms."
+        ),
+    }
+
+
+def _stouffer_combine(p_values: list[float]) -> tuple[float, float]:
+    """Combine p-values via Stouffer's Z method. Returns (Z, combined_p)."""
+    from scipy.stats import norm
+
+    _CLIP_LO, _CLIP_HI = 1e-10, 1 - 1e-10
+    z_scores = [
+        float(norm.ppf(1 - max(min(p, _CLIP_HI), _CLIP_LO))) for p in p_values
+    ]
+    combined_z = sum(z_scores) / (len(z_scores) ** 0.5)
+    combined_p = float(1 - norm.cdf(combined_z))
+    return combined_z, combined_p
+
+
+def maximal_independent_set_analysis() -> dict:
+    """Enumerate all maximal independent sets (MIS) and compute Stouffer p-values.
+
+    Addresses the reviewer concern that greedy selection by strongest effect
+    biases the independent-pairings Stouffer p-value downward. Instead of
+    selecting one set, we enumerate ALL maximal independent sets from the
+    conflict graph (edges connect pairings sharing an organism) and report
+    the distribution of Stouffer p-values.
+
+    A maximal independent set is a set of pairings where no two share an
+    organism AND no additional pairing can be added without creating a conflict.
+    """
+    from scipy.stats import fisher_exact
+
+    # Step 1: compute Fisher's exact p-value for each pairing
+    pairing_p: list[float] = []
+    pairing_keys: list[tuple[str, str, str]] = []
+    for dis_key, ctl_key, aa in DISCONNECTION_PAIRINGS:
+        dis = get_repertoire(dis_key)
+        ctl = get_repertoire(ctl_key)
+        a = dis.by_amino_acid.get(aa, 0)
+        b = sum(dis.by_amino_acid.values()) - a
+        c = ctl.by_amino_acid.get(aa, 0)
+        d = sum(ctl.by_amino_acid.values()) - c
+        _, p = fisher_exact([[a, b], [c, d]], alternative="greater")
+        pairing_p.append(float(p))
+        pairing_keys.append((dis_key, ctl_key, aa))
+
+    n = len(DISCONNECTION_PAIRINGS)
+
+    # Step 2: build conflict graph (adjacency list)
+    # Two pairings conflict if they share a disconnection or control organism key
+    conflicts: list[set[int]] = [set() for _ in range(n)]
+    for i in range(n):
+        for j in range(i + 1, n):
+            di, ci, _ = pairing_keys[i]
+            dj, cj, _ = pairing_keys[j]
+            if di == dj or di == cj or ci == dj or ci == cj:
+                conflicts[i].add(j)
+                conflicts[j].add(i)
+
+    # Step 3: enumerate all maximal independent sets via Bron-Kerbosch
+    all_mis: list[list[int]] = []
+
+    def _bron_kerbosch(
+        R: set[int], P: set[int], X: set[int]
+    ) -> None:
+        if not P and not X:
+            # R is a maximal independent set
+            all_mis.append(sorted(R))
+            return
+        # Pick pivot that maximizes |P intersect N(u)| to prune
+        pivot_candidates = P | X
+        if not pivot_candidates:
+            return
+        pivot = max(pivot_candidates, key=lambda u: len(conflicts[u] & P))
+        for v in list(P - conflicts[pivot]):
+            _bron_kerbosch(
+                R | {v},
+                P - conflicts[v] - {v},
+                X - conflicts[v],
+            )
+            P = P - {v}
+            X = X | {v}
+
+    _bron_kerbosch(set(), set(range(n)), set())
+
+    # Step 4: for each MIS with >=2 members, compute Stouffer p-value
+    mis_results: list[dict] = []
+    for mis in all_mis:
+        if len(mis) < 2:
+            continue
+        mis_p_values = [pairing_p[i] for i in mis]
+        z, combined_p = _stouffer_combine(mis_p_values)
+        mis_results.append(
+            {
+                "mis_indices": mis,
+                "mis_size": len(mis),
+                "pairings": [
+                    f"{pairing_keys[i][0]} vs {pairing_keys[i][1]} ({pairing_keys[i][2]})"
+                    for i in mis
+                ],
+                "fisher_p_values": mis_p_values,
+                "stouffer_z": z,
+                "stouffer_p": combined_p,
+            }
+        )
+
+    if not mis_results:
+        return {
+            "n_mis_total": len(all_mis),
+            "n_mis_size_ge2": 0,
+            "error": "No MIS with >=2 members found",
+        }
+
+    stouffer_ps = [r["stouffer_p"] for r in mis_results]
+    stouffer_ps.sort()
+    median_idx = len(stouffer_ps) // 2
+
+    # Find the greedy-best and greedy-worst
+    best_mis = min(mis_results, key=lambda r: r["stouffer_p"])
+    worst_mis = max(mis_results, key=lambda r: r["stouffer_p"])
+
+    return {
+        "n_pairings": n,
+        "n_mis_total": len(all_mis),
+        "n_mis_size_ge2": len(mis_results),
+        "median_stouffer_p": stouffer_ps[median_idx],
+        "worst_case_stouffer_p": stouffer_ps[-1],
+        "best_case_stouffer_p": stouffer_ps[0],
+        "fraction_significant_p05": sum(1 for p in stouffer_ps if p < 0.05) / len(stouffer_ps),
+        "fraction_significant_p01": sum(1 for p in stouffer_ps if p < 0.01) / len(stouffer_ps),
+        "best_mis": best_mis,
+        "worst_mis": worst_mis,
+        "all_mis_p_values": stouffer_ps,
+        "method": (
+            "Bron-Kerbosch enumeration of all maximal independent sets from "
+            "the conflict graph (edges = shared organisms). Stouffer's Z "
+            "combination computed for each MIS with >=2 members."
+        ),
+        "interpretation": (
+            f"{'Robust' if stouffer_ps[-1] < 0.05 else 'Not robust'}: "
+            f"worst-case MIS p = {stouffer_ps[-1]:.4f}, "
+            f"median MIS p = {stouffer_ps[median_idx]:.4f}, "
+            f"{sum(1 for p in stouffer_ps if p < 0.05)}/{len(stouffer_ps)} "
+            f"MIS significant at p<0.05."
         ),
     }
 
@@ -1094,13 +1622,15 @@ def aa_label_permutation_test(
 
 
 def trna_evidence_summary() -> dict:
-    """Summary for paper or report, including all three statistical tests."""
+    """Summary for paper or report, including all statistical tests."""
     sign_test = trna_duplication_correlation_test()
     fisher_test = fisher_exact_per_pairing()
+    mis_test = maximal_independent_set_analysis()
     perm_test = aa_label_permutation_test()
     return {
         "sign_test": sign_test,
         "fisher_stouffer": fisher_test,
+        "mis_analysis": mis_test,
         "permutation_test": perm_test,
         "repertoires_used": list(CURATED_REPERTOIRES.keys()),
         "n_disconnection_organisms": sum(

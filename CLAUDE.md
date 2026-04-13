@@ -17,21 +17,17 @@ The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
 - **Fano lines**: XOR triples in GF(2)^6 (e.g., GGU XOR GUU XOR CAC = 0)
 - **Root-of-unity map**: phi: GF(2)^6 -> C^3, coordinate-wise bijection to fourth roots of unity (not holomorphic — domain is finite discrete)
 
-## Preliminary Code (archived)
-
-The original `codon_topo_preliminary/` scripts have been fully refactored into the `codon_topo` package and removed from the working tree. All functionality is now in `src/codon_topo/` with 344 tests verifying correctness. The original scripts remain in git history for reference.
-
 ## Claim Hierarchy
 
 The single source of truth for what the paper claims is `src/codon_topo/reports/claim_hierarchy.py`. Run `codon-topo claims` to view it. See also `ARCHITECTURE.md` for the full module dependency graph.
 
-Current status (after multi-model adversarial review + Clayworth input, April 2026):
-- 1 SUPPORTED (hypercube coloring optimality, p=0.006)
-- 1 SUGGESTIVE (tRNA duplication correlation, 4/4 cases, p=0.0625)
-- 3 EXPLORATORY (bit-position bias, variant-code disconnection catalogue, Atchley F3/Serine convergence)
-- 3 REJECTED (Serine min-distance-4 invariant, PSL(2,7), holomorphic embedding)
-- 1 FALSIFIED (KRAS-Fano clinical prediction, p=1.0)
-- 2 TAUTOLOGICAL (two-fold bit-5 filtration, four-fold prefix filtration)
+Current status (15 claims):
+- 4 SUPPORTED: hypercube coloring optimality (p=0.006), per-table preservation (24/25), rho robustness (p=0.003), topology avoidance depletion (permutation p=0.0001)
+- 1 SUGGESTIVE: tRNA enrichment (independent Stouffer p=0.033)
+- 4 EXPLORATORY: bit-position bias, mechanism boundary conditions, Atchley F3/Serine convergence, variant-code disconnection catalogue
+- 3 REJECTED: Serine min-distance-4 invariant, PSL(2,7), holomorphic embedding
+- 1 FALSIFIED: KRAS-Fano clinical prediction (p=1.0)
+- 2 TAUTOLOGICAL: two-fold bit-5 filtration, four-fold prefix filtration
 
 ## Package Structure (Implemented)
 
@@ -53,14 +49,16 @@ src/codon_topo/
     depth_calibration.py # Evolutionary depth calibration, epsilon-age Spearman correlation
     synbio_feasibility.py # Synthetic biology feasibility scoring, reassignment landscape
     coloring_optimality.py # Hypercube coloring Monte Carlo (primary publishable result)
-    trna_evidence.py     # tRNA duplication correlation test (4 organisms + controls)
+    trna_evidence.py     # tRNA enrichment test (19 organisms, 7 tRNAscan-SE verified)
   data/
     grantham.json        # Grantham 1974 physicochemical distance matrix
+    assembly_accessions.tsv  # NCBI genome assemblies for tRNAscan-SE verification
+    trnascan_results/    # Raw tRNAscan-SE .out/.stats files
   visualization/
     data_export.py       # CSV export for R visualization (all workstreams)
   reports/
     catalogue.py         # Prediction catalogue with evidence grading (WS5 synthesis)
-    claim_hierarchy.py   # Single source of truth for claim status (10 claims)
+    claim_hierarchy.py   # Single source of truth for claim status (15 claims)
 tests/
   test_encoding.py       # Encoding primitives + hypothesis property tests
   test_genetic_codes.py  # All 25 NCBI tables
@@ -78,7 +76,7 @@ tests/
   test_synbio_feasibility.py    # WS6 feasibility scoring
   test_catalogue.py             # WS5 prediction catalogue
   test_claim_hierarchy.py       # Claim hierarchy tests
-  test_refinements.py           # Refinement-round tests (adversarial review)
+  test_refinements.py           # Refinement-round tests
   test_cli.py                   # CLI subcommand tests
   test_ws_exports.py            # WS2-WS6 data exports
   test_integration_ws2_ws6.py   # Cross-workstream integration tests
@@ -99,7 +97,7 @@ tests/
 
 ```bash
 pip install -e ".[dev]"                              # Install in development mode
-python3.11 -m pytest                                  # Run all tests (344 tests)
+python3.11 -m pytest                                  # Run all tests (367 tests)
 python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
 python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
 python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (≥96%)
@@ -129,6 +127,12 @@ These must be reproduced exactly:
 - Serine: disconnected at epsilon=1 in all 24 tables, min inter-block Hamming = 4, reconnects at epsilon=4
 - Non-Serine disconnections: Thr (yeast mito, epsilon=2), Leu (chlorophycean mito, epsilon=2), Ala (Pachysolen nuclear, epsilon=3), three-component Ser (Candida nuclear, epsilon=3)
 - KRAS Fano line: GGU XOR GUU XOR CAC = 0 in GF(2)^6
+
+## External Dependencies
+
+- **tRNAscan-SE 2.0.12** at `~/.local/bin/tRNAscan-SE` with Infernal 1.1.4 at `~/.local/bin/`
+- Run `bash scripts/run_trnascan.sh` to reproduce all tRNA scans from NCBI assemblies
+- Assembly accessions in `data/assembly_accessions.tsv`; raw results in `data/trnascan_results/`
 
 ## Key Constraints
 

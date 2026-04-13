@@ -1,0 +1,20 @@
+organism	table_id	assembly	bioproject	genome_size_mb	compartment	trnascan_mode	verified
+Tetrahymena thermophila	6	GCF_000189635.1	PRJNA16540	103.0	nuclear	-E	yes
+Paramecium tetraurelia	6	GCF_000165425.1	PRJEA40197	72.1	nuclear	-E	yes
+Oxytricha trifallax	6	GCA_000295675.1	PRJNA74629	50.0	nuclear	-E	yes
+Stentor coeruleus	1	GCA_001970955.1	PRJNA299053	84.0	nuclear	-E	yes
+Ichthyophthirius multifiliis	1	GCF_000220395.1	PRJNA72537	49.0	nuclear	-E	yes
+Blastocrithidia nonstop P57	31	GCA_028554745.1	PRJNA790628	24.7	nuclear	-E	yes
+Fabrea salina	1	GCA_022984795.1	PRJNA822294	18.3	nuclear	-E	yes
+Pseudocohnilembus persalinus	6	GCA_001447515.1	PRJNA259665	55.5	nuclear	-E	yes
+Halteria grandinella	6	GCA_006369765.1	PRJNA531417	64.0	nuclear	-E	yes
+Blepharisma stoltei ATCC30299	15	GCA_965603825.1	PRJEB40285	41.5	nuclear	-E	yes
+Euplotes aediculatus	10	GCA_030463445.1	PRJNA945673	97.3	nuclear	-E	pending
+Euplotes focardii	10	GCA_001880345.2	PRJNA307484	49.3	nuclear	-E	pending
+Euplotes woodruffi	10	GCA_027382605.1	PRJNA851085	72.2	nuclear	-E	pending
+Euplotes amieti	10	GCA_048569255.1	PRJNA945672	88.5	nuclear	-E	pending
+Euplotes parawoodruffi	10	GCA_021440025.1	PRJNA783283	74.2	nuclear	-E	pending
+Euplotes weissei	10	GCA_021440005.1	PRJNA783283	82.1	nuclear	-E	pending
+Mycoplasmoides genitalium G37	4	GCA_000027325.1	PRJNA219	0.58	bacterial	-B	yes
+Mycoplasmoides pneumoniae M129	4	GCF_910574535.1	PRJEB47816	0.82	bacterial	-B	yes
+Saccharomyces cerevisiae S288C	1	GCF_000146045.2	PRJNA43747	12.2	nuclear	-E	no (GtRNAdb)

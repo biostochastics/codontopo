@@ -182,7 +182,7 @@ def bit_position_bias() -> dict:
 
 # Position-level mutation-rate priors (NOT pure Ts/Tv decomposition).
 #
-# IMPORTANT — what this model actually does (after codex review):
+# What this model actually does:
 #   Each codon position gets a single rate weight reflecting its RELATIVE
 #   mutation rate across Ts+Tv. Both GF(2)^6 bits within one nucleotide
 #   position receive the SAME weight because the default encoding's per-bit

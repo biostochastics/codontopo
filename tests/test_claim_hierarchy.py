@@ -1,8 +1,7 @@
 """Tests for the claim hierarchy module.
 
-Per gpt-5.4-pro review: the paper must have an explicit claim hierarchy.
-This module encodes the hierarchy as structured data; tests enforce that
-it stays consistent (no orphaned statuses, no missing justifications, etc.).
+The paper has an explicit claim hierarchy encoded as structured data.
+Tests enforce consistency (no orphaned statuses, no missing justifications).
 """
 
 from codon_topo.reports.claim_hierarchy import (
@@ -115,7 +114,7 @@ class TestClaimHierarchy:
         assert not any(c.id == "trna_enrichment_reassigned_aa" for c in sup)
 
     def test_bit_position_bias_is_exploratory(self):
-        """Per gpt-5.4-pro: p<0.05 under realistic null is exploratory, not supported."""
+        """p=0.075 after de-duplication is exploratory, not supported."""
         exp = exploratory_claims()
         assert any(c.id == "bit_position_bias_weighted" for c in exp)
 

@@ -34,8 +34,8 @@ from codon_topo.core.genetic_codes import STANDARD
 class TestNullModelCExtended:
     """Tests for the per-encoding minimum distance emission.
 
-    Verifies the kimi-k2.5 counterexample: Serine min distance is NOT
-    invariantly 4 across the 24 base-to-bit encodings.
+    Verifies that Serine min distance is NOT invariantly 4 across
+    the 24 base-to-bit encodings (counterexample exists).
     """
 
     def test_returns_correct_structure(self):
@@ -54,7 +54,7 @@ class TestNullModelCExtended:
     def test_serine_min_distance_is_not_invariant(self):
         """CRITICAL: Ser min distance varies across encodings.
 
-        Kimi-k2.5's counterexample proved this; we verify it here.
+        Counterexample: phi(U)=00, phi(C)=11, phi(A)=01, phi(G)=10 gives min=2.
         The claim 'min distance 4 invariant across 24 encodings' is FALSE.
         """
         result = null_model_c_extended()
