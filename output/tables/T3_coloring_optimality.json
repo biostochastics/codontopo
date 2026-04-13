@@ -1,4 +1,5 @@
 {
+  "metric": "grantham",
   "null_type": "freeland_hurst",
   "include_stops": true,
   "observed_score": 13477.0,
@@ -12,5 +13,6 @@
   "p_value_raw": 0.006,
   "p_value_conservative": 0.006099390060993901,
   "p_value_lower_bound": 9.999000099990002e-05,
+  "effect_size_z": 2.3526106235428257,
   "interpretation": "Strongly optimal (p = 0.0060)"
 }

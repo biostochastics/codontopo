@@ -10,3 +10,16 @@ ptetraurelia_nuclear vs scoeruleus_nuclear,Gln,2.126,0.0396,1,20,0.05,0.0425
 oxytricha_nuclear vs scoeruleus_nuclear,Gln,2.271,0.0751,1,20,0.05,0.0477
 eoctocarinatus_nuclear vs scoeruleus_nuclear,Cys,1.704,0.2718,3,20,0.15,0.0176
 bjaponicum_nuclear vs scoeruleus_nuclear,Trp,1.977,0.2097,2,20,0.1,0.021
+eaediculatus_nuclear vs scoeruleus_nuclear,Cys,2.035,0.2148,4,20,0.2,0.0257
+eaediculatus_nuclear vs fsalina_nuclear,Cys,4.658,0.151,2,20,0.1,0.0403
+eamieti_nuclear vs scoeruleus_nuclear,Cys,2.751,0.0492,1,20,0.05,0.0427
+efocardii_nuclear vs fsalina_nuclear,Cys,4.554,0.184,1,20,0.05,0.0392
+eparawoodruffi_nuclear vs scoeruleus_nuclear,Cys,2.458,0.0654,2,20,0.1,0.0359
+eweissei_nuclear vs fsalina_nuclear,Cys,3.837,0.1318,3,20,0.15,0.0316
+ewoodruffi_nuclear vs scoeruleus_nuclear,Cys,1.981,0.2263,4,20,0.2,0.0244
+ppersalinus_nuclear vs imultifiliis_nuclear,Gln,3.833,0.015,1,20,0.05,0.0556
+ppersalinus_nuclear vs fsalina_nuclear,Gln,2.306,0.1317,1,20,0.05,0.042
+hgrandinella_nuclear vs scoeruleus_nuclear,Gln,1.745,0.165,1,20,0.05,0.0286
+hgrandinella_nuclear vs fsalina_nuclear,Gln,2.075,0.2182,2,20,0.1,0.0349
+bstoltei_nuclear vs scoeruleus_nuclear,Trp,1.631,0.2894,1,20,0.05,0.0137
+bstoltei_nuclear vs fsalina_nuclear,Trp,1.575,0.4469,4,20,0.2,0.0129

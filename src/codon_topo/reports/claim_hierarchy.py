@@ -141,7 +141,7 @@ CLAIM_HIERARCHY: list[Claim] = [
         statement=(
             "Organisms with variant genetic codes show elevated tRNA gene "
             "copy numbers for the reassigned amino acid, verified by "
-            "tRNAscan-SE 2.0.12 on 17 NCBI genome assemblies across "
+            "tRNAscan-SE 2.0.12 on 18 NCBI genome assemblies across "
             "5 variant genetic codes (24 pairings, 6 independent)"
         ),
         status=ClaimStatus.SUGGESTIVE,
@@ -153,7 +153,7 @@ CLAIM_HIERARCHY: list[Claim] = [
             "Stouffer p=0.045. Bron-Kerbosch enumeration of all 2 MIS from "
             "conflict graph; both significant at p<0.05. Eliminates greedy-"
             "selection bias. All-pairings (n=24): p=1.7e-7. Independent "
-            "greedy (n=6): p=0.017. 17 tRNAscan-SE verified assemblies: "
+            "greedy (n=6): p=0.017. 18 tRNAscan-SE verified assemblies: "
             "5 Table 6 (Gln), 6 Table 10 (Cys), 1 Table 15 (Trp), "
             "1 Table 31 (Trp/Glu), 2 Table 4 (Trp/bacterial), plus "
             "3 standard-code controls. Covers 5 variant genetic codes "
