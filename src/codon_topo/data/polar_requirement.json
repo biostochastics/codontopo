@@ -1,0 +1,31 @@
+{
+  "_metadata": {
+    "name": "Woese Polar Requirement scale",
+    "source": "Woese, C.R. (1973). Evolution of the genetic code. Naturwissenschaften 60:447-459. Values from Mathew & Luthey-Schulten (2008) J Mol Evol 66:519-528, Table 1.",
+    "description": "Chromatographic measure of amino acid polarity in an RNA-binding context. Used by Freeland & Hurst (1998) as the primary metric for genetic code error-minimization. Distance = |PR_i - PR_j|.",
+    "type": "scalar",
+    "range": "4.9 (Phe, most nonpolar) to 13.0 (Asp/Glu, most polar)"
+  },
+  "values": {
+    "A": 7.0,
+    "R": 9.1,
+    "N": 10.0,
+    "D": 13.0,
+    "C": 4.8,
+    "Q": 8.6,
+    "E": 12.5,
+    "G": 7.9,
+    "H": 8.4,
+    "I": 4.9,
+    "L": 4.9,
+    "K": 10.1,
+    "M": 5.3,
+    "F": 5.0,
+    "P": 6.6,
+    "S": 7.5,
+    "T": 6.6,
+    "W": 5.2,
+    "Y": 5.4,
+    "V": 5.6
+  }
+}
