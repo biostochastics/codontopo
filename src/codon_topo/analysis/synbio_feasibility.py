@@ -119,3 +119,142 @@ def feasibility_summary(
         "low_feasibility": len(low),
         "best_variants": best,
     }
+
+
+def topology_avoidance_test() -> dict:
+    """Test whether natural reassignments avoid creating new disconnections.
+
+    Compares the rate of disconnection-creating changes among OBSERVED
+    natural reassignments vs ALL POSSIBLE single-codon reassignments.
+
+    Prediction: observed events are depleted for topology-breaking changes
+    (i.e., observed rate < possible rate).
+    """
+    from scipy.stats import fisher_exact, hypergeom
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db
+
+    # 1. What fraction of POSSIBLE reassignments create new disconnections?
+    # (Use the standard code as base, matching the original landscape)
+    landscape = single_reassignment_landscape(STANDARD)
+    standard_cat = disconnection_catalogue(STANDARD)
+    standard_disc_aas = {e["aa"] for e in standard_cat}
+
+    possible_creates_disc = 0
+    possible_no_disc = 0
+    for entry in landscape:
+        # Does this variant have MORE disconnected AAs than standard?
+        new_disc_aas = set()
+        variant = dict(STANDARD)
+        variant[entry["codon"]] = entry["new_aa"]
+        new_cat = disconnection_catalogue(variant)
+        new_disc_aas = {e["aa"] for e in new_cat}
+        novel_discs = new_disc_aas - standard_disc_aas
+        if novel_discs:
+            possible_creates_disc += 1
+        else:
+            possible_no_disc += 1
+
+    # 2. What fraction of OBSERVED natural reassignments create disconnections?
+    db = build_reassignment_db()
+    observed_creates_disc = 0
+    observed_no_disc = 0
+    seen: set[tuple[str, str]] = set()  # de-duplicate
+    for e in db:
+        key = (e.codon, e.target_aa)
+        if key in seen:
+            continue
+        seen.add(key)
+        variant = dict(STANDARD)
+        variant[e.codon] = e.target_aa
+        new_cat = disconnection_catalogue(variant)
+        new_disc_aas = {entry["aa"] for entry in new_cat}
+        novel_discs = new_disc_aas - standard_disc_aas
+        if novel_discs:
+            observed_creates_disc += 1
+        else:
+            observed_no_disc += 1
+
+    a = observed_creates_disc
+    n_obs = observed_creates_disc + observed_no_disc
+    N = possible_creates_disc + possible_no_disc
+    K = possible_creates_disc
+
+    rate_observed = a / max(n_obs, 1)
+    rate_possible = K / max(N, 1)
+
+    # Hypergeometric test: n_obs draws from landscape of N items,
+    # K of which are "disc-creating". P(X <= a) tests depletion.
+    hypergeom_p = float(hypergeom.cdf(a, N, K, n_obs))
+
+    # Also report Fisher's exact for comparison.
+    # Observed is a subset of possible, so the second row is the complement.
+    b = observed_no_disc
+    c_complement = K - a  # possible disc-creating NOT in observed
+    d_complement = (N - K) - b  # possible non-disc NOT in observed
+    odds_ratio, fisher_p = fisher_exact(
+        [[a, b], [max(c_complement, 0), max(d_complement, 0)]],
+        alternative="less",
+    )
+
+    # Table-preserving permutation null: within each table, keep which
+    # codons change but permute their target AAs among that table's
+    # observed targets. Recompute "creates novel disconnections."
+    import random as _rng_mod
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db as _build_db
+
+    by_table: dict[int, list[tuple[str, str]]] = {}
+    for e in _build_db():
+        by_table.setdefault(e.table_id, []).append((e.codon, e.target_aa))
+
+    rng = _rng_mod.Random(135325)
+    n_perm = 10_000
+    n_perm_extreme = 0
+    for _ in range(n_perm):
+        perm_creates = 0
+        perm_seen: set[tuple[str, str]] = set()
+        for _tid, events in by_table.items():
+            codons = [c for c, _t in events]
+            targets = [t for _c, t in events]
+            rng.shuffle(targets)
+            for c, t in zip(codons, targets):
+                key = (c, t)
+                if key in perm_seen:
+                    continue
+                perm_seen.add(key)
+                variant = dict(STANDARD)
+                variant[c] = t
+                new_cat = disconnection_catalogue(variant)
+                new_disc = {entry["aa"] for entry in new_cat}
+                if new_disc - standard_disc_aas:
+                    perm_creates += 1
+        perm_rate = perm_creates / max(len(perm_seen), 1)
+        if perm_rate <= rate_observed:
+            n_perm_extreme += 1
+
+    perm_p = (n_perm_extreme + 1) / (n_perm + 1)
+
+    return {
+        "observed_creates_disc": a,
+        "observed_no_disc": b,
+        "observed_total": n_obs,
+        "possible_creates_disc": K,
+        "possible_no_disc": N - K,
+        "possible_total": N,
+        "rate_observed": rate_observed,
+        "rate_possible": rate_possible,
+        "hypergeom_p": hypergeom_p,
+        "permutation_p": perm_p,
+        "n_permutations": n_perm,
+        "odds_ratio": float(odds_ratio),
+        "fisher_p": float(fisher_p),
+        "hypothesis": (
+            "Natural reassignments are depleted for topology-breaking "
+            "changes relative to the space of possible reassignments"
+        ),
+        "caveat": (
+            "Hypergeometric p assumes iid draws; permutation p preserves "
+            "table structure. Both reported for transparency."
+        ),
+    }

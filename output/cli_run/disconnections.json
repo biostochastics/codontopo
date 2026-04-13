@@ -1,0 +1,568 @@
+[
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 1
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 2
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 3
+  },
+  {
+    "aa": "Thr",
+    "n_components": 2,
+    "reconnect_eps": 2,
+    "min_inter_distance": 2,
+    "blocks": [
+      [
+        "ACA",
+        "ACC",
+        "ACG",
+        "ACU"
+      ],
+      [
+        "CUA",
+        "CUC",
+        "CUG",
+        "CUU"
+      ]
+    ],
+    "table_id": 3
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 4
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGA",
+        "AGC",
+        "AGG",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 5
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 6
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGA",
+        "AGC",
+        "AGG",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 9
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 10
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 11
+  },
+  {
+    "aa": "Ser",
+    "n_components": 3,
+    "reconnect_eps": 3,
+    "min_inter_distance": 2,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "CUG"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 12
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 13
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGA",
+        "AGC",
+        "AGG",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 14
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 15
+  },
+  {
+    "aa": "Leu",
+    "n_components": 2,
+    "reconnect_eps": 2,
+    "min_inter_distance": 2,
+    "blocks": [
+      [
+        "CUA",
+        "CUC",
+        "CUG",
+        "CUU",
+        "UUA",
+        "UUG"
+      ],
+      [
+        "UAG"
+      ]
+    ],
+    "table_id": 16
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 16
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGA",
+        "AGC",
+        "AGG",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 21
+  },
+  {
+    "aa": "Leu",
+    "n_components": 2,
+    "reconnect_eps": 2,
+    "min_inter_distance": 2,
+    "blocks": [
+      [
+        "CUA",
+        "CUC",
+        "CUG",
+        "CUU",
+        "UUA",
+        "UUG"
+      ],
+      [
+        "UAG"
+      ]
+    ],
+    "table_id": 22
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 22
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 23
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGA",
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 24
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 25
+  },
+  {
+    "aa": "Ala",
+    "n_components": 2,
+    "reconnect_eps": 3,
+    "min_inter_distance": 3,
+    "blocks": [
+      [
+        "CUG"
+      ],
+      [
+        "GCA",
+        "GCC",
+        "GCG",
+        "GCU"
+      ]
+    ],
+    "table_id": 26
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 26
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 27
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 29
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 30
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 31
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGA",
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 33
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "null_type": "freeland_hurst",
+  "include_stops": true,
+  "observed_score": 13477.0,
+  "null_mean": 14954.4802,
+  "null_std": 628.0173120084972,
+  "null_min": 12781.0,
+  "null_max": 17283.0,
+  "quantile_of_observed": 0.6,
+  "n_beaten_observed": 60,
+  "n_samples": 10000,
+  "p_value_raw": 0.006,
+  "p_value_conservative": 0.006099390060993901,
+  "p_value_lower_bound": 9.999000099990002e-05,
+  "interpretation": "Strongly optimal (p = 0.0060)"
+}

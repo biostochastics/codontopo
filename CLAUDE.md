@@ -13,53 +13,54 @@ The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
 - **GF(2)^6 encoding**: Each codon is a 6-bit binary vector (default: C=00, U=01, A=10, G=11, two bits per nucleotide position)
 - **Filtration**: Two-fold degeneracy = bit-5 difference; four-fold degeneracy = shared 4-bit prefix with last 2 bits exhausting GF(2)^2
 - **Persistent homology**: Connected components of amino acid codon graphs at increasing Hamming distance threshold epsilon
-- **Serine invariant**: Serine is topologically disconnected (epsilon=4) in every known genetic code — a universal invariant
+- **Serine invariant**: Serine is topologically disconnected at epsilon=1 in every known genetic code and every base-to-bit encoding — the only encoding-invariant disconnection. Under the default encoding, min inter-family Hamming distance = 4 (UCN vs AGY), uniquely extreme among 6-codon AAs (Leu and Arg = 1). Distance-4 holds for 8/24 encodings; 16/24 give distance 2. Converges with Serine's extreme Atchley Factor 3 score (Atchley et al. 2005)
 - **Fano lines**: XOR triples in GF(2)^6 (e.g., GGU XOR GUU XOR CAC = 0)
-- **Holomorphic embedding**: phi: GF(2)^6 -> C^3, maps codons to complex 3-space preserving degeneracy structure
+- **Root-of-unity map**: phi: GF(2)^6 -> C^3, coordinate-wise bijection to fourth roots of unity (not holomorphic — domain is finite discrete)
 
-## Preliminary Code
+## Preliminary Code (archived)
 
-`codon_topo_preliminary/` contains 6 verified scripts (stdlib-only Python, no external deps) that form the foundation for the `codon_topo` package. All produce correct output — these are the regression reference.
+The original `codon_topo_preliminary/` scripts have been fully refactored into the `codon_topo` package and removed from the working tree. All functionality is now in `src/codon_topo/` with 344 tests verifying correctness. The original scripts remain in git history for reference.
 
-| Script | What it does | Refactors into |
-|---|---|---|
-| `verify_filtration.py` | Claims 1-3: bit-5 two-fold, prefix four-fold, Serine persistent homology | `core/filtration.py`, `core/homology.py` |
-| `verify_embedding.py` | Holomorphic embedding phi: GF(2)^6 -> C^3, base->fourth-root-of-unity | `core/embedding.py` |
-| `verify_kras.py` | KRAS G12V Fano line (GGU XOR GUU XOR CAC = 0), all single-bit mutations | `core/fano.py`, `analysis/cosmic_query.py` |
-| `verify_mitochondrial.py` | 6-code cross-validation, Serine persistence, Thr disconnection discovery | `core/genetic_codes.py` + analysis pipeline |
-| `all_codes.py` | All 24 NCBI tables, disconnection catalogue, filtration breakage | Integration tests, `analysis/reassignment_db.py` |
-| `summary_table.py` | Disconnection-depth catalogue with evolutionary dating context | Reports |
+## Claim Hierarchy
 
-Shared utilities duplicated across scripts (must be consolidated):
-- `BASE_TO_BITS = {'C': (0,0), 'U': (0,1), 'A': (1,0), 'G': (1,1)}`
-- `codon_to_bits(codon)` — codon string to 6-bit tuple
-- `hamming_distance(a, b)` — bitwise Hamming distance
-- `connected_components(bits_list, epsilon)` — union-find at threshold
-- `STANDARD` / `GENETIC_CODE` — standard code dict (duplicated 4 times)
-- `all_codes.py` has all 24 NCBI tables via `make_code(changes)` pattern
+The single source of truth for what the paper claims is `src/codon_topo/reports/claim_hierarchy.py`. Run `codon-topo claims` to view it. See also `ARCHITECTURE.md` for the full module dependency graph.
+
+Current status (after multi-model adversarial review + Clayworth input, April 2026):
+- 1 SUPPORTED (hypercube coloring optimality, p=0.006)
+- 1 SUGGESTIVE (tRNA duplication correlation, 4/4 cases, p=0.0625)
+- 3 EXPLORATORY (bit-position bias, variant-code disconnection catalogue, Atchley F3/Serine convergence)
+- 3 REJECTED (Serine min-distance-4 invariant, PSL(2,7), holomorphic embedding)
+- 1 FALSIFIED (KRAS-Fano clinical prediction, p=1.0)
+- 2 TAUTOLOGICAL (two-fold bit-5 filtration, four-fold prefix filtration)
 
 ## Package Structure (Implemented)
 
 ```
 src/codon_topo/
-  __init__.py            # Public API re-exports
+  __init__.py            # Public API re-exports, DEFAULT_SEED=135325
+  cli.py                 # Click-based CLI: codon-topo {filtration,disconnections,coloring,...}
   core/
     encoding.py          # Base->bit mappings, codon->vector conversion, all 24 encodings
     genetic_codes.py     # All 25 NCBI translation tables as dictionaries
     filtration.py        # Two-fold (bit-5) and four-fold (prefix) degeneracy checks
     homology.py          # Connected components, persistent homology, disconnection catalogue
-    embedding.py         # Holomorphic embedding phi: GF(2)^6 -> C^3
-    fano.py              # Fano-line computation, XOR triples
+    embedding.py         # Coordinate-wise root-of-unity map GF(2)^6 -> C^3
+    fano.py              # XOR triple computation
   analysis/
-    null_models.py       # Null Model A (random), B (block shuffle), C (24 encodings)
-    reassignment_db.py   # Reassignment database, Hamming path analysis, directionality stats
-    cosmic_query.py      # cBioPortal API client, KRAS Fano-line co-occurrence, WS4 gate
+    null_models.py       # Null Model A (random), B (block shuffle), C (24 encodings), C_extended
+    reassignment_db.py   # Reassignment database, Hamming paths, bit-position bias (uniform + weighted)
+    cosmic_query.py      # cBioPortal API client, KRAS Fano co-occurrence, WS4 gate
     depth_calibration.py # Evolutionary depth calibration, epsilon-age Spearman correlation
     synbio_feasibility.py # Synthetic biology feasibility scoring, reassignment landscape
+    coloring_optimality.py # Hypercube coloring Monte Carlo (primary publishable result)
+    trna_evidence.py     # tRNA duplication correlation test (4 organisms + controls)
+  data/
+    grantham.json        # Grantham 1974 physicochemical distance matrix
   visualization/
     data_export.py       # CSV export for R visualization (all workstreams)
   reports/
     catalogue.py         # Prediction catalogue with evidence grading (WS5 synthesis)
+    claim_hierarchy.py   # Single source of truth for claim status (10 claims)
 tests/
   test_encoding.py       # Encoding primitives + hypothesis property tests
   test_genetic_codes.py  # All 25 NCBI tables
@@ -76,6 +77,9 @@ tests/
   test_kras_enrichment.py       # WS4 Fano enrichment test
   test_synbio_feasibility.py    # WS6 feasibility scoring
   test_catalogue.py             # WS5 prediction catalogue
+  test_claim_hierarchy.py       # Claim hierarchy tests
+  test_refinements.py           # Refinement-round tests (adversarial review)
+  test_cli.py                   # CLI subcommand tests
   test_ws_exports.py            # WS2-WS6 data exports
   test_integration_ws2_ws6.py   # Cross-workstream integration tests
 ```
@@ -85,7 +89,8 @@ tests/
 - **Python 3.11+**, NumPy, SciPy for core computation
 - **GUDHI or Ripser.py** for production persistent homology (hand-rolled code is verification-only)
 - **ggplot2 + ggpubr** (R) for all figures — publication-quality, statistical annotations via ggpubr
-- **requests + pandas** for COSMIC REST API, cBioPortal API
+- **click + rich** for CLI (`codon-topo` command)
+- **requests** for cBioPortal API
 - **SciPy.stats, statsmodels** for permutation tests, bootstrap CIs, multiple testing correction
 - **pytest + hypothesis** for property-based testing of mathematical invariants
 - **Sphinx + NumPy-style docstrings** for documentation
@@ -94,10 +99,13 @@ tests/
 
 ```bash
 pip install -e ".[dev]"                              # Install in development mode
-python3.11 -m pytest                                  # Run all tests (280 tests)
+python3.11 -m pytest                                  # Run all tests (344 tests)
 python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
 python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
-python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (96%)
+python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (≥96%)
+codon-topo --help                                     # CLI usage
+codon-topo claims                                     # View claim hierarchy
+codon-topo all --output-dir=./output                  # Run all analyses
 ```
 
 Note: Use `python3.11 -m pytest` (not bare `pytest`) because the system default Python is 3.14 but dev dependencies are installed under 3.11.

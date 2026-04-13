@@ -1,0 +1,5 @@
+test,n_pairings,statistic,p_value
+Sign test,11,8/11,0.113281
+Fisher+Stouffer (all),11,Z=3.466,0.000265
+Fisher+Stouffer (independent),5,Z=1.835,0.033278
+AA-label exact+Stouffer,11,Z=4.641,2e-06

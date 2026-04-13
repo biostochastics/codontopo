@@ -1,0 +1,62 @@
+table_id,table_name,codon,source_aa,target_aa,hamming_to_nearest_target
+2,Vertebrate Mitochondrial,AGA,Arg,Stop,2
+2,Vertebrate Mitochondrial,AGG,Arg,Stop,3
+2,Vertebrate Mitochondrial,AUA,Ile,Met,1
+2,Vertebrate Mitochondrial,UGA,Stop,Trp,1
+3,Yeast Mitochondrial,AUA,Ile,Met,1
+3,Yeast Mitochondrial,CUU,Leu,Thr,2
+3,Yeast Mitochondrial,CUC,Leu,Thr,2
+3,Yeast Mitochondrial,CUA,Leu,Thr,2
+3,Yeast Mitochondrial,CUG,Leu,Thr,2
+3,Yeast Mitochondrial,UGA,Stop,Trp,1
+4,Mold/Protozoan/Coelenterate Mito,UGA,Stop,Trp,1
+5,Invertebrate Mitochondrial,AGA,Arg,Ser,1
+5,Invertebrate Mitochondrial,AGG,Arg,Ser,1
+5,Invertebrate Mitochondrial,AUA,Ile,Met,1
+5,Invertebrate Mitochondrial,UGA,Stop,Trp,1
+6,Ciliate Nuclear,UAA,Stop,Gln,1
+6,Ciliate Nuclear,UAG,Stop,Gln,1
+9,Echinoderm/Flatworm Mito,AAA,Lys,Asn,1
+9,Echinoderm/Flatworm Mito,AGA,Arg,Ser,1
+9,Echinoderm/Flatworm Mito,AGG,Arg,Ser,1
+9,Echinoderm/Flatworm Mito,UGA,Stop,Trp,1
+10,Euplotid Nuclear,UGA,Stop,Cys,1
+12,Alternative Yeast Nuclear,CUG,Leu,Ser,2
+13,Ascidian Mitochondrial,AGA,Arg,Gly,1
+13,Ascidian Mitochondrial,AGG,Arg,Gly,1
+13,Ascidian Mitochondrial,AUA,Ile,Met,1
+13,Ascidian Mitochondrial,UGA,Stop,Trp,1
+14,Alternative Flatworm Mito,AAA,Lys,Asn,1
+14,Alternative Flatworm Mito,AGA,Arg,Ser,1
+14,Alternative Flatworm Mito,AGG,Arg,Ser,1
+14,Alternative Flatworm Mito,UAA,Stop,Tyr,1
+14,Alternative Flatworm Mito,UGA,Stop,Trp,1
+15,Blepharisma Macronuclear,UAG,Stop,Gln,1
+16,Chlorophycean Mito,UAG,Stop,Leu,2
+21,Trematode Mitochondrial,AAA,Lys,Asn,1
+21,Trematode Mitochondrial,AGA,Arg,Ser,1
+21,Trematode Mitochondrial,AGG,Arg,Ser,1
+21,Trematode Mitochondrial,AUA,Ile,Met,1
+21,Trematode Mitochondrial,UGA,Stop,Trp,1
+22,Scenedesmus obliquus Mito,UAG,Stop,Leu,2
+22,Scenedesmus obliquus Mito,UCA,Ser,Stop,1
+23,Thraustochytrium Mito,UUA,Leu,Stop,1
+23,Thraustochytrium Mito,UGA,Stop,Trp,1
+24,Rhabdopleuridae Mito,AGA,Arg,Ser,1
+24,Rhabdopleuridae Mito,AGG,Arg,Lys,1
+24,Rhabdopleuridae Mito,UGA,Stop,Trp,1
+25,Candidate Division SR1 / Gracilibacteria,UGA,Stop,Gly,1
+26,Pachysolen tannophilus Nuclear,CUG,Leu,Ala,3
+27,Karyorelictea Nuclear,UAG,Stop,Gln,1
+27,Karyorelictea Nuclear,UAA,Stop,Gln,1
+29,Mesodinium Nuclear,UAA,Stop,Tyr,1
+29,Mesodinium Nuclear,UAG,Stop,Tyr,1
+30,Peritrich Nuclear,UAA,Stop,Glu,1
+30,Peritrich Nuclear,UAG,Stop,Glu,1
+31,Blastocrithidia Nuclear,UGA,Stop,Trp,1
+31,Blastocrithidia Nuclear,UAG,Stop,Glu,1
+31,Blastocrithidia Nuclear,UAA,Stop,Glu,1
+33,Cephalodiscidae Mito,AGA,Arg,Ser,1
+33,Cephalodiscidae Mito,AGG,Arg,Lys,1
+33,Cephalodiscidae Mito,UAA,Stop,Tyr,1
+33,Cephalodiscidae Mito,UGA,Stop,Trp,1

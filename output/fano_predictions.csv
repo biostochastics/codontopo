@@ -1,0 +1,7 @@
+variant,wt_codon,mutant_codon,fano_partner_codon,fano_partner_aa,fano_partner_aa_1letter
+G12A,GGU,GCU,CGC,Arg,R
+G12C,GGU,UGU,ACC,Thr,T
+G12D,GGU,GAU,CUC,Leu,L
+G12R,GGU,CGU,GCC,Ala,A
+G12S,GGU,AGU,UCC,Ser,S
+G12V,GGU,GUU,CAC,His,H

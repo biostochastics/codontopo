@@ -1,0 +1,75 @@
+{
+  "correlation": {
+    "spearman_rho": 0.0,
+    "spearman_p": 1.0,
+    "n_points": 6
+  },
+  "calibration_points": [
+    {
+      "aa": "Ser",
+      "table_id": 1,
+      "table_name": "Universal (all tables)",
+      "reconnect_eps": 4,
+      "age_mya_low": 3500.0,
+      "age_mya_high": 4000.0,
+      "age_midpoint_mya": 3750.0,
+      "lineage": "Pre-LUCA, all domains of life",
+      "notes": "UCN-AGY split, min inter-block Hamming=4, present in all 25 NCBI tables"
+    },
+    {
+      "aa": "Thr",
+      "table_id": 3,
+      "table_name": "Yeast Mitochondrial",
+      "reconnect_eps": 2,
+      "age_mya_low": 200.0,
+      "age_mya_high": 300.0,
+      "age_midpoint_mya": 250.0,
+      "lineage": "Saccharomycetales (budding yeasts)",
+      "notes": "CUN block reassigned Leu->Thr, creates ACN/CUN split"
+    },
+    {
+      "aa": "Leu",
+      "table_id": 16,
+      "table_name": "Chlorophycean Mito",
+      "reconnect_eps": 2,
+      "age_mya_low": 500.0,
+      "age_mya_high": 700.0,
+      "age_midpoint_mya": 600.0,
+      "lineage": "Chlorophyceae (green algae)",
+      "notes": "UAG reassigned Stop->Leu"
+    },
+    {
+      "aa": "Leu",
+      "table_id": 22,
+      "table_name": "Scenedesmus obliquus Mito",
+      "reconnect_eps": 2,
+      "age_mya_low": 500.0,
+      "age_mya_high": 700.0,
+      "age_midpoint_mya": 600.0,
+      "lineage": "Chlorophyceae (Scenedesmus)",
+      "notes": "UAG reassigned Stop->Leu, UCA reassigned Ser->Stop"
+    },
+    {
+      "aa": "Ala",
+      "table_id": 26,
+      "table_name": "Pachysolen tannophilus Nuclear",
+      "reconnect_eps": 3,
+      "age_mya_low": 100.0,
+      "age_mya_high": 200.0,
+      "age_midpoint_mya": 150.0,
+      "lineage": "CUG clade (Pachysolen)",
+      "notes": "CUG reassigned Leu->Ala"
+    },
+    {
+      "aa": "Ser",
+      "table_id": 12,
+      "table_name": "Alternative Yeast Nuclear",
+      "reconnect_eps": 3,
+      "age_mya_low": 100.0,
+      "age_mya_high": 200.0,
+      "age_midpoint_mya": 150.0,
+      "lineage": "CUG clade (Candida)",
+      "notes": "CUG reassigned Leu->Ser, creates 3-component Ser (unique)"
+    }
+  ]
+}

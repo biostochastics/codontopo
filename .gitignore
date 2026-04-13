@@ -9,3 +9,8 @@ build/
 .hypothesis/
 .pytest_cache/
 *.egg
+.DS_Store
+.claude/
+.playwright-mcp/
+viz_*.png
+web/

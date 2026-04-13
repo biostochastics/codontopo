@@ -1,0 +1,122 @@
+[
+  {
+    "id": "WS1-C1",
+    "claim": "Two-fold degeneracy is uniformly explained by bit-5 difference in GF(2)^6",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "very_strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-C2",
+    "claim": "Four-fold degeneracy corresponds to shared 4-bit prefix exhausting GF(2)^2",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "very_strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-C3",
+    "claim": "Serine is uniquely disconnected at epsilon=1 in all known genetic codes",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "very_strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-NULL-A",
+    "claim": "Serine uniqueness is statistically unlikely under random codon assignment",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "strong",
+    "p_value": 0.05
+  },
+  {
+    "id": "WS1-NULL-C",
+    "claim": "Serine disconnection is encoding-invariant (all 24 base-to-bit mappings)",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "very_strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-NOVEL-1",
+    "claim": "Threonine is disconnected in yeast mitochondrial code (Table 3, epsilon=2)",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-NOVEL-2",
+    "claim": "Leucine is disconnected in chlorophycean mito (Table 16, epsilon=2)",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-NOVEL-3",
+    "claim": "Alanine is disconnected in Pachysolen nuclear code (Table 26, epsilon=3)",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "strong",
+    "p_value": null
+  },
+  {
+    "id": "WS1-NOVEL-4",
+    "claim": "Serine has three components in alternative yeast nuclear code (Table 12)",
+    "workstream": "WS1",
+    "status": "verified",
+    "evidence_strength": "strong",
+    "p_value": null
+  },
+  {
+    "id": "WS2-DIR",
+    "claim": "Codon reassignment events show directional bias in GF(2)^6 bit positions",
+    "workstream": "WS2",
+    "status": "tested",
+    "evidence_strength": "strong",
+    "p_value": 0.006
+  },
+  {
+    "id": "WS2-PATH",
+    "claim": "Reassignment Hamming paths have characteristic length distribution",
+    "workstream": "WS2",
+    "status": "tested",
+    "evidence_strength": "moderate",
+    "p_value": null
+  },
+  {
+    "id": "WS3-CORR",
+    "claim": "Disconnection epsilon correlates positively with evolutionary age",
+    "workstream": "WS3",
+    "status": "tested",
+    "evidence_strength": "weak",
+    "p_value": 1.0
+  },
+  {
+    "id": "WS4-FANO",
+    "claim": "KRAS G12V Fano partner (His/CAC) is enriched in co-occurring mutations",
+    "workstream": "WS4",
+    "status": "null",
+    "evidence_strength": "moderate",
+    "p_value": 1.0
+  },
+  {
+    "id": "WS6-LANDSCAPE",
+    "claim": "Most single-codon reassignments preserve algebraic structure (feasibility > 0.5)",
+    "workstream": "WS6",
+    "status": "tested",
+    "evidence_strength": "strong",
+    "p_value": null
+  },
+  {
+    "id": "WS6-SERINE",
+    "claim": "Serine disconnection is robust to most single-codon perturbations",
+    "workstream": "WS6",
+    "status": "tested",
+    "evidence_strength": "strong",
+    "p_value": null
+  }
+]

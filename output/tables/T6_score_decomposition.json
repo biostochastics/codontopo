@@ -1,0 +1,95 @@
+{
+  "total_score": 13477.0,
+  "by_nucleotide_position": {
+    "pos1": 5143.0,
+    "pos2": 6649.0,
+    "pos3_wobble": 1685.0
+  },
+  "position_fractions": {
+    "pos1": 0.3816131186465831,
+    "pos2": 0.4933590561697707,
+    "pos3_wobble": 0.12502782518364622
+  },
+  "top_aa_pairs": [
+    {
+      "pair": [
+        "Arg",
+        "Ser"
+      ],
+      "score": 440.0,
+      "fraction": 0.03264821547822216
+    },
+    {
+      "pair": [
+        "Gly",
+        "Val"
+      ],
+      "score": 436.0,
+      "fraction": 0.03235141351932923
+    },
+    {
+      "pair": [
+        "Gln",
+        "Stop"
+      ],
+      "score": 430.0,
+      "fraction": 0.03190621058098984
+    },
+    {
+      "pair": [
+        "Ser",
+        "Stop"
+      ],
+      "score": 430.0,
+      "fraction": 0.03190621058098984
+    },
+    {
+      "pair": [
+        "Stop",
+        "Tyr"
+      ],
+      "score": 430.0,
+      "fraction": 0.03190621058098984
+    },
+    {
+      "pair": [
+        "Glu",
+        "Stop"
+      ],
+      "score": 430.0,
+      "fraction": 0.03190621058098984
+    },
+    {
+      "pair": [
+        "Stop",
+        "Trp"
+      ],
+      "score": 430.0,
+      "fraction": 0.03190621058098984
+    },
+    {
+      "pair": [
+        "Cys",
+        "Phe"
+      ],
+      "score": 410.0,
+      "fraction": 0.030422200786525192
+    },
+    {
+      "pair": [
+        "Arg",
+        "Leu"
+      ],
+      "score": 408.0,
+      "fraction": 0.030273799807078727
+    },
+    {
+      "pair": [
+        "Ala",
+        "Ser"
+      ],
+      "score": 396.0,
+      "fraction": 0.029383393930399942
+    }
+  ]
+}

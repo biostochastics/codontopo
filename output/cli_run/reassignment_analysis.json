@@ -1,0 +1,255 @@
+{
+  "n_events": 61,
+  "hamming_paths": {
+    "events": [
+      {
+        "table_id": 2,
+        "codon": "AUA",
+        "source_aa": "Ile",
+        "target_aa": "Met",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 3,
+        "codon": "AUA",
+        "source_aa": "Ile",
+        "target_aa": "Met",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 3,
+        "codon": "CUU",
+        "source_aa": "Leu",
+        "target_aa": "Thr",
+        "hamming_to_nearest_target": 2
+      },
+      {
+        "table_id": 3,
+        "codon": "CUC",
+        "source_aa": "Leu",
+        "target_aa": "Thr",
+        "hamming_to_nearest_target": 2
+      },
+      {
+        "table_id": 3,
+        "codon": "CUA",
+        "source_aa": "Leu",
+        "target_aa": "Thr",
+        "hamming_to_nearest_target": 2
+      },
+      {
+        "table_id": 3,
+        "codon": "CUG",
+        "source_aa": "Leu",
+        "target_aa": "Thr",
+        "hamming_to_nearest_target": 2
+      },
+      {
+        "table_id": 5,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 5,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 5,
+        "codon": "AUA",
+        "source_aa": "Ile",
+        "target_aa": "Met",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 9,
+        "codon": "AAA",
+        "source_aa": "Lys",
+        "target_aa": "Asn",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 9,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 9,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 12,
+        "codon": "CUG",
+        "source_aa": "Leu",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 2
+      },
+      {
+        "table_id": 13,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Gly",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 13,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Gly",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 13,
+        "codon": "AUA",
+        "source_aa": "Ile",
+        "target_aa": "Met",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 14,
+        "codon": "AAA",
+        "source_aa": "Lys",
+        "target_aa": "Asn",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 14,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 14,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 21,
+        "codon": "AAA",
+        "source_aa": "Lys",
+        "target_aa": "Asn",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 21,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 21,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 21,
+        "codon": "AUA",
+        "source_aa": "Ile",
+        "target_aa": "Met",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 24,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 24,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Lys",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 26,
+        "codon": "CUG",
+        "source_aa": "Leu",
+        "target_aa": "Ala",
+        "hamming_to_nearest_target": 3
+      },
+      {
+        "table_id": 33,
+        "codon": "AGA",
+        "source_aa": "Arg",
+        "target_aa": "Ser",
+        "hamming_to_nearest_target": 1
+      },
+      {
+        "table_id": 33,
+        "codon": "AGG",
+        "source_aa": "Arg",
+        "target_aa": "Lys",
+        "hamming_to_nearest_target": 1
+      }
+    ],
+    "mean_hamming": 1.25,
+    "median_hamming": 1.0,
+    "n_events_included": 28,
+    "n_events_excluded_non_standard_target": 0
+  },
+  "bit_bias_mitochondrial": {
+    "compartment": "mitochondrial",
+    "bit_counts_observed": [
+      5,
+      4,
+      0,
+      8,
+      13,
+      5
+    ],
+    "expected_counts_weighted": [
+      4.827586206896552,
+      4.827586206896552,
+      3.6206896551724137,
+      3.6206896551724137,
+      9.051724137931036,
+      9.051724137931036
+    ],
+    "expected_weights": [
+      0.13793103448275862,
+      0.13793103448275862,
+      0.10344827586206896,
+      0.10344827586206896,
+      0.25862068965517243,
+      0.25862068965517243
+    ],
+    "chi2_statistic_weighted": 12.60142857142857,
+    "chi2_p_value_weighted": 0.027414305178913745,
+    "chi2_statistic_uniform_reference": 16.25714285714286,
+    "chi2_p_value_uniform_reference": 0.006147008368679554,
+    "n_events": 35
+  },
+  "directionality": {
+    "total_events": 61,
+    "sense_to_sense": 28,
+    "sense_to_stop": 4,
+    "stop_to_sense": 29,
+    "unique_codons": 13,
+    "unique_source_aas": 6,
+    "unique_target_aas": 14,
+    "top_codons": [
+      "UGA",
+      "AGA",
+      "AGG",
+      "UAG",
+      "UAA"
+    ]
+  }
+}

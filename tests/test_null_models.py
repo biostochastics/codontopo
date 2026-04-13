@@ -40,12 +40,12 @@ def test_null_model_a_accepts_code():
 def test_null_model_b_returns_results():
     result = null_model_b(n_permutations=100, seed=42)
     assert "p_value_serine_unique" in result
-    assert result["exclude_stops"] is False
+    assert result["include_stops"] is True
 
 
-def test_null_model_b_exclude_stops():
-    result = null_model_b(n_permutations=100, seed=42, exclude_stops=True)
-    assert result["exclude_stops"] is True
+def test_null_model_b_include_stops_false():
+    result = null_model_b(n_permutations=100, seed=42, include_stops=False)
+    assert result["include_stops"] is False
     assert "p_value_serine_unique" in result
 
 

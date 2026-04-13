@@ -198,7 +198,10 @@ class CBioPortalClient:
         }
         try:
             resp = requests.post(
-                url, json=body, params=params, timeout=60,
+                url,
+                json=body,
+                params=params,
+                timeout=60,
                 headers={"Content-Type": "application/json"},
             )
             resp.raise_for_status()

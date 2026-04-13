@@ -1,0 +1,802 @@
+{
+  "monte_carlo": {
+    "null_type": "freeland_hurst",
+    "include_stops": true,
+    "observed_score": 13477.0,
+    "null_mean": 14954.4802,
+    "null_std": 628.0173120084972,
+    "null_min": 12781.0,
+    "null_max": 17283.0,
+    "quantile_of_observed": 0.6,
+    "n_beaten_observed": 60,
+    "n_samples": 10000,
+    "p_value_raw": 0.006,
+    "p_value_conservative": 0.006099390060993901,
+    "p_value_lower_bound": 9.999000099990002e-05,
+    "interpretation": "Strongly optimal (p = 0.0060)"
+  },
+  "cross_table": {
+    "per_table": [
+      {
+        "table_id": 1,
+        "score": 13477.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 2,
+        "score": 14612.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 3,
+        "score": 13448.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 4,
+        "score": 13178.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 5,
+        "score": 13306.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 6,
+        "score": 12279.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 9,
+        "score": 13210.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 10,
+        "score": 13369.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 11,
+        "score": 13477.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 12,
+        "score": 14016.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 13,
+        "score": 13332.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 14,
+        "score": 12752.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 15,
+        "score": 12943.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 16,
+        "score": 13110.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 21,
+        "score": 13197.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 22,
+        "score": 13652.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 23,
+        "score": 14208.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 24,
+        "score": 13387.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 25,
+        "score": 13223.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 26,
+        "score": 13773.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          5,
+          5,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 27,
+        "score": 12279.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 29,
+        "score": 12524.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 30,
+        "score": 12371.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 31,
+        "score": 11794.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 33,
+        "score": 12929.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      }
+    ],
+    "standard_score": 13477.0,
+    "min_score": 11794.0,
+    "max_score": 14612.0,
+    "relative_to_standard": [
+      {
+        "table_id": 1,
+        "score": 13477.0,
+        "pct_of_standard": 100.0
+      },
+      {
+        "table_id": 2,
+        "score": 14612.0,
+        "pct_of_standard": 108.42175558358686
+      },
+      {
+        "table_id": 3,
+        "score": 13448.0,
+        "pct_of_standard": 99.78481857980263
+      },
+      {
+        "table_id": 4,
+        "score": 13178.0,
+        "pct_of_standard": 97.78140535727536
+      },
+      {
+        "table_id": 5,
+        "score": 13306.0,
+        "pct_of_standard": 98.73117162573273
+      },
+      {
+        "table_id": 6,
+        "score": 12279.0,
+        "pct_of_standard": 91.11078133115679
+      },
+      {
+        "table_id": 9,
+        "score": 13210.0,
+        "pct_of_standard": 98.0188469243897
+      },
+      {
+        "table_id": 10,
+        "score": 13369.0,
+        "pct_of_standard": 99.1986347109891
+      },
+      {
+        "table_id": 11,
+        "score": 13477.0,
+        "pct_of_standard": 100.0
+      },
+      {
+        "table_id": 12,
+        "score": 14016.0,
+        "pct_of_standard": 103.99940639608221
+      },
+      {
+        "table_id": 13,
+        "score": 13332.0,
+        "pct_of_standard": 98.92409289901313
+      },
+      {
+        "table_id": 14,
+        "score": 12752.0,
+        "pct_of_standard": 94.62046449506566
+      },
+      {
+        "table_id": 15,
+        "score": 12943.0,
+        "pct_of_standard": 96.0376938487794
+      },
+      {
+        "table_id": 16,
+        "score": 13110.0,
+        "pct_of_standard": 97.27684202715739
+      },
+      {
+        "table_id": 21,
+        "score": 13197.0,
+        "pct_of_standard": 97.9223862877495
+      },
+      {
+        "table_id": 22,
+        "score": 13652.0,
+        "pct_of_standard": 101.29850857015656
+      },
+      {
+        "table_id": 23,
+        "score": 14208.0,
+        "pct_of_standard": 105.42405579876826
+      },
+      {
+        "table_id": 24,
+        "score": 13387.0,
+        "pct_of_standard": 99.3321955924909
+      },
+      {
+        "table_id": 25,
+        "score": 13223.0,
+        "pct_of_standard": 98.11530756102991
+      },
+      {
+        "table_id": 26,
+        "score": 13773.0,
+        "pct_of_standard": 102.19633449580768
+      },
+      {
+        "table_id": 27,
+        "score": 12279.0,
+        "pct_of_standard": 91.11078133115679
+      },
+      {
+        "table_id": 29,
+        "score": 12524.0,
+        "pct_of_standard": 92.92869332937597
+      },
+      {
+        "table_id": 30,
+        "score": 12371.0,
+        "pct_of_standard": 91.79342583661052
+      },
+      {
+        "table_id": 31,
+        "score": 11794.0,
+        "pct_of_standard": 87.51205757958003
+      },
+      {
+        "table_id": 33,
+        "score": 12929.0,
+        "pct_of_standard": 95.93381316316687
+      }
+    ]
+  }
+}

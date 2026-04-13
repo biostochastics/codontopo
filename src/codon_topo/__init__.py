@@ -36,7 +36,23 @@ from codon_topo.analysis.cosmic_query import (
 from codon_topo.analysis.synbio_feasibility import (
     score_variant_code as score_variant_code,
 )
+from codon_topo.analysis.coloring_optimality import (
+    monte_carlo_null as monte_carlo_null,
+    hypercube_edge_mismatch_score as hypercube_edge_mismatch_score,
+    cross_table_optimality as cross_table_optimality,
+)
+from codon_topo.analysis.trna_evidence import (
+    trna_duplication_correlation_test as trna_duplication_correlation_test,
+)
 from codon_topo.reports.catalogue import (
     build_catalogue as build_catalogue,
     Prediction as Prediction,
 )
+from codon_topo.reports.claim_hierarchy import (
+    CLAIM_HIERARCHY as CLAIM_HIERARCHY,
+    ClaimStatus as ClaimStatus,
+    supported_claims as supported_claims,
+    hierarchy_summary_table as hierarchy_summary_table,
+)
+
+DEFAULT_SEED: int = 135325

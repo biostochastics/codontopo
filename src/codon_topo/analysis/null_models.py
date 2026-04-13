@@ -151,7 +151,7 @@ def null_model_a(
 def null_model_b(
     n_permutations: int = 100_000,
     code: dict[str, str] | None = None,
-    exclude_stops: bool = False,
+    include_stops: bool = True,
     seed: int | None = None,
 ) -> dict:
     """Null Model B: preserve block structure, shuffle block-to-AA assignment.
@@ -162,12 +162,13 @@ def null_model_b(
 
     Note on stop codons: by default, blocks containing Stop codons (UA, UG)
     participate in the shuffle, testing joint randomness of AA AND stop
-    placement. Set exclude_stops=True to fix stop-containing blocks in
+    placement. Set include_stops=False to fix stop-containing blocks in
     place and test only sense-codon block assignments.
 
     Args:
         code: Genetic code to use as reference. Defaults to STANDARD.
-        exclude_stops: If True, blocks containing Stop codons are not shuffled.
+        include_stops: If True (default), stop-containing blocks participate
+            in the shuffle. If False, they are held fixed.
     """
     rng = random.Random(seed)
     ref = code or STANDARD
@@ -190,7 +191,7 @@ def null_model_b(
     count_serine_unique = 0
 
     for _ in range(n_permutations):
-        if exclude_stops:
+        if not include_stops:
             # Only shuffle non-stop blocks
             sense_indices = [i for i, s in enumerate(has_stop) if not s]
             sense_patterns = [std_block_aas[i] for i in sense_indices]
@@ -214,7 +215,7 @@ def null_model_b(
     return {
         "n_permutations": n_permutations,
         "p_value_serine_unique": count_serine_unique / n_permutations,
-        "exclude_stops": exclude_stops,
+        "include_stops": include_stops,
     }
 
 
@@ -253,4 +254,91 @@ def null_model_c(
         "n_encodings": len(encodings),
         "twofold_invariant_count": twofold_invariant,
         "encoding_results": results,
+    }
+
+
+def null_model_c_extended(
+    code: dict[str, str] | None = None,
+) -> dict:
+    """Null Model C EXTENDED: emit per-encoding MIN INTER-BLOCK HAMMING DISTANCE
+    for every disconnected amino acid.
+
+    Addresses the kimi-k2.5 counterexample: the original claim "Serine min distance 4
+    invariant across 24 encodings" is FALSE. What survives is "disconnected at eps=1."
+
+    For each of the 24 encodings and each amino acid whose codon graph is
+    disconnected at eps=1, this emits:
+        - n_components
+        - min_inter_distance (can vary across encodings)
+        - reconnect_eps (smallest eps at which the graph becomes connected)
+
+    Returns a structure that lets you aggregate: for how many encodings does
+    Serine have min distance 4 vs 2? vs 3?
+    """
+    from codon_topo.core.homology import disconnection_catalogue
+
+    ref = code or STANDARD
+    encodings = all_encodings()
+
+    per_encoding: list[dict] = []
+    # Aggregate: {aa: {min_dist_value: count_across_encodings}}
+    aa_distance_histogram: dict[str, dict[int, int]] = defaultdict(
+        lambda: defaultdict(int)
+    )
+    # Aggregate: {aa: {reconnect_eps: count_across_encodings}}
+    aa_reconnect_histogram: dict[str, dict[int, int]] = defaultdict(
+        lambda: defaultdict(int)
+    )
+
+    for enc_idx, enc in enumerate(encodings):
+        cat = disconnection_catalogue(ref, encoding=enc)
+        encoding_summary = {
+            "encoding_index": enc_idx,
+            "encoding_map": dict(enc),
+            "disconnected": [
+                {
+                    "aa": entry["aa"],
+                    "n_components": entry["n_components"],
+                    "min_inter_distance": entry["min_inter_distance"],
+                    "reconnect_eps": entry["reconnect_eps"],
+                }
+                for entry in cat
+            ],
+        }
+        per_encoding.append(encoding_summary)
+
+        for entry in cat:
+            aa = entry["aa"]
+            aa_distance_histogram[aa][entry["min_inter_distance"]] += 1
+            if entry["reconnect_eps"] is not None:
+                aa_reconnect_histogram[aa][entry["reconnect_eps"]] += 1
+
+    # Universal invariants: AA that is disconnected in ALL 24 encodings
+    universal_disconnected_aas = [
+        aa
+        for aa in aa_distance_histogram
+        if sum(aa_distance_histogram[aa].values()) == len(encodings)
+    ]
+
+    # For each universal AA, enumerate the distance values it takes
+    invariant_details: dict[str, dict] = {}
+    for aa in universal_disconnected_aas:
+        invariant_details[aa] = {
+            "min_distance_values": dict(aa_distance_histogram[aa]),
+            "reconnect_eps_values": dict(aa_reconnect_histogram[aa]),
+            "distance_is_invariant": len(aa_distance_histogram[aa]) == 1,
+            "reconnect_is_invariant": len(aa_reconnect_histogram[aa]) == 1,
+        }
+
+    return {
+        "n_encodings": len(encodings),
+        "per_encoding": per_encoding,
+        "universal_disconnected_aas": sorted(universal_disconnected_aas),
+        "invariant_details": invariant_details,
+        "aa_distance_histogram": {
+            aa: dict(counts) for aa, counts in aa_distance_histogram.items()
+        },
+        "aa_reconnect_histogram": {
+            aa: dict(counts) for aa, counts in aa_reconnect_histogram.items()
+        },
     }

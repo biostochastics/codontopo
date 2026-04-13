@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Genetic Code as Hypercube Coloring</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14; --surface: #111820; --surface2: #151d28;
+    --border: #1e2a38; --border-light: #253345;
+    --text: #a8b5c4; --text-light: #d4dce6; --text-dim: #5a6a7a;
+    --accent: #4d94ff; --accent-dim: #2d5a9e;
+    --green: #42b883; --red: #e05555; --yellow: #e0b044;
+    --radius: 10px; --transition: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',system-ui,sans-serif; font-weight:400; font-size:13px; line-height:1.55; overflow:hidden; -webkit-font-smoothing:antialiased; }
+  #app { display:flex; height:100vh; }
+
+  /* ---- SIDEBAR ---- */
+  #sidebar { width:340px; display:flex; flex-direction:column; background:var(--surface); border-right:1px solid var(--border); flex-shrink:0; }
+  #header { padding:20px 20px 16px; }
+  #header h1 { font-size:15px; font-weight:600; color:var(--text-light); letter-spacing:-0.3px; }
+  #header .sub { font-size:11px; color:var(--text-dim); margin-top:3px; font-weight:300; }
+  #steps { flex:1; overflow-y:auto; padding:0 12px 12px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+  #steps::-webkit-scrollbar { width:4px; }
+  #steps::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+  .step { padding:14px 16px; margin-bottom:6px; background:transparent; border-radius:var(--radius); border-left:2px solid transparent; cursor:pointer; transition:var(--transition); opacity:0.4; }
+  .step:hover { opacity:0.7; background:var(--surface2); }
+  .step.active { opacity:1; background:var(--surface2); border-left-color:var(--accent); }
+  .step .num { font-size:9px; font-weight:500; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-dim); margin-bottom:5px; }
+  .step.active .num { color:var(--accent); }
+  .step h3 { font-size:13px; font-weight:500; color:var(--text-light); margin-bottom:5px; letter-spacing:-0.2px; }
+  .step p { font-size:11.5px; color:var(--text-dim); line-height:1.65; font-weight:300; }
+  .step.active p { color:var(--text); }
+  .step .hl { color:var(--accent); font-weight:500; }
+  .step .val { display:inline-block; padding:0 5px; background:var(--bg); border-radius:3px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--green); font-weight:500; }
+
+  #nav { padding:10px 16px; border-top:1px solid var(--border); display:flex; gap:6px; }
+  .nbtn { flex:1; padding:7px; font-size:11px; font-weight:500; background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; cursor:pointer; text-align:center; transition:var(--transition); letter-spacing:0.3px; }
+  .nbtn:hover { background:var(--border); }
+  .nbtn.go { background:var(--accent-dim); border-color:var(--accent-dim); color:#fff; }
+  .nbtn.go:hover { background:var(--accent); }
+  .nbtn:disabled { opacity:0.25; pointer-events:none; }
+
+  /* ---- VIZ ---- */
+  #viz { flex:1; position:relative; background:radial-gradient(ellipse at center,#0f1620 0%,var(--bg) 70%); }
+  svg { width:100%; height:100%; }
+
+  /* Epsilon pill */
+  #eps-pill { position:absolute; top:14px; left:14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; backdrop-filter:blur(12px); min-width:160px; }
+  #eps-pill .ep-label { font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); font-weight:500; }
+  #eps-pill .ep-val { font-size:32px; font-weight:300; color:var(--accent); font-family:'IBM Plex Mono'; line-height:1.1; }
+  #eps-pill .ep-sub { font-size:10px; color:var(--text-dim); font-weight:300; margin-top:1px; }
+  #eps-pill input[type=range] { width:100%; margin-top:8px; accent-color:var(--accent); height:3px; }
+
+  /* Stats card */
+  #stats { position:absolute; top:14px; right:14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:12px 16px; min-width:180px; backdrop-filter:blur(12px); }
+  #stats .st-title { font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); font-weight:500; margin-bottom:6px; }
+  .sr { display:flex; justify-content:space-between; align-items:center; padding:2px 0; }
+  .sr span:first-child { font-size:11px; color:var(--text-dim); font-weight:300; }
+  .sr .sv { font-family:'IBM Plex Mono'; font-size:11px; color:var(--accent); font-weight:500; }
+  .sr .sg { color:var(--green); }
+  .divider { height:1px; background:var(--border); margin:6px 0; }
+
+  /* Tooltip */
+  #tip { position:absolute; background:var(--surface2); border:1px solid var(--border-light); padding:10px 14px; border-radius:8px; pointer-events:none; display:none; z-index:10; backdrop-filter:blur(16px); }
+  #tip .tc { font-family:'IBM Plex Mono'; font-size:16px; color:var(--text-light); font-weight:500; letter-spacing:1px; }
+  #tip .ta { font-size:12px; color:var(--accent); font-weight:500; margin-top:1px; }
+  #tip .tb { font-family:'IBM Plex Mono'; font-size:10px; color:var(--text-dim); margin-top:2px; }
+
+  /* Legend */
+  #legend { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:5px 8px; flex-wrap:wrap; max-width:92%; justify-content:center; }
+  .li { display:flex; align-items:center; gap:3px; font-size:9px; font-weight:400; padding:2px 5px; border-radius:4px; cursor:pointer; border:1px solid transparent; color:var(--text-dim); transition:var(--transition); white-space:nowrap; }
+  .li:hover { border-color:var(--border-light); color:var(--text); }
+  .li.active { border-color:var(--accent-dim); color:var(--accent); background:rgba(77,148,255,0.06); }
+  .ld { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+  /* Nodes */
+  .node { cursor:pointer; stroke:var(--bg); stroke-width:1; transition: opacity 0.4s, r 0.3s; }
+  .node:hover { stroke:var(--text-light); stroke-width:1.5; }
+  .node.dim { opacity:0.06; }
+  .node.glow { filter:drop-shadow(0 0 4px currentColor); }
+</style>
+</head>
+<body>
+<div id="app">
+<div id="sidebar">
+  <div id="header">
+    <h1>Genetic Code as Q<sub>6</sub> Hypercube Coloring</h1>
+    <div class="sub">An interactive walk through the error-minimization structure of the genetic code</div>
+  </div>
+  <div id="steps"></div>
+  <div id="nav">
+    <button class="nbtn" id="bp" disabled>Back</button>
+    <button class="nbtn go" id="bn">Continue</button>
+  </div>
+</div>
+<div id="viz">
+  <svg id="canvas"></svg>
+  <div id="eps-pill">
+    <div class="ep-label">Hamming threshold</div>
+    <div class="ep-val" id="ev">1</div>
+    <div class="ep-sub" id="esub">192 edges</div>
+    <input type="range" id="esl" min="0" max="6" value="1" step="1">
+  </div>
+  <div id="stats">
+    <div class="st-title">Live metrics</div>
+    <div class="sr"><span>Visible edges</span><span class="sv" id="xe">192</span></div>
+    <div class="sr"><span>Synonymous</span><span class="sv sg" id="xs">0</span></div>
+    <div class="sr"><span>Non-synonymous</span><span class="sv" id="xn">0</span></div>
+    <div class="sr"><span>Components</span><span class="sv" id="xc">64</span></div>
+    <div class="divider"></div>
+    <div class="sr"><span>Mismatch F</span><span class="sv" id="xf">0</span></div>
+    <div class="sr"><span>FH quantile</span><span class="sv sg" id="xq">0.60%</span></div>
+    <div class="sr"><span>p-value</span><span class="sv sg" id="xp">0.006</span></div>
+  </div>
+  <div id="tip"><div class="tc" id="tc"></div><div class="ta" id="ta"></div><div class="tb" id="tb"></div></div>
+  <div id="legend"></div>
+</div>
+</div>
+<script>
+var B=['C','U','A','G'],EN={C:[0,0],U:[0,1],A:[1,0],G:[1,1]},ST={};
+var as='FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';
+var AN={F:'Phe',L:'Leu',I:'Ile',M:'Met',V:'Val',S:'Ser',P:'Pro',T:'Thr',A:'Ala',Y:'Tyr',H:'His',Q:'Gln',N:'Asn',K:'Lys',D:'Asp',E:'Glu',C:'Cys',W:'Trp',R:'Arg',G:'Gly','*':'Stop'};
+var cs=[];B.forEach(function(a){B.forEach(function(b){B.forEach(function(c){cs.push(a+b+c)})})});
+cs.forEach(function(c,i){ST[c]=AN[as[i]]});
+function v(c){return EN[c[0]].concat(EN[c[1]],EN[c[2]])}
+function hm(a,b){var d=0;for(var i=0;i<6;i++)if(a[i]!==b[i])d++;return d}
+
+// Muted palette
+var CL={Phe:'#c4697a',Leu:'#4a9e6b',Ile:'#5b86b8',Met:'#b8a84e',Val:'#6bb8c4',Ser:'#9e5b8e',Pro:'#8a8a8a',Thr:'#c4875e',Ala:'#5baa8e',Tyr:'#c4b044',His:'#b8697a',Gln:'#7a4a6e',Asn:'#4a4a8e',Lys:'#6aaab8',Asp:'#8a8a4e',Glu:'#8a3a2e',Cys:'#3a8a5e',Trp:'#b8aa6e',Arg:'#7a5e6b',Gly:'#aa8e5e',Stop:'#5a5a4a'};
+var A31={Ala:'A',Arg:'R',Asn:'N',Asp:'D',Cys:'C',Gln:'Q',Glu:'E',Gly:'G',His:'H',Ile:'I',Leu:'L',Lys:'K',Met:'M',Phe:'F',Pro:'P',Ser:'S',Thr:'T',Trp:'W',Tyr:'Y',Val:'V'};
+var GR={I:{L:5,M:10,F:21,V:29,Y:33},L:{M:15,F:22,V:32,Y:36,W:61},F:{Y:22,W:40},D:{E:45,N:23},K:{R:26},A:{G:60,P:27,T:58,V:64,S:99},S:{T:58,N:46,G:56},W:{C:215,Y:37},R:{H:29,Q:43,N:86}};
+function gd(a,b){if(a==='Stop'||b==='Stop')return a===b?0:215;var x=A31[a],y=A31[b];if(x===y)return 0;if(GR[x]&&GR[x][y]!==undefined)return GR[x][y];if(GR[y]&&GR[y][x]!==undefined)return GR[y][x];return 100}
+
+var nodes=cs.map(function(c){var vv=v(c),aa=ST[c],dg=cs.filter(function(x){return ST[x]===aa}).length;return{id:c,v:vv,aa:aa,cl:CL[aa]||'#444',dg:dg,x:0,y:0,fx:null,fy:null}});
+var edges=[];
+for(var i=0;i<64;i++)for(var j=i+1;j<64;j++){var d=hm(nodes[i].v,nodes[j].v);if(d<=6)edges.push({s:i,t:j,h:d,syn:nodes[i].aa===nodes[j].aa,g:gd(nodes[i].aa,nodes[j].aa)})}
+var h1=edges.filter(function(e){return e.h===1});
+var TF=h1.reduce(function(s,e){return s+e.g},0);
+
+// Steps
+var S=[
+  {n:'01',t:'64 RNA codons',b:'Each circle is one of the 64 possible three-letter RNA words. Colors represent the amino acid each codon encodes \u2014 the fundamental translation table of life.',eps:0,em:'off',hl:null},
+  {n:'02',t:'The mutation graph',b:'An edge connects two codons that differ by exactly one nucleotide \u2014 a single point mutation. There are <span class="val">192</span> such edges in the 6-dimensional hypercube Q\u2086.',eps:1,em:'hm',hl:null},
+  {n:'03',t:'Silent vs. damaging mutations',b:'<span class="hl">Green edges</span> connect synonymous codons (same amino acid \u2014 the mutation is silent). <span class="hl" style="color:var(--red)">Red edges</span> cross amino acid boundaries \u2014 potentially harmful.',eps:1,em:'syn',hl:null},
+  {n:'04',t:'Physicochemical cost',b:'Each non-synonymous edge is weighted by Grantham distance \u2014 how different the two amino acids are physically. <span class="hl">Thin blue</span>: similar substitution. <span class="hl" style="color:var(--red)">Thick red</span>: radical change. Total mismatch score: <span class="val">F = '+TF.toLocaleString()+'</span>.',eps:1,em:'gr',hl:null},
+  {n:'05',t:'Is this score unusual?',b:'We shuffled which amino acid each codon block encodes, <span class="val">10,000 times</span> (Freeland\u2013Hurst null). The standard code\u2019s F beats 99.4% of random codes. <span class="val">p = 0.006</span>. The genetic code is significantly error-minimizing.',eps:1,em:'gr',hl:null},
+  {n:'06',t:'Serine\u2019s unique split',b:'Serine has six codons in <span class="hl">two disconnected clusters</span>: UCN (four codons) and AGY (two codons). No single mutation bridges them. This is the <span class="hl">only amino acid</span> with this property across all 25 known genetic codes.',eps:1,em:'hm',hl:'Ser'},
+  {n:'07',t:'Reconnection at \u03b5 = 4',b:'Increase the Hamming threshold to allow multi-step paths. Serine\u2019s two families finally reconnect at \u03b5 = 4 (under the default encoding). Try dragging the slider yourself.',eps:4,em:'hm',hl:'Ser'},
+  {n:'08',t:'Explore freely',b:'The genetic code is an optimized coloring of the 6-dimensional hypercube. Click any amino acid to isolate its codons. Drag the epsilon slider. Drag nodes to rearrange. Switch edge modes in steps 2\u20134.',eps:1,em:'syn',hl:null},
+];
+
+// Build step elements
+var stepsEl=document.getElementById('steps');
+S.forEach(function(s,idx){
+  var d=document.createElement('div');d.className='step';d.dataset.i=idx;
+  var nm=document.createElement('div');nm.className='num';nm.textContent='Step '+s.n;
+  var h=document.createElement('h3');h.textContent=s.t;
+  var p=document.createElement('p');p.id='sp'+idx;
+  d.appendChild(nm);d.appendChild(h);d.appendChild(p);
+  d.addEventListener('click',function(){go(idx)});
+  stepsEl.appendChild(d);
+});
+
+function setStepBody(idx){
+  var p=document.getElementById('sp'+idx);if(!p)return;
+  while(p.firstChild)p.removeChild(p.firstChild);
+  var raw=S[idx].b;
+  var parts=raw.split(/(<span[^>]*>[^<]*<\/span>)/);
+  parts.forEach(function(part){
+    var m=part.match(/^<span class="([^"]*)"(?: style="([^"]*)")?>(.*)<\/span>$/);
+    if(m){var sp=document.createElement('span');sp.className=m[1];if(m[2])sp.setAttribute('style',m[2]);sp.textContent=m[3];p.appendChild(sp)}
+    else{p.appendChild(document.createTextNode(part))}
+  });
+}
+
+// Viz state
+var svg=d3.select('#canvas'),tip=document.getElementById('tip');
+var cEps=1,hlAA=null,eMode='hm',cStep=0;
+var gC,eSel,nSel;
+
+var sim=d3.forceSimulation(nodes)
+  .force('charge',d3.forceManyBody().strength(-18))
+  .force('link',d3.forceLink(h1.map(function(e){return{source:e.s,target:e.t}})).distance(35).strength(0.25))
+  .force('center',d3.forceCenter())
+  .force('collide',d3.forceCollide(7))
+  .alphaDecay(0.018)
+  .on('tick',tick);
+
+function init(){
+  var r=document.getElementById('viz').getBoundingClientRect();
+  var W=r.width,H=r.height;
+  svg.attr('viewBox',(-W/2)+' '+(-H/2)+' '+W+' '+H);
+  svg.selectAll('*').remove();
+  gC=svg.append('g');
+  svg.call(d3.zoom().scaleExtent([0.3,6]).on('zoom',function(e){gC.attr('transform',e.transform)}));
+
+  eSel=gC.selectAll('line').data(edges).join('line');
+  nSel=gC.selectAll('circle').data(nodes).join('circle')
+    .attr('class','node').attr('r',3.5).attr('fill',function(d){return d.cl})
+    .call(d3.drag()
+      .on('start',function(ev,d){if(!ev.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y})
+      .on('drag',function(ev,d){d.fx=ev.x;d.fy=ev.y})
+      .on('end',function(ev,d){if(!ev.active)sim.alphaTarget(0);d.fx=null;d.fy=null}))
+    .on('mouseover',function(ev,d){
+      tip.style.display='block';
+      document.getElementById('tc').textContent=d.id;
+      document.getElementById('ta').textContent=d.aa+' ('+d.dg+'-fold)';
+      document.getElementById('tb').textContent=d.v.join('');
+      tip.style.left=(ev.pageX+12)+'px';tip.style.top=(ev.pageY-45)+'px';
+    })
+    .on('mousemove',function(ev){tip.style.left=(ev.pageX+12)+'px';tip.style.top=(ev.pageY-45)+'px'})
+    .on('mouseout',function(){tip.style.display='none'})
+    .on('click',function(ev,d){hlAA=hlAA===d.aa?null:d.aa;upd();
+      document.querySelectorAll('.li').forEach(function(el){el.classList.toggle('active',hlAA&&el.dataset.a===hlAA)});
+    });
+  sim.alpha(1).restart();
+}
+
+function tick(){
+  if(!eSel||!nSel)return;
+  eSel.attr('x1',function(e){return nodes[e.s].x||0}).attr('y1',function(e){return nodes[e.s].y||0})
+      .attr('x2',function(e){return nodes[e.t].x||0}).attr('y2',function(e){return nodes[e.t].y||0});
+  nSel.attr('cx',function(d){return d.x||0}).attr('cy',function(d){return d.y||0});
+}
+
+function upd(){
+  if(!eSel||!nSel)return;
+  eSel.each(function(e){
+    var el=d3.select(this);
+    var vis=e.h<=cEps&&eMode!=='off';
+    el.attr('display',vis?null:'none');
+    if(!vis)return;
+    var op=0.12,col='#253345',w=0.6;
+    if(eMode==='syn'){col=e.syn?'#42d990':'#ff5555';op=e.syn?0.7:0.4;w=e.syn?1.5:0.8}
+    else if(eMode==='gr'){
+      if(e.syn){col='#42d990';op=0.35;w=1.0}
+      else{var t=Math.min(e.g/215,1);col=d3.interpolateRgb('#5599dd','#ff4444')(t);op=0.55;w=Math.max(0.8,e.g/35)}
+    }else{var cc=['#5599ff','#42d990','#eebb44','#ff5555','#ff3333','#cc3333'];col=cc[e.h-1]||'#333';op=0.3;w=0.8}
+    if(hlAA){var sa=nodes[e.s].aa,ta=nodes[e.t].aa;if(sa!==hlAA&&ta!==hlAA){op=0.01}else{op=Math.min(op*3,0.95);w=Math.max(w,1.8)}}
+    el.attr('stroke',col).attr('stroke-opacity',op).attr('stroke-width',w);
+  });
+
+  nSel.attr('class',function(d){var c='node';if(hlAA&&d.aa!==hlAA)c+=' dim';if(hlAA&&d.aa===hlAA)c+=' glow';return c})
+      .attr('r',function(d){return hlAA===d.aa?6.5:3.5})
+      .attr('fill',function(d){return hlAA===d.aa?d3.color(d.cl).brighter(0.6):d.cl});
+
+  var ve=edges.filter(function(e){return e.h<=cEps&&eMode!=='off'});
+  var sy=ve.filter(function(e){return e.syn}).length;
+  var ns=ve.filter(function(e){return!e.syn}).length;
+  document.getElementById('xe').textContent=ve.length;
+  document.getElementById('xs').textContent=sy;
+  document.getElementById('xn').textContent=ns;
+
+  var pa=[];for(var k=0;k<64;k++)pa.push(k);
+  function fi(x){while(pa[x]!==x){pa[x]=pa[pa[x]];x=pa[x]}return x}
+  edges.filter(function(e){return e.h<=cEps}).forEach(function(e){var a=fi(e.s),b=fi(e.t);if(a!==b)pa[a]=b});
+  var ro=new Set();for(var k=0;k<64;k++)ro.add(fi(k));
+  document.getElementById('xc').textContent=ro.size;
+  document.getElementById('xf').textContent=TF.toLocaleString();
+  document.getElementById('esub').textContent=ve.length+' edges \u00b7 '+ro.size+' components';
+}
+
+function go(idx){
+  cStep=idx;var s=S[idx];
+  cEps=s.eps;eMode=s.em;hlAA=s.hl;
+  document.getElementById('esl').value=s.eps;
+  document.getElementById('ev').textContent=s.eps;
+  document.querySelectorAll('.step').forEach(function(el,i){
+    el.classList.toggle('active',i===idx);
+    if(i===idx){setStepBody(i);el.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  });
+  document.getElementById('bp').disabled=(idx===0);
+  var nb=document.getElementById('bn');
+  nb.disabled=(idx===S.length-1);
+  nb.textContent=idx===S.length-1?'Done':'Continue';
+  document.querySelectorAll('.li').forEach(function(el){el.classList.toggle('active',hlAA&&el.dataset.a===hlAA)});
+  upd();
+}
+
+document.getElementById('bn').addEventListener('click',function(){if(cStep<S.length-1)go(cStep+1)});
+document.getElementById('bp').addEventListener('click',function(){if(cStep>0)go(cStep-1)});
+document.getElementById('esl').addEventListener('input',function(){cEps=+this.value;document.getElementById('ev').textContent=this.value;upd()});
+
+var lg=document.getElementById('legend');
+Array.from(new Set(Object.values(ST))).sort().forEach(function(aa){
+  var cnt=cs.filter(function(c){return ST[c]===aa}).length;
+  var it=document.createElement('div');it.className='li';it.dataset.a=aa;
+  var dt=document.createElement('span');dt.className='ld';dt.style.background=CL[aa]||'#444';
+  it.appendChild(dt);it.appendChild(document.createTextNode(aa+'\u2009'+cnt));
+  it.addEventListener('click',function(){hlAA=hlAA===aa?null:aa;
+    document.querySelectorAll('.li').forEach(function(el){el.classList.toggle('active',hlAA&&el.dataset.a===hlAA)});upd()});
+  lg.appendChild(it);
+});
+
+document.addEventListener('keydown',function(ev){
+  if(ev.key==='ArrowRight'||ev.key===' '){ev.preventDefault();if(cStep<S.length-1)go(cStep+1)}
+  if(ev.key==='ArrowLeft'){ev.preventDefault();if(cStep>0)go(cStep-1)}
+  if(ev.key==='Escape'){hlAA=null;upd();document.querySelectorAll('.li').forEach(function(el){el.classList.remove('active')})}
+});
+
+init();setTimeout(function(){go(0)},400);
+window.addEventListener('resize',function(){init();setTimeout(upd,100)});
+</script>
+</body>
+</html>

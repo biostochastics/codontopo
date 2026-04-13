@@ -1,0 +1,30 @@
+table_id,table_name,aa,n_components,reconnect_eps,min_inter_distance
+1,Standard,Ser,2,4,4
+2,Vertebrate Mitochondrial,Ser,2,4,4
+3,Yeast Mitochondrial,Ser,2,4,4
+3,Yeast Mitochondrial,Thr,2,2,2
+4,Mold/Protozoan/Coelenterate Mito,Ser,2,4,4
+5,Invertebrate Mitochondrial,Ser,2,4,4
+6,Ciliate Nuclear,Ser,2,4,4
+9,Echinoderm/Flatworm Mito,Ser,2,4,4
+10,Euplotid Nuclear,Ser,2,4,4
+11,Bacterial/Archaeal/Plant Plastid,Ser,2,4,4
+12,Alternative Yeast Nuclear,Ser,3,3,2
+13,Ascidian Mitochondrial,Ser,2,4,4
+14,Alternative Flatworm Mito,Ser,2,4,4
+15,Blepharisma Macronuclear,Ser,2,4,4
+16,Chlorophycean Mito,Leu,2,2,2
+16,Chlorophycean Mito,Ser,2,4,4
+21,Trematode Mitochondrial,Ser,2,4,4
+22,Scenedesmus obliquus Mito,Leu,2,2,2
+22,Scenedesmus obliquus Mito,Ser,2,4,4
+23,Thraustochytrium Mito,Ser,2,4,4
+24,Rhabdopleuridae Mito,Ser,2,4,4
+25,Candidate Division SR1 / Gracilibacteria,Ser,2,4,4
+26,Pachysolen tannophilus Nuclear,Ala,2,3,3
+26,Pachysolen tannophilus Nuclear,Ser,2,4,4
+27,Karyorelictea Nuclear,Ser,2,4,4
+29,Mesodinium Nuclear,Ser,2,4,4
+30,Peritrich Nuclear,Ser,2,4,4
+31,Blastocrithidia Nuclear,Ser,2,4,4
+33,Cephalodiscidae Mito,Ser,2,4,4
