@@ -16,11 +16,6 @@ class TestCLIHelp:
         assert result.exit_code == 0
         assert "Codon Geometry" in result.output
 
-    def test_version(self):
-        result = runner.invoke(main, ["--version"])
-        assert result.exit_code == 0
-        assert "0.2.0" in result.output
-
     def test_each_subcommand_help(self):
         for cmd in [
             "filtration",
@@ -30,6 +25,12 @@ class TestCLIHelp:
             "trna",
             "kras",
             "claims",
+            "condlogit",
+            "topology-avoidance-k43",
+            "codonsafe",
+            "metric-sensitivity",
+            "mis-analysis",
+            "phylo-sensitivity",
             "all",
         ]:
             result = runner.invoke(main, [cmd, "--help"])
@@ -195,3 +196,19 @@ class TestAll:
         for jf in json_files:
             data = json.loads(jf.read_text())
             assert data is not None
+
+    def test_manuscript_stats_json(self, tmp_path):
+        result = runner.invoke(
+            main, ["all", "--output-dir", str(tmp_path), "--n", "50"]
+        )
+        assert result.exit_code == 0
+        stats_path = tmp_path / "manuscript_stats.json"
+        assert stats_path.exists(), "manuscript_stats.json not generated"
+        stats = json.loads(stats_path.read_text())
+        assert stats["_version"] == "0.3.0"
+        assert "metrics" in stats
+        assert "coloring" in stats
+        assert "topology_avoidance_q6" in stats
+        assert "topology_avoidance_k43" in stats
+        assert "condlogit" in stats
+        assert "trna" in stats

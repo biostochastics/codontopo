@@ -4,9 +4,26 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codon-topo"
-version = "0.2.0"
-description = "Codon Geometry Validation & Prediction Engine"
+version = "0.3.0"
+description = "Codon Geometry Validation & Prediction Engine — algebraic structure of genetic codes in GF(2)^6"
+readme = "README.md"
+license = "MIT"
 requires-python = ">=3.11"
+authors = [
+    { name = "Paul Clayworth" },
+    { name = "Sergey Kornilov", email = "sergey@biostochastics.com" },
+]
+keywords = [
+    "genetic-code", "codon", "error-minimization", "graph-theory",
+    "GF(2)^6", "hypercube", "persistent-homology", "evolution",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
@@ -19,7 +36,25 @@ dependencies = [
 codon-topo = "codon_topo.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "hypothesis>=6.0", "pytest-cov"]
+codonsafe = [
+    "pandas>=2.0",
+    "openpyxl>=3.1",
+    "biopython>=1.81",
+]
+dev = [
+    "pytest>=7.0",
+    "hypothesis>=6.0",
+    "pytest-cov",
+    "pandas>=2.0",
+    "openpyxl>=3.1",
+    "biopython>=1.81",
+]
+all = [
+    "codon-topo[codonsafe]",
+]
+
+[project.urls]
+Repository = "https://github.com/biostochastics/codon-topo"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

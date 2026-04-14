@@ -48,7 +48,7 @@ The following table lists all 15 evaluated claims with their complete justificat
     [variant_code_disconnection_catalogue], [Exploratory], [4 variant-code cases: Thr (Table 3), Leu (Table 16), Ala (Table 26), Ser (Table 12).],
     [kras_fano_clinical_prediction], [Falsified], [$p = 1.0$ across all 6 G12 variants. $n = 1{,}670$ MSK-IMPACT mutations.],
     [serine_min_distance_4_invariant], [Rejected], [16/24 encodings give distance 2. Only 8/24 give distance 4.],
-    [psl_2_7_symmetry], [Rejected], [No 64-dim irrep. Antoneli & Forger 2011.],
+    [psl_2_7_symmetry], [Rejected], [No 64-dim irrep. #cite(<antoneli2011>, form: "prose").],
     [holomorphic_embedding], [Rejected], [Domain is finite discrete. Character identity fails: $i^2 = -1 eq.not 1$.],
     [two_fold_bit_5_filtration], [Tautological], [Forced by encoding choice. Holds in 16/24 encodings.],
     [four_fold_prefix_filtration], [Tautological], [Trivial under any bijection from 4 bases to $"GF"(2)^2$.],
@@ -80,7 +80,7 @@ Full per-encoding results are available in the `codon-topo` repository via `codo
 
 == tRNAscan-SE verified organisms
 
-All tRNA gene counts were obtained by running tRNAscan-SE 2.0.12 (Chan and Lowe, 2019) with Infernal 1.1.4 on NCBI genome assemblies. Eukaryotic organisms were scanned in `-E` mode; _Mycoplasma_ species in `-B` (bacterial) mode.
+All tRNA gene counts were obtained by running tRNAscan-SE 2.0.12 @chan2019 with Infernal 1.1.4 on NCBI genome assemblies. Eukaryotic organisms were scanned in `-E` mode; _Mycoplasma_ species in `-B` (bacterial) mode.
 
 #figure(
   table(
@@ -147,12 +147,83 @@ In every exclusion, the depletion remains highly significant ($p < 10^(-5)$), co
 // ============================================================
 = KRAS--Fano clinical prediction: detailed results <sec:s-kras>
 
-The conjecture that XOR ("Fano") relationships in $"GF"(2)^6$ predict enrichment of specific amino acids at KRAS G12 co-mutation sites was tested against 1,670 KRAS mutations from the MSK-IMPACT dataset (Zehir et al., 2017).
+The conjecture that XOR ("Fano") relationships in $"GF"(2)^6$ predict enrichment of specific amino acids at KRAS G12 co-mutation sites was tested against 1,670 KRAS mutations from the MSK-IMPACT dataset @zehir2017.
 
 For each of the 6 KRAS G12 variant types (G12D, G12V, G12C, G12A, G12R, G12S), we identified the XOR-predicted amino acid partners and tested for co-mutation enrichment via Fisher's exact test with Bonferroni correction. All 6 tests yielded $p = 1.0$, with odds ratios near 1.0.
 
 This result cleanly separates code-level error-minimization (which operates on the amino acid assignment structure) from mutation-level algebraic predictions (which would require DNA polymerase errors to respect the binary encoding --- a biologically implausible mechanism).
 
+
+// ============================================================
+= Event-level conditional logit model: full details <sec:s-condlogit>
+
+== Model specification and candidate universe
+
+The conditional logit model treats each observed reassignment as a discrete choice from the set of all single-codon reassignments available at the current code state. For a code with 64 codons and $approx 21$ possible amino acid/stop labels, the candidate set $cal(N)(C)$ contains $approx 1{,}280$ moves (64 codons $times$ 20 alternative labels, excluding identity assignments). All 1,280 candidates are evaluated at each step regardless of biological plausibility; the model's purpose is to test whether the observed moves are statistically distinguishable from uniform sampling given the three feature classes. As a conditional logit, the model implies an independence of irrelevant alternatives (IIA) structure within each choice set. Here the goal is not mechanistic completeness but a controlled test of whether observed moves are statistically enriched for low $Delta_"phys"$ and low $Delta_"topo"$ relative to a uniform baseline over the same candidate set; a mixed logit relaxing IIA would be appropriate if the goal were prediction rather than hypothesis testing.
+
+== Feature definitions
+
+*Local physicochemical mismatch change ($Delta_"phys"$)*: For a reassignment of codon $c$ from amino acid $a$ to $a'$, this is the change in the sum of Grantham (1974) distances across all Hamming-1 edges incident to $c$:
+
+$ Delta_"phys" = sum_({c,c'}: d(c,c')=1) [Delta(a', "code"(c')) - Delta(a, "code"(c'))] $
+
+This captures the local impact on error-minimization at the reassigned position. When a neighboring codon is assigned Stop, we set $Delta(a, "Stop")$ equal to the maximum Grantham distance (215), consistent with the stop-penalty convention used in the coloring objective (@sec:objective).
+
+*Topology disruption ($Delta_"topo"$)*: The total increase in connected components (at $epsilon = 1$) summed across all amino acid codon graphs. Stop codons are excluded from the topology sum; $Delta_"topo"$ counts connected-component changes only for amino acid codon families. A move that splits one amino acid's codon family into two components contributes $+1$; a move that fragments two families contributes $+2$; topology-preserving moves contribute $0$.
+
+*tRNA complexity proxy ($Delta_"tRNA"$)*: The Hamming distance from the reassigned codon to the nearest codon already encoding the target amino acid in the current code. This serves as a heuristic for the tRNA repertoire change required to service the reassigned codon, with larger distances implying more novel tRNA machinery needed.
+
+== Fitted coefficients
+
+#figure(
+  table(
+    columns: (auto, auto, auto, auto),
+    align: (left, left, center, center),
+    inset: 5pt,
+    stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+    table.header([Model], [Feature], [$hat(beta)$ (raw)], [$hat(beta)$ (normalized)]),
+    [M1], [$Delta_"phys"$], [$-0.0045$], [$-0.65$],
+    [M2], [$Delta_"topo"$], [$-3.504$], [$-3.83$],
+    [M3], [$Delta_"phys"$], [$-0.0039$], [$-0.56$],
+    [M3], [$Delta_"topo"$], [$-3.263$], [$-3.56$],
+    [M4], [$Delta_"phys"$], [$-0.0039$], [$-0.56$],
+    [M4], [$Delta_"topo"$], [$-2.911$], [$-3.17$],
+    [M4], [$Delta_"tRNA"$], [$-0.219$], [$-0.30$],
+  ),
+  caption: [
+    Conditional logit coefficient estimates. Raw coefficients are on the original feature scale; normalized coefficients are on $z$-scored features. All $hat(beta)$ values are negative, indicating that evolution favors moves that reduce physicochemical mismatch, avoid topology disruption, and (weakly) prefer target amino acids already serviced by nearby codons. The tRNA proxy coefficient is small and non-significant (LR $= 0.54$, $p = 0.46$).
+  ],
+) <tbl:s-condlogit-coefs>
+
+== Likelihood ratio tests
+
+#figure(
+  table(
+    columns: (auto, auto, auto, auto, auto),
+    align: (left, left, center, center, center),
+    inset: 5pt,
+    stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+    table.header([Restricted], [Full], [LR], [df], [$p$]),
+    [M1 (phys)], [M3 (phys+topo)], [103.7], [1], [$lt.lt 10^(-10)$],
+    [M2 (topo)], [M3 (phys+topo)], [69.1], [1], [$lt.lt 10^(-10)$],
+    [M3 (phys+topo)], [M4 (full)], [0.54], [1], [$0.46$],
+  ),
+  caption: [
+    Likelihood-ratio tests for nested conditional logit models. Both topology (added to M1) and physicochemistry (added to M2) provide highly significant improvements. The tRNA-complexity proxy does not improve on the phys+topo model.
+  ],
+) <tbl:s-condlogit-lrt>
+
+== Confounding diagnostic
+
+Across $approx 78{,}000$ candidate moves pooled from all choice sets, the Spearman correlation between $Delta_"phys"$ and $Delta_"topo"$ is $rho = 0.15$, indicating that the two predictors carry largely independent information. Moves that reduce physicochemical mismatch are only slightly more likely to also preserve topology, and the conditional logit framework accounts for any residual collinearity through simultaneous estimation.
+
+== Observed move percentile ranks
+
+Under the best model (M3), observed natural reassignments rank at the 89.5th percentile on average (mean rank 134 out of $approx 1{,}280$ candidates). Notable individual events: UGA$arrow.r$Trp ranks consistently above the 98th percentile across all tables where it occurs, indicating that this reassignment is among the most "predictable" given the combined phys+topo score. The one clear outlier is the yeast mitochondrial CUU$arrow.r$Thr reassignment (30th percentile), consistent with translation table 3's status as the sole marginal exception in the per-table optimality analysis.
+
+== Order-averaging implementation
+
+For tables with $k > 1$ reassignment events, the temporal ordering is unknown. We marginalized the conditional logit likelihood over all $k!$ orderings, computing $L_"table" = (1\/k!) sum_sigma product_s P(m_(sigma(s))^* | cal(N)(C_(sigma,s)))$ using log-sum-exp for numerical stability. For the largest table (yeast mitochondrial, $k = 6$, $6! = 720$ possible orderings), we used a random subset of 24 orderings. For all tables with $k lt.eq 5$ ($lt.eq 120$ orderings), all orderings were enumerated exactly. We verified that AICc differences and coefficient estimates were stable to increasing the number of sampled orderings (6 vs 24 subsets for the yeast mitochondrial table; results unchanged to two significant digits), indicating that Monte Carlo noise from order-subsampling does not affect the qualitative conclusions.
 
 // ============================================================
 = Software and reproducibility <sec:s-software>
@@ -172,3 +243,9 @@ Rscript src/codon_topo/visualization/R/strengthened_figures.R
 ```
 
 The complete test suite (367 tests) can be run with `python3.11 -m pytest tests/`.
+
+// ============================================================
+// REFERENCES (shared with main manuscript)
+// ============================================================
+
+#bibliography("references.bib", title: "References", style: "elsevier-harvard")

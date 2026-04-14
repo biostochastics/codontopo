@@ -308,6 +308,180 @@ CLADE_GROUPS: dict[str, list[int]] = {
 }
 
 
+def topology_avoidance_k43(seed: int = 135325) -> dict:
+    """Topology avoidance test using K4^3 (nucleotide-level) adjacency.
+
+    Addresses the reviewer concern that Hamming-1 in GF(2)^6 misses ~1/3
+    of single-nucleotide mutations. Here we define amino acid codon-family
+    graphs using full single-nucleotide adjacency: two codons are neighbors
+    iff they differ at exactly one nucleotide position (encoding-independent).
+
+    A reassignment is topology-breaking if it increases the number of
+    connected components in ANY amino acid's codon graph under K4^3.
+    """
+    import random as _rng_mod
+
+    from scipy.stats import hypergeom
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db
+    from codon_topo.core.encoding import ALL_CODONS, nucleotide_distance
+
+    def _k43_components(code: dict[str, str]) -> dict[str, int]:
+        """Count connected components per AA under K4^3 adjacency."""
+        from collections import defaultdict
+
+        aa_codons: dict[str, list[str]] = defaultdict(list)
+        for c, aa in code.items():
+            if aa != "Stop":
+                aa_codons[aa].append(c)
+
+        result = {}
+        for aa, codons in aa_codons.items():
+            if len(codons) < 2:
+                result[aa] = 1 if codons else 0
+                continue
+            # Union-find
+            idx = {c: i for i, c in enumerate(codons)}
+            parent = list(range(len(codons)))
+
+            def find(x: int) -> int:
+                while parent[x] != x:
+                    parent[x] = parent[parent[x]]
+                    x = parent[x]
+                return x
+
+            def union(x: int, y: int) -> None:
+                px, py = find(x), find(y)
+                if px != py:
+                    parent[px] = py
+
+            for i in range(len(codons)):
+                for j in range(i + 1, len(codons)):
+                    if nucleotide_distance(codons[i], codons[j]) == 1:
+                        union(i, j)
+            result[aa] = len(set(find(i) for i in range(len(codons))))
+        return result
+
+    standard_comps = _k43_components(STANDARD)
+
+    # All possible single-codon reassignments
+    all_aas = sorted(set(STANDARD.values()))
+    possible_breaks = 0
+    possible_total = 0
+    for codon in ALL_CODONS:
+        orig = STANDARD[codon]
+        for new_aa in all_aas:
+            if new_aa == orig:
+                continue
+            variant = dict(STANDARD)
+            variant[codon] = new_aa
+            var_comps = _k43_components(variant)
+            breaks = any(
+                var_comps.get(aa, 0) > standard_comps.get(aa, 0)
+                for aa in set(list(var_comps.keys()) + list(standard_comps.keys()))
+            )
+            if breaks:
+                possible_breaks += 1
+            possible_total += 1
+
+    # Observed natural reassignments
+    db = build_reassignment_db()
+    observed_breaks = 0
+    observed_total = 0
+    seen: set[tuple[str, str]] = set()
+    for e in db:
+        key = (e.codon, e.target_aa)
+        if key in seen:
+            continue
+        seen.add(key)
+        variant = dict(STANDARD)
+        variant[e.codon] = e.target_aa
+        var_comps = _k43_components(variant)
+        breaks = any(
+            var_comps.get(aa, 0) > standard_comps.get(aa, 0)
+            for aa in set(list(var_comps.keys()) + list(standard_comps.keys()))
+        )
+        if breaks:
+            observed_breaks += 1
+        observed_total += 1
+
+    rate_obs = observed_breaks / max(observed_total, 1)
+    rate_poss = possible_breaks / max(possible_total, 1)
+
+    hyper_p = float(
+        hypergeom.cdf(observed_breaks, possible_total, possible_breaks, observed_total)
+    )
+
+    # Permutation test (table-preserving)
+    by_table: dict[int, list[tuple[str, str]]] = {}
+    for e in db:
+        by_table.setdefault(e.table_id, []).append((e.codon, e.target_aa))
+
+    rng = _rng_mod.Random(seed)
+    n_perm = 10_000
+    n_extreme = 0
+    for _ in range(n_perm):
+        perm_breaks = 0
+        perm_seen: set[tuple[str, str]] = set()
+        for _tid, events in by_table.items():
+            codons = [c for c, _t in events]
+            targets = [t for _c, t in events]
+            rng.shuffle(targets)
+            for c, t in zip(codons, targets):
+                key = (c, t)
+                if key in perm_seen:
+                    continue
+                perm_seen.add(key)
+                variant = dict(STANDARD)
+                variant[c] = t
+                var_comps = _k43_components(variant)
+                if any(
+                    var_comps.get(aa, 0) > standard_comps.get(aa, 0)
+                    for aa in set(
+                        list(var_comps.keys()) + list(standard_comps.keys())
+                    )
+                ):
+                    perm_breaks += 1
+        perm_rate = perm_breaks / max(len(perm_seen), 1)
+        if perm_rate <= rate_obs:
+            n_extreme += 1
+
+    perm_p = (n_extreme + 1) / (n_perm + 1)
+
+    # Risk ratio + CI (log-normal approximation)
+    import math
+
+    rr = rate_obs / max(rate_poss, 1e-10)
+    # Standard error of log(RR) for two independent proportions
+    if observed_breaks > 0 and observed_total > observed_breaks:
+        se_log_rr = math.sqrt(
+            (1 / max(observed_breaks, 1) - 1 / observed_total)
+            + (1 / max(possible_breaks, 1) - 1 / possible_total)
+        )
+        rr_ci_lo = math.exp(math.log(rr) - 1.96 * se_log_rr)
+        rr_ci_hi = math.exp(math.log(rr) + 1.96 * se_log_rr)
+    else:
+        se_log_rr = float("inf")
+        rr_ci_lo = 0.0
+        rr_ci_hi = float("inf")
+
+    return {
+        "adjacency": "K4^3 (nucleotide-level, encoding-independent)",
+        "observed_breaks": observed_breaks,
+        "observed_total": observed_total,
+        "rate_observed": rate_obs,
+        "possible_breaks": possible_breaks,
+        "possible_total": possible_total,
+        "rate_possible": rate_poss,
+        "depletion_fold": rate_poss / max(rate_obs, 0.001),
+        "risk_ratio": rr,
+        "risk_ratio_ci_95": (rr_ci_lo, rr_ci_hi),
+        "hypergeom_p": hyper_p,
+        "permutation_p": perm_p,
+        "n_permutations": n_perm,
+    }
+
+
 def topology_avoidance_phylogenetic_sensitivity() -> dict:
     """Re-run topology avoidance test with phylogenetic corrections.
 
