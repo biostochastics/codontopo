@@ -47,7 +47,7 @@
 #let tq6 = stats.topology_avoidance_q6
 #let tk43 = stats.topology_avoidance_k43
 #let pt = stats.per_table
-#let rho = stats.rho_sweep
+#let rho_data = stats.rho_sweep
 #let dec = stats.decomposition
 #let cl = stats.condlogit
 #let trna = stats.trna
@@ -313,23 +313,27 @@ Under the Freeland--Hurst block-preserving null with $n = #fmtk(stats.coloring.n
 
 Decomposing $F$ by nucleotide position reveals that the second codon position contributes #str(pos2_pct)% of the total mismatch, followed by the first position at #str(pos1_pct)% and the wobble position at #str(pos3_pct)%. This gradient reflects the well-known biochemical hierarchy: second-position mutations are the most physicochemically disruptive, first-position mutations are intermediate, and wobble-position mutations are largely synonymous.
 
+// Figure 1 — Core topology (persistent homology + disconnection catalogue)
 #figure(
-  grid(
-    columns: (1fr, 1fr),
-    gutter: 1em,
-    image("figures/FigA_coloring_null.png"),
-    image("figures/FigD_score_decomposition.png"),
-  ),
+  image("figures/Fig1_core_topology.png"),
   caption: [
-    *Left (a)*: Null distribution of edge-mismatch scores $F$ under the block-preserving null ($n = #fmtk(stats.coloring.n_samples)$). The observed standard code (red line, $F = #fmtk(g.observed)$) falls at the #str(calc.round(g.quantile, digits: 2))th percentile. *Right (b)*: Decomposition of $F$ by nucleotide position. Position 2 dominates (#str(pos2_pct)%), consistent with the biochemical hierarchy of mutational impact.
+    Core topology of the genetic code in $"GF"(2)^6$. *(A)* Persistent homology: connected components ($beta_0$) of amino acid codon graphs as a function of Hamming distance threshold $epsilon$. Serine (bold) is the only amino acid disconnected at $epsilon = 1$ across all 25 NCBI translation tables, reconnecting at $epsilon = 4$. *(B)* Disconnection catalogue across all translation tables. Each tile denotes an amino acid disconnected at $epsilon = 1$; the number is the reconnection $epsilon$. Serine is universally disconnected; Leu, Thr, and Ala appear as variant-code disconnections.
+  ],
+) <fig:topology>
+
+// Figure 2 — Coloring optimality (null + per-table + rho)
+#figure(
+  image("figures/Fig2_coloring_optimality.png"),
+  caption: [
+    Coloring optimality of the genetic code. *(A)* Null distribution of Grantham edge-mismatch scores $F$ under the Freeland--Hurst block-preserving null ($n = #fmtk(stats.coloring.n_samples)$). The observed standard code (red line, $F = #fmtk(g.observed)$) falls at the #str(calc.round(g.quantile, digits: 2))th percentile ($p = #str(calc.round(g.p, digits: 3))$). *(B)* $p$-value across transversion weight $rho$ from 0 ($Q_6$) to 1 (full $K_4^3$); all values below 0.01, with optimality strengthening monotonically. *(C)* Per-table quantile for each of 25 NCBI translation tables under their own block-preserving null ($n = 1{,}000$); only table 3 (yeast mito.) exceeds the 5% threshold.
   ],
 ) <fig:coloring>
 
 == Robustness across transversion weights <sec:res-rho>
 
 // --- dynamic rho sweep ---
-#let rho0 = rho.per_rho.at(0)
-#let rho4 = rho.per_rho.at(rho.per_rho.len() - 1)
+#let rho0 = rho_data.per_rho.at(0)
+#let rho4 = rho_data.per_rho.at(rho_data.per_rho.len() - 1)
 
 The weighted score $F_rho$ (@eq:weighted) remains significantly optimal across all values of $rho$ from 0 to 1 (@tbl:rho). At $rho = 0$ (pure $Q_6$), $p = #str(calc.round(rho0.p_value, digits: 3))$ ($z = #str(calc.round(rho0.at("z", default: rho0.at("effect_size_z", default: 0)), digits: 2))$); at $rho = 1$ (full $K_4^3$, all 288 single-nucleotide edges equally weighted), $p < 0.001$ ($z = #str(calc.round(rho4.at("z", default: rho4.at("effect_size_z", default: 0)), digits: 2))$). No value of $rho$ yields $p > #str(calc.round(rho0.p_value, digits: 3))$. The optimality signal strengthens monotonically as diagonal edges are included, addressing the concern that the $Q_6$ representation ignores approximately one-third of single-nucleotide mutations.
 
@@ -339,8 +343,8 @@ The weighted score $F_rho$ (@eq:weighted) remains significantly optimal across a
     align: (center, right, right, right, right, right),
     inset: 7pt,
     stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-    table.header([$bold(rho)$], [*Observed*], [*Null mean*], [*Quantile*], [*_p_-value*], [*_z_*]),
-    ..rho.per_rho.map(r => (
+    table.header([*ρ*], [*Observed*], [*Null mean*], [*Quantile*], [*_p_-value*], [*_z_*]),
+    ..rho_data.per_rho.map(r => (
       [$#str(r.rho)$],
       [#fmtk(r.at("observed", default: r.at("observed_score", default: 0)))],
       [#fmtk(r.at("null_mean", default: 0))],
@@ -354,21 +358,11 @@ The weighted score $F_rho$ (@eq:weighted) remains significantly optimal across a
   ],
 ) <tbl:rho>
 
-#figure(
-  grid(
-    columns: (1fr, 1fr),
-    gutter: 1em,
-    image("figures/FigC_rho_robustness.png"),
-    image("figures/FigB_per_table_optimality.png"),
-  ),
-  caption: [
-    Robustness of coloring optimality. *Left (a)*: $p$-value across diagonal-edge weight $rho$ from 0 ($Q_6$ only) to 1 (full $K_4^3$). All values below 0.01; optimality strengthens monotonically with diagonal-edge inclusion. *Right (b)*: Per-table quantile for each of the 25 NCBI translation tables under their own block-preserving null ($n = 1{,}000$). Only translation table 3 (yeast mitochondrial) exceeds the 5% threshold.
-  ],
-) <fig:robustness>
+// Robustness panels are now in Fig 2 (panels B and C above)
 
 == Per-table optimality preservation <sec:res-pertable>
 
-Of the #pt.n_tables NCBI translation tables, #pt.n_significant_bh remain in the top 5% of their own block-preserving null after Benjamini--Hochberg FDR correction (@fig:robustness, right panel). The mean quantile across all tables is #str(calc.round(pt.mean_quantile, digits: 1))%. Only translation table 3 (yeast mitochondrial code, 6 codon reassignments) marginally exceeds the 5% threshold.
+Of the #pt.n_tables NCBI translation tables, #pt.n_significant_bh remain in the top 5% of their own block-preserving null after Benjamini--Hochberg FDR correction (@fig:coloring, panel C). The mean quantile across all tables is #str(calc.round(pt.mean_quantile, digits: 1))%. Only translation table 3 (yeast mitochondrial code, 6 codon reassignments) marginally exceeds the 5% threshold.
 
 This result demonstrates that codon reassignment events, despite altering the mapping between codons and amino acids, generally preserve the error-minimization structure of the code. Even the most extensively reassigned code retains near-optimal physicochemical placement.
 
@@ -414,10 +408,11 @@ To address phylogenetic non-independence @sengupta2007, we performed clade-exclu
   ],
 ) <tbl:topo>
 
+// Figure 3 — Evolutionary evidence (bit-bias + depth + topology avoidance + tRNA)
 #figure(
-  image("figures/FigF_topology_avoidance.png", width: 70%),
+  image("figures/Fig3_evolutionary_evidence.png"),
   caption: [
-    Topology avoidance in natural codon reassignments. Left: proportion of topology-breaking reassignments among all possible single-codon changes (72.7% under $Q_6$, 66.1% under $K_4^3$) versus observed natural events (22.2%). Right: permutation null distribution ($n = 10{,}000$); the observed rate (arrow) is below all permuted values ($p lt.eq 10^(-4)$) under both adjacency definitions.
+    Evolutionary evidence for structural constraints on codon reassignment. *(A)* Bit-position bias: distribution of bit-flips across $"GF"(2)^6$ coordinates in natural reassignment events; dashed line = uniform expectation. *(B)* Evolutionary depth calibration: reconnection $epsilon$ vs estimated divergence age (log scale) for 4 variant-code amino acids. *(C)* Topology avoidance: observed natural reassignments create new disconnections at 22.2% vs 72.7% among all possible single-codon changes (permutation $p lt.eq 10^(-4)$). *(D)* tRNA enrichment: rank of the reassigned amino acid among all 20 AAs by tRNA gene proportion in variant-code vs standard-code organism pairings; rank 1 = most enriched.
   ],
 ) <fig:topo>
 
@@ -471,14 +466,15 @@ To test whether topology avoidance is reducible to physicochemical optimization,
 #let lr_m1m3 = cl.lr_tests.at("M1_vs_M3", default: (:))
 #let lr_m2m3 = cl.lr_tests.at("M2_vs_M3", default: (:))
 
-Likelihood-ratio tests confirmed that each feature class adds substantial explanatory value to the other: adding topology to physicochemistry yields LR $= #str(calc.round(lr_m1m3.lr_statistic, digits: 1))$ ($p lt.lt 10^(-10)$), and adding physicochemistry to topology yields LR $= #str(calc.round(lr_m2m3.lr_statistic, digits: 1))$ ($p lt.lt 10^(-10)$). The two feature classes are only weakly associated across the full candidate landscape, indicating limited confounding.
+Likelihood-ratio tests confirmed that each feature class adds substantial explanatory value to the other: adding topology to physicochemistry yields LR $= #str(calc.round(lr_m1m3.lr_statistic, digits: 1))$ ($p lt.double 10^(-10)$), and adding physicochemistry to topology yields LR $= #str(calc.round(lr_m2m3.lr_statistic, digits: 1))$ ($p lt.double 10^(-10)$). The two feature classes are only weakly associated across the full candidate landscape, indicating limited confounding.
 
 In the best-fitting model (M3), evolution favored moves that reduce local physicochemical mismatch ($hat(beta)_"phys" = -0.004$ per Grantham unit) and strongly disfavored moves that increase amino acid codon-family disconnection ($hat(beta)_"topo" = -3.26$ per additional connected component). Under M3, observed natural reassignments rank on average at the 89.5th percentile among all candidate moves (@fig:condlogit, panel B), with the recurrent UGA$arrow.r$Trp reassignment consistently ranking above the 98th percentile. The one notable outlier is the yeast mitochondrial CUU$arrow.r$Thr reassignment (30th percentile), consistent with translation table 3 being the sole marginal exception in the per-table optimality analysis (@sec:res-pertable).
 
+// Figure 5 — Conditional logit diagnostics
 #figure(
-  image("figures/FigG_condlogit_diagnostics.png", width: 85%),
+  image("figures/Fig5_condlogit.png"),
   caption: [
-    Event-level explanatory modeling of natural codon reassignments. (A) AICc comparison of four nested conditional logit models; lower is better. The combined physicochemistry-plus-topology model (M3) is decisively favored ($Delta"AICc" gt.eq 67$). (B) Distribution of observed move percentile ranks under M1 (physicochemistry only, light) versus M3 (combined, dark); M3 concentrates ranks toward the top of the candidate set. Dashed line = chance expectation (50th percentile). (C) Likelihood-ratio tests for each feature class added to its complement. Both topology ($"LR" = 103.7$) and physicochemistry ($"LR" = 69.1$) contribute highly significant independent information; the heuristic tRNA-complexity proxy does not ($"LR" = 0.5$, $p = 0.46$).
+    Event-level explanatory modeling of natural codon reassignments. *(A)* AICc comparison of four nested conditional logit models (M1--M4); lower is better. The combined physicochemistry-plus-topology model (M3) is decisively favored ($Delta"AICc" gt.eq 67$). *(B)* Distribution of observed move percentile ranks under M1 (physicochemistry only, light) versus M3 (combined, dark); M3 concentrates ranks toward the top of the candidate set. Dashed line = chance expectation (50th percentile). *(C)* Likelihood-ratio tests for each feature class added to its complement; both topology and physicochemistry contribute highly significant independent information ($p < 0.001$); the heuristic tRNA proxy does not ($p = 0.70$).
   ],
 ) <fig:condlogit>
 
@@ -507,12 +503,7 @@ However, the pattern is not universal. _Blastocrithidia nonstop_ (translation ta
   ],
 ) <tbl:trna-tests>
 
-#figure(
-  image("figures/FigE_trna_aa_rank.png", width: 75%),
-  caption: [
-    tRNA enrichment for the reassigned amino acid across variant-code/control pairings. Rank 1 indicates the reassigned amino acid is the most proportionally enriched among all 20 amino acids. Statistical analysis uses the full 24-pairing dataset including 6 Euplotes (Table 10, UGA$arrow.r$Cys) and 2 Mycoplasma (Table 4, UGA$arrow.r$Trp) species not shown in this panel.
-  ],
-) <fig:trna>
+// tRNA enrichment panel is now in Fig 3D above; table-based analysis follows
 
 #figure(
   table(
@@ -587,6 +578,14 @@ To assess whether the structural properties identified in Sections 3.1--3.5 tran
   ],
 ) <tbl:codonsafe-datasets>
 
+// Figure 4 — Translational applications (synbio + decomposition + catalogue)
+#figure(
+  image("figures/Fig4_translational.png"),
+  caption: [
+    Translational applications and prediction catalogue. *(A)* Feasibility landscape of 1,280 single-codon reassignments from the standard code, colored by degeneracy filtration status. All filtration-preserving variants score $gt.eq 0.8$; all filtration-breaking variants score $lt.eq 0.75$. Dashed line: high-feasibility threshold. *(B)* Grantham mismatch score decomposition by nucleotide position: position 2 dominates (#str(pos2_pct)%), consistent with the biochemical hierarchy of mutational impact. *(C)* Prediction catalogue: 15 evaluated claims distributed across 5 workstreams (WS1--WS6), colored by verification status.
+  ],
+) <fig:translational>
+
 === A three-layer decomposition of recoding outcomes <sec:res-threelayer>
 
 The cross-study reanalysis revealed three separable layers of codon-space structure, each with distinct predictive scope.
@@ -641,13 +640,13 @@ The central finding of this work is that the standard genetic code minimizes the
 
 The score decomposition (@fig:coloring) shows that this optimization is concentrated at the second codon position (49.3% of total mismatch) and first position (38.2%), with the wobble position contributing only 12.5%. This gradient mirrors the biochemical hierarchy of mutational impact and is an emergent property of the code's structure rather than a parameter of the model.
 
-The robustness result (@fig:robustness) demonstrates that optimality is not an artifact of restricting attention to $Q_6$: when the full $K_4^3$ mutation graph is considered ($rho = 1$), the signal strengthens. The code minimizes error not just along the hypercube edges but across the complete space of single-nucleotide substitutions. This error-minimization is complementary to, but distinct from, the finding of #cite(<itzkovitz2007>, form: "prose") that the code is also nearly optimal for carrying parallel regulatory information within protein-coding sequences---a property related to stop-codon identity rather than amino acid physicochemistry.
+The robustness result (@fig:coloring) demonstrates that optimality is not an artifact of restricting attention to $Q_6$: when the full $K_4^3$ mutation graph is considered ($rho = 1$), the signal strengthens. The code minimizes error not just along the hypercube edges but across the complete space of single-nucleotide substitutions. This error-minimization is complementary to, but distinct from, the finding of #cite(<itzkovitz2007>, form: "prose") that the code is also nearly optimal for carrying parallel regulatory information within protein-coding sequences---a property related to stop-codon identity rather than amino acid physicochemistry.
 
 A natural question is whether the $"GF"(2)^6$ framework adds genuine insight beyond what a direct analysis of $K_4^3$ would provide. We note three advantages. First, the binary decomposition enables the $rho$-interpolation that reveals the relationship between $Q_6$ and $K_4^3$ optimality as a continuum rather than two disconnected analyses. Second, the Hamming-distance filtration provides a natural persistence parameter ($epsilon$) for studying amino acid graph connectivity, yielding the topology avoidance result. Third, the encoding-sensitivity analysis (24 bijections) distinguishes encoding-invariant properties (Serine disconnection) from encoding-dependent ones (distance-4 claim), a distinction invisible in the nucleotide-level representation. However, we emphasize that the Hamming-1/diagonal decomposition does not correspond to the biological transition/transversion partition: 16 of 24 encodings mix transitions and transversions equally among Hamming-1 edges, while 8 encodings place both transitions on diagonal edges (Supplementary Table S2). The $rho$ parameter is best interpreted as a diagonal-edge weight, not a transition/transversion weight.
 
 == Evolutionary preservation and topology avoidance <sec:disc-evol>
 
-The per-table analysis (@fig:robustness) shows that 24 of 25 NCBI translation tables maintain coloring optimality under their own block-preserving null, suggesting that codon reassignment events are constrained to preserve error-minimization. The single marginal exception (translation table 3, yeast mitochondrial) is the most extensively reassigned code (6 changes), yet still falls only slightly above the 5% threshold (quantile 7.4%).
+The per-table analysis (@fig:coloring) shows that 24 of 25 NCBI translation tables maintain coloring optimality under their own block-preserving null, suggesting that codon reassignment events are constrained to preserve error-minimization. The single marginal exception (translation table 3, yeast mitochondrial) is the most extensively reassigned code (6 changes), yet still falls only slightly above the 5% threshold (quantile 7.4%).
 
 The topology avoidance result (@fig:topo) provides a mechanistic complement: natural reassignments avoid creating new amino acid disconnections at a rate far below chance expectation. Importantly, this depletion is not confined to the $Q_6$ representation: under the full $K_4^3$ single-nucleotide mutation graph, the observed proportion of topology-breaking reassignments remains 22.2% against a possible rate of 66.1% ($"RR" = 0.34$, 95% CI $[0.17, 0.68]$, $p lt.eq 10^(-4)$). The signal is somewhat attenuated relative to the $Q_6$ result ($"RR" = 0.31$) because some $Q_6$-disconnected pairs become connected when all single-nucleotide edges are admitted, but the main qualitative conclusion survives: the connected-component structure of amino acid codon families is functionally important, regardless of whether connectivity is defined on the hypercube subgraph or on the biologically fuller single-substitution graph. The yeast mitochondrial threonine reassignment illustrates this cost: the CUN$arrow.r$Thr change required acquisition of a novel tRNA#super[Thr] derived from tRNA#super[His] via anticodon mutation @su2011, creating the topology-breaking disconnection that makes translation table 3 the sole marginal outlier in the per-table optimality analysis.
 
@@ -655,7 +654,7 @@ Together, these analyses support a four-part picture: the standard code is unusu
 
 == Mechanistic implications: tRNA compensation <sec:disc-trna>
 
-The tRNA enrichment result (@fig:trna) links the geometric observation to molecular mechanism. In several variant-code lineages where codon reassignment disrupts connectivity, expanded tRNA gene repertoires for the affected amino acid are observed, consistent with compensatory gene duplication as one evolutionary route to accommodation. The extreme case of _Tetrahymena thermophila_ (54 Gln tRNAs, including 39 suppressors) illustrates the scale of genomic response required to service a split codon family.
+The tRNA enrichment result (@fig:topo, panel D) links the geometric observation to molecular mechanism. In several variant-code lineages where codon reassignment disrupts connectivity, expanded tRNA gene repertoires for the affected amino acid are observed, consistent with compensatory gene duplication as one evolutionary route to accommodation. The extreme case of _Tetrahymena thermophila_ (54 Gln tRNAs, including 39 suppressors) illustrates the scale of genomic response required to service a split codon family.
 
 However, the boundary cases---_Blastocrithidia nonstop_ (anticodon stem shortening; @kachale2023) and _Mycoplasma_ species (anticodon modification)---show that tRNA gene duplication is not the only evolutionary solution. The three-tier pattern (duplication in large genomes, structural modification in intermediate genomes, base modification in minimal genomes) suggests that genome size constrains the available mechanistic repertoire for codon reassignment. This pattern is now supported by 18 tRNAscan-SE--verified genomes across 5 variant genetic codes (Tables 4, 6, 10, 15, and 31), including 6 _Euplotes_ species (UGA$arrow.r$Cys) that each carry 1--4 TCA-anticodon tRNA-Cys genes dedicated to reading UGA.
 

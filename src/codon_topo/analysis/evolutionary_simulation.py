@@ -133,11 +133,11 @@ class CandidateMove:
     codon: str
     source_aa: str
     target_aa: str
-    delta_phys: float       # Change in local Grantham mismatch
-    topo_breaking: bool     # Binary: creates new disconnection?
-    delta_topo: int         # Graded: total component count increase
-    delta_trna: int         # Hamming distance to nearest target-AA codon
-    is_observed: bool       # Was this the actually observed move?
+    delta_phys: float  # Change in local Grantham mismatch
+    topo_breaking: bool  # Binary: creates new disconnection?
+    delta_topo: int  # Graded: total component count increase
+    delta_trna: int  # Hamming distance to nearest target-AA codon
+    is_observed: bool  # Was this the actually observed move?
 
 
 @dataclass
@@ -276,9 +276,7 @@ def compute_candidate_features(
             # delta_trna: Hamming distance proxy for tRNA complexity
             delta_trna = _nearest_hamming_to_aa(codon, new_aa, code)
 
-            is_observed = (
-                codon == observed_codon and new_aa == observed_target
-            )
+            is_observed = codon == observed_codon and new_aa == observed_target
 
             candidates.append(
                 CandidateMove(
@@ -319,7 +317,9 @@ class ModelSpec:
 MODELS = {
     "M1_phys": ModelSpec("M1_phys", use_phys=True, use_topo=False, use_trna=False),
     "M2_topo": ModelSpec("M2_topo", use_phys=False, use_topo=True, use_trna=False),
-    "M3_phys_topo": ModelSpec("M3_phys_topo", use_phys=True, use_topo=True, use_trna=False),
+    "M3_phys_topo": ModelSpec(
+        "M3_phys_topo", use_phys=True, use_topo=True, use_trna=False
+    ),
     "M4_full": ModelSpec("M4_full", use_phys=True, use_topo=True, use_trna=True),
 }
 
@@ -336,7 +336,9 @@ def _feature_vector(move: CandidateMove, spec: ModelSpec) -> np.ndarray:
     return np.array(feats, dtype=np.float64)
 
 
-def _normalize_features(choice_sets: list[StepChoiceSet], spec: ModelSpec) -> tuple[np.ndarray, np.ndarray]:
+def _normalize_features(
+    choice_sets: list[StepChoiceSet], spec: ModelSpec
+) -> tuple[np.ndarray, np.ndarray]:
     """Compute means and stds for feature normalization across all candidates.
 
     Returns (means, stds) arrays of shape (n_features,).
@@ -443,11 +445,18 @@ def fit_conditional_logit(
 
     # Start from zeros (uniform prior)
     w0 = np.zeros(k)
-    result = minimize(neg_ll, w0, method="Nelder-Mead", options={"maxiter": 5000, "xatol": 1e-8, "fatol": 1e-10})
+    result = minimize(
+        neg_ll,
+        w0,
+        method="Nelder-Mead",
+        options={"maxiter": 5000, "xatol": 1e-8, "fatol": 1e-10},
+    )
 
     # Also try L-BFGS-B if Nelder-Mead finds suboptimal
     try:
-        result2 = minimize(neg_ll, result.x, method="L-BFGS-B", options={"maxiter": 5000})
+        result2 = minimize(
+            neg_ll, result.x, method="L-BFGS-B", options={"maxiter": 5000}
+        )
         if result2.fun < result.fun:
             result = result2
     except (ValueError, RuntimeError):
@@ -679,11 +688,16 @@ def fit_all_models(
             return -total
 
         w0 = np.zeros(k)
-        opt = minimize(neg_ll_total, w0, method="Nelder-Mead",
-                       options={"maxiter": 10000, "xatol": 1e-8, "fatol": 1e-10})
+        opt = minimize(
+            neg_ll_total,
+            w0,
+            method="Nelder-Mead",
+            options={"maxiter": 10000, "xatol": 1e-8, "fatol": 1e-10},
+        )
         try:
-            opt2 = minimize(neg_ll_total, opt.x, method="L-BFGS-B",
-                            options={"maxiter": 10000})
+            opt2 = minimize(
+                neg_ll_total, opt.x, method="L-BFGS-B", options={"maxiter": 10000}
+            )
             if opt2.fun < opt.fun:
                 opt = opt2
         except (ValueError, RuntimeError):
@@ -695,7 +709,9 @@ def fit_all_models(
 
         n_obs = len([cs for cs in all_cs_flat if cs.observed_move is not None])
         aic = -2 * ll + 2 * k
-        aicc = aic + 2 * k * (k + 1) / (n_obs - k - 1) if n_obs > k + 1 else float("inf")
+        aicc = (
+            aic + 2 * k * (k + 1) / (n_obs - k - 1) if n_obs > k + 1 else float("inf")
+        )
 
         # Feature labels
         labels = []
@@ -764,15 +780,17 @@ def observed_move_ranks(
             obs_rank = next(
                 i + 1 for i, (_, is_obs, _, _) in enumerate(scores) if is_obs
             )
-            ranks.append({
-                "table_id": tid,
-                "step": cs.step_index,
-                "codon": obs.codon,
-                "target_aa": obs.target_aa,
-                "rank": obs_rank,
-                "n_candidates": len(scores),
-                "percentile": 100.0 * (1 - obs_rank / len(scores)),
-            })
+            ranks.append(
+                {
+                    "table_id": tid,
+                    "step": cs.step_index,
+                    "codon": obs.codon,
+                    "target_aa": obs.target_aa,
+                    "rank": obs_rank,
+                    "n_candidates": len(scores),
+                    "percentile": 100.0 * (1 - obs_rank / len(scores)),
+                }
+            )
 
     return ranks
 

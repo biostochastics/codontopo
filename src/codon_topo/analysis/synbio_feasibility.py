@@ -341,7 +341,6 @@ def topology_avoidance_k43(seed: int = 135325) -> dict:
                 result[aa] = 1 if codons else 0
                 continue
             # Union-find
-            idx = {c: i for i, c in enumerate(codons)}
             parent = list(range(len(codons)))
 
             def find(x: int) -> int:
@@ -437,9 +436,7 @@ def topology_avoidance_k43(seed: int = 135325) -> dict:
                 var_comps = _k43_components(variant)
                 if any(
                     var_comps.get(aa, 0) > standard_comps.get(aa, 0)
-                    for aa in set(
-                        list(var_comps.keys()) + list(standard_comps.keys())
-                    )
+                    for aa in set(list(var_comps.keys()) + list(standard_comps.keys()))
                 ):
                     perm_breaks += 1
         perm_rate = perm_breaks / max(len(perm_seen), 1)
@@ -566,9 +563,7 @@ def topology_avoidance_phylogenetic_sensitivity() -> dict:
         if ft == 0:
             continue
         fr = fc / ft
-        fp = float(
-            hypergeom.cdf(fc, possible_total, possible_creates_disc, ft)
-        )
+        fp = float(hypergeom.cdf(fc, possible_total, possible_creates_disc, ft))
         clade_results.append(
             {
                 "excluded_clade": clade_name,

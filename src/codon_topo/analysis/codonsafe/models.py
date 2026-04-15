@@ -166,10 +166,7 @@ class RecodingOutcome:
     def __post_init__(self) -> None:
         if self.outcome_type == OutcomeType.BINARY_SUCCESS and self.success is None:
             raise ValueError("BINARY_SUCCESS outcome requires success field")
-        if (
-            self.outcome_type == OutcomeType.FITNESS_CONTINUOUS
-            and self.fitness is None
-        ):
+        if self.outcome_type == OutcomeType.FITNESS_CONTINUOUS and self.fitness is None:
             raise ValueError("FITNESS_CONTINUOUS outcome requires fitness field")
 
 

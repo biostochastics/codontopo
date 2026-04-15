@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from codon_topo.analysis.codonsafe.models import AnnotatedSwap, OutcomeType
+from codon_topo.analysis.codonsafe.models import AnnotatedSwap
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -114,7 +114,6 @@ def aggregate_to_units(
       - max_delta_F_*: max delta_F per metric
       - n_ser_crossings: count of Ser boundary crossings
     """
-    import pandas as pd
 
     agg_dict: dict[str, tuple[str, str]] = {
         "n_events": ("event_id", "count"),

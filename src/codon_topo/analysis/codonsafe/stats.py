@@ -145,9 +145,7 @@ def fit_model(df: "pd.DataFrame", spec: ModelSpec) -> ModelResult:
 
     pseudo_r2 = None
     if spec.family == "binomial":
-        null_model = smf.glm(
-            f"{outcome_col} ~ 1", data=df_clean, family=family
-        ).fit()
+        null_model = smf.glm(f"{outcome_col} ~ 1", data=df_clean, family=family).fit()
         pseudo_r2 = float(1 - fit.llf / null_model.llf) if null_model.llf != 0 else None
 
     return ModelResult(
@@ -228,7 +226,7 @@ def leave_one_study_out(
         )
 
         try:
-            result = fit_model(train, loso_spec)
+            fit_model(train, loso_spec)
         except Exception:
             continue
 
@@ -272,7 +270,9 @@ def leave_one_study_out(
         )
 
     mean_val = (
-        float(np.mean([r["metric_value"] for r in per_study])) if per_study else float("nan")
+        float(np.mean([r["metric_value"] for r in per_study]))
+        if per_study
+        else float("nan")
     )
 
     return {

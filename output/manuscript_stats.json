@@ -1,0 +1,314 @@
+{
+  "_version": "0.3.1",
+  "coloring": {
+    "n_samples": 10000,
+    "seed": 135325
+  },
+  "metrics": {
+    "grantham": {
+      "observed": 13477.0,
+      "null_mean": 14954.4802,
+      "null_std": 628.0173120084972,
+      "z": 2.3526106235428257,
+      "p": 0.006099390060993901,
+      "quantile": 0.6,
+      "improvement_pct": 9.879849919491015
+    },
+    "miyata": {
+      "observed": 235.30000000000015,
+      "null_mean": 275.6736859999999,
+      "null_std": 12.87702362299389,
+      "z": 3.1353274779978184,
+      "p": 0.00039996000399960006,
+      "quantile": 0.03,
+      "improvement_pct": 14.645462389181308
+    },
+    "polar_requirement": {
+      "observed": 347.29999999999984,
+      "null_mean": 410.4517999999998,
+      "null_std": 23.11206636199266,
+      "z": 2.732416868785557,
+      "p": 0.0025997400259974,
+      "quantile": 0.25,
+      "improvement_pct": 15.385923511603558
+    },
+    "kyte_doolittle": {
+      "observed": 457.20000000000005,
+      "null_mean": 570.69364,
+      "null_std": 40.857084253330754,
+      "z": 2.777820348028082,
+      "p": 0.0013998600139986002,
+      "quantile": 0.13,
+      "improvement_pct": 19.88696422129392
+    }
+  },
+  "rho_sweep": {
+    "per_rho": [
+      {
+        "rho": 0.0,
+        "p_value": 0.002997002997002997,
+        "effect_size_z": 2.4836068503136763,
+        "quantile": 0.2,
+        "observed_score": 13477.0,
+        "null_mean": 14998.415
+      },
+      {
+        "rho": 0.25,
+        "p_value": 0.000999000999000999,
+        "effect_size_z": 2.9023709953621717,
+        "quantile": 0.0,
+        "observed_score": 15334.75,
+        "null_mean": 17062.795
+      },
+      {
+        "rho": 0.5,
+        "p_value": 0.000999000999000999,
+        "effect_size_z": 3.2168240546839026,
+        "quantile": 0.0,
+        "observed_score": 17192.5,
+        "null_mean": 19127.175
+      },
+      {
+        "rho": 0.75,
+        "p_value": 0.000999000999000999,
+        "effect_size_z": 3.3988137249953607,
+        "quantile": 0.0,
+        "observed_score": 19050.25,
+        "null_mean": 21191.555
+      },
+      {
+        "rho": 1.0,
+        "p_value": 0.000999000999000999,
+        "effect_size_z": 3.46140426233678,
+        "quantile": 0.0,
+        "observed_score": 20908.0,
+        "null_mean": 23255.935
+      }
+    ]
+  },
+  "per_table": {
+    "n_significant_bh": 24,
+    "n_tables": 25,
+    "mean_quantile": 1.432,
+    "max_quantile": 7.4
+  },
+  "decomposition": {
+    "total_score": 13477.0,
+    "position_fractions": {
+      "position_1": 0.3816131186465831,
+      "position_2": 0.4933590561697707,
+      "position_3": 0.12502782518364622
+    }
+  },
+  "topology_avoidance_q6": {
+    "observed_breaks": 6,
+    "observed_total": 27,
+    "rate_observed": 0.2222222222222222,
+    "possible_breaks": 931,
+    "possible_total": 1280,
+    "rate_possible": 0.72734375,
+    "depletion_fold": 3.273046875,
+    "hypergeom_p": 4.776789702630534e-08,
+    "permutation_p": 9.999000099990002e-05
+  },
+  "topology_avoidance_k43": {
+    "observed_breaks": 6,
+    "observed_total": 27,
+    "rate_observed": 0.2222222222222222,
+    "possible_breaks": 846,
+    "possible_total": 1280,
+    "rate_possible": 0.6609375,
+    "depletion_fold": 2.97421875,
+    "risk_ratio": 0.3362227475702653,
+    "risk_ratio_ci_95": [
+      0.16583663406201485,
+      0.6816692621813869
+    ],
+    "hypergeom_p": 3.071076550278102e-06,
+    "permutation_p": 9.999000099990002e-05
+  },
+  "condlogit": {
+    "model_fits": {
+      "M1_phys": {
+        "ll": -390.97830074598386,
+        "k": 1,
+        "n": 61,
+        "aic": 783.9566014919677,
+        "aicc": 784.0243981021372,
+        "weights_raw": [
+          -0.0045587022672626135
+        ],
+        "weight_labels": [
+          "delta_phys"
+        ],
+        "log_likelihood": -390.97830074598386,
+        "n_params": 1,
+        "n_obs": 61
+      },
+      "M2_topo": {
+        "ll": -373.7043758099787,
+        "k": 1,
+        "n": 61,
+        "aic": 749.4087516199575,
+        "aicc": 749.4765482301269,
+        "weights_raw": [
+          -3.5087496025719913
+        ],
+        "weight_labels": [
+          "delta_topo"
+        ],
+        "log_likelihood": -373.7043758099787,
+        "n_params": 1,
+        "n_obs": 61
+      },
+      "M3_phys_topo": {
+        "ll": -339.14389309356955,
+        "k": 2,
+        "n": 61,
+        "aic": 682.2877861871391,
+        "aicc": 682.4946827388633,
+        "weights_raw": [
+          -0.003960911167444425,
+          -3.2674320467584357
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo"
+        ],
+        "log_likelihood": -339.14389309356955,
+        "n_params": 2,
+        "n_obs": 61
+      },
+      "M4_full": {
+        "ll": -338.8726442975881,
+        "k": 3,
+        "n": 61,
+        "aic": 683.7452885951762,
+        "aicc": 684.1663412267552,
+        "weights_raw": [
+          -0.0039274210848036055,
+          -2.59310189501428,
+          -0.4370298419165787
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo",
+          "delta_trna"
+        ],
+        "log_likelihood": -338.8726442975881,
+        "n_params": 3,
+        "n_obs": 61
+      }
+    },
+    "models": {
+      "M1_phys": {
+        "ll": -390.97830074598386,
+        "k": 1,
+        "n": 61,
+        "aic": 783.9566014919677,
+        "aicc": 784.0243981021372,
+        "weights_raw": [
+          -0.0045587022672626135
+        ],
+        "weight_labels": [
+          "delta_phys"
+        ],
+        "log_likelihood": -390.97830074598386,
+        "n_params": 1,
+        "n_obs": 61
+      },
+      "M2_topo": {
+        "ll": -373.7043758099787,
+        "k": 1,
+        "n": 61,
+        "aic": 749.4087516199575,
+        "aicc": 749.4765482301269,
+        "weights_raw": [
+          -3.5087496025719913
+        ],
+        "weight_labels": [
+          "delta_topo"
+        ],
+        "log_likelihood": -373.7043758099787,
+        "n_params": 1,
+        "n_obs": 61
+      },
+      "M3_phys_topo": {
+        "ll": -339.14389309356955,
+        "k": 2,
+        "n": 61,
+        "aic": 682.2877861871391,
+        "aicc": 682.4946827388633,
+        "weights_raw": [
+          -0.003960911167444425,
+          -3.2674320467584357
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo"
+        ],
+        "log_likelihood": -339.14389309356955,
+        "n_params": 2,
+        "n_obs": 61
+      },
+      "M4_full": {
+        "ll": -338.8726442975881,
+        "k": 3,
+        "n": 61,
+        "aic": 683.7452885951762,
+        "aicc": 684.1663412267552,
+        "weights_raw": [
+          -0.0039274210848036055,
+          -2.59310189501428,
+          -0.4370298419165787
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo",
+          "delta_trna"
+        ],
+        "log_likelihood": -338.8726442975881,
+        "n_params": 3,
+        "n_obs": 61
+      }
+    },
+    "lr_tests": {
+      "M1_vs_M3": {
+        "lr_statistic": 103.66881530482863,
+        "df": 1,
+        "p_value": 0.0,
+        "significant": true
+      },
+      "M2_vs_M3": {
+        "lr_statistic": 69.12096543281837,
+        "df": 1,
+        "p_value": 1.1102230246251565e-16,
+        "significant": true
+      },
+      "M3_vs_M4": {
+        "lr_statistic": 0.5424975919628423,
+        "df": 1,
+        "p_value": 0.461399482619146,
+        "significant": false
+      }
+    },
+    "phys_topo_rho": 0.1503557300502014,
+    "phys_topo_p": 0.0,
+    "avg_percentile": 89.48386270491804,
+    "n_tables": 23,
+    "total_events": 61
+  },
+  "trna": {
+    "all_pairings_p": 1.7129804374960145e-07,
+    "all_pairings_z": 5.098367014629634,
+    "all_pairings_n": 24,
+    "independent_p": 0.01652607987435928,
+    "independent_z": 2.1314491214946427,
+    "independent_n": 6,
+    "mis_worst_p": 0.04489292052810068,
+    "mis_best_p": 0.04380929523299426,
+    "mis_count": 2,
+    "n_organisms": 31,
+    "n_pairings": 24
+  }
+}

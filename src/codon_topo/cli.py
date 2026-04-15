@@ -411,7 +411,9 @@ def per_table(n_samples: int, seed: int, as_json: bool) -> None:
 
 
 @main.command("metric-sensitivity")
-@click.option("--n", "n_samples", default=1_000, help="Monte Carlo sample size per metric.")
+@click.option(
+    "--n", "n_samples", default=1_000, help="Monte Carlo sample size per metric."
+)
 @click.option("--seed", default=DEFAULT_SEED, help="Random seed.")
 @click.option("--json", "as_json", is_flag=True, help="JSON output.")
 def metric_sensitivity(n_samples: int, seed: int, as_json: bool) -> None:
@@ -425,8 +427,12 @@ def metric_sensitivity(n_samples: int, seed: int, as_json: bool) -> None:
         _try_rich_table(
             ["Metric", "Quantile", "p-value", "Effect size (z)"],
             [
-                [r["metric"], f"{r['quantile']:.1f}%",
-                 f"{r['p_value_conservative']:.4f}", f"{r['effect_size_z']:.2f}"]
+                [
+                    r["metric"],
+                    f"{r['quantile']:.1f}%",
+                    f"{r['p_value_conservative']:.4f}",
+                    f"{r['effect_size_z']:.2f}",
+                ]
                 for r in results["per_metric"]
             ],
             title="Multi-Metric Sensitivity Analysis",
@@ -447,7 +453,9 @@ def mis_analysis(as_json: bool) -> None:
         click.echo(f"MIS enumerated: {results['n_mis_size_ge2']}")
         click.echo(f"Median Stouffer p: {results['median_stouffer_p']:.4f}")
         click.echo(f"Worst-case Stouffer p: {results['worst_case_stouffer_p']:.4f}")
-        click.echo(f"Fraction significant (p<0.05): {results['fraction_significant_p05']:.0%}")
+        click.echo(
+            f"Fraction significant (p<0.05): {results['fraction_significant_p05']:.0%}"
+        )
         click.echo(f"\n{results['interpretation']}")
 
 
@@ -464,13 +472,19 @@ def phylo_sensitivity(as_json: bool) -> None:
         _json_out(results)
     else:
         lc = results["lineage_collapsed"]
-        click.echo(f"Lineage-collapsed: {lc['n_events']} events, "
-                    f"{lc['depletion_fold']:.1f}x depletion, p={lc['hypergeom_p']:.2e}")
+        click.echo(
+            f"Lineage-collapsed: {lc['n_events']} events, "
+            f"{lc['depletion_fold']:.1f}x depletion, p={lc['hypergeom_p']:.2e}"
+        )
         _try_rich_table(
             ["Excluded Clade", "n remaining", "p-value", "Significant"],
             [
-                [r["excluded_clade"], str(r["n_events_remaining"]),
-                 f"{r['hypergeom_p']:.2e}", "YES" if r["significant_p05"] else "NO"]
+                [
+                    r["excluded_clade"],
+                    str(r["n_events_remaining"]),
+                    f"{r['hypergeom_p']:.2e}",
+                    "YES" if r["significant_p05"] else "NO",
+                ]
                 for r in results["clade_exclusion"]
             ],
             title="Clade-Exclusion Sensitivity",
@@ -478,7 +492,9 @@ def phylo_sensitivity(as_json: bool) -> None:
 
 
 @main.command("condlogit")
-@click.option("--max-orderings", default=720, help="Max orderings per table for order-averaging.")
+@click.option(
+    "--max-orderings", default=720, help="Max orderings per table for order-averaging."
+)
 @click.option("--seed", default=DEFAULT_SEED, help="Random seed.")
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON.")
 def condlogit(max_orderings: int, seed: int, as_json: bool) -> None:
@@ -555,8 +571,7 @@ def codonsafe_cmd(as_json: bool) -> None:
         from codon_topo.analysis.codonsafe.run_analyses import main as cs_main
     except ImportError as e:
         click.echo(
-            f"Error: {e}\n"
-            "Install codonsafe dependencies: pip install -e '.[codonsafe]'"
+            f"Error: {e}\nInstall codonsafe dependencies: pip install -e '.[codonsafe]'"
         )
         raise SystemExit(1)
 
@@ -657,7 +672,9 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     cross_table = cross_table_optimality()
 
     _step("Multi-metric sensitivity (n=1000)...")
-    metric_results = multi_metric_sensitivity(n_samples=min(n_samples, 10_000), seed=seed)
+    metric_results = multi_metric_sensitivity(
+        n_samples=min(n_samples, 10_000), seed=seed
+    )
 
     _step("Rho robustness sweep...")
     rho_result = rho_robustness_sweep(n_samples=min(n_samples, 10_000), seed=seed)
@@ -730,6 +747,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     from codon_topo.analysis.evolutionary_simulation import (
         run_evolutionary_simulation_analysis,
     )
+
     evosim_result = run_evolutionary_simulation_analysis(seed=seed)
     _write_json(out / "evolutionary_simulation.json", evosim_result)
 
@@ -798,7 +816,11 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     }
 
     # Best conditional logit model
-    best_model = evosim_result["aicc_ranking"][0][0] if evosim_result["aicc_ranking"] else "M3_phys_topo"
+    best_model = (
+        evosim_result["aicc_ranking"][0][0]
+        if evosim_result["aicc_ranking"]
+        else "M3_phys_topo"
+    )
     best_fit = evosim_result["model_fits"].get(best_model, {})
     lr_tests = evosim_result.get("likelihood_ratio_tests", {})
 
@@ -807,7 +829,6 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         "_seed": seed,
         "_n_samples": n_samples,
         "_version": "0.3.0",
-
         # Section 3.1: Cross-metric coloring optimality
         "coloring": {
             "observed_score": coloring_result["observed_score"],
@@ -829,13 +850,11 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             }
             for name, m in mm.items()
         },
-
         # Section 3.2: Rho robustness
         "rho_sweep": {
             "per_rho": rho_result["per_rho"],
             "all_significant_p01": rho_result["all_significant_p01"],
         },
-
         # Section 3.3: Per-table optimality
         "per_table": {
             "n_significant_bh": pertable_result["n_significant_p05_bh"],
@@ -843,13 +862,11 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "mean_quantile": pertable_result["mean_quantile"],
             "per_table": pertable_result["per_table"],
         },
-
         # Section 3.1: Score decomposition
         "decomposition": {
             "position_fractions": decomp_result["position_fractions"],
             "total_score": decomp_result["total_score"],
         },
-
         # Section 3.4: Topology avoidance (Q6)
         "topology_avoidance_q6": {
             "observed_breaks": topo_q6["observed_creates_disc"],
@@ -861,7 +878,6 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "hypergeom_p": topo_q6["hypergeom_p"],
             "permutation_p": topo_q6["permutation_p"],
         },
-
         # Section 3.4: Topology avoidance (K4^3)
         "topology_avoidance_k43": {
             "observed_breaks": topo_k43["observed_breaks"],
@@ -876,7 +892,6 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "hypergeom_p": topo_k43["hypergeom_p"],
             "permutation_p": topo_k43["permutation_p"],
         },
-
         # Section 3.5: Conditional logit
         "condlogit": {
             "n_tables": evosim_result["n_tables"],
@@ -885,7 +900,6 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "model_fits": evosim_result["model_fits"],
             "lr_tests": lr_tests,
         },
-
         # Section 3.6: tRNA enrichment
         "trna": {
             "n_pairings": fisher_result.get("n_pairings"),
@@ -895,19 +909,16 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "mis_best_p": mis_result.get("best_case_stouffer_p"),
             "n_mis": mis_result.get("n_mis_size_ge2"),
         },
-
         # Phylogenetic sensitivity
         "phylo": {
             "all_significant": phylo_result["all_clade_exclusions_significant"],
             "lineage_collapsed": phylo_result["lineage_collapsed"],
         },
-
         # Reassignment DB
         "reassignment": {
             "n_events": len(db),
             "n_dedup": topo_q6["observed_total"],
         },
-
         # Pipeline metadata
         "pipeline": {
             "n_claims": len(claims_data),
@@ -920,11 +931,17 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     # Summary
     click.echo(f"\nDone. {len(list(out.glob('*.json')))} JSON files written to {out}/")
     for m in metric_results["per_metric"]:
-        click.echo(f"  {m['metric']:20s}  quantile={m['quantile']:.1f}%  p={m['p_value_conservative']:.4f}")
+        click.echo(
+            f"  {m['metric']:20s}  quantile={m['quantile']:.1f}%  p={m['p_value_conservative']:.4f}"
+        )
     click.echo(f"  MIS worst-case p: {mis_result.get('worst_case_stouffer_p', 'N/A')}")
-    click.echo(f"  Phylo clade-exclusion: all significant = {phylo_result['all_clade_exclusions_significant']}")
-    click.echo(f"  Condlogit best model: {best_model} (AICc={best_fit.get('aicc', 'N/A')})")
-    click.echo(f"  manuscript_stats.json written for Typst dynamic rendering")
+    click.echo(
+        f"  Phylo clade-exclusion: all significant = {phylo_result['all_clade_exclusions_significant']}"
+    )
+    click.echo(
+        f"  Condlogit best model: {best_model} (AICc={best_fit.get('aicc', 'N/A')})"
+    )
+    click.echo("  manuscript_stats.json written for Typst dynamic rendering")
 
 
 def _write_json(path: Path, data: dict | list) -> None:

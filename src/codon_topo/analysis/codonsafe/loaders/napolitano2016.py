@@ -44,7 +44,9 @@ CRAM_POSITIONS: list[tuple[str, int, str]] = [
     # Placeholder structure based on paper text.
 ]
 
-DATA_DIR = Path(__file__).parent.parent.parent.parent / "data" / "codonsafe" / "napolitano2016"
+DATA_DIR = (
+    Path(__file__).parent.parent.parent.parent / "data" / "codonsafe" / "napolitano2016"
+)
 
 
 def load_cram_data() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:

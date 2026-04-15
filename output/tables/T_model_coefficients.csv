@@ -1,0 +1,8 @@
+Model,Feature,Weight_normalized,Weight_raw
+M1_phys,delta_phys,-1.250017,-0.004559
+M2_topo,delta_topo,-1.618443,-3.508750
+M3_phys_topo,delta_phys,-1.086100,-0.003961
+M3_phys_topo,delta_topo,-1.507133,-3.267432
+M4_full,delta_phys,-1.076917,-0.003927
+M4_full,delta_topo,-1.196092,-2.593102
+M4_full,delta_trna,-0.455039,-0.437030

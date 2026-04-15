@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "toposafe"
+version = "0.1.0"
+description = "Cross-study retrospective meta-analysis of genome recoding experiments using GF(2)^6 topology"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "Paul Clayworth" },
+    { name = "Sergey Kornilov", email = "sergey@biostochastics.com" },
+]
+keywords = [
+    "genetic-code", "codon", "genome-recoding", "synthetic-biology",
+    "GF(2)^6", "topology", "meta-analysis",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "codon-topo[codonsafe]>=0.3.0",
+]
+
+[project.urls]
+Repository = "https://github.com/biostochastics/toposafe"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

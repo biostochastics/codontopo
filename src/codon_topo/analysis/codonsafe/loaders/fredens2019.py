@@ -38,7 +38,9 @@ from codon_topo.analysis.codonsafe.models import (
 )
 from codon_topo.analysis.codonsafe.normalize import normalize_codon
 
-DATA_DIR = Path(__file__).parent.parent.parent.parent / "data" / "codonsafe" / "fredens2019"
+DATA_DIR = (
+    Path(__file__).parent.parent.parent.parent / "data" / "codonsafe" / "fredens2019"
+)
 
 
 def load_target_codons() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:

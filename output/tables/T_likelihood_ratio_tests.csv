@@ -1,0 +1,4 @@
+Restricted,Full,LR_statistic,df,p_value,Significant_p05
+M1_phys,M3_phys_topo,103.669,1,0.00e+00,True
+M2_topo,M3_phys_topo,69.121,1,1.11e-16,True
+M3_phys_topo,M4_full,0.542,1,4.61e-01,False

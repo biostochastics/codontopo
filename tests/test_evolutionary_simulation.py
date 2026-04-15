@@ -148,8 +148,7 @@ class TestCandidateFeatures:
         candidates = compute_candidate_features(STANDARD)
         # Find a synonymous-like move: Ile -> Leu (similar AAs)
         ile_to_leu = [
-            m for m in candidates
-            if m.source_aa == "Ile" and m.target_aa == "Leu"
+            m for m in candidates if m.source_aa == "Ile" and m.target_aa == "Leu"
         ]
         # At least some should exist
         assert len(ile_to_leu) > 0
@@ -181,20 +180,45 @@ class TestConditionalLogit:
     def _make_simple_choice_set(self) -> list[StepChoiceSet]:
         """Create a simple 3-candidate choice set for testing."""
         candidates = [
-            CandidateMove("AAA", "Lys", "Asn", delta_phys=-10.0,
-                          topo_breaking=False, delta_topo=0, delta_trna=1,
-                          is_observed=True),
-            CandidateMove("AAG", "Lys", "Glu", delta_phys=50.0,
-                          topo_breaking=True, delta_topo=1, delta_trna=2,
-                          is_observed=False),
-            CandidateMove("AAC", "Asn", "Lys", delta_phys=30.0,
-                          topo_breaking=False, delta_topo=0, delta_trna=1,
-                          is_observed=False),
+            CandidateMove(
+                "AAA",
+                "Lys",
+                "Asn",
+                delta_phys=-10.0,
+                topo_breaking=False,
+                delta_topo=0,
+                delta_trna=1,
+                is_observed=True,
+            ),
+            CandidateMove(
+                "AAG",
+                "Lys",
+                "Glu",
+                delta_phys=50.0,
+                topo_breaking=True,
+                delta_topo=1,
+                delta_trna=2,
+                is_observed=False,
+            ),
+            CandidateMove(
+                "AAC",
+                "Asn",
+                "Lys",
+                delta_phys=30.0,
+                topo_breaking=False,
+                delta_topo=0,
+                delta_trna=1,
+                is_observed=False,
+            ),
         ]
-        return [StepChoiceSet(
-            table_id=1, step_index=0,
-            candidates=candidates, current_code=STANDARD,
-        )]
+        return [
+            StepChoiceSet(
+                table_id=1,
+                step_index=0,
+                candidates=candidates,
+                current_code=STANDARD,
+            )
+        ]
 
     def test_uniform_likelihood(self):
         """With zero weights, P(obs) = 1/n for each choice set."""
@@ -370,4 +394,7 @@ class TestFullPipeline:
 
         # M3 should have better (less negative) LL than M1 (more params)
         # or at least equal (topology may not help)
-        assert fits["M3_phys_topo"]["log_likelihood"] >= fits["M1_phys"]["log_likelihood"] - 1e-6
+        assert (
+            fits["M3_phys_topo"]["log_likelihood"]
+            >= fits["M1_phys"]["log_likelihood"] - 1e-6
+        )

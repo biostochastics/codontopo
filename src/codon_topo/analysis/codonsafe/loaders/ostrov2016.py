@@ -35,7 +35,9 @@ from codon_topo.analysis.codonsafe.models import (
 )
 from codon_topo.analysis.codonsafe.normalize import normalize_codon
 
-DATA_DIR = Path(__file__).parent.parent.parent.parent / "data" / "codonsafe" / "ostrov2016"
+DATA_DIR = (
+    Path(__file__).parent.parent.parent.parent / "data" / "codonsafe" / "ostrov2016"
+)
 
 # Recoding rules from the paper (DNA alphabet)
 OSTROV_RECODE_MAP: dict[str, str] = {

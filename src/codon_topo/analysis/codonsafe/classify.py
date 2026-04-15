@@ -281,7 +281,7 @@ def classify_swap_event(
         # beta_0 is unchanged by definition.
         changes = False
         delta_by_aa: dict[str, int] = {}
-        affected = ()
+        affected: tuple[str, ...] = ()
     else:
         # REASSIGN_SOURCE_CODON: C'[source] = target_aa
         # Check which AAs are affected
@@ -325,12 +325,8 @@ def classify_swap_event(
                 include_stops=include_stops,
             )
 
-        local_src[m] = _local_mismatch_at_codon(
-            event.source_codon, ctx.code, ctx, m
-        )
-        local_tgt[m] = _local_mismatch_at_codon(
-            event.target_codon, ctx.code, ctx, m
-        )
+        local_src[m] = _local_mismatch_at_codon(event.source_codon, ctx.code, ctx, m)
+        local_tgt[m] = _local_mismatch_at_codon(event.target_codon, ctx.code, ctx, m)
 
     return TopologyClassification(
         encoding_id=ctx.encoding_id,

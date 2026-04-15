@@ -3,16 +3,13 @@
 import pytest
 
 from codon_topo.analysis.codonsafe.models import (
-    AnnotatedSwap,
     CodonSwapEvent,
     OutcomeType,
     RecodingOutcome,
     StudyId,
     SwapModel,
-    TopologyClassification,
 )
 from codon_topo.analysis.codonsafe.classify import (
-    ReferenceContext,
     build_reference_context,
     classify_all_encodings,
     classify_swap_event,
@@ -141,7 +138,8 @@ class TestClassify:
             target_codon="AGC",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
         )
         assert topo.source_aa == "Ser"
@@ -159,7 +157,8 @@ class TestClassify:
             target_codon="GCU",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
         )
         assert topo.source_aa == "Ala"
@@ -175,7 +174,8 @@ class TestClassify:
             target_codon="CGU",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
         )
         assert topo.source_aa == "Arg"
@@ -191,7 +191,8 @@ class TestClassify:
             target_codon="GCU",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.REASSIGN_SOURCE_CODON,
         )
         assert topo.source_aa == "Arg"
@@ -208,7 +209,8 @@ class TestClassify:
             target_codon="UAA",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
         )
         assert topo.source_aa == "Stop"
@@ -224,7 +226,8 @@ class TestClassify:
             target_codon="AGC",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
         )
         for metric, val in topo.delta_edge_mismatch.items():
@@ -239,7 +242,8 @@ class TestClassify:
             target_codon="AGC",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
             metrics=("grantham",),
         )
@@ -277,7 +281,8 @@ class TestClassify:
             target_codon="UUA",
         )
         topo = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.SYNONYMOUS_REPLACEMENT,
         )
         assert topo.source_aa == "Leu"
@@ -298,7 +303,8 @@ class TestClassify:
             target_codon="CAG",
         )
         topo_with = classify_swap_event(
-            event=event, ctx=ctx,
+            event=event,
+            ctx=ctx,
             swap_model=SwapModel.REASSIGN_SOURCE_CODON,
             metrics=("grantham",),
         )

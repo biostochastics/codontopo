@@ -40,15 +40,36 @@ OUT = Path("output/codonsafe")
 OUT.mkdir(parents=True, exist_ok=True)
 
 AA1_TO_3 = {
-    "A": "Ala", "R": "Arg", "N": "Asn", "D": "Asp", "C": "Cys",
-    "Q": "Gln", "E": "Glu", "G": "Gly", "H": "His", "I": "Ile",
-    "L": "Leu", "K": "Lys", "M": "Met", "F": "Phe", "P": "Pro",
-    "S": "Ser", "T": "Thr", "W": "Trp", "Y": "Tyr", "V": "Val",
+    "A": "Ala",
+    "R": "Arg",
+    "N": "Asn",
+    "D": "Asp",
+    "C": "Cys",
+    "Q": "Gln",
+    "E": "Glu",
+    "G": "Gly",
+    "H": "His",
+    "I": "Ile",
+    "L": "Leu",
+    "K": "Lys",
+    "M": "Met",
+    "F": "Phe",
+    "P": "Pro",
+    "S": "Ser",
+    "T": "Thr",
+    "W": "Trp",
+    "Y": "Tyr",
+    "V": "Val",
 }
 
 SYN57_RECODE = {
-    "TCG": "AGC", "TCT": "AGC", "TCC": "AGC", "TCA": "AGT",
-    "GCA": "GCT", "GCG": "GCC", "TAG": "TAA",
+    "TCG": "AGC",
+    "TCT": "AGC",
+    "TCC": "AGC",
+    "TCA": "AGT",
+    "GCA": "GCT",
+    "GCG": "GCC",
+    "TAG": "TAA",
 }
 
 
@@ -81,27 +102,29 @@ def _classify_changes(
             event=event, ctx=ctx, swap_model=model, metrics=("grantham",)
         )
 
-        rows.append({
-            "gene": ch.gene or "unknown",
-            "locus_tag": ch.locus_tag,
-            "codon_idx": ch.codon_index_in_cds,
-            "genome_pos": ch.genome_pos_nt,
-            "design_codon": ch.source_codon_dna,
-            "final_codon": ch.target_codon_dna,
-            "design_aa": aa3,
-            "final_aa": tgt_aa3,
-            "is_synonymous": ch.is_synonymous,
-            "is_reversion": ch.target_codon_dna in SYN57_RECODE,
-            "hamming": topo.hamming,
-            "crosses_boundary": topo.crosses_component_boundary_eps1,
-            "changes_components": topo.changes_components_eps1,
-            "local_mismatch_design": topo.local_mismatch_source["grantham"],
-            "local_mismatch_final": topo.local_mismatch_target["grantham"],
-            "delta_local": (
-                topo.local_mismatch_target["grantham"]
-                - topo.local_mismatch_source["grantham"]
-            ),
-        })
+        rows.append(
+            {
+                "gene": ch.gene or "unknown",
+                "locus_tag": ch.locus_tag,
+                "codon_idx": ch.codon_index_in_cds,
+                "genome_pos": ch.genome_pos_nt,
+                "design_codon": ch.source_codon_dna,
+                "final_codon": ch.target_codon_dna,
+                "design_aa": aa3,
+                "final_aa": tgt_aa3,
+                "is_synonymous": ch.is_synonymous,
+                "is_reversion": ch.target_codon_dna in SYN57_RECODE,
+                "hamming": topo.hamming,
+                "crosses_boundary": topo.crosses_component_boundary_eps1,
+                "changes_components": topo.changes_components_eps1,
+                "local_mismatch_design": topo.local_mismatch_source["grantham"],
+                "local_mismatch_final": topo.local_mismatch_target["grantham"],
+                "delta_local": (
+                    topo.local_mismatch_target["grantham"]
+                    - topo.local_mismatch_source["grantham"]
+                ),
+            }
+        )
     return pd.DataFrame(rows)
 
 
@@ -110,7 +133,6 @@ def run_syn57_deviation_analysis() -> dict:
     print("=== ANALYSIS 1: Syn57 S9 Deviation Directionality ===")
 
     BASE = Path("data/codonsafe/robertson2025_syn57/Data_files")
-    MDS42 = Path("data/codonsafe/fredens2019/Sup Data 1 - MDS42 genome.txt")
 
     ctx = build_reference_context(table_id=11, encoding_id=0)
 
@@ -163,37 +185,47 @@ def run_syn57_deviation_analysis() -> dict:
             _, wilcox_p = wilcoxon(nonzero, alternative="less")
             wilcox_p = float(wilcox_p)
 
-        sensitivity.append({
-            "cutoff": label,
-            "n_deviations": n,
-            "n_genes_removed": len(rdf) - n,
-            "n_better": n_better,
-            "n_worse": n_worse,
-            "n_same": n_same,
-            "proportion_better": round(prop, 4),
-            "ci_95_lo": round(ci_lo, 4),
-            "ci_95_hi": round(ci_hi, 4),
-            "binomial_p": round(binom_p, 4),
-            "wilcoxon_p": round(wilcox_p, 4),
-            "mean_delta_local": round(float(subset["delta_local"].mean()), 2),
-            "mean_hamming": round(float(subset["hamming"].mean()), 2),
-        })
+        sensitivity.append(
+            {
+                "cutoff": label,
+                "n_deviations": n,
+                "n_genes_removed": len(rdf) - n,
+                "n_better": n_better,
+                "n_worse": n_worse,
+                "n_same": n_same,
+                "proportion_better": round(prop, 4),
+                "ci_95_lo": round(ci_lo, 4),
+                "ci_95_hi": round(ci_hi, 4),
+                "binomial_p": round(binom_p, 4),
+                "wilcoxon_p": round(wilcox_p, 4),
+                "mean_delta_local": round(float(subset["delta_local"].mean()), 2),
+                "mean_hamming": round(float(subset["hamming"].mean()), 2),
+            }
+        )
 
     sens_df = pd.DataFrame(sensitivity)
     sens_df.to_csv(OUT / "syn57_s9_sensitivity_table.csv", index=False)
     print(f"  Sensitivity table saved ({len(sensitivity)} rows)")
 
     # Primary result at cutoff=10
-    genuine = rdf[
-        rdf["gene"].map(rdf["gene"].value_counts()) <= 10
-    ].copy()
+    genuine = rdf[rdf["gene"].map(rdf["gene"].value_counts()) <= 10].copy()
     genuine.to_csv(OUT / "syn57_s9_genuine_deviations.csv", index=False)
 
     # R-ready figure data
     genuine[
-        ["gene", "design_codon", "final_codon", "design_aa", "final_aa",
-         "is_synonymous", "is_reversion", "hamming", "delta_local",
-         "local_mismatch_design", "local_mismatch_final"]
+        [
+            "gene",
+            "design_codon",
+            "final_codon",
+            "design_aa",
+            "final_aa",
+            "is_synonymous",
+            "is_reversion",
+            "hamming",
+            "delta_local",
+            "local_mismatch_design",
+            "local_mismatch_final",
+        ]
     ].to_csv(OUT / "syn57_s9_for_ggplot.csv", index=False)
 
     # Compute summary stats for the primary cutoff
@@ -223,8 +255,9 @@ def run_syn57_deviation_analysis() -> dict:
     pd.DataFrame([summary]).to_csv(OUT / "syn57_s9_genuine_summary.csv", index=False)
 
     print(f"  Result: {n_better} better, {n_worse} worse, {n_same} same")
-    print(f"  Binomial p={binom_result.pvalue:.4f}, "
-          f"95% CI [{ci.low:.3f}, {ci.high:.3f}]")
+    print(
+        f"  Binomial p={binom_result.pvalue:.4f}, 95% CI [{ci.low:.3f}, {ci.high:.3f}]"
+    )
 
     return summary
 
@@ -239,8 +272,7 @@ def run_ostrov_case_control() -> dict:
     headers = df.iloc[1].tolist()
     data = df.iloc[3:].copy()
     data.columns = [
-        str(c).strip() if pd.notna(c) else f"col_{i}"
-        for i, c in enumerate(headers)
+        str(c).strip() if pd.notna(c) else f"col_{i}" for i, c in enumerate(headers)
     ]
 
     # Column aliases
@@ -250,8 +282,9 @@ def run_ostrov_case_control() -> dict:
     n_ess = "Number Of Essential Genes"
     dt_del = "Relative Doubling Time After Chromosomal Deletion (mean)"
     dt_int = "Relative Doubling Time After Segment Integration (mean)"
-    reversions = "Number of Codon Reversions found in E. coli Segment After Chromosomal Deletion"
-    rev_loci = "Loci of reversions (Gene name)"
+    reversions = (
+        "Number of Codon Reversions found in E. coli Segment After Chromosomal Deletion"
+    )
     comments = "Comments"
 
     for col in [n_rec, n_ess_rec, n_ess]:
@@ -260,8 +293,8 @@ def run_ostrov_case_control() -> dict:
         data[col] = pd.to_numeric(data[col], errors="coerce")
     data[reversions] = pd.to_numeric(data[reversions], errors="coerce")
 
-    data["has_lethal"] = data[comments].fillna("").str.contains(
-        "Lethal|lethal|dead", case=False
+    data["has_lethal"] = (
+        data[comments].fillna("").str.contains("Lethal|lethal|dead", case=False)
     )
     data["has_issue"] = data["has_lethal"]
     data["has_reversions"] = data[reversions].fillna(0) > 0
@@ -291,13 +324,32 @@ def run_ostrov_case_control() -> dict:
     mw_p_bonf = min(float(mw_p) * 3, 1.0)
 
     # Save R-ready data
-    fig_cols = [seg, n_rec, n_ess_rec, n_ess, dt_del, dt_int, reversions,
-                "has_issue", "has_lethal", "has_reversions", "status"]
+    fig_cols = [
+        seg,
+        n_rec,
+        n_ess_rec,
+        n_ess,
+        dt_del,
+        dt_int,
+        reversions,
+        "has_issue",
+        "has_lethal",
+        "has_reversions",
+        "status",
+    ]
     fig_data = data[[c for c in fig_cols if c in data.columns]].copy()
     fig_data.columns = [
-        "segment", "n_recoded", "n_essential_recoded", "n_essential",
-        "doubling_time_deletion", "doubling_time_integration",
-        "n_reversions", "has_issue", "has_lethal", "has_reversions", "status",
+        "segment",
+        "n_recoded",
+        "n_essential_recoded",
+        "n_essential",
+        "doubling_time_deletion",
+        "doubling_time_integration",
+        "n_reversions",
+        "has_issue",
+        "has_lethal",
+        "has_reversions",
+        "status",
     ]
     fig_data.to_csv(OUT / "ostrov_segments_for_ggplot.csv", index=False)
 
@@ -323,18 +375,16 @@ def run_ostrov_case_control() -> dict:
     }
     pd.DataFrame([summary]).to_csv(OUT / "ostrov_summary.csv", index=False)
 
-    # Save combined stats JSON for R figures
-    stats_for_r = {
-        "syn57": {},  # filled by caller
-        "ostrov": summary,
-    }
-
     print(f"  N={n_fitness} segments with fitness data")
-    print(f"  rho(essential_recoded, DT) = {rho_ess:.4f}, "
-          f"p = {p_ess:.4f} (Bonf. = {p_bonf_ess:.4f})")
-    print(f"  Problem vs Normal: {problem[n_ess_rec].mean():.1f} vs "
-          f"{normal[n_ess_rec].mean():.1f}, p = {mw_p:.4f} "
-          f"(Bonf. = {mw_p_bonf:.4f})")
+    print(
+        f"  rho(essential_recoded, DT) = {rho_ess:.4f}, "
+        f"p = {p_ess:.4f} (Bonf. = {p_bonf_ess:.4f})"
+    )
+    print(
+        f"  Problem vs Normal: {problem[n_ess_rec].mean():.1f} vs "
+        f"{normal[n_ess_rec].mean():.1f}, p = {mw_p:.4f} "
+        f"(Bonf. = {mw_p_bonf:.4f})"
+    )
 
     return summary
 
@@ -352,9 +402,9 @@ def main():
     with open(OUT / "analysis_stats.json", "w") as f:
         json.dump(combined, f, indent=2, default=str)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("All analyses complete. Outputs in output/codonsafe/")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
 
 if __name__ == "__main__":

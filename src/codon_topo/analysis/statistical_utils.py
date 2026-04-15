@@ -44,9 +44,7 @@ def beta_posterior_ci(
     }
 
 
-def risk_ratio_ci(
-    a: int, n1: int, b: int, n2: int, confidence: float = 0.95
-) -> dict:
+def risk_ratio_ci(a: int, n1: int, b: int, n2: int, confidence: float = 0.95) -> dict:
     """Risk ratio with log-normal CI.
 
     RR = (a/n1) / (b/n2) with 95% CI via log-normal approximation.
@@ -62,9 +60,7 @@ def risk_ratio_ci(
     z = stats.norm.ppf(1 - (1 - confidence) / 2)
 
     if a > 0 and n1 > a:
-        se_log_rr = math.sqrt(
-            (1 / max(a, 1) - 1 / n1) + (1 / max(b, 1) - 1 / n2)
-        )
+        se_log_rr = math.sqrt((1 / max(a, 1) - 1 / n1) + (1 / max(b, 1) - 1 / n2))
         ci_lo = math.exp(math.log(max(rr, 1e-20)) - z * se_log_rr)
         ci_hi = math.exp(math.log(max(rr, 1e-20)) + z * se_log_rr)
     else:
@@ -83,9 +79,7 @@ def risk_ratio_ci(
     }
 
 
-def quantile_ci(
-    k: int, n: int, confidence: float = 0.95
-) -> dict:
+def quantile_ci(k: int, n: int, confidence: float = 0.95) -> dict:
     """Confidence interval for a quantile estimate q = k/n.
 
     Uses the Clopper-Pearson (exact binomial) interval.

@@ -18,3 +18,13 @@ web/
 # Large genome assembly downloads (reproducible via scripts/run_trnascan.sh)
 data/assemblies/*.zip
 data/assemblies/*_data/
+
+# CodonSafe raw supplementary data (103 MB, from external publications)
+# Download instructions: data/codonsafe/DATA_MANIFEST.md
+# DATA_MANIFEST.md and ANALYSIS_RESULTS.md at this level ARE tracked.
+data/codonsafe/*/
+
+# Python packaging artifacts
+uv.lock
+.venv/
+*.dist-info/

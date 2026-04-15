@@ -1,0 +1,2 @@
+total_deviations,genuine_deviations,genes_removed,n_better,n_worse,n_same,proportion_better,ci_95_lo,ci_95_hi,binomial_p,mean_delta_local,median_delta_local,mean_hamming,n_reversions
+727,326,401,76,87,163,0.4663,0.3998,1.0,0.8264,1.98,0.0,1.21,2

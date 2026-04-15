@@ -462,11 +462,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 on GCA_030463445.1
         # 97.3 Mb MAC genome. 80 total tRNAs, 76 std20.
         by_amino_acid={
-            "Ala": 4, "Arg": 7, "Asn": 3, "Asp": 3,
+            "Ala": 4,
+            "Arg": 7,
+            "Asn": 3,
+            "Asp": 3,
             "Cys": 4,  # 3 GCA + 1 TCA reading UGA
-            "Gln": 3, "Glu": 4, "Gly": 3, "His": 4, "Ile": 1,
-            "Leu": 6, "Lys": 5, "Met": 10, "Phe": 2, "Pro": 4,
-            "Ser": 4, "Thr": 2, "Trp": 1, "Tyr": 2, "Val": 5,
+            "Gln": 3,
+            "Glu": 4,
+            "Gly": 3,
+            "His": 4,
+            "Ile": 1,
+            "Leu": 6,
+            "Lys": 5,
+            "Met": 10,
+            "Phe": 2,
+            "Pro": 4,
+            "Ser": 4,
+            "Thr": 2,
+            "Trp": 1,
+            "Tyr": 2,
+            "Val": 5,
         },
         has_disconnection=True,
         reassigned_aa="Cys",
@@ -480,11 +495,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 on GCA_048569255.1
         # 88.5 Mb. 120 total tRNAs, 103 std20.
         by_amino_acid={
-            "Ala": 6, "Arg": 6, "Asn": 4, "Asp": 3,
+            "Ala": 6,
+            "Arg": 6,
+            "Asn": 4,
+            "Asp": 3,
             "Cys": 8,  # 4 GCA + 4 TCA reading UGA
-            "Gln": 9, "Glu": 7, "Gly": 4, "His": 3, "Ile": 7,
-            "Leu": 10, "Lys": 10, "Met": 4, "Phe": 4, "Pro": 5,
-            "Ser": 8, "Thr": 10, "Trp": 1, "Tyr": 4, "Val": 3,
+            "Gln": 9,
+            "Glu": 7,
+            "Gly": 4,
+            "His": 3,
+            "Ile": 7,
+            "Leu": 10,
+            "Lys": 10,
+            "Met": 4,
+            "Phe": 4,
+            "Pro": 5,
+            "Ser": 8,
+            "Thr": 10,
+            "Trp": 1,
+            "Tyr": 4,
+            "Val": 3,
         },
         has_disconnection=True,
         reassigned_aa="Cys",
@@ -498,11 +528,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 on GCA_001880345.2
         # 49.3 Mb Antarctic psychrophile. 62 total tRNAs, 56 std20.
         by_amino_acid={
-            "Ala": 5, "Arg": 5, "Asn": 2, "Asp": 1,
+            "Ala": 5,
+            "Arg": 5,
+            "Asn": 2,
+            "Asp": 1,
             "Cys": 3,  # 1 GCA + 2 TCA reading UGA
-            "Gln": 2, "Glu": 3, "Gly": 5, "His": 1, "Ile": 3,
-            "Leu": 6, "Lys": 2, "Met": 3, "Phe": 3, "Pro": 2,
-            "Ser": 4, "Thr": 3, "Trp": 2, "Tyr": 1, "Val": 3,
+            "Gln": 2,
+            "Glu": 3,
+            "Gly": 5,
+            "His": 1,
+            "Ile": 3,
+            "Leu": 6,
+            "Lys": 2,
+            "Met": 3,
+            "Phe": 3,
+            "Pro": 2,
+            "Ser": 4,
+            "Thr": 3,
+            "Trp": 2,
+            "Tyr": 1,
+            "Val": 3,
         },
         has_disconnection=True,
         reassigned_aa="Cys",
@@ -516,11 +561,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 on GCA_021440025.1
         # 74.2 Mb. 149 total tRNAs, 128 std20.
         by_amino_acid={
-            "Ala": 10, "Arg": 15, "Asn": 5, "Asp": 3,
+            "Ala": 10,
+            "Arg": 15,
+            "Asn": 5,
+            "Asp": 3,
             "Cys": 9,  # 5 GCA + 4 TCA reading UGA
-            "Gln": 2, "Glu": 11, "Gly": 10, "His": 3, "Ile": 6,
-            "Leu": 16, "Lys": 2, "Met": 14, "Phe": 4, "Pro": 8,
-            "Ser": 7, "Thr": 11, "Trp": 0, "Tyr": 4, "Val": 5,
+            "Gln": 2,
+            "Glu": 11,
+            "Gly": 10,
+            "His": 3,
+            "Ile": 6,
+            "Leu": 16,
+            "Lys": 2,
+            "Met": 14,
+            "Phe": 4,
+            "Pro": 8,
+            "Ser": 7,
+            "Thr": 11,
+            "Trp": 0,
+            "Tyr": 4,
+            "Val": 5,
         },
         has_disconnection=True,
         reassigned_aa="Cys",
@@ -534,11 +594,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 on GCA_021440005.1
         # 82.1 Mb. 495 total tRNAs (large/polyploid MAC), 390 std20.
         by_amino_acid={
-            "Ala": 14, "Arg": 35, "Asn": 19, "Asp": 15,
+            "Ala": 14,
+            "Arg": 35,
+            "Asn": 19,
+            "Asp": 15,
             "Cys": 20,  # 17 GCA + 3 TCA reading UGA
-            "Gln": 28, "Glu": 26, "Gly": 22, "His": 18, "Ile": 22,
-            "Leu": 42, "Lys": 25, "Met": 35, "Phe": 11, "Pro": 23,
-            "Ser": 27, "Thr": 39, "Trp": 14, "Tyr": 10, "Val": 18,
+            "Gln": 28,
+            "Glu": 26,
+            "Gly": 22,
+            "His": 18,
+            "Ile": 22,
+            "Leu": 42,
+            "Lys": 25,
+            "Met": 35,
+            "Phe": 11,
+            "Pro": 23,
+            "Ser": 27,
+            "Thr": 39,
+            "Trp": 14,
+            "Tyr": 10,
+            "Val": 18,
         },
         has_disconnection=True,
         reassigned_aa="Cys",
@@ -552,11 +627,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 on GCA_027382605.1
         # 72.2 Mb. 83 total tRNAs, 74 std20.
         by_amino_acid={
-            "Ala": 7, "Arg": 11, "Asn": 2, "Asp": 1,
+            "Ala": 7,
+            "Arg": 11,
+            "Asn": 2,
+            "Asp": 1,
             "Cys": 4,  # 2 GCA + 2 TCA reading UGA
-            "Gln": 3, "Glu": 3, "Gly": 3, "His": 1, "Ile": 3,
-            "Leu": 6, "Lys": 5, "Met": 8, "Phe": 1, "Pro": 3,
-            "Ser": 6, "Thr": 6, "Trp": 1, "Tyr": 1, "Val": 4,
+            "Gln": 3,
+            "Glu": 3,
+            "Gly": 3,
+            "His": 1,
+            "Ile": 3,
+            "Leu": 6,
+            "Lys": 5,
+            "Met": 8,
+            "Phe": 1,
+            "Pro": 3,
+            "Ser": 6,
+            "Thr": 6,
+            "Trp": 1,
+            "Tyr": 1,
+            "Val": 4,
         },
         has_disconnection=True,
         reassigned_aa="Cys",
@@ -804,10 +894,7 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         },
         has_disconnection=True,
         reassigned_aa="Gln",
-        source=(
-            "tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); "
-            "Ensembl Protists"
-        ),
+        source=("tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); Ensembl Protists"),
         notes=(
             "UAA/UAG reassigned to Gln (Table 6). Class Oligohymenophorea "
             "(Scuticociliatia). Same class as Tetrahymena and Paramecium but "
@@ -974,10 +1061,26 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 (-B mode) on GCA_000027325.1
         # 580 kb genome. 36 total tRNAs. Single tRNA-Trp(CCA).
         by_amino_acid={
-            "Ala": 1, "Arg": 4, "Asn": 1, "Asp": 1, "Cys": 1,
-            "Gln": 1, "Glu": 1, "Gly": 2, "His": 1, "Ile": 2,
-            "Leu": 4, "Lys": 2, "Met": 2, "Phe": 1, "Pro": 1,
-            "Ser": 4, "Thr": 3, "Trp": 1, "Tyr": 1, "Val": 1,
+            "Ala": 1,
+            "Arg": 4,
+            "Asn": 1,
+            "Asp": 1,
+            "Cys": 1,
+            "Gln": 1,
+            "Glu": 1,
+            "Gly": 2,
+            "His": 1,
+            "Ile": 2,
+            "Leu": 4,
+            "Lys": 2,
+            "Met": 2,
+            "Phe": 1,
+            "Pro": 1,
+            "Ser": 4,
+            "Thr": 3,
+            "Trp": 1,
+            "Tyr": 1,
+            "Val": 1,
         },
         has_disconnection=True,
         reassigned_aa="Trp",
@@ -1000,16 +1103,30 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         # VERIFIED: tRNAscan-SE 2.0.12 (-B mode) on GCF_910574535.1
         # 816 kb genome. 37 total tRNAs. Single tRNA-Trp(CCA).
         by_amino_acid={
-            "Ala": 1, "Arg": 4, "Asn": 1, "Asp": 1, "Cys": 1,
-            "Gln": 1, "Glu": 1, "Gly": 2, "His": 1, "Ile": 2,
-            "Leu": 4, "Lys": 2, "Met": 2, "Phe": 1, "Pro": 1,
-            "Ser": 5, "Thr": 3, "Trp": 1, "Tyr": 1, "Val": 1,
+            "Ala": 1,
+            "Arg": 4,
+            "Asn": 1,
+            "Asp": 1,
+            "Cys": 1,
+            "Gln": 1,
+            "Glu": 1,
+            "Gly": 2,
+            "His": 1,
+            "Ile": 2,
+            "Leu": 4,
+            "Lys": 2,
+            "Met": 2,
+            "Phe": 1,
+            "Pro": 1,
+            "Ser": 5,
+            "Thr": 3,
+            "Trp": 1,
+            "Tyr": 1,
+            "Val": 1,
         },
         has_disconnection=True,
         reassigned_aa="Trp",
-        source=(
-            "tRNAscan-SE 2.0.12 (-B mode) on GCF_910574535.1 (April 2026)"
-        ),
+        source=("tRNAscan-SE 2.0.12 (-B mode) on GCF_910574535.1 (April 2026)"),
         notes=(
             "UGA→Trp (Table 4). 816 kb genome. Single tRNA-Trp(CCA) reads "
             "both UGG and UGA via post-transcriptional modification. 37 "
@@ -1398,9 +1515,7 @@ def _stouffer_combine(p_values: list[float]) -> tuple[float, float]:
     from scipy.stats import norm
 
     _CLIP_LO, _CLIP_HI = 1e-10, 1 - 1e-10
-    z_scores = [
-        float(norm.ppf(1 - max(min(p, _CLIP_HI), _CLIP_LO))) for p in p_values
-    ]
+    z_scores = [float(norm.ppf(1 - max(min(p, _CLIP_HI), _CLIP_LO))) for p in p_values]
     combined_z = sum(z_scores) / (len(z_scores) ** 0.5)
     combined_p = float(1 - norm.cdf(combined_z))
     return combined_z, combined_p
@@ -1450,9 +1565,7 @@ def maximal_independent_set_analysis() -> dict:
     # Step 3: enumerate all maximal independent sets via Bron-Kerbosch
     all_mis: list[list[int]] = []
 
-    def _bron_kerbosch(
-        R: set[int], P: set[int], X: set[int]
-    ) -> None:
+    def _bron_kerbosch(R: set[int], P: set[int], X: set[int]) -> None:
         if not P and not X:
             # R is a maximal independent set
             all_mis.append(sorted(R))
@@ -1516,8 +1629,10 @@ def maximal_independent_set_analysis() -> dict:
         "median_stouffer_p": stouffer_ps[median_idx],
         "worst_case_stouffer_p": stouffer_ps[-1],
         "best_case_stouffer_p": stouffer_ps[0],
-        "fraction_significant_p05": sum(1 for p in stouffer_ps if p < 0.05) / len(stouffer_ps),
-        "fraction_significant_p01": sum(1 for p in stouffer_ps if p < 0.01) / len(stouffer_ps),
+        "fraction_significant_p05": sum(1 for p in stouffer_ps if p < 0.05)
+        / len(stouffer_ps),
+        "fraction_significant_p01": sum(1 for p in stouffer_ps if p < 0.01)
+        / len(stouffer_ps),
         "best_mis": best_mis,
         "worst_mis": worst_mis,
         "all_mis_p_values": stouffer_ps,
