@@ -35,7 +35,7 @@
     "n_permutations": 10000
   },
   "definitions_audit": {
-    "method": "Two-by-two audit of topology-breaking under (Q_6, K_4^3) x (new-disconnection-in-previously-connected-family, \u0394\u03b2\u2080>0). All four cells share the same denominators (1280 candidate moves; 28 de-duplicated observed events) but differ in how 'topology-breaking' is defined. Reviewer R1 noted the manuscript Methods text described \u0394\u03b2\u2080>0 while Q_6 reported counts matched the new-disconnection definition; both are now reported transparently.",
+    "method": "Two-by-two audit of topology-breaking under (Q_6, K_4^3) x (new-disconnection-in-previously-connected-family, \u0394\u03b2\u2080>0). All four cells share the same denominators (1280 candidate moves; 28 de-duplicated observed events) but differ in how 'topology-breaking' is defined. The manuscript Methods text uses \u0394\u03b2\u2080>0 (matching the conditional-logit feature); the new-disconnection cells are reported alongside as a sensitivity column.",
     "audit_rows": [
       {
         "cell": "q6_new_disc",
@@ -372,7 +372,7 @@
     ]
   },
   "denominator_sensitivity": {
-    "method": "Reviewer R1.D / R1.2 denominator-sensitivity audit: four candidate-universe definitions for the topology-avoidance denominator. Primary for the manuscript is U1 (21-label, identity-excluded) = 1280 single-codon relabelings. U2 (AA-only) gives 1219 for the standard code; the difference matters when interpretating the hypergeometric parameter K. U3 and U4 are listed for completeness but are not used in the primary analysis.",
+    "method": "Denominator-sensitivity audit: four candidate-universe definitions for the topology-avoidance denominator. Primary for the manuscript is U1 (21-label, identity-excluded) = 1280 single-codon relabelings. U2 (AA-only) gives 1219 for the standard code; the difference matters when interpretating the hypergeometric parameter K. U3 and U4 are listed for completeness but are not used in the primary analysis.",
     "rows": [
       {
         "universe": "U1_21label_no_identity",

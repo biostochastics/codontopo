@@ -19,7 +19,7 @@
 CODON-TOPO validates the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. It provides a complete, reproducible pipeline for the analyses described in:
 
 > **Robust error-minimization in the genetic code across physicochemical metrics and variant codes: a graph-theoretic analysis in GF(2)^6**
-> Paul Clayworth & Sergey Kornilov (2026). Manuscript under review.
+> Paul Clayworth & Sergey Kornilov (2026). Pre-submission manuscript; PDF compiles from `output/manuscript.typ`.
 
 ### Key Findings
 
@@ -37,6 +37,8 @@ CODON-TOPO validates the algebraic structure of genetic codes when encoded as 6-
 **Encoding sensitivity (24 base-to-bit bijection sweep):** The Q₆ topology-avoidance result is encoding-dependent — 8 of 24 bijections give a Q₆ candidate-landscape rate near 36% (rather than 73% under the default encoding) and no statistically significant depletion. The H(3,4) result is encoding-independent and **is reported as the primary topology-avoidance test**; Q₆ is now framed as a coordinate-dependent decomposition. Q₆ remains useful for the ρ-sweep (continuous interpolation between Q₆ and H(3,4)).
 
 **Conditional logit (M3 phys+topo) under both topology encodings:** Decisively favored over single-feature models. Under encoding-dependent Q₆ topology: ΔAICc(M1→M3) = 108.2, ΔAICc(M2→M3) = 89.1. Under encoding-independent H(3,4) topology (verifying that the result is not an artifact of the Q₆ encoding): ΔAICc(M1→M3_H(3,4)) = **91.3**, ΔAICc(M2_H(3,4)→M3_H(3,4)) = **95.1** — both decisive (>10) and similar in magnitude to the Q₆ counterparts. Adding the tRNA-distance proxy (M4) does not improve fit (LR = 0.12, p = 0.73). Spearman ρ between Δ_phys and Δ_topo across the 1,280-move candidate landscape = 0.15 (largely independent predictors). Conditional-logit clade-exclusion sensitivity (per Sengupta et al. 2007, refitting M1-M4 with each major clade dropped) and posterior-predictive validation (observed 0.076 vs simulated 0.077; pp p = 0.60) confirm robustness.
+
+**Restricted-candidate sensitivity:** Refitting M1-M4 on candidate sets restricted to biologically plausible moves (target AA already accessible at Hamming distance ≤ d) shows the qualitative claim "topology adds value beyond physicochemistry" survives at every threshold tested. Under the primary d=2 filter (≈727 candidates per choice set), ΔAICc(M1→M3) = 60 and ΔAICc(M2→M3) = 77, both well above the conventional ΔAICc>10 reference. Under the most stringent d=1 filter (≈275 candidates), ΔAICc(M1→M3) shrinks to 14 but stays above 10; ΔAICc(M2→M3) stays at 73. The unrestricted ΔAICc magnitudes are upper bounds; the d=2 filter gives a more biologically-calibrated effect size.
 
 **Methodological caveats explicitly disclosed in Limitations:**
 - Survivorship bias: cross-sectional NCBI data cannot distinguish "selection against attempting topology-breaking moves" from "selection against the lineages that attempted them"
@@ -87,6 +89,7 @@ codon-topo per-table                   # All 27 NCBI translation tables
 codon-topo topology-avoidance          # Topology avoidance (Q6)
 codon-topo topology-avoidance-k43      # Topology avoidance (K4^3, encoding-independent)
 codon-topo condlogit                   # Conditional logit models (M1-M4)
+codon-topo condlogit-restricted        # Restricted-candidate sensitivity (delta_trna<=1,2,3)
 codon-topo trna                        # tRNA enrichment test
 codon-topo mis-analysis                # Maximal independent set analysis
 codon-topo phylo-sensitivity           # Clade-exclusion robustness
@@ -166,6 +169,7 @@ codon-topo all
     +-- Conditional Logit (WS6) ........... M1-M4 (Q6) + M2k43, M3k43 (H(3,4))
     |     +-- Encoding robustness ......... Q6 vs H(3,4) ΔAICc comparison
     |     +-- Clade-exclusion sensitivity . 7 clade regimes per Sengupta et al. 2007
+    |     +-- Restricted-candidate sens. .. delta_trna<=1,2,3 biological-plausibility filter
     |     +-- Posterior predictive ........ Observed vs simulated topology rate
     +-- Depth Calibration (WS3) ........... Epsilon-age correlation
     +-- KRAS-Fano (WS4) .................. cBioPortal enrichment (negative)
@@ -215,6 +219,7 @@ codon-topo all
 | `codon-topo topology-avoidance` | Topology avoidance test (Q6) |
 | `codon-topo topology-avoidance-k43` | Topology avoidance test (K4^3) |
 | `codon-topo condlogit` | Conditional logit model comparison (M1-M4) |
+| `codon-topo condlogit-restricted` | Restricted-candidate-set sensitivity (delta_trna ≤ d) |
 | `codon-topo phylo-sensitivity` | Clade-exclusion sensitivity analysis |
 | `codon-topo trna` | tRNA enrichment test |
 | `codon-topo mis-analysis` | Maximal independent set enumeration |

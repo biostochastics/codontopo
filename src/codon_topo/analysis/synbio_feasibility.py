@@ -715,12 +715,13 @@ def _classify_move(
 def topology_definitions_audit() -> dict:
     """Compute the 2 (adjacency) x 2 (definition) sensitivity audit.
 
-    Reviewer R1 noted that the manuscript Methods text claims the Δβ₀>0
-    (any-component-increase) definition while Q_6 numbers (931 of 1280
-    possible) actually correspond to the narrower "creates a new
-    disconnection from a previously connected family" definition. This
-    routine computes all four cells so the manuscript can pick one
-    definition consistently and report the other as a sensitivity column.
+    The manuscript Methods text uses the Δβ₀>0 (any-component-increase)
+    definition for the conditional-logit feature, but the Q_6 hypergeometric
+    counts (931 of 1280 possible) historically corresponded to the narrower
+    "creates a new disconnection from a previously connected family"
+    definition. This routine computes all four cells so the manuscript can
+    pick one definition consistently and report the other as a sensitivity
+    column.
 
     Cells (possible_breaks, observed_breaks, rate_obs, rate_poss,
     depletion, hypergeom_p, RR, CI):
@@ -843,10 +844,10 @@ def topology_definitions_audit() -> dict:
             "x (new-disconnection-in-previously-connected-family, Δβ₀>0). "
             "All four cells share the same denominators (1280 candidate "
             "moves; 28 de-duplicated observed events) but differ in how "
-            "'topology-breaking' is defined. Reviewer R1 noted the "
-            "manuscript Methods text described Δβ₀>0 while Q_6 reported "
-            "counts matched the new-disconnection definition; both are "
-            "now reported transparently."
+            "'topology-breaking' is defined. The manuscript Methods text "
+            "uses Δβ₀>0 (matching the conditional-logit feature); the "
+            "new-disconnection cells are reported alongside as a "
+            "sensitivity column."
         ),
         "audit_rows": audit_rows,
     }
@@ -857,9 +858,9 @@ def topology_avoidance_q6_encoding_sweep() -> dict:
 
     K_4^3 adjacency is encoding-independent and does not need this sweep.
     The Q_6 result depends on which 192 of the 288 single-nucleotide edges
-    are designated as Hamming-1 (vs the 96 Hamming-2 'diagonals'); reviewer
-    R1.B asked for confirmation that the depletion holds across all 24
-    bijections, not just the default C=00, U=01, A=10, G=11.
+    are designated as Hamming-1 (vs the 96 Hamming-2 'diagonals'); this
+    routine confirms that the depletion holds across all 24 bijections,
+    not just the default C=00, U=01, A=10, G=11.
 
     Uses the new-disconnection definition (legacy primary for Q_6).
     """
@@ -965,8 +966,7 @@ def topology_avoidance_q6_encoding_sweep() -> dict:
 def topology_denominator_sensitivity() -> dict:
     """Report the four candidate-universe definitions side-by-side.
 
-    Reviewer R1.D / R1.2 asked for an explicit denominator-sensitivity
-    table covering:
+    Explicit denominator-sensitivity table covering:
       1. 21-label targets, identity-excluded: |M| = 64 x 20 = 1280
          (each codon gets 20 alternative labels = 19 AAs + Stop, OR
          20 AAs if currently Stop)
@@ -1019,9 +1019,9 @@ def topology_denominator_sensitivity() -> dict:
     ]
     return {
         "method": (
-            "Reviewer R1.D / R1.2 denominator-sensitivity audit: four "
-            "candidate-universe definitions for the topology-avoidance "
-            "denominator. Primary for the manuscript is U1 "
+            "Denominator-sensitivity audit: four candidate-universe "
+            "definitions for the topology-avoidance denominator. "
+            "Primary for the manuscript is U1 "
             "(21-label, identity-excluded) = 1280 single-codon relabelings. "
             "U2 (AA-only) gives 1219 for the standard code; the difference "
             "matters when interpretating the hypergeometric parameter K. "

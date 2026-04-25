@@ -109,7 +109,7 @@ def component_counts_k43(code: dict[str, str]) -> dict[str, int]:
     Uses nucleotide-level adjacency: two codons are neighbors iff they
     differ at exactly one nucleotide position. This is the encoding-
     independent counterpart of component_counts (which uses Q_6 / Hamming-1
-    in the GF(2)^6 encoding). Reviewer R2.M1 / glm-5.1 verification: the
+    in the GF(2)^6 encoding). Encoding-robustness verification: the
     conditional-logit topology feature delta_topo uses Q_6 by default,
     which is encoding-dependent (8/24 encodings give no Q_6 depletion at
     the landscape level). The K_4^3 variant verifies that M3's dominance
@@ -203,7 +203,7 @@ def topology_change_k43(
 
     Encoding-independent counterpart of topology_change. Used to verify
     that the conditional-logit M3 dominance is not an artifact of the
-    Q_6 encoding choice (per glm-5.1 review).
+    Q_6 encoding choice.
 
     Returns:
         (is_breaking_k43, delta_components_k43):
@@ -432,8 +432,8 @@ class ModelSpec:
 
 
 # The original four nested models (Q_6 topology) plus K_4^3 verification variants.
-# Per glm-5.1 review: M3 dominance must be confirmed under encoding-independent
-# topology before treating "topology adds independent power" as a primary claim.
+# M3 dominance is confirmed under encoding-independent topology so the
+# "topology adds independent power" claim does not rest on the Q_6 encoding.
 MODELS = {
     "M1_phys": ModelSpec("M1_phys", use_phys=True, use_topo=False, use_trna=False),
     "M2_topo": ModelSpec("M2_topo", use_phys=False, use_topo=True, use_trna=False),
@@ -1367,12 +1367,12 @@ def run_clade_exclusion_sensitivity(
 ) -> dict:
     """Refit M1-M4 under each of 7 clade-exclusion regimes.
 
-    Reviewer R1.C / R2.M1 (RIGORA Major #1) noted that the topology-avoidance
-    hypergeometric/permutation tests have a clade-exclusion sensitivity
-    analysis (Sengupta et al. 2007), but the conditional logit does not.
-    This routine fits M1-M4 with each major clade dropped and reports
-    ΔAICc(M1->M3) and ΔAICc(M2->M3) for each. If both deltas remain large
-    across all exclusions, the topology coefficient is robust to phylogenetic
+    The topology-avoidance hypergeometric/permutation tests already include
+    a clade-exclusion sensitivity analysis (Sengupta et al. 2007); this
+    routine adds the matching analysis for the conditional logit. It fits
+    M1-M4 with each major clade dropped and reports ΔAICc(M1->M3) and
+    ΔAICc(M2->M3) for each. If both deltas remain large across all
+    exclusions, the topology coefficient is robust to phylogenetic
     non-independence; if the effect concentrates in one or two clades, the
     Section 3.5 / 4.2 framing needs softening.
 
@@ -1449,9 +1449,8 @@ def run_clade_exclusion_sensitivity(
             "phylogenetic-clade exclusion regimes (matching "
             "phylogenetic_sensitivity.json), refit M1-M4 with the "
             "indicated tables removed and report ΔAICc(M1->M3) and "
-            "ΔAICc(M2->M3). Reviewer R1.C / R2.M1: tests whether the "
-            "topology coefficient is robust to phylogenetic "
-            "non-independence."
+            "ΔAICc(M2->M3); tests whether the topology coefficient is "
+            "robust to phylogenetic non-independence."
         ),
         "rows": rows,
         "all_M3_favored_over_M1": (
@@ -1475,6 +1474,125 @@ def run_clade_exclusion_sensitivity(
             }
         )
     return summary
+
+
+def run_restricted_candidate_sensitivity(
+    max_orderings_per_table: int = 720,
+    max_trna_thresholds: tuple[int, ...] = (1, 2, 3),
+) -> dict:
+    """Restricted-candidate-set sensitivity for the conditional logit.
+
+    The full 1,280-move candidate set includes biologically catastrophic
+    moves (reassignments to AUG-Met, simultaneous multi-codon changes,
+    reassignments to stop in essential codons) that natural selection has
+    already removed from the option set. Models with strongly negative
+    coefficients on Δ_topo and Δ_phys may be partly rediscovering that
+    natural reassignments are not biologically catastrophic, inflating
+    apparent ΔAICc.
+
+    This refits M1-M4 (Q_6 and H(3,4) variants) on candidate sets restricted
+    to moves whose target AA is already serviced by a codon at Hamming
+    distance ≤ max_trna from the reassigned codon (i.e., delta_trna ≤
+    max_trna). The observed move is always retained regardless of its
+    delta_trna, so likelihoods remain comparable across filters.
+
+    If M3 dominance survives at ΔAICc ≥ 10 in the ≤2 filter, the
+    explanatory claim is much stronger; if it collapses, the unrestricted
+    ΔAICc magnitudes need to be reinterpreted.
+    """
+    from copy import copy as _copy
+
+    all_cs_full = build_all_choice_sets(max_orderings_per_table)
+
+    def _summarise(all_cs: dict[int, list[list[StepChoiceSet]]]) -> dict:
+        counts: list[int] = []
+        obs_in = 0
+        obs_total = 0
+        for orderings in all_cs.values():
+            for cs in orderings[0]:
+                counts.append(len(cs.candidates))
+                if cs.observed_move is not None:
+                    obs_total += 1
+                    if any(m.is_observed for m in cs.candidates):
+                        obs_in += 1
+        return {
+            "n_choice_sets": len(counts),
+            "candidates_min": min(counts) if counts else 0,
+            "candidates_max": max(counts) if counts else 0,
+            "candidates_mean": float(sum(counts) / max(len(counts), 1)),
+            "observed_in_filtered_set": obs_in,
+            "observed_total": obs_total,
+        }
+
+    def _filter_one(cs: StepChoiceSet, max_trna: int) -> StepChoiceSet:
+        kept = [m for m in cs.candidates if (m.delta_trna <= max_trna) or m.is_observed]
+        new_cs = _copy(cs)
+        new_cs.candidates = kept
+        return new_cs
+
+    def _filter_all(
+        all_cs: dict[int, list[list[StepChoiceSet]]],
+        max_trna: int,
+    ) -> dict[int, list[list[StepChoiceSet]]]:
+        out: dict[int, list[list[StepChoiceSet]]] = {}
+        for tid, orderings in all_cs.items():
+            out[tid] = [
+                [_filter_one(cs, max_trna) for cs in order] for order in orderings
+            ]
+        return out
+
+    full_summary = _summarise(all_cs_full)
+    by_max_trna: dict[str, dict[str, Any]] = {}
+
+    for max_trna in max_trna_thresholds:
+        all_cs_filt = _filter_all(all_cs_full, max_trna)
+        filt_summary = _summarise(all_cs_filt)
+        fits = fit_all_models(all_cs_filt)
+
+        m1 = fits.get("M1_phys")
+        m2 = fits.get("M2_topo")
+        m3 = fits.get("M3_phys_topo")
+        m4 = fits.get("M4_full")
+        m2k = fits.get("M2_topo_k43")
+        m3k = fits.get("M3_phys_topo_k43")
+
+        block: dict[str, Any] = {
+            "max_trna": max_trna,
+            "candidate_summary": filt_summary,
+            "model_aicc": {n: float(f["aicc"]) for n, f in fits.items()},
+            "model_log_likelihood": {
+                n: float(f["log_likelihood"]) for n, f in fits.items()
+            },
+            "delta_aicc": {},
+            "lr_tests": {},
+        }
+        if m1 and m3:
+            block["delta_aicc"]["M1_to_M3"] = m1["aicc"] - m3["aicc"]
+            block["lr_tests"]["M1_vs_M3"] = likelihood_ratio_test(m1, m3)
+        if m2 and m3:
+            block["delta_aicc"]["M2_to_M3"] = m2["aicc"] - m3["aicc"]
+            block["lr_tests"]["M2_vs_M3"] = likelihood_ratio_test(m2, m3)
+        if m3 and m4:
+            block["delta_aicc"]["M3_to_M4"] = m3["aicc"] - m4["aicc"]
+            block["lr_tests"]["M3_vs_M4"] = likelihood_ratio_test(m3, m4)
+        if m1 and m3k:
+            block["delta_aicc"]["M1_to_M3_k43"] = m1["aicc"] - m3k["aicc"]
+            block["lr_tests"]["M1_vs_M3_k43"] = likelihood_ratio_test(m1, m3k)
+        if m2k and m3k:
+            block["delta_aicc"]["M2k43_to_M3k43"] = m2k["aicc"] - m3k["aicc"]
+            block["lr_tests"]["M2_k43_vs_M3_k43"] = likelihood_ratio_test(m2k, m3k)
+
+        by_max_trna[str(max_trna)] = block
+
+    return {
+        "_doc": (
+            "Restricted-candidate-set sensitivity for the conditional logit. "
+            "Candidates are filtered by delta_trna (Hamming distance to nearest "
+            "existing target-AA codon). Observed moves are always retained."
+        ),
+        "full_set_summary": full_summary,
+        "by_max_trna": by_max_trna,
+    }
 
 
 def run_evolutionary_simulation_analysis(
@@ -1516,9 +1634,9 @@ def run_evolutionary_simulation_analysis(
             fits["M3_phys_topo"], fits["M4_full"]
         )
     # --- K_4^3 (encoding-independent) topology comparisons ---
-    # Per glm-5.1 review: M3 dominance must be confirmed under
-    # encoding-independent topology before treating "topology adds
-    # independent power" as a primary claim.
+    # M3 dominance is confirmed under encoding-independent topology so
+    # the "topology adds independent power" claim does not rest on the
+    # Q_6 encoding choice.
     if "M1_phys" in fits and "M3_phys_topo_k43" in fits:
         comparisons["M1_vs_M3_k43"] = likelihood_ratio_test(
             fits["M1_phys"], fits["M3_phys_topo_k43"]

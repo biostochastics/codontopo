@@ -248,12 +248,22 @@ df_ta <- data.frame(
                tq6$rate_observed  * 100, tq6$rate_possible  * 100)
 )
 
-p3c <- ggplot(df_ta, aes(x = category, y = rate, fill = category)) +
-  geom_col(width = 0.6, color = "grey30", linewidth = 0.2) +
+df_ta$category_label <- factor(
+  ifelse(df_ta$category == "Observed",
+         sprintf("Observed\n(n=%d)", tk43$observed_total),
+         sprintf("Candidate\n(N=%s)", format(tk43$possible_total, big.mark = ","))),
+  levels = c(
+    sprintf("Observed\n(n=%d)", tk43$observed_total),
+    sprintf("Candidate\n(N=%s)", format(tk43$possible_total, big.mark = ","))
+  )
+)
+
+p3c <- ggplot(df_ta, aes(x = category_label, y = rate, fill = category)) +
+  geom_col(width = 0.55, color = "grey30", linewidth = 0.2) +
   geom_text(aes(label = paste0(round(rate, 1), "%")),
             vjust = -0.4, size = 2.8, fontface = "bold") +
   scale_fill_manual(values = c("Observed" = PAL_BLUE, "Candidate" = PAL_GREY_LT)) +
-  scale_y_continuous(limits = c(0, 92), expand = expansion(mult = c(0, 0.10))) +
+  scale_y_continuous(limits = c(0, 95), expand = expansion(mult = c(0, 0.10))) +
   facet_wrap(~ graph, scales = "free_x") +
   labs(x = NULL, y = "% topology-breaking moves",
        subtitle = sprintf("H(3,4) RR=%.2f, p<1e-4   Q_6 %.1f-fold depl.",
@@ -266,8 +276,9 @@ p3c <- ggplot(df_ta, aes(x = category, y = rate, fill = category)) +
         strip.text = element_text(size = 7.0,
                                    margin = margin(t = 2, b = 2)),
         strip.background = element_rect(fill = "grey95", color = NA),
-        panel.spacing = unit(0.8, "lines"),
-        axis.text.x = element_text(size = 7))
+        panel.spacing = unit(1.0, "lines"),
+        axis.text.x = element_text(size = 6.5, lineheight = 0.85,
+                                    margin = margin(t = 1)))
 
 # Panel D: tRNA enrichment
 trna <- read.csv(file.path(table_dir, "T7_trna_per_pairing.csv"))

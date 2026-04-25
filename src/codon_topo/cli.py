@@ -13,6 +13,8 @@ class _NumpyEncoder(json.JSONEncoder):
     """JSON encoder that converts numpy types to native Python types."""
 
     def default(self, o):
+        if isinstance(o, np.bool_):
+            return bool(o)
         if isinstance(o, np.integer):
             return int(o)
         if isinstance(o, np.floating):
@@ -527,6 +529,65 @@ def condlogit(max_orderings: int, seed: int, as_json: bool) -> None:
         )
 
 
+@main.command("condlogit-restricted")
+@click.option(
+    "--max-orderings", default=720, help="Max orderings per table for order-averaging."
+)
+@click.option(
+    "--max-trna",
+    "max_trna_list",
+    multiple=True,
+    type=int,
+    default=(1, 2, 3),
+    help="Restrict candidates to delta_trna <= this value (repeatable).",
+)
+@click.option("--json", "as_json", is_flag=True, help="Output as JSON.")
+def condlogit_restricted(
+    max_orderings: int,
+    max_trna_list: tuple[int, ...],
+    as_json: bool,
+) -> None:
+    """Restricted-candidate sensitivity for the conditional logit.
+
+    Refits M1-M4 on candidate sets filtered to moves whose target AA is
+    already serviced by a codon at Hamming distance <= max-trna from the
+    reassigned codon. The observed move is always retained.
+    """
+    from codon_topo.analysis.evolutionary_simulation import (
+        run_restricted_candidate_sensitivity,
+    )
+
+    result = run_restricted_candidate_sensitivity(
+        max_orderings_per_table=max_orderings,
+        max_trna_thresholds=tuple(max_trna_list),
+    )
+
+    if as_json:
+        _json_out(result)
+        return
+
+    click.echo("Restricted-Candidate Sensitivity (conditional logit)")
+    click.echo(
+        f"  Full set: ~{result['full_set_summary']['candidates_mean']:.0f} "
+        f"candidates per choice set ({result['full_set_summary']['n_choice_sets']} sets)"
+    )
+    for k, block in result["by_max_trna"].items():
+        cs = block["candidate_summary"]
+        d = block["delta_aicc"]
+        click.echo(
+            f"  delta_trna<={k}: ~{cs['candidates_mean']:.0f} candidates, "
+            f"obs retained {cs['observed_in_filtered_set']}/{cs['observed_total']}"
+        )
+        if "M1_to_M3" in d:
+            click.echo(f"    ΔAICc(M1→M3 Q_6)    = {d['M1_to_M3']:.1f}")
+        if "M2_to_M3" in d:
+            click.echo(f"    ΔAICc(M2→M3 Q_6)    = {d['M2_to_M3']:.1f}")
+        if "M3_to_M4" in d:
+            click.echo(f"    ΔAICc(M3→M4)        = {d['M3_to_M4']:.1f}")
+        if "M1_to_M3_k43" in d:
+            click.echo(f"    ΔAICc(M1→M3 H(3,4)) = {d['M1_to_M3_k43']:.1f}")
+
+
 @main.command("topology-avoidance-k43")
 @click.option("--seed", default=DEFAULT_SEED, help="Random seed.")
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON.")
@@ -776,15 +837,23 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     from codon_topo.analysis.evolutionary_simulation import (
         run_clade_exclusion_sensitivity,
         run_evolutionary_simulation_analysis,
+        run_restricted_candidate_sensitivity,
     )
 
     evosim_result = run_evolutionary_simulation_analysis(seed=seed)
     _write_json(out / "evolutionary_simulation.json", evosim_result)
 
-    # 11b. Conditional-logit clade-exclusion sensitivity (Reviewer R1.C / R2.M1)
+    # 11b. Conditional-logit clade-exclusion sensitivity
     _step("Conditional logit clade-exclusion sensitivity (7 regimes)...")
     condlogit_clade = run_clade_exclusion_sensitivity()
     _write_json(out / "condlogit_clade_sensitivity.json", condlogit_clade)
+
+    # 11c. Restricted-candidate-set sensitivity
+    _step("Conditional logit restricted-candidate sensitivity (delta_trna<=1,2,3)...")
+    condlogit_restricted_result = run_restricted_candidate_sensitivity()
+    _write_json(
+        out / "condlogit_restricted_candidate.json", condlogit_restricted_result
+    )
 
     # 12. Depth calibration
     _step("Depth calibration...")
@@ -938,6 +1007,8 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "model_fits": evosim_result["model_fits"],
             "lr_tests": lr_tests,
             "encoding_robustness": evosim_result.get("encoding_robustness", {}),
+            # Restricted-candidate-set sensitivity
+            "restricted_candidate": condlogit_restricted_result,
         },
         # Section 3.6: tRNA enrichment
         "trna": {

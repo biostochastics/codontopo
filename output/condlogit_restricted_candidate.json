@@ -1,0 +1,60 @@
+{
+  "_doc": "Restricted-candidate-set sensitivity for the conditional logit. Candidates are filtered by delta_trna (Hamming distance to nearest existing target-AA codon). Observed moves are always retained.",
+  "_source_run": "scripts/restricted_candidate_sensitivity.py (initial run 2026-04-25, seed 135325)",
+  "_note": "Initial run reported ΔAICc + counts; this JSON was reconstructed from the run's stdout because the original write failed on a numpy bool. The serialization bug is fixed in scripts/restricted_candidate_sensitivity.py.",
+  "full_set_summary": {
+    "n_choice_sets": 66,
+    "candidates_min": 1280,
+    "candidates_max": 1280,
+    "candidates_mean": 1280.0,
+    "observed_in_filtered_set": 66,
+    "observed_total": 66
+  },
+  "by_max_trna": {
+    "1": {
+      "max_trna": 1,
+      "candidate_summary": {
+        "n_choice_sets": 66,
+        "candidates_mean": 275.0,
+        "observed_in_filtered_set": 66,
+        "observed_total": 66
+      },
+      "delta_aicc": {
+        "M1_to_M3": 13.8,
+        "M2_to_M3": 73.3,
+        "M3_to_M4": 95.3,
+        "M1_to_M3_k43": 15.4
+      }
+    },
+    "2": {
+      "max_trna": 2,
+      "candidate_summary": {
+        "n_choice_sets": 66,
+        "candidates_mean": 727.0,
+        "observed_in_filtered_set": 66,
+        "observed_total": 66
+      },
+      "delta_aicc": {
+        "M1_to_M3": 59.6,
+        "M2_to_M3": 77.3,
+        "M3_to_M4": 17.3,
+        "M1_to_M3_k43": 40.8
+      }
+    },
+    "3": {
+      "max_trna": 3,
+      "candidate_summary": {
+        "n_choice_sets": 66,
+        "candidates_mean": 1088.0,
+        "observed_in_filtered_set": 66,
+        "observed_total": 66
+      },
+      "delta_aicc": {
+        "M1_to_M3": 94.6,
+        "M2_to_M3": 85.2,
+        "M3_to_M4": -1.6,
+        "M1_to_M3_k43": 77.2
+      }
+    }
+  }
+}

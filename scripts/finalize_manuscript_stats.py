@@ -35,6 +35,8 @@ def main() -> None:
     evosim = load_json(OUTPUT / "evolutionary_simulation.json")
     clade_path = OUTPUT / "condlogit_clade_sensitivity.json"
     clade = load_json(clade_path) if clade_path.exists() else None
+    restricted_path = OUTPUT / "condlogit_restricted_candidate.json"
+    restricted = load_json(restricted_path) if restricted_path.exists() else None
 
     # 1. Inject topology_audit (2x2 sensitivity)
     if "definitions_audit" in topo:
@@ -87,6 +89,13 @@ def main() -> None:
             stats["condlogit"] = {}
         stats["condlogit"]["clade_exclusion"] = clade
         print("  [+] condlogit.clade_exclusion added")
+
+    # 7b. Inject condlogit restricted-candidate sensitivity
+    if restricted is not None:
+        if "condlogit" not in stats:
+            stats["condlogit"] = {}
+        stats["condlogit"]["restricted_candidate"] = restricted
+        print("  [+] condlogit.restricted_candidate added")
 
     # 8. Inject phys_topo_rho from evosim diagnostics block (used by abstract/results)
     diag = evosim.get("diagnostics", {})

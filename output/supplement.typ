@@ -210,6 +210,77 @@ The conditional-logit framework assumes Independence of Irrelevant Alternatives 
 
 We adopt IIA here because the goal is _explanatory_ rather than _predictive_: the test asks whether topology adds explanatory value beyond physicochemical cost (LR test, ΔAICc) within the same candidate set, not whether the model accurately predicts which specific reassignment will occur next. The relative-probability ratios that IIA constrains are not the quantities we report; the LR statistics depend only on whether the observed event occupies a high-likelihood position within the candidate set, which is robust to substitution patterns among non-observed candidates. A mixed logit relaxing IIA would be more appropriate if the goal were prediction; future work could pursue this once a larger event set permits identification of mixed-logit covariance parameters. The posterior-predictive simulation reported in the main text (§3.5; observed topology-breaking rate 0.076 vs simulated mean 0.077; $p = 0.60$) provides a calibration check that the chosen explanatory model reproduces the marginal feature distribution rather than just maximizing in-sample AICc.
 
+== Candidate-set composition: restricted-candidate sensitivity <sec:s-iia-restricted>
+
+A separate concern about the candidate set is that the universe of $approx $1,280 single-codon moves admits biologically catastrophic alternatives---reassigning AUG-Met, simultaneous multi-codon changes implicit in the single-step framing, reassignments to stop in essential codons---that natural selection has already removed from the option set. Models with strongly negative coefficients on $Delta_"topo"$ and $Delta_"phys"$ may therefore be partly rediscovering that natural reassignments are not biologically catastrophic, inflating ΔAICc magnitudes beyond what the explanatory thesis (topology adds value beyond physicochemistry) strictly requires. The qualitative claim is unaffected by this concern, but the magnitudes need calibration.
+
+We address this by refitting M1--M4 (and the $H(3,4)$ verification variants) on a *restricted candidate set*: at each event-step we retain only candidates whose target amino acid is already serviced by a codon at Hamming distance $lt.eq d$ from the reassigned codon (i.e., $Delta_"tRNA" lt.eq d$), with $d in {1, 2, 3}$. The observed move is always retained regardless of its $Delta_"tRNA"$ so the likelihood remains well-defined. The Hamming-$lt.eq 2$ filter is the primary biological-plausibility criterion (target AA already accessible via at most two nucleotide-position changes); the $lt.eq 1$ filter is the most stringent biological-plausibility cut, and $lt.eq 3$ is included as a looser bound to bracket the choice.
+
+#let cl_restr = cl.at("restricted_candidate", default: (:))
+#let _restr_block(d) = cl_restr.at("by_max_trna", default: (:)).at(d, default: (:))
+#let _restr_field(d, key) = {
+  let b = _restr_block(d)
+  let da = b.at("delta_aicc", default: (:))
+  da.at(key, default: 0)
+}
+#let _restr_csize(d) = {
+  let b = _restr_block(d)
+  let cs = b.at("candidate_summary", default: (:))
+  cs.at("candidates_mean", default: 0)
+}
+#let _restr_obs(d) = {
+  let b = _restr_block(d)
+  let cs = b.at("candidate_summary", default: (:))
+  (cs.at("observed_in_filtered_set", default: 0), cs.at("observed_total", default: 0))
+}
+
+#if cl_restr.len() > 0 [
+  #figure(
+    table(
+      columns: (auto, auto, auto, auto, auto, auto, auto),
+      align: (center, right, right, right, right, right, right),
+      inset: 6pt,
+      stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+      table.header(
+        [*Filter $Delta_"tRNA" lt.eq d$*],
+        [*Mean cand. set*],
+        [*Obs. retained*],
+        [*ΔAICc(M1→M3)*],
+        [*ΔAICc(M2→M3)*],
+        [*ΔAICc(M3→M4)*],
+        [*ΔAICc(M1→M3#sub[H(3,4)])*],
+      ),
+      [Full ($d = 7$)],
+        [#str(calc.round(cl_restr.at("full_set_summary", default: (:)).at("candidates_mean", default: 0), digits: 0))],
+        [---],
+        [#str(calc.round(cl.model_fits.M1_phys.aicc - cl.model_fits.M3_phys_topo.aicc, digits: 0))],
+        [#str(calc.round(cl.model_fits.M2_topo.aicc - cl.model_fits.M3_phys_topo.aicc, digits: 0))],
+        [#str(calc.round(cl.lr_tests.at("M3_vs_M4", default: (lr_statistic: 0)).lr_statistic, digits: 1))],
+        [#str(calc.round(cl.at("encoding_robustness", default: (:)).at("delta_aicc_M1_to_M3_k43", default: 0), digits: 0))],
+      ..("3", "2", "1").map(d => {
+        let (kept, total) = _restr_obs(d)
+        (
+          [$d = #d$],
+          [#str(calc.round(_restr_csize(d), digits: 0))],
+          [#kept / #total],
+          [#str(calc.round(_restr_field(d, "M1_to_M3"), digits: 0))],
+          [#str(calc.round(_restr_field(d, "M2_to_M3"), digits: 0))],
+          [#str(calc.round(_restr_field(d, "M3_to_M4"), digits: 1))],
+          [#str(calc.round(_restr_field(d, "M1_to_M3_k43"), digits: 0))],
+        )
+      }).flatten(),
+    ),
+    caption: [
+      Restricted-candidate sensitivity for the conditional-logit comparison. Each row refits M1, M2, M3, M4 (and the $H(3,4)$ topology variants) on a candidate set filtered to $Delta_"tRNA" lt.eq d$, where $Delta_"tRNA"$ is the Hamming distance from the reassigned codon to the nearest existing codon for the target amino acid. Observed moves are always retained so likelihoods remain comparable. The "Full" row reproduces the unrestricted main-text numbers. ΔAICc gaps shrink as the candidate set is restricted---this is expected, since removing biologically implausible candidates removes contrasts the model otherwise exploits---and the magnitude of the ΔAICc(M1$arrow.r$M3) gap is therefore best read at the primary $d = 2$ threshold (~727 candidates per choice set), where it is ~60. Under the most stringent $d = 1$ filter (~275 candidates), ΔAICc(M1$arrow.r$M3) shrinks to ~14 but stays above the conventional 10-threshold; ΔAICc(M2$arrow.r$M3) stays large at all $d$. The qualitative claim "topology adds explanatory value beyond physicochemistry" is therefore robust to candidate-set composition. The ΔAICc(M3$arrow.r$M4) column under the restricted filters is *not* interpretable, because the filter is defined on $Delta_"tRNA"$ so the M4 tRNA-feature distribution shifts mechanically with the filter; the unrestricted-set ΔAICc(M3$arrow.r$M4) of ~2 is the calibrated reading and shows the heuristic tRNA proxy is uninformative.
+    ],
+  ) <tbl:s-condlogit-restricted>
+] else [
+  // Fallback: pipeline did not populate the restricted_candidate block.
+  Restricted-candidate sensitivity table will be populated by `codon-topo all` (block `cl.restricted_candidate` in `manuscript_stats.json`).
+]
+
+The substantive reading: under the primary biological-plausibility cut ($d = 2$, target amino acid accessible at Hamming distance $lt.eq 2$), the unrestricted ΔAICc(M1$arrow.r$M3) of $approx 110$ contracts to $approx 60$, but stays well above the conventional ΔAICc>10 reference; ΔAICc(M2$arrow.r$M3) stays at $approx 77$. Under the most stringent cut ($d = 1$, target AA accessible at a single nucleotide change), ΔAICc(M1$arrow.r$M3) shrinks further to $approx 14$, just above the 10-threshold, while ΔAICc(M2$arrow.r$M3) stays at $approx 73$. The pattern is the expected inflation diagnosis: removing biologically catastrophic candidates removes contrasts the topology coefficient was exploiting, so the unrestricted-set ΔAICc(M1$arrow.r$M3) of $approx 110$ is partly inflated. The qualitative explanatory thesis (topology adds value beyond physicochemistry) is robust at every threshold tested; the unrestricted-set magnitudes are best read as upper bounds, with the $d = 2$ filter giving a more biologically-calibrated effect size. The ΔAICc(M3$arrow.r$M4) column under the restricted filters is mechanically tied to the filter (the filter uses $Delta_"tRNA"$), so the unrestricted-set ΔAICc(M3$arrow.r$M4) of $approx 2$ is the calibrated reading.
+
 
 // ============================================================
 = Conditional logit: clade-exclusion sensitivity <sec:s-condlogit-clade>
@@ -359,7 +430,7 @@ The complete database is released as `output/tables/T10_reassignment_db.csv` in 
 // ============================================================
 = Synthetic-biology feasibility score (visualization-only) <sec:s-feasibility>
 
-For Figure 4A of the main text we use a heuristic feasibility score $S(m) in [0, 1]$ for each candidate single-codon reassignment $m$ from the standard code. The score is *not* used in any inferential test in the manuscript; it is a visualization aid for delineating high- versus low-feasibility regions of the 1,280-move candidate landscape. We report it in detail here for completeness.
+For Figure 5A of the main text we use a heuristic feasibility score $S(m) in [0, 1]$ for each candidate single-codon reassignment $m$ from the standard code. The score is *not* used in any inferential test in the manuscript; it is a visualization aid for delineating high- versus low-feasibility regions of the 1,280-move candidate landscape. We report it in detail here for completeness.
 
 The score combines three structural factors:
 
@@ -373,7 +444,7 @@ The composite score is the equal-weighted average:
 
 $ S(m) = (1/3) I_F(m) + (1/3) f(Delta_"phys"(m)) + (1/3) g(Delta_"acc"(m)). $
 
-Filtration-preserving variants ($I_F = 1$) score $gt.eq 0.8$ under this composite; filtration-breaking variants ($I_F = 0$) score $lt.eq 0.75$. The visual gap between the two groups in Figure 4A is therefore mostly driven by $I_F$. Exact implementation: `src/codon_topo/analysis/synbio_feasibility.py` in the `codontopo` repository.
+Filtration-preserving variants ($I_F = 1$) score $gt.eq 0.8$ under this composite; filtration-breaking variants ($I_F = 0$) score $lt.eq 0.75$. The visual gap between the two groups in Figure 5A is therefore mostly driven by $I_F$. Exact implementation: `src/codon_topo/analysis/synbio_feasibility.py` in the `codontopo` repository.
 
 
 // ============================================================
@@ -497,7 +568,7 @@ For tables with $k > 1$ reassignment events, the temporal ordering is unknown. W
 // ============================================================
 = Software and reproducibility <sec:s-software>
 
-This section provides the metadata a reviewer or replication attempt needs to reproduce every number in the manuscript and supplement bit-for-bit from the public repository. Every figure, table, and inline statistic is rendered by the Typst sources `manuscript.typ` and `supplement.typ` (also in the repository) from the JSON outputs of a single `codon-topo all` invocation, so the manuscript and supplement cannot drift from each other within a single pipeline run.
+This section provides the metadata needed to reproduce every number in the manuscript and supplement bit-for-bit from the public repository. Every figure, table, and inline statistic is rendered by the Typst sources `manuscript.typ` and `supplement.typ` (also in the repository) from the JSON outputs of a single `codon-topo all` invocation, so the manuscript and supplement cannot drift from each other within a single pipeline run.
 
 All analyses were performed using the `codon-topo` Python package (version #stats._version, commit #raw(stats.at("_commit", default: "see repo HEAD"))). The code is publicly released at https://github.com/biostochastics/codontopo. Dependencies and runtime requirements:
 

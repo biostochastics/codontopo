@@ -1740,14 +1740,14 @@ def aa_label_permutation_test(
 def topology_breaking_subset_test() -> dict:
     """Restrict tRNA enrichment to topology-breaking reassignment events only.
 
-    Reviewer R1.E / R1.8 noted that the all-pairings (n=24) Stouffer result
-    blends several event classes — topology-breaking disconnections (yeast
-    mito Thr, Scenedesmus Leu, Pachysolen Ala, Candida Ser), topology-
-    preserving stop-to-sense reassignments (UAR-Gln in ciliates, UGA-Cys
-    in Euplotes, UGA-Trp in Blepharisma), and ambiguous stop/sense systems.
-    The headline framing ("variant-code lineages with topology-breaking
-    reassignments show elevated tRNA gene counts") is best supported by
-    restricting analysis to the topology-breaking subset.
+    The all-pairings (n=24) Stouffer result blends several event classes —
+    topology-breaking disconnections (yeast mito Thr, Scenedesmus Leu,
+    Pachysolen Ala, Candida Ser), topology-preserving stop-to-sense
+    reassignments (UAR-Gln in ciliates, UGA-Cys in Euplotes, UGA-Trp in
+    Blepharisma), and ambiguous stop/sense systems. The headline framing
+    ("variant-code lineages with topology-breaking reassignments show
+    elevated tRNA gene counts") is best supported by restricting analysis
+    to the topology-breaking subset.
 
     The 4 topology-breaking pairings:
       - scerevisiae_mito vs ylipolytica_mito for Thr (table 3, CUN-Thr)
@@ -1815,9 +1815,9 @@ def topology_breaking_subset_test() -> dict:
             "Restricts the 24-pairing all-pairings analysis to the 4 "
             "pairings whose underlying variant-code reassignment creates "
             "a new amino-acid disconnection in GF(2)^6 (yeast mito Thr, "
-            "Scenedesmus mito Leu, Pachysolen Ala, Candida Ser). "
-            "Reviewer R1.E / R1.8: more direct test of the "
-            "compensation-via-tRNA-duplication hypothesis."
+            "Scenedesmus mito Leu, Pachysolen Ala, Candida Ser); "
+            "more direct test of the compensation-via-tRNA-duplication "
+            "hypothesis."
         ),
         "n_pairings": len(per_pairing),
         "per_pairing": per_pairing,
