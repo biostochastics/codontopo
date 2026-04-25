@@ -913,7 +913,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "hypergeom_p": topo_q6["hypergeom_p"],
             "permutation_p": topo_q6["permutation_p"],
         },
-        # Section 3.4: Topology avoidance (K4^3)
+        # Section 3.4: Topology avoidance (K4^3, encoding-independent)
         "topology_avoidance_k43": {
             "observed_breaks": topo_k43["observed_breaks"],
             "observed_total": topo_k43["observed_total"],
@@ -927,6 +927,9 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "hypergeom_p": topo_k43["hypergeom_p"],
             "permutation_p": topo_k43["permutation_p"],
         },
+        # Section 3.4 supplementary: 2x2 audit + 24-encoding sweep + denominator sensitivity
+        "topology_audit": topo_audit,
+        "topology_q6_encoding_sweep": topo_enc_sweep,
         # Section 3.5: Conditional logit
         "condlogit": {
             "n_tables": evosim_result["n_tables"],

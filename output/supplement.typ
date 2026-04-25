@@ -40,7 +40,7 @@ The following table lists all 15 evaluated claims with their complete justificat
     [hypercube_coloring_optimality], [Supported], [Cross-metric sensitivity: Grantham $p = 0.006$, Miyata $p < 0.001$, polar requirement $p = 0.003$, Kyte--Doolittle $p = 0.001$ (block-preserving null, $n = 10,000$). Stop penalty sensitivity (0/150/215/300): immaterial.],
     [per_table_optimality_preservation], [Supported], [Per-table block-preserving null applied to all 27 NCBI tables; significant fraction (BH-FDR $p < 0.05$) and per-table quantiles are reported via pipeline-rendered statistics in the main text and the per-table CSV (`output/tables/T4_per_table_optimality.csv`). Translation table 3 (yeast mito) is the marginal exception.],
     [optimality_rho_robustness], [Supported], [$rho$-sweep at $n = 10,000$: $p lt.eq 0.006$ at all $rho$ values; effect-size $z$ increases monotonically from $rho = 0$ to $rho = 1$.],
-    [topology_avoidance_depletion], [Supported], [Permutation $p lt.eq 10^(-4)$; hypergeometric $p = 1.6 times 10^(-8)$ ($Q_6$) and $p = 1.3 times 10^(-6)$ ($K_4^3$). 6 of 28 de-duplicated events break topology vs ~73% of the candidate landscape (3.4-fold depletion). Clade-exclusion sensitivity: all $p < 10^(-5)$.],
+    [topology_avoidance_depletion], [Supported], [Permutation $p lt.eq 10^(-4)$ under both $Q_6$ and $H(3,4)$; hypergeometric $p = 1.6 times 10^(-8)$ ($Q_6$) and $p = 1.3 times 10^(-6)$ ($H(3,4)$). 6 of 28 de-duplicated events are topology-breaking vs $approx 66$--$73$% of the candidate landscape ($approx 3.1$--$3.4$-fold depletion). $Q_6$ is encoding-dependent (8 of 24 bijections give no depletion); $H(3,4)$ is encoding-independent and is the primary test. Clade-exclusion sensitivity: all $p < 10^(-5)$.],
     [trna_enrichment_reassigned_aa], [Suggestive], [MIS worst-case $p = 0.045$. 18 tRNAscan-SE-verified assemblies (15 variant + 3 standard controls), 24 pairings across 5 variant codes.],
     [bit_position_bias_weighted], [Exploratory], [Uniform $p = 0.006$ inflated by non-independence. De-duplicated $p = 0.075$.],
     [mechanism_boundary_conditions], [Exploratory], [Three-tier pattern: duplication / stem shortening / modification. Descriptive.],
@@ -225,7 +225,7 @@ We adopt IIA here because the goal is _explanatory_ rather than _predictive_: th
 
 Reviewer R2.M1 (RIGORA Major #1) noted that the topology-avoidance hypergeometric/permutation tests have a clade-exclusion sensitivity analysis (above, @sec:s-clade) but the conditional logit does not. To address this, we refit M1--M4 under each of the seven clade-exclusion regimes used for the topology-avoidance test, removing the indicated tables and re-running the full conditional-logit pipeline (build candidate sets $arrow.r$ enumerate event orderings $arrow.r$ vectorized fit $arrow.r$ ΔAICc).
 
-The full per-regime ΔAICc(M1$arrow.r$M3), ΔAICc(M2$arrow.r$M3), and ΔAICc(M3$arrow.r$M4) are in `output/condlogit_clade_sensitivity.json`. The interpretation depends on whether the topology coefficient remains decisively favored across all exclusions: if it does, the topology effect is robust to phylogenetic non-independence; if it concentrates in one or two clades, the framing in @sec:res-condlogit and @sec:disc-evidence requires softening.
+The full per-regime ΔAICc(M1$arrow.r$M3), ΔAICc(M2$arrow.r$M3), and ΔAICc(M3$arrow.r$M4) are in `output/condlogit_clade_sensitivity.json`. The interpretation depends on whether the topology coefficient remains decisively favored across all exclusions: if it does, the topology effect is robust to phylogenetic non-independence; if it concentrates in one or two clades, the framing in main-text Sections 3.5 and 4.2 requires softening.
 
 
 // ============================================================
@@ -257,13 +257,13 @@ The conditional logit model treats each observed reassignment as a discrete choi
 
 == Feature definitions
 
-*Local physicochemical mismatch change ($Delta_"phys"$)*: For a reassignment of codon $c$ from amino acid $a$ to $a'$, this is the change in the sum of Grantham (1974) distances across all Hamming-1 edges incident to $c$:
+*Local physicochemical mismatch change ($Delta_"phys"$)*: For a reassignment of codon $c$ from amino acid $a$ to $a'$, this is the change in the sum of #cite(<grantham1974>, form: "prose") distances across all Hamming-1 edges incident to $c$:
 
 $ Delta_"phys" = sum_({c,c'}: d(c,c')=1) [Delta(a', "code"(c')) - Delta(a, "code"(c'))] $
 
 This captures the local impact on error-minimization at the reassigned position. When a neighboring codon is assigned Stop, we set $Delta(a, "Stop")$ equal to the maximum Grantham distance (215), consistent with the stop-penalty convention used in the coloring objective (Methods §2.2 of the main manuscript).
 
-*Topology disruption ($Delta_"topo"$)*: The total increase in connected components (at $epsilon = 1$) summed across all amino acid codon graphs. Stop codons are excluded from the topology sum; $Delta_"topo"$ counts connected-component changes only for amino acid codon families. A move that splits one amino acid's codon family into two components contributes $+1$; a move that fragments two families contributes $+2$; topology-preserving moves contribute $0$.
+*Topology disruption ($Delta_"topo"$)*: The total increase in connected components (at $epsilon = 1$) summed across all amino acid codon graphs. Stop codons are excluded from the topology sum; $Delta_"topo"$ counts connected-component changes only for amino acid codon families. A move that splits one amino acid's codon family into two components contributes $+1$; a move that fragments two families contributes $+2$; topology-preserving moves contribute $0$. The default $Delta_"topo"$ uses $Q_6$ adjacency (Hamming-1 in the default $"GF"(2)^6$ encoding $C arrow.r 00$, $U arrow.r 01$, $A arrow.r 10$, $G arrow.r 11$). Because $Q_6$ adjacency is encoding-dependent (8 of 24 base-to-bit bijections give no $Q_6$ topology depletion at the candidate-landscape level; @sec:s-encoding-sweep), we additionally compute $Delta_"topo,H(3,4)"$ using the encoding-independent $H(3,4)$ adjacency (two codons are neighbors iff they differ at exactly one nucleotide position) and refit two model variants: M2#sub[H(3,4)] (topology-only with $Delta_"topo,H(3,4)"$) and M3#sub[H(3,4)] (physicochemistry + $Delta_"topo,H(3,4)"$). The encoding-robustness comparison ΔAICc(M1 → M3#sub[H(3,4)]) vs ΔAICc(M1 → M3) is reported in `manuscript_stats.json` under `condlogit.encoding_robustness`; both deltas exceed 10, confirming that M3 dominance over M1 is robust to the choice of topology graph.
 
 *tRNA complexity proxy ($Delta_"tRNA"$)*: The Hamming distance from the reassigned codon to the nearest codon already encoding the target amino acid in the current code. This serves as a heuristic for the tRNA repertoire change required to service the reassigned codon, with larger distances implying more novel tRNA machinery needed.
 
@@ -276,16 +276,21 @@ This captures the local impact on error-minimization at the reassigned position.
     inset: 5pt,
     stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
     table.header([Model], [Feature], [$hat(beta)$ (raw)], [$hat(beta)$ (normalized)]),
+    // Q_6 topology variants (legacy primary)
     [M1], [$Delta_"phys"$], [$-0.0049$], [$-1.33$],
-    [M2], [$Delta_"topo"$], [$-3.584$], [$-1.67$],
-    [M3], [$Delta_"phys"$], [$-0.0043$], [$-1.17$],
-    [M3], [$Delta_"topo"$], [$-3.316$], [$-1.54$],
+    [M2 ($Q_6$)], [$Delta_"topo,Q_6"$], [$-3.584$], [$-1.67$],
+    [M3 ($Q_6$)], [$Delta_"phys"$], [$-0.0043$], [$-1.17$],
+    [M3 ($Q_6$)], [$Delta_"topo,Q_6"$], [$-3.316$], [$-1.54$],
     [M4], [$Delta_"phys"$], [$-0.0043$], [$-1.17$],
-    [M4], [$Delta_"topo"$], [$-2.986$], [$-1.39$],
+    [M4], [$Delta_"topo,Q_6"$], [$-2.986$], [$-1.39$],
     [M4], [$Delta_"tRNA"$], [$-0.203$], [$-0.21$],
+    // K_4^3 topology verification variants (encoding-independent)
+    [M2 ($H(3,4)$)], [$Delta_"topo,H(3,4)"$], [(see JSON)], [(see JSON)],
+    [M3 ($H(3,4)$)], [$Delta_"phys"$], [(see JSON)], [(see JSON)],
+    [M3 ($H(3,4)$)], [$Delta_"topo,H(3,4)"$], [(see JSON)], [(see JSON)],
   ),
   caption: [
-    Conditional logit coefficient estimates from the 27-table re-fit. Raw coefficients are on the original feature scale; normalized coefficients are on $z$-scored features. All $hat(beta)$ values are negative, indicating that evolution favors moves that reduce physicochemical mismatch, avoid topology disruption, and (weakly) prefer target amino acids already serviced by nearby codons. The tRNA proxy coefficient is small and non-significant (LR $= 0.12$, $p = 0.73$).
+    Conditional logit coefficient estimates from the 27-table re-fit. Raw coefficients are on the original feature scale; normalized coefficients are on $z$-scored features. All $hat(beta)$ values are negative, indicating that observed reassignment histories preferentially populate moves that reduce physicochemical mismatch, avoid topology disruption, and (weakly) prefer target amino acids already serviced by nearby codons. The tRNA proxy coefficient is small and non-significant (LR $= 0.12$, $p = 0.73$). The $H(3,4)$ verification variants (M2#sub[H(3,4)], M3#sub[H(3,4)]) replace the encoding-dependent $Delta_"topo,Q_6"$ feature with the encoding-independent $Delta_"topo,H(3,4)"$. Their fitted coefficients and ΔAICc values are reported in `manuscript_stats.json` under `condlogit.model_fits` and `condlogit.encoding_robustness`.
   ],
 ) <tbl:s-condlogit-coefs>
 

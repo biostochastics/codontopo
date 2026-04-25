@@ -257,9 +257,7 @@ def main():
         default="output/manuscript_stats.json",
         help="Output JSON path",
     )
-    parser.add_argument(
-        "--seed", type=int, default=135325, help="Random seed"
-    )
+    parser.add_argument("--seed", type=int, default=135325, help="Random seed")
     parser.add_argument(
         "--n-metric-samples",
         type=int,
