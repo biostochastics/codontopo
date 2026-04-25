@@ -1,0 +1,2541 @@
+{
+  "tables_used": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "n_tables": 25,
+  "total_events": 66,
+  "model_fits": {
+    "M1_phys": {
+      "model": "M1_phys",
+      "log_likelihood": -413.799155757563,
+      "n_params": 1,
+      "aic": 829.598311515126,
+      "aicc": 829.660811515126,
+      "converged": true,
+      "weights_raw": [
+        -0.004888022399449203
+      ],
+      "weight_labels": [
+        "delta_phys"
+      ]
+    },
+    "M2_topo": {
+      "model": "M2_topo",
+      "log_likelihood": -404.20271603535576,
+      "n_params": 1,
+      "aic": 810.4054320707115,
+      "aicc": 810.4679320707115,
+      "converged": true,
+      "weights_raw": [
+        -3.5837637044599058
+      ],
+      "weight_labels": [
+        "delta_topo"
+      ]
+    },
+    "M3_phys_topo": {
+      "model": "M3_phys_topo",
+      "log_likelihood": -358.61126934870674,
+      "n_params": 2,
+      "aic": 721.2225386974135,
+      "aicc": 721.4130148878896,
+      "converged": true,
+      "weights_raw": [
+        -0.004317389210753695,
+        -3.315800708651331
+      ],
+      "weight_labels": [
+        "delta_phys",
+        "delta_topo"
+      ]
+    },
+    "M4_full": {
+      "model": "M4_full",
+      "log_likelihood": -358.5514215594464,
+      "n_params": 3,
+      "aic": 723.1028431188928,
+      "aicc": 723.4899398930863,
+      "converged": true,
+      "weights_raw": [
+        -0.00430380366776267,
+        -2.985532394290398,
+        -0.2033225825326316
+      ],
+      "weight_labels": [
+        "delta_phys",
+        "delta_topo",
+        "delta_trna"
+      ]
+    }
+  },
+  "aicc_ranking": [
+    [
+      "M3_phys_topo",
+      721.4130148878896
+    ],
+    [
+      "M4_full",
+      723.4899398930863
+    ],
+    [
+      "M2_topo",
+      810.4679320707115
+    ],
+    [
+      "M1_phys",
+      829.660811515126
+    ]
+  ],
+  "likelihood_ratio_tests": {
+    "M1_vs_M3": {
+      "restricted_model": "M1_phys",
+      "full_model": "M3_phys_topo",
+      "lr_statistic": 110.37577281771257,
+      "df": 1,
+      "p_value": 0.0,
+      "significant_p05": "True"
+    },
+    "M2_vs_M3": {
+      "restricted_model": "M2_topo",
+      "full_model": "M3_phys_topo",
+      "lr_statistic": 91.18289337329804,
+      "df": 1,
+      "p_value": 0.0,
+      "significant_p05": "True"
+    },
+    "M3_vs_M4": {
+      "restricted_model": "M3_phys_topo",
+      "full_model": "M4_full",
+      "lr_statistic": 0.11969557852069102,
+      "df": 1,
+      "p_value": 0.7293648939389585,
+      "significant_p05": "False"
+    }
+  },
+  "diagnostics": {
+    "phys_topo_correlation": {
+      "spearman_rho": 0.15068140420169496,
+      "spearman_p": 0.0,
+      "n": 84480,
+      "interpretation": "High |rho| indicates confounding: topology and physicochemistry are correlated across the candidate landscape. Low |rho| suggests they carry independent information."
+    },
+    "ranks_M1_phys": [
+      {
+        "table_id": 2,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Stop",
+        "rank": 1246,
+        "n_candidates": 1280,
+        "percentile": 2.6562500000000044
+      },
+      {
+        "table_id": 2,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Stop",
+        "rank": 1144,
+        "n_candidates": 1280,
+        "percentile": 10.624999999999996
+      },
+      {
+        "table_id": 2,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 228,
+        "n_candidates": 1280,
+        "percentile": 82.1875
+      },
+      {
+        "table_id": 2,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 78,
+        "n_candidates": 1280,
+        "percentile": 93.90625
+      },
+      {
+        "table_id": 3,
+        "step": 0,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 197,
+        "n_candidates": 1280,
+        "percentile": 84.609375
+      },
+      {
+        "table_id": 3,
+        "step": 1,
+        "codon": "CUU",
+        "target_aa": "Thr",
+        "rank": 803,
+        "n_candidates": 1280,
+        "percentile": 37.265625
+      },
+      {
+        "table_id": 3,
+        "step": 2,
+        "codon": "CUC",
+        "target_aa": "Thr",
+        "rank": 388,
+        "n_candidates": 1280,
+        "percentile": 69.6875
+      },
+      {
+        "table_id": 3,
+        "step": 3,
+        "codon": "CUA",
+        "target_aa": "Thr",
+        "rank": 376,
+        "n_candidates": 1280,
+        "percentile": 70.625
+      },
+      {
+        "table_id": 3,
+        "step": 4,
+        "codon": "CUG",
+        "target_aa": "Thr",
+        "rank": 108,
+        "n_candidates": 1280,
+        "percentile": 91.5625
+      },
+      {
+        "table_id": 3,
+        "step": 5,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 4,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 5,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 600,
+        "n_candidates": 1280,
+        "percentile": 53.125
+      },
+      {
+        "table_id": 5,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 166,
+        "n_candidates": 1280,
+        "percentile": 87.03125
+      },
+      {
+        "table_id": 5,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 189,
+        "n_candidates": 1280,
+        "percentile": 85.234375
+      },
+      {
+        "table_id": 5,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 6,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 60,
+        "n_candidates": 1280,
+        "percentile": 95.3125
+      },
+      {
+        "table_id": 6,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 9,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 264,
+        "n_candidates": 1280,
+        "percentile": 79.375
+      },
+      {
+        "table_id": 9,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 317,
+        "n_candidates": 1280,
+        "percentile": 75.234375
+      },
+      {
+        "table_id": 9,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 164,
+        "n_candidates": 1280,
+        "percentile": 87.1875
+      },
+      {
+        "table_id": 9,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 10,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Cys",
+        "rank": 109,
+        "n_candidates": 1280,
+        "percentile": 91.484375
+      },
+      {
+        "table_id": 12,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ser",
+        "rank": 1157,
+        "n_candidates": 1280,
+        "percentile": 9.609374999999998
+      },
+      {
+        "table_id": 13,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Gly",
+        "rank": 670,
+        "n_candidates": 1280,
+        "percentile": 47.65625
+      },
+      {
+        "table_id": 13,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Gly",
+        "rank": 165,
+        "n_candidates": 1280,
+        "percentile": 87.109375
+      },
+      {
+        "table_id": 13,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 184,
+        "n_candidates": 1280,
+        "percentile": 85.625
+      },
+      {
+        "table_id": 13,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 14,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 264,
+        "n_candidates": 1280,
+        "percentile": 79.375
+      },
+      {
+        "table_id": 14,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 317,
+        "n_candidates": 1280,
+        "percentile": 75.234375
+      },
+      {
+        "table_id": 14,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 164,
+        "n_candidates": 1280,
+        "percentile": 87.1875
+      },
+      {
+        "table_id": 14,
+        "step": 3,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 132,
+        "n_candidates": 1280,
+        "percentile": 89.6875
+      },
+      {
+        "table_id": 14,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 24,
+        "n_candidates": 1280,
+        "percentile": 98.125
+      },
+      {
+        "table_id": 15,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 16,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 22,
+        "n_candidates": 1280,
+        "percentile": 98.28125
+      },
+      {
+        "table_id": 21,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 264,
+        "n_candidates": 1280,
+        "percentile": 79.375
+      },
+      {
+        "table_id": 21,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 317,
+        "n_candidates": 1280,
+        "percentile": 75.234375
+      },
+      {
+        "table_id": 21,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 164,
+        "n_candidates": 1280,
+        "percentile": 87.1875
+      },
+      {
+        "table_id": 21,
+        "step": 3,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 186,
+        "n_candidates": 1280,
+        "percentile": 85.46875
+      },
+      {
+        "table_id": 21,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 22,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 22,
+        "n_candidates": 1280,
+        "percentile": 98.28125
+      },
+      {
+        "table_id": 22,
+        "step": 1,
+        "codon": "UCA",
+        "target_aa": "Stop",
+        "rank": 1158,
+        "n_candidates": 1280,
+        "percentile": 9.531250000000002
+      },
+      {
+        "table_id": 23,
+        "step": 0,
+        "codon": "UUA",
+        "target_aa": "Stop",
+        "rank": 1192,
+        "n_candidates": 1280,
+        "percentile": 6.874999999999998
+      },
+      {
+        "table_id": 23,
+        "step": 1,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 376,
+        "n_candidates": 1280,
+        "percentile": 70.625
+      },
+      {
+        "table_id": 24,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 600,
+        "n_candidates": 1280,
+        "percentile": 53.125
+      },
+      {
+        "table_id": 24,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 277,
+        "n_candidates": 1280,
+        "percentile": 78.359375
+      },
+      {
+        "table_id": 24,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 25,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Gly",
+        "rank": 54,
+        "n_candidates": 1280,
+        "percentile": 95.78125
+      },
+      {
+        "table_id": 26,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ala",
+        "rank": 904,
+        "n_candidates": 1280,
+        "percentile": 29.374999999999996
+      },
+      {
+        "table_id": 27,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 60,
+        "n_candidates": 1280,
+        "percentile": 95.3125
+      },
+      {
+        "table_id": 27,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 27,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 16,
+        "n_candidates": 1280,
+        "percentile": 98.75
+      },
+      {
+        "table_id": 28,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 60,
+        "n_candidates": 1280,
+        "percentile": 95.3125
+      },
+      {
+        "table_id": 28,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 28,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 16,
+        "n_candidates": 1280,
+        "percentile": 98.75
+      },
+      {
+        "table_id": 29,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 131,
+        "n_candidates": 1280,
+        "percentile": 89.765625
+      },
+      {
+        "table_id": 29,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Tyr",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 30,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 65,
+        "n_candidates": 1280,
+        "percentile": 94.921875
+      },
+      {
+        "table_id": 30,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 2,
+        "n_candidates": 1280,
+        "percentile": 99.84375
+      },
+      {
+        "table_id": 31,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 31,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 6,
+        "n_candidates": 1280,
+        "percentile": 99.53125
+      },
+      {
+        "table_id": 31,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 2,
+        "n_candidates": 1280,
+        "percentile": 99.84375
+      },
+      {
+        "table_id": 32,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Trp",
+        "rank": 23,
+        "n_candidates": 1280,
+        "percentile": 98.203125
+      },
+      {
+        "table_id": 33,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 600,
+        "n_candidates": 1280,
+        "percentile": 53.125
+      },
+      {
+        "table_id": 33,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 277,
+        "n_candidates": 1280,
+        "percentile": 78.359375
+      },
+      {
+        "table_id": 33,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 141,
+        "n_candidates": 1280,
+        "percentile": 88.984375
+      },
+      {
+        "table_id": 33,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 24,
+        "n_candidates": 1280,
+        "percentile": 98.125
+      }
+    ],
+    "ranks_M2_topo": [
+      {
+        "table_id": 2,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Stop",
+        "rank": 231,
+        "n_candidates": 1280,
+        "percentile": 81.953125
+      },
+      {
+        "table_id": 2,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Stop",
+        "rank": 230,
+        "n_candidates": 1280,
+        "percentile": 82.03125
+      },
+      {
+        "table_id": 2,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 182,
+        "n_candidates": 1280,
+        "percentile": 85.78125
+      },
+      {
+        "table_id": 2,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 149,
+        "n_candidates": 1280,
+        "percentile": 88.359375
+      },
+      {
+        "table_id": 3,
+        "step": 0,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 183,
+        "n_candidates": 1280,
+        "percentile": 85.703125
+      },
+      {
+        "table_id": 3,
+        "step": 1,
+        "codon": "CUU",
+        "target_aa": "Thr",
+        "rank": 410,
+        "n_candidates": 1280,
+        "percentile": 67.96875
+      },
+      {
+        "table_id": 3,
+        "step": 2,
+        "codon": "CUC",
+        "target_aa": "Thr",
+        "rank": 25,
+        "n_candidates": 1280,
+        "percentile": 98.046875
+      },
+      {
+        "table_id": 3,
+        "step": 3,
+        "codon": "CUA",
+        "target_aa": "Thr",
+        "rank": 35,
+        "n_candidates": 1280,
+        "percentile": 97.265625
+      },
+      {
+        "table_id": 3,
+        "step": 4,
+        "codon": "CUG",
+        "target_aa": "Thr",
+        "rank": 33,
+        "n_candidates": 1280,
+        "percentile": 97.421875
+      },
+      {
+        "table_id": 3,
+        "step": 5,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 151,
+        "n_candidates": 1280,
+        "percentile": 88.203125
+      },
+      {
+        "table_id": 4,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 149,
+        "n_candidates": 1280,
+        "percentile": 88.359375
+      },
+      {
+        "table_id": 5,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 230,
+        "n_candidates": 1280,
+        "percentile": 82.03125
+      },
+      {
+        "table_id": 5,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 227,
+        "n_candidates": 1280,
+        "percentile": 82.265625
+      },
+      {
+        "table_id": 5,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 184,
+        "n_candidates": 1280,
+        "percentile": 85.625
+      },
+      {
+        "table_id": 5,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 151,
+        "n_candidates": 1280,
+        "percentile": 88.203125
+      },
+      {
+        "table_id": 6,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 125,
+        "n_candidates": 1280,
+        "percentile": 90.234375
+      },
+      {
+        "table_id": 6,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 126,
+        "n_candidates": 1280,
+        "percentile": 90.15625
+      },
+      {
+        "table_id": 9,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 206,
+        "n_candidates": 1280,
+        "percentile": 83.90625
+      },
+      {
+        "table_id": 9,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 224,
+        "n_candidates": 1280,
+        "percentile": 82.5
+      },
+      {
+        "table_id": 9,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 221,
+        "n_candidates": 1280,
+        "percentile": 82.734375
+      },
+      {
+        "table_id": 9,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 151,
+        "n_candidates": 1280,
+        "percentile": 88.203125
+      },
+      {
+        "table_id": 10,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Cys",
+        "rank": 146,
+        "n_candidates": 1280,
+        "percentile": 88.59375
+      },
+      {
+        "table_id": 12,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ser",
+        "rank": 435,
+        "n_candidates": 1280,
+        "percentile": 66.015625
+      },
+      {
+        "table_id": 13,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Gly",
+        "rank": 227,
+        "n_candidates": 1280,
+        "percentile": 82.265625
+      },
+      {
+        "table_id": 13,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Gly",
+        "rank": 229,
+        "n_candidates": 1280,
+        "percentile": 82.109375
+      },
+      {
+        "table_id": 13,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 185,
+        "n_candidates": 1280,
+        "percentile": 85.546875
+      },
+      {
+        "table_id": 13,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 151,
+        "n_candidates": 1280,
+        "percentile": 88.203125
+      },
+      {
+        "table_id": 14,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 206,
+        "n_candidates": 1280,
+        "percentile": 83.90625
+      },
+      {
+        "table_id": 14,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 224,
+        "n_candidates": 1280,
+        "percentile": 82.5
+      },
+      {
+        "table_id": 14,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 221,
+        "n_candidates": 1280,
+        "percentile": 82.734375
+      },
+      {
+        "table_id": 14,
+        "step": 3,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 130,
+        "n_candidates": 1280,
+        "percentile": 89.84375
+      },
+      {
+        "table_id": 14,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 148,
+        "n_candidates": 1280,
+        "percentile": 88.4375
+      },
+      {
+        "table_id": 15,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 129,
+        "n_candidates": 1280,
+        "percentile": 89.921875
+      },
+      {
+        "table_id": 16,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 738,
+        "n_candidates": 1280,
+        "percentile": 42.34375
+      },
+      {
+        "table_id": 21,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 206,
+        "n_candidates": 1280,
+        "percentile": 83.90625
+      },
+      {
+        "table_id": 21,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 224,
+        "n_candidates": 1280,
+        "percentile": 82.5
+      },
+      {
+        "table_id": 21,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 221,
+        "n_candidates": 1280,
+        "percentile": 82.734375
+      },
+      {
+        "table_id": 21,
+        "step": 3,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 184,
+        "n_candidates": 1280,
+        "percentile": 85.625
+      },
+      {
+        "table_id": 21,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 151,
+        "n_candidates": 1280,
+        "percentile": 88.203125
+      },
+      {
+        "table_id": 22,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 738,
+        "n_candidates": 1280,
+        "percentile": 42.34375
+      },
+      {
+        "table_id": 22,
+        "step": 1,
+        "codon": "UCA",
+        "target_aa": "Stop",
+        "rank": 92,
+        "n_candidates": 1280,
+        "percentile": 92.8125
+      },
+      {
+        "table_id": 23,
+        "step": 0,
+        "codon": "UUA",
+        "target_aa": "Stop",
+        "rank": 108,
+        "n_candidates": 1280,
+        "percentile": 91.5625
+      },
+      {
+        "table_id": 23,
+        "step": 1,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 143,
+        "n_candidates": 1280,
+        "percentile": 88.828125
+      },
+      {
+        "table_id": 24,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 230,
+        "n_candidates": 1280,
+        "percentile": 82.03125
+      },
+      {
+        "table_id": 24,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 225,
+        "n_candidates": 1280,
+        "percentile": 82.421875
+      },
+      {
+        "table_id": 24,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 151,
+        "n_candidates": 1280,
+        "percentile": 88.203125
+      },
+      {
+        "table_id": 25,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Gly",
+        "rank": 147,
+        "n_candidates": 1280,
+        "percentile": 88.515625
+      },
+      {
+        "table_id": 26,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ala",
+        "rank": 424,
+        "n_candidates": 1280,
+        "percentile": 66.875
+      },
+      {
+        "table_id": 27,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 125,
+        "n_candidates": 1280,
+        "percentile": 90.234375
+      },
+      {
+        "table_id": 27,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 126,
+        "n_candidates": 1280,
+        "percentile": 90.15625
+      },
+      {
+        "table_id": 27,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 154,
+        "n_candidates": 1280,
+        "percentile": 87.96875
+      },
+      {
+        "table_id": 28,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 125,
+        "n_candidates": 1280,
+        "percentile": 90.234375
+      },
+      {
+        "table_id": 28,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 126,
+        "n_candidates": 1280,
+        "percentile": 90.15625
+      },
+      {
+        "table_id": 28,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 154,
+        "n_candidates": 1280,
+        "percentile": 87.96875
+      },
+      {
+        "table_id": 29,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 128,
+        "n_candidates": 1280,
+        "percentile": 90.0
+      },
+      {
+        "table_id": 29,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Tyr",
+        "rank": 130,
+        "n_candidates": 1280,
+        "percentile": 89.84375
+      },
+      {
+        "table_id": 30,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 126,
+        "n_candidates": 1280,
+        "percentile": 90.15625
+      },
+      {
+        "table_id": 30,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 133,
+        "n_candidates": 1280,
+        "percentile": 89.609375
+      },
+      {
+        "table_id": 31,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 149,
+        "n_candidates": 1280,
+        "percentile": 88.359375
+      },
+      {
+        "table_id": 31,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 133,
+        "n_candidates": 1280,
+        "percentile": 89.609375
+      },
+      {
+        "table_id": 31,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 131,
+        "n_candidates": 1280,
+        "percentile": 89.765625
+      },
+      {
+        "table_id": 32,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Trp",
+        "rank": 132,
+        "n_candidates": 1280,
+        "percentile": 89.6875
+      },
+      {
+        "table_id": 33,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 230,
+        "n_candidates": 1280,
+        "percentile": 82.03125
+      },
+      {
+        "table_id": 33,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 225,
+        "n_candidates": 1280,
+        "percentile": 82.421875
+      },
+      {
+        "table_id": 33,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 130,
+        "n_candidates": 1280,
+        "percentile": 89.84375
+      },
+      {
+        "table_id": 33,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 148,
+        "n_candidates": 1280,
+        "percentile": 88.4375
+      }
+    ],
+    "ranks_M3_phys_topo": [
+      {
+        "table_id": 2,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Stop",
+        "rank": 654,
+        "n_candidates": 1280,
+        "percentile": 48.90624999999999
+      },
+      {
+        "table_id": 2,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Stop",
+        "rank": 309,
+        "n_candidates": 1280,
+        "percentile": 75.859375
+      },
+      {
+        "table_id": 2,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 79,
+        "n_candidates": 1280,
+        "percentile": 93.828125
+      },
+      {
+        "table_id": 2,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 22,
+        "n_candidates": 1280,
+        "percentile": 98.28125
+      },
+      {
+        "table_id": 3,
+        "step": 0,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 71,
+        "n_candidates": 1280,
+        "percentile": 94.453125
+      },
+      {
+        "table_id": 3,
+        "step": 1,
+        "codon": "CUU",
+        "target_aa": "Thr",
+        "rank": 875,
+        "n_candidates": 1280,
+        "percentile": 31.640625
+      },
+      {
+        "table_id": 3,
+        "step": 2,
+        "codon": "CUC",
+        "target_aa": "Thr",
+        "rank": 150,
+        "n_candidates": 1280,
+        "percentile": 88.28125
+      },
+      {
+        "table_id": 3,
+        "step": 3,
+        "codon": "CUA",
+        "target_aa": "Thr",
+        "rank": 149,
+        "n_candidates": 1280,
+        "percentile": 88.359375
+      },
+      {
+        "table_id": 3,
+        "step": 4,
+        "codon": "CUG",
+        "target_aa": "Thr",
+        "rank": 32,
+        "n_candidates": 1280,
+        "percentile": 97.5
+      },
+      {
+        "table_id": 3,
+        "step": 5,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 4,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 5,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 204,
+        "n_candidates": 1280,
+        "percentile": 84.0625
+      },
+      {
+        "table_id": 5,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 51,
+        "n_candidates": 1280,
+        "percentile": 96.015625
+      },
+      {
+        "table_id": 5,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 70,
+        "n_candidates": 1280,
+        "percentile": 94.53125
+      },
+      {
+        "table_id": 5,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 6,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 17,
+        "n_candidates": 1280,
+        "percentile": 98.671875
+      },
+      {
+        "table_id": 6,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 9,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 100,
+        "n_candidates": 1280,
+        "percentile": 92.1875
+      },
+      {
+        "table_id": 9,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 116,
+        "n_candidates": 1280,
+        "percentile": 90.9375
+      },
+      {
+        "table_id": 9,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 50,
+        "n_candidates": 1280,
+        "percentile": 96.09375
+      },
+      {
+        "table_id": 9,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 10,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Cys",
+        "rank": 32,
+        "n_candidates": 1280,
+        "percentile": 97.5
+      },
+      {
+        "table_id": 12,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ser",
+        "rank": 1198,
+        "n_candidates": 1280,
+        "percentile": 6.406250000000002
+      },
+      {
+        "table_id": 13,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Gly",
+        "rank": 214,
+        "n_candidates": 1280,
+        "percentile": 83.28125
+      },
+      {
+        "table_id": 13,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Gly",
+        "rank": 51,
+        "n_candidates": 1280,
+        "percentile": 96.015625
+      },
+      {
+        "table_id": 13,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 67,
+        "n_candidates": 1280,
+        "percentile": 94.765625
+      },
+      {
+        "table_id": 13,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 14,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 100,
+        "n_candidates": 1280,
+        "percentile": 92.1875
+      },
+      {
+        "table_id": 14,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 116,
+        "n_candidates": 1280,
+        "percentile": 90.9375
+      },
+      {
+        "table_id": 14,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 50,
+        "n_candidates": 1280,
+        "percentile": 96.09375
+      },
+      {
+        "table_id": 14,
+        "step": 3,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 40,
+        "n_candidates": 1280,
+        "percentile": 96.875
+      },
+      {
+        "table_id": 14,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 8,
+        "n_candidates": 1280,
+        "percentile": 99.375
+      },
+      {
+        "table_id": 15,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 16,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 271,
+        "n_candidates": 1280,
+        "percentile": 78.828125
+      },
+      {
+        "table_id": 21,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 100,
+        "n_candidates": 1280,
+        "percentile": 92.1875
+      },
+      {
+        "table_id": 21,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 116,
+        "n_candidates": 1280,
+        "percentile": 90.9375
+      },
+      {
+        "table_id": 21,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 50,
+        "n_candidates": 1280,
+        "percentile": 96.09375
+      },
+      {
+        "table_id": 21,
+        "step": 3,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 67,
+        "n_candidates": 1280,
+        "percentile": 94.765625
+      },
+      {
+        "table_id": 21,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 22,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 271,
+        "n_candidates": 1280,
+        "percentile": 78.828125
+      },
+      {
+        "table_id": 22,
+        "step": 1,
+        "codon": "UCA",
+        "target_aa": "Stop",
+        "rank": 312,
+        "n_candidates": 1280,
+        "percentile": 75.625
+      },
+      {
+        "table_id": 23,
+        "step": 0,
+        "codon": "UUA",
+        "target_aa": "Stop",
+        "rank": 345,
+        "n_candidates": 1280,
+        "percentile": 73.046875
+      },
+      {
+        "table_id": 23,
+        "step": 1,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 136,
+        "n_candidates": 1280,
+        "percentile": 89.375
+      },
+      {
+        "table_id": 24,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 204,
+        "n_candidates": 1280,
+        "percentile": 84.0625
+      },
+      {
+        "table_id": 24,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 105,
+        "n_candidates": 1280,
+        "percentile": 91.796875
+      },
+      {
+        "table_id": 24,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 25,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Gly",
+        "rank": 16,
+        "n_candidates": 1280,
+        "percentile": 98.75
+      },
+      {
+        "table_id": 26,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ala",
+        "rank": 965,
+        "n_candidates": 1280,
+        "percentile": 24.609375
+      },
+      {
+        "table_id": 27,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 17,
+        "n_candidates": 1280,
+        "percentile": 98.671875
+      },
+      {
+        "table_id": 27,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 27,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 4,
+        "n_candidates": 1280,
+        "percentile": 99.6875
+      },
+      {
+        "table_id": 28,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 17,
+        "n_candidates": 1280,
+        "percentile": 98.671875
+      },
+      {
+        "table_id": 28,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 28,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 4,
+        "n_candidates": 1280,
+        "percentile": 99.6875
+      },
+      {
+        "table_id": 29,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 37,
+        "n_candidates": 1280,
+        "percentile": 97.109375
+      },
+      {
+        "table_id": 29,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Tyr",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 30,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 18,
+        "n_candidates": 1280,
+        "percentile": 98.59375
+      },
+      {
+        "table_id": 30,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 2,
+        "n_candidates": 1280,
+        "percentile": 99.84375
+      },
+      {
+        "table_id": 31,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 31,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 4,
+        "n_candidates": 1280,
+        "percentile": 99.6875
+      },
+      {
+        "table_id": 31,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 2,
+        "n_candidates": 1280,
+        "percentile": 99.84375
+      },
+      {
+        "table_id": 32,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Trp",
+        "rank": 9,
+        "n_candidates": 1280,
+        "percentile": 99.296875
+      },
+      {
+        "table_id": 33,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 204,
+        "n_candidates": 1280,
+        "percentile": 84.0625
+      },
+      {
+        "table_id": 33,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 105,
+        "n_candidates": 1280,
+        "percentile": 91.796875
+      },
+      {
+        "table_id": 33,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 33,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 8,
+        "n_candidates": 1280,
+        "percentile": 99.375
+      }
+    ],
+    "ranks_M4_full": [
+      {
+        "table_id": 2,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Stop",
+        "rank": 745,
+        "n_candidates": 1280,
+        "percentile": 41.796875
+      },
+      {
+        "table_id": 2,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Stop",
+        "rank": 311,
+        "n_candidates": 1280,
+        "percentile": 75.703125
+      },
+      {
+        "table_id": 2,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 79,
+        "n_candidates": 1280,
+        "percentile": 93.828125
+      },
+      {
+        "table_id": 2,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 22,
+        "n_candidates": 1280,
+        "percentile": 98.28125
+      },
+      {
+        "table_id": 3,
+        "step": 0,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 71,
+        "n_candidates": 1280,
+        "percentile": 94.453125
+      },
+      {
+        "table_id": 3,
+        "step": 1,
+        "codon": "CUU",
+        "target_aa": "Thr",
+        "rank": 791,
+        "n_candidates": 1280,
+        "percentile": 38.20312500000001
+      },
+      {
+        "table_id": 3,
+        "step": 2,
+        "codon": "CUC",
+        "target_aa": "Thr",
+        "rank": 150,
+        "n_candidates": 1280,
+        "percentile": 88.28125
+      },
+      {
+        "table_id": 3,
+        "step": 3,
+        "codon": "CUA",
+        "target_aa": "Thr",
+        "rank": 149,
+        "n_candidates": 1280,
+        "percentile": 88.359375
+      },
+      {
+        "table_id": 3,
+        "step": 4,
+        "codon": "CUG",
+        "target_aa": "Thr",
+        "rank": 32,
+        "n_candidates": 1280,
+        "percentile": 97.5
+      },
+      {
+        "table_id": 3,
+        "step": 5,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 4,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 5,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 204,
+        "n_candidates": 1280,
+        "percentile": 84.0625
+      },
+      {
+        "table_id": 5,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 51,
+        "n_candidates": 1280,
+        "percentile": 96.015625
+      },
+      {
+        "table_id": 5,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 70,
+        "n_candidates": 1280,
+        "percentile": 94.53125
+      },
+      {
+        "table_id": 5,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 6,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 17,
+        "n_candidates": 1280,
+        "percentile": 98.671875
+      },
+      {
+        "table_id": 6,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 9,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 100,
+        "n_candidates": 1280,
+        "percentile": 92.1875
+      },
+      {
+        "table_id": 9,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 116,
+        "n_candidates": 1280,
+        "percentile": 90.9375
+      },
+      {
+        "table_id": 9,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 50,
+        "n_candidates": 1280,
+        "percentile": 96.09375
+      },
+      {
+        "table_id": 9,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 10,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Cys",
+        "rank": 32,
+        "n_candidates": 1280,
+        "percentile": 97.5
+      },
+      {
+        "table_id": 12,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ser",
+        "rank": 1163,
+        "n_candidates": 1280,
+        "percentile": 9.140625000000002
+      },
+      {
+        "table_id": 13,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Gly",
+        "rank": 214,
+        "n_candidates": 1280,
+        "percentile": 83.28125
+      },
+      {
+        "table_id": 13,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Gly",
+        "rank": 51,
+        "n_candidates": 1280,
+        "percentile": 96.015625
+      },
+      {
+        "table_id": 13,
+        "step": 2,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 67,
+        "n_candidates": 1280,
+        "percentile": 94.765625
+      },
+      {
+        "table_id": 13,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 14,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 100,
+        "n_candidates": 1280,
+        "percentile": 92.1875
+      },
+      {
+        "table_id": 14,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 116,
+        "n_candidates": 1280,
+        "percentile": 90.9375
+      },
+      {
+        "table_id": 14,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 50,
+        "n_candidates": 1280,
+        "percentile": 96.09375
+      },
+      {
+        "table_id": 14,
+        "step": 3,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 40,
+        "n_candidates": 1280,
+        "percentile": 96.875
+      },
+      {
+        "table_id": 14,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 8,
+        "n_candidates": 1280,
+        "percentile": 99.375
+      },
+      {
+        "table_id": 15,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 16,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 263,
+        "n_candidates": 1280,
+        "percentile": 79.453125
+      },
+      {
+        "table_id": 21,
+        "step": 0,
+        "codon": "AAA",
+        "target_aa": "Asn",
+        "rank": 100,
+        "n_candidates": 1280,
+        "percentile": 92.1875
+      },
+      {
+        "table_id": 21,
+        "step": 1,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 116,
+        "n_candidates": 1280,
+        "percentile": 90.9375
+      },
+      {
+        "table_id": 21,
+        "step": 2,
+        "codon": "AGG",
+        "target_aa": "Ser",
+        "rank": 50,
+        "n_candidates": 1280,
+        "percentile": 96.09375
+      },
+      {
+        "table_id": 21,
+        "step": 3,
+        "codon": "AUA",
+        "target_aa": "Met",
+        "rank": 67,
+        "n_candidates": 1280,
+        "percentile": 94.765625
+      },
+      {
+        "table_id": 21,
+        "step": 4,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 22,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Leu",
+        "rank": 263,
+        "n_candidates": 1280,
+        "percentile": 79.453125
+      },
+      {
+        "table_id": 22,
+        "step": 1,
+        "codon": "UCA",
+        "target_aa": "Stop",
+        "rank": 309,
+        "n_candidates": 1280,
+        "percentile": 75.859375
+      },
+      {
+        "table_id": 23,
+        "step": 0,
+        "codon": "UUA",
+        "target_aa": "Stop",
+        "rank": 351,
+        "n_candidates": 1280,
+        "percentile": 72.578125
+      },
+      {
+        "table_id": 23,
+        "step": 1,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 136,
+        "n_candidates": 1280,
+        "percentile": 89.375
+      },
+      {
+        "table_id": 24,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 204,
+        "n_candidates": 1280,
+        "percentile": 84.0625
+      },
+      {
+        "table_id": 24,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 105,
+        "n_candidates": 1280,
+        "percentile": 91.796875
+      },
+      {
+        "table_id": 24,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 25,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Gly",
+        "rank": 16,
+        "n_candidates": 1280,
+        "percentile": 98.75
+      },
+      {
+        "table_id": 26,
+        "step": 0,
+        "codon": "CUG",
+        "target_aa": "Ala",
+        "rank": 944,
+        "n_candidates": 1280,
+        "percentile": 26.249999999999996
+      },
+      {
+        "table_id": 27,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 17,
+        "n_candidates": 1280,
+        "percentile": 98.671875
+      },
+      {
+        "table_id": 27,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 27,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 4,
+        "n_candidates": 1280,
+        "percentile": 99.6875
+      },
+      {
+        "table_id": 28,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Gln",
+        "rank": 17,
+        "n_candidates": 1280,
+        "percentile": 98.671875
+      },
+      {
+        "table_id": 28,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Gln",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 28,
+        "step": 2,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 4,
+        "n_candidates": 1280,
+        "percentile": 99.6875
+      },
+      {
+        "table_id": 29,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 37,
+        "n_candidates": 1280,
+        "percentile": 97.109375
+      },
+      {
+        "table_id": 29,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Tyr",
+        "rank": 1,
+        "n_candidates": 1280,
+        "percentile": 99.921875
+      },
+      {
+        "table_id": 30,
+        "step": 0,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 18,
+        "n_candidates": 1280,
+        "percentile": 98.59375
+      },
+      {
+        "table_id": 30,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 2,
+        "n_candidates": 1280,
+        "percentile": 99.84375
+      },
+      {
+        "table_id": 31,
+        "step": 0,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 12,
+        "n_candidates": 1280,
+        "percentile": 99.0625
+      },
+      {
+        "table_id": 31,
+        "step": 1,
+        "codon": "UAG",
+        "target_aa": "Glu",
+        "rank": 4,
+        "n_candidates": 1280,
+        "percentile": 99.6875
+      },
+      {
+        "table_id": 31,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Glu",
+        "rank": 2,
+        "n_candidates": 1280,
+        "percentile": 99.84375
+      },
+      {
+        "table_id": 32,
+        "step": 0,
+        "codon": "UAG",
+        "target_aa": "Trp",
+        "rank": 9,
+        "n_candidates": 1280,
+        "percentile": 99.296875
+      },
+      {
+        "table_id": 33,
+        "step": 0,
+        "codon": "AGA",
+        "target_aa": "Ser",
+        "rank": 204,
+        "n_candidates": 1280,
+        "percentile": 84.0625
+      },
+      {
+        "table_id": 33,
+        "step": 1,
+        "codon": "AGG",
+        "target_aa": "Lys",
+        "rank": 105,
+        "n_candidates": 1280,
+        "percentile": 91.796875
+      },
+      {
+        "table_id": 33,
+        "step": 2,
+        "codon": "UAA",
+        "target_aa": "Tyr",
+        "rank": 42,
+        "n_candidates": 1280,
+        "percentile": 96.71875
+      },
+      {
+        "table_id": 33,
+        "step": 3,
+        "codon": "UGA",
+        "target_aa": "Trp",
+        "rank": 8,
+        "n_candidates": 1280,
+        "percentile": 99.375
+      }
+    ],
+    "posterior_predictive": {
+      "model": "M3_phys_topo",
+      "observed_topo_breaking_rate": 0.07575757575757576,
+      "simulated_mean_rate": 0.07692727272727272,
+      "simulated_std_rate": 0.03284854131718282,
+      "posterior_predictive_p": 0.6038,
+      "n_simulations": 10000,
+      "n_choice_sets": 66,
+      "interpretation": "Observed rate: 0.076. Model predicts: 0.077 (+/- 0.033). Model reproduces observed depletion (pp p > 0.05)."
+    }
+  }
+}

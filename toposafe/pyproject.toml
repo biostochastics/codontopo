@@ -4,10 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "toposafe"
-version = "0.1.0"
+version = "0.2.0"
 description = "Cross-study retrospective meta-analysis of genome recoding experiments using GF(2)^6 topology"
 readme = "README.md"
-license = "MIT"
+license = "CC-BY-NC-4.0"
+license-files = ["../LICENSE"]
 requires-python = ">=3.11"
 authors = [
     { name = "Paul Clayworth" },
@@ -25,7 +26,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "codon-topo[codonsafe]>=0.3.0",
+    "codon-topo[codonsafe]>=0.4.0",
 ]
 
 [project.urls]

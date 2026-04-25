@@ -75,7 +75,7 @@ def load_cram_data() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
     # Expected columns based on paper: Gene, Position, Codon, T0, T1, T2, T3
     for _, row in df.iterrows():
         gene = str(row.get("Gene", row.get("gene", "")))
-        pos = int(row.get("Position", row.get("position", 0)))
+        pos = int(row.get("Position", row.get("position", 0)) or 0)
 
         source_dna = str(row.get("WT_Codon", row.get("wt_codon", "NNN")))
         target_dna = str(row.get("Codon", row.get("codon", "NNN")))
@@ -103,8 +103,8 @@ def load_cram_data() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
             "mRNA_fold_energy",
             "RBS_strength",
         ]:
-            if cov_key in row and pd.notna(row[cov_key]):
-                covariates[cov_key] = float(row[cov_key])
+            if cov_key in row and bool(pd.notna(row[cov_key])):
+                covariates[cov_key] = float(row[cov_key])  # type: ignore[arg-type]
 
         event = CodonSwapEvent(
             study=StudyId.NAPOLITANO_2016,
@@ -160,7 +160,7 @@ def load_recalcitrant_codons() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
 
     for _, row in df.iterrows():
         gene = str(row.get("Gene", row.get("gene", "")))
-        pos = int(row.get("Position", row.get("position", 0)))
+        pos = int(row.get("Position", row.get("position", 0)) or 0)
         source_dna = str(row.get("Codon", row.get("codon", "NNN")))
         recalcitrant = row.get("Recalcitrant", row.get("recalcitrant", False))
 

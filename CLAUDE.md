@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 25 NCBI translation tables.
+**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 27 NCBI translation tables (codes 1–6, 9–16, 21–33; codes 7, 8, 17–20 deprecated).
 
-The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
+Authoritative scientific scope: see `src/codon_topo/reports/claim_hierarchy.py` (15 claims, status + p-values + justifications) and the manuscript at `output/manuscript.typ`. The original product-requirements document was internal-only and has been removed from the public release.
 
 ## Core Domain Concepts
 
@@ -22,8 +22,8 @@ The PRD is in `CODON_TOPO_PRD_v1.docx` at the repository root.
 The single source of truth for what the paper claims is `src/codon_topo/reports/claim_hierarchy.py`. Run `codon-topo claims` to view it. See also `ARCHITECTURE.md` for the full module dependency graph.
 
 Current status (15 claims):
-- 4 SUPPORTED: hypercube coloring optimality (p=0.006), per-table preservation (24/25), rho robustness (p=0.003), topology avoidance depletion (permutation p=0.0001)
-- 1 SUGGESTIVE: tRNA enrichment (independent Stouffer p=0.033)
+- 4 SUPPORTED: hypercube coloring optimality (p=0.006), per-table preservation across the 27 NCBI tables (BH-FDR; see manuscript_stats.json for current count), rho robustness (p=0.003), topology avoidance depletion (permutation p=0.0001)
+- 1 SUGGESTIVE: tRNA enrichment (worst-case MIS Stouffer p=0.045; 18 organisms, 17 tRNAscan-SE verified)
 - 4 EXPLORATORY: bit-position bias, mechanism boundary conditions, Atchley F3/Serine convergence, variant-code disconnection catalogue
 - 3 REJECTED: Serine min-distance-4 invariant, PSL(2,7), holomorphic embedding
 - 1 FALSIFIED: KRAS-Fano clinical prediction (p=1.0)
@@ -37,7 +37,7 @@ src/codon_topo/
   cli.py                 # Click-based CLI: codon-topo {filtration,disconnections,coloring,...}
   core/
     encoding.py          # Base->bit mappings, codon->vector conversion, all 24 encodings
-    genetic_codes.py     # All 25 NCBI translation tables as dictionaries
+    genetic_codes.py     # All 27 NCBI translation tables as dictionaries (codes 1–6, 9–16, 21–33)
     filtration.py        # Two-fold (bit-5) and four-fold (prefix) degeneracy checks
     homology.py          # Connected components, persistent homology, disconnection catalogue
     embedding.py         # Coordinate-wise root-of-unity map GF(2)^6 -> C^3
@@ -49,7 +49,7 @@ src/codon_topo/
     depth_calibration.py # Evolutionary depth calibration, epsilon-age Spearman correlation
     synbio_feasibility.py # Synthetic biology feasibility scoring, reassignment landscape
     coloring_optimality.py # Hypercube coloring Monte Carlo (primary publishable result)
-    trna_evidence.py     # tRNA enrichment test (19 organisms, 7 tRNAscan-SE verified)
+    trna_evidence.py     # tRNA enrichment test (18 organisms, 17 tRNAscan-SE verified + 1 from literature)
   data/
     grantham.json        # Grantham 1974 physicochemical distance matrix
     assembly_accessions.tsv  # NCBI genome assemblies for tRNAscan-SE verification
@@ -61,7 +61,7 @@ src/codon_topo/
     claim_hierarchy.py   # Single source of truth for claim status (15 claims)
 tests/
   test_encoding.py       # Encoding primitives + hypothesis property tests
-  test_genetic_codes.py  # All 25 NCBI tables
+  test_genetic_codes.py  # All 27 NCBI tables
   test_filtration.py     # Two-fold/four-fold checks across all tables
   test_homology.py       # Serine invariant, novel disconnections
   test_embedding.py      # C^3 embedding properties
@@ -97,7 +97,7 @@ tests/
 
 ```bash
 pip install -e ".[dev]"                              # Install in development mode
-python3.11 -m pytest                                  # Run all tests (367 tests)
+python3.11 -m pytest                                  # Run all tests (416 tests)
 python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
 python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
 python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (≥96%)
@@ -117,15 +117,15 @@ Dependency order: WS1 (foundation) -> WS4 (fast-fail KRAS test) -> WS2/WS3 (inde
 - **WS3**: Evolutionary depth calibration — epsilon vs. divergence age correlation
 - **WS4**: KRAS/COSMIC Fano-line co-occurrence test (critical decision gate: null result kills clinical track only)
 - **WS5**: Prediction catalogue synthesis
-- **WS6**: Synthetic biology feasibility + commercial assessment
+- **WS6**: Topology avoidance + conditional logit modeling + cross-study CodonSafe reanalysis (`topology-avoidance`, `topology-avoidance-k43`, `condlogit`, `phylo-sensitivity`, `codonsafe`)
 
 ## Regression Test Values (from Appendix 8)
 
 These must be reproduced exactly:
-- Two-fold filtration: 100% bit-5 pattern across all 24 NCBI tables, zero exceptions
+- Two-fold filtration: bit-5 pattern across all 27 NCBI tables for the standard code's nine 2-fold AAs (zero exceptions among them); Table 32 (Balanophoraceae plastid, UAG→Trp) creates a new 2-fold Trp pair (UGG, UAG) at Hamming distance 2 (bits 3-4 differ rather than bit 5) — documented exception in `tests/test_filtration.py::TWOFOLD_FILTRATION_EXCEPTIONS`
 - Four-fold filtration: 100% prefix uniformity, breaks only on stop->amino acid reassignments
-- Serine: disconnected at epsilon=1 in all 24 tables, min inter-block Hamming = 4, reconnects at epsilon=4
-- Non-Serine disconnections: Thr (yeast mito, epsilon=2), Leu (chlorophycean mito, epsilon=2), Ala (Pachysolen nuclear, epsilon=3), three-component Ser (Candida nuclear, epsilon=3)
+- Serine: disconnected at epsilon=1 in all 27 tables, min inter-block Hamming = 4 under the default encoding, reconnects at epsilon=4
+- Non-Serine disconnections: Thr (yeast mito, epsilon=2), Leu (chlorophycean mito, epsilon=2), Ala (Pachysolen nuclear, epsilon=3), three-component Ser (Candida nuclear, epsilon=3), Trp (Balanophoraceae plastid table 32, epsilon=2 — new in 27-table analysis)
 - KRAS Fano line: GGU XOR GUU XOR CAC = 0 in GF(2)^6
 
 ## External Dependencies
@@ -137,6 +137,6 @@ These must be reproduced exactly:
 ## Key Constraints
 
 - All figures: ggplot2 + ggpubr (R), 300 DPI minimum, vector where possible, colorblind-friendly palette
-- Null Model A requires 100,000 permutations
+- Null Model A (filtration/homology) requires 100,000 permutations; the coloring-optimality Monte Carlo (the headline result) uses 10,000 — these are distinct sample sizes for different tests, do not confuse them
 - Success threshold: p < 0.01 for null model rejection
 - 100% unit test coverage on core computation functions

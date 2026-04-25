@@ -152,9 +152,9 @@ def run_syn57_deviation_analysis() -> dict:
     sensitivity = []
     for cutoff in [3, 5, 10, 15, 20, 50, None]:
         if cutoff is not None:
-            gene_counts = rdf["gene"].value_counts()
-            keep = gene_counts[gene_counts <= cutoff].index
-            subset = rdf[rdf["gene"].isin(keep)]
+            gene_counts = rdf["gene"].value_counts()  # type: ignore[union-attr]
+            keep = gene_counts[gene_counts <= cutoff].index  # type: ignore[attr-defined]
+            subset = rdf[rdf["gene"].isin(keep)]  # type: ignore[union-attr]
             label = f"≤{cutoff}"
         else:
             subset = rdf
@@ -182,8 +182,8 @@ def run_syn57_deviation_analysis() -> dict:
 
         nonzero = subset[subset["delta_local"] != 0]["delta_local"]
         if len(nonzero) >= 5:
-            _, wilcox_p = wilcoxon(nonzero, alternative="less")
-            wilcox_p = float(wilcox_p)
+            wx = wilcoxon(nonzero, alternative="less")
+            wilcox_p = float(wx.pvalue)  # type: ignore[attr-defined]
 
         sensitivity.append(
             {
@@ -198,8 +198,8 @@ def run_syn57_deviation_analysis() -> dict:
                 "ci_95_hi": round(ci_hi, 4),
                 "binomial_p": round(binom_p, 4),
                 "wilcoxon_p": round(wilcox_p, 4),
-                "mean_delta_local": round(float(subset["delta_local"].mean()), 2),
-                "mean_hamming": round(float(subset["hamming"].mean()), 2),
+                "mean_delta_local": round(float(subset["delta_local"].mean()), 2),  # type: ignore[arg-type]
+                "mean_hamming": round(float(subset["hamming"].mean()), 2),  # type: ignore[arg-type]
             }
         )
 
@@ -208,7 +208,7 @@ def run_syn57_deviation_analysis() -> dict:
     print(f"  Sensitivity table saved ({len(sensitivity)} rows)")
 
     # Primary result at cutoff=10
-    genuine = rdf[rdf["gene"].map(rdf["gene"].value_counts()) <= 10].copy()
+    genuine = rdf[rdf["gene"].map(rdf["gene"].value_counts()) <= 10].copy()  # type: ignore[union-attr,arg-type]
     genuine.to_csv(OUT / "syn57_s9_genuine_deviations.csv", index=False)
 
     # R-ready figure data
@@ -226,7 +226,7 @@ def run_syn57_deviation_analysis() -> dict:
             "local_mismatch_design",
             "local_mismatch_final",
         ]
-    ].to_csv(OUT / "syn57_s9_for_ggplot.csv", index=False)
+    ].to_csv(OUT / "syn57_s9_for_ggplot.csv", index=False)  # type: ignore[union-attr]
 
     # Compute summary stats for the primary cutoff
     n_better = int((genuine["delta_local"] < 0).sum())
@@ -247,10 +247,10 @@ def run_syn57_deviation_analysis() -> dict:
         "ci_95_lo": round(float(ci.low), 4),
         "ci_95_hi": round(float(ci.high), 4),
         "binomial_p": round(float(binom_result.pvalue), 4),
-        "mean_delta_local": round(float(genuine["delta_local"].mean()), 2),
-        "median_delta_local": round(float(genuine["delta_local"].median()), 2),
-        "mean_hamming": round(float(genuine["hamming"].mean()), 2),
-        "n_reversions": int(genuine["is_reversion"].sum()),
+        "mean_delta_local": round(float(genuine["delta_local"].mean()), 2),  # type: ignore[arg-type,union-attr]
+        "median_delta_local": round(float(genuine["delta_local"].median()), 2),  # type: ignore[arg-type,union-attr]
+        "mean_hamming": round(float(genuine["hamming"].mean()), 2),  # type: ignore[arg-type,union-attr]
+        "n_reversions": int(genuine["is_reversion"].sum()),  # type: ignore[arg-type,union-attr]
     }
     pd.DataFrame([summary]).to_csv(OUT / "syn57_s9_genuine_summary.csv", index=False)
 
@@ -303,12 +303,16 @@ def run_ostrov_case_control() -> dict:
     # Fitness correlation
     fitness = data.dropna(subset=[dt_del])
     n_fitness = len(fitness)
-    rho_ess, p_ess = spearmanr(fitness[n_ess_rec], fitness[dt_del])
-    rho_tot, p_tot = spearmanr(fitness[n_rec], fitness[dt_del])
+    sr_ess = spearmanr(fitness[n_ess_rec], fitness[dt_del])
+    sr_tot = spearmanr(fitness[n_rec], fitness[dt_del])
+    rho_ess = float(sr_ess.statistic)  # type: ignore[attr-defined]
+    p_ess = float(sr_ess.pvalue)  # type: ignore[attr-defined]
+    rho_tot = float(sr_tot.statistic)  # type: ignore[attr-defined]
+    p_tot = float(sr_tot.pvalue)  # type: ignore[attr-defined]
 
     # Bonferroni correction for 3 tests
-    p_bonf_ess = min(float(p_ess) * 3, 1.0)
-    p_bonf_tot = min(float(p_tot) * 3, 1.0)
+    p_bonf_ess = min(p_ess * 3, 1.0)
+    p_bonf_tot = min(p_tot * 3, 1.0)
 
     # Case-control
     problem = data[data["has_issue"]]
@@ -316,12 +320,13 @@ def run_ostrov_case_control() -> dict:
     n_problem = len(problem)
     n_normal = len(normal)
 
-    mw_stat, mw_p = mannwhitneyu(
+    mw = mannwhitneyu(
         problem[n_ess_rec].dropna(),
         normal[n_ess_rec].dropna(),
         alternative="two-sided",
     )
-    mw_p_bonf = min(float(mw_p) * 3, 1.0)
+    mw_p = float(mw.pvalue)  # type: ignore[attr-defined]
+    mw_p_bonf = min(mw_p * 3, 1.0)
 
     # Save R-ready data
     fig_cols = [
@@ -361,11 +366,11 @@ def run_ostrov_case_control() -> dict:
         "n_with_fitness": n_fitness,
         "n_problem": n_problem,
         "n_normal": n_normal,
-        "rho_essential_recoded_vs_dt": round(float(rho_ess), 4),
-        "p_essential_recoded_vs_dt": round(float(p_ess), 4),
+        "rho_essential_recoded_vs_dt": round(rho_ess, 4),
+        "p_essential_recoded_vs_dt": round(p_ess, 4),
         "p_bonferroni_essential": round(p_bonf_ess, 4),
-        "rho_total_recoded_vs_dt": round(float(rho_tot), 4),
-        "p_total_recoded_vs_dt": round(float(p_tot), 4),
+        "rho_total_recoded_vs_dt": round(rho_tot, 4),
+        "p_total_recoded_vs_dt": round(p_tot, 4),
         "p_bonferroni_total": round(p_bonf_tot, 4),
         "mw_essential_problem_mean": round(float(problem[n_ess_rec].mean()), 1),
         "mw_essential_normal_mean": round(float(normal[n_ess_rec].mean()), 1),

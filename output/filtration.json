@@ -1966,7 +1966,7 @@
     "table_id": 26
   },
   {
-    "twofold_pass": 8,
+    "twofold_pass": 9,
     "twofold_fail": 0,
     "fourfold_pass": 5,
     "fourfold_fail": 1,
@@ -2021,6 +2021,13 @@
         ]
       ],
       [
+        "Trp",
+        true,
+        [
+          5
+        ]
+      ],
+      [
         "Tyr",
         true,
         [
@@ -2055,6 +2062,104 @@
       ]
     ],
     "table_id": 27
+  },
+  {
+    "twofold_pass": 9,
+    "twofold_fail": 0,
+    "fourfold_pass": 5,
+    "fourfold_fail": 1,
+    "twofold_detail": [
+      [
+        "Asn",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Asp",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Cys",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Glu",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "His",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Lys",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Phe",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Trp",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Tyr",
+        true,
+        [
+          5
+        ]
+      ]
+    ],
+    "fourfold_detail": [
+      [
+        "Ala",
+        true
+      ],
+      [
+        "Gln",
+        false
+      ],
+      [
+        "Gly",
+        true
+      ],
+      [
+        "Pro",
+        true
+      ],
+      [
+        "Thr",
+        true
+      ],
+      [
+        "Val",
+        true
+      ]
+    ],
+    "table_id": 28
   },
   {
     "twofold_pass": 8,
@@ -2335,6 +2440,107 @@
       ]
     ],
     "table_id": 31
+  },
+  {
+    "twofold_pass": 9,
+    "twofold_fail": 1,
+    "fourfold_pass": 5,
+    "fourfold_fail": 0,
+    "twofold_detail": [
+      [
+        "Asn",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Asp",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Cys",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Gln",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Glu",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "His",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Lys",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Phe",
+        true,
+        [
+          5
+        ]
+      ],
+      [
+        "Trp",
+        false,
+        [
+          3
+        ]
+      ],
+      [
+        "Tyr",
+        true,
+        [
+          5
+        ]
+      ]
+    ],
+    "fourfold_detail": [
+      [
+        "Ala",
+        true
+      ],
+      [
+        "Gly",
+        true
+      ],
+      [
+        "Pro",
+        true
+      ],
+      [
+        "Thr",
+        true
+      ],
+      [
+        "Val",
+        true
+      ]
+    ],
+    "table_id": 32
   },
   {
     "twofold_pass": 8,

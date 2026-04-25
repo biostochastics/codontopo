@@ -4,7 +4,7 @@ Tests whether topology avoidance is an independent evolutionary constraint
 beyond physicochemical error-minimization, using a discrete-choice framework
 (conditional logit) on the 27 observed natural reassignment events.
 
-Architecture (three-layer design, cf. hybrid stack recommendation):
+Architecture (three-layer design):
   Layer A — Graph/state algebra: component-count features via homology.py
   Layer B — Scoring kernels: per-move feature vectors (delta_phys, delta_topo, delta_trna)
   Layer C — Statistical inference: conditional logit MLE, AICc model comparison
@@ -12,13 +12,13 @@ Architecture (three-layer design, cf. hybrid stack recommendation):
 The conditional logit framing treats each observed reassignment as a choice
 among ~1,280 candidate single-codon reassignments. This converts 27 data
 points into 27 choices with thousands of contrasted alternatives, dramatically
-improving statistical power over binary (break/no-break) analyses.
+improving statistical power over binary (break/no-break) analyses. The
+underlying evolutionary assumption is strong-selection-weak-mutation (SSWM)
+origin-fixation dynamics, with the conditional logit as the retrospective
+statistical test.
 
 For tables with k>1 changes, the likelihood is marginalized over all k!
 orderings of events (order-averaging), since temporal ordering is unknown.
-
-Reference: GPT-5.2-pro consultation (2026-04-13) recommended SSWM origin-
-fixation dynamics with conditional logit as the retrospective statistical test.
 
 Models compared:
   M1: physicochemistry only (w_topo=0, w_trna=0)
@@ -33,15 +33,25 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass, field
 from itertools import permutations
-from typing import Sequence
+from typing import Any, Sequence
 
 import numpy as np
 from scipy.optimize import minimize
+from scipy.special import logsumexp as _logsumexp
 from scipy.stats import chi2
 
 from codon_topo.core.encoding import ALL_CODONS, codon_to_vector, hamming_distance
 from codon_topo.core.genetic_codes import STANDARD, all_table_ids, get_changes
 from codon_topo.core.homology import connected_components
+
+try:
+    from joblib import Parallel, delayed
+
+    _HAS_JOBLIB = True
+except ImportError:  # pragma: no cover
+    Parallel = None  # type: ignore[assignment]
+    delayed = None  # type: ignore[assignment]
+    _HAS_JOBLIB = False
 
 # ====================================================================
 # Layer A: Graph/state algebra — fast topology features with caching
@@ -57,10 +67,14 @@ def _code_to_key(code: dict[str, str]) -> frozenset:
 
 
 def component_counts(code: dict[str, str]) -> dict[str, int]:
-    """Count connected components per AA at epsilon=1 (Hamming distance).
+    """Count connected components per AA at epsilon=1 in Q_6 (encoding-dependent).
 
     Uses aggressive caching since many intermediate codes are revisited
     during order-averaging over k! permutations.
+
+    This is the *Q_6* component-count: Hamming-1 adjacency in the default
+    GF(2)^6 encoding (C=00, U=01, A=10, G=11). For the encoding-independent
+    K_4^3 / H(3,4) component-count, see component_counts_k43.
 
     Returns dict mapping AA -> number of connected components.
     """
@@ -85,9 +99,67 @@ def component_counts(code: dict[str, str]) -> dict[str, int]:
     return result
 
 
+# Cache for K_4^3 (nucleotide-level, encoding-independent) component counts.
+_COMPONENT_CACHE_K43: dict[frozenset, dict[str, int]] = {}
+
+
+def component_counts_k43(code: dict[str, str]) -> dict[str, int]:
+    """Count connected components per AA under K_4^3 (encoding-independent).
+
+    Uses nucleotide-level adjacency: two codons are neighbors iff they
+    differ at exactly one nucleotide position. This is the encoding-
+    independent counterpart of component_counts (which uses Q_6 / Hamming-1
+    in the GF(2)^6 encoding). Reviewer R2.M1 / glm-5.1 verification: the
+    conditional-logit topology feature delta_topo uses Q_6 by default,
+    which is encoding-dependent (8/24 encodings give no Q_6 depletion at
+    the landscape level). The K_4^3 variant verifies that M3's dominance
+    is not an artifact of the chosen Q_6 encoding.
+
+    Returns dict mapping AA -> number of connected components.
+    """
+    from codon_topo.core.encoding import nucleotide_distance
+
+    key = _code_to_key(code)
+    if key in _COMPONENT_CACHE_K43:
+        return _COMPONENT_CACHE_K43[key]
+
+    aa_codons: dict[str, list[str]] = defaultdict(list)
+    for codon, aa in code.items():
+        if aa != "Stop":
+            aa_codons[aa].append(codon)
+
+    result: dict[str, int] = {}
+    for aa, codons in aa_codons.items():
+        if not codons:
+            result[aa] = 0
+            continue
+        if len(codons) == 1:
+            result[aa] = 1
+            continue
+        parent = list(range(len(codons)))
+
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+
+        for i in range(len(codons)):
+            for j in range(i + 1, len(codons)):
+                if nucleotide_distance(codons[i], codons[j]) == 1:
+                    pi, pj = find(i), find(j)
+                    if pi != pj:
+                        parent[pi] = pj
+        result[aa] = len({find(i) for i in range(len(codons))})
+
+    _COMPONENT_CACHE_K43[key] = result
+    return result
+
+
 def clear_component_cache() -> None:
-    """Clear the component count cache (for testing/memory management)."""
+    """Clear all component count caches (for testing/memory management)."""
     _COMPONENT_CACHE.clear()
+    _COMPONENT_CACHE_K43.clear()
 
 
 def topology_change(
@@ -96,7 +168,7 @@ def topology_change(
     codon: str,
     new_aa: str,
 ) -> tuple[bool, int]:
-    """Compute topology change from a single-codon reassignment.
+    """Compute topology change from a single-codon reassignment under Q_6.
 
     Returns:
         (is_breaking, delta_components):
@@ -121,6 +193,40 @@ def topology_change(
     return is_breaking, delta
 
 
+def topology_change_k43(
+    base_code: dict[str, str],
+    base_components_k43: dict[str, int],
+    codon: str,
+    new_aa: str,
+) -> tuple[bool, int]:
+    """Compute K_4^3 topology change from a single-codon reassignment.
+
+    Encoding-independent counterpart of topology_change. Used to verify
+    that the conditional-logit M3 dominance is not an artifact of the
+    Q_6 encoding choice (per glm-5.1 review).
+
+    Returns:
+        (is_breaking_k43, delta_components_k43):
+            is_breaking_k43: True if any AA gains a new connected component
+                under K_4^3 nucleotide-level adjacency
+            delta_components_k43: total increase in components across all AAs
+    """
+    variant = dict(base_code)
+    variant[codon] = new_aa
+    var_components = component_counts_k43(variant)
+
+    delta = 0
+    is_breaking = False
+    all_aas = set(base_components_k43.keys()) | set(var_components.keys())
+    for aa in all_aas:
+        diff = var_components.get(aa, 0) - base_components_k43.get(aa, 0)
+        if diff > 0:
+            is_breaking = True
+            delta += diff
+
+    return is_breaking, delta
+
+
 # ====================================================================
 # Layer B: Scoring kernels — per-move feature computation
 # ====================================================================
@@ -134,10 +240,13 @@ class CandidateMove:
     source_aa: str
     target_aa: str
     delta_phys: float  # Change in local Grantham mismatch
-    topo_breaking: bool  # Binary: creates new disconnection?
-    delta_topo: int  # Graded: total component count increase
+    topo_breaking: bool  # Binary: creates new component (Q_6)?
+    delta_topo: int  # Graded Q_6: total component count increase
     delta_trna: int  # Hamming distance to nearest target-AA codon
     is_observed: bool  # Was this the actually observed move?
+    # Encoding-independent (K_4^3) topology — for sensitivity vs Q_6
+    topo_breaking_k43: bool = False
+    delta_topo_k43: int = 0
 
 
 @dataclass
@@ -240,6 +349,7 @@ def compute_candidate_features(
 
     codon_edges = _get_codon_edges()
     base_components = component_counts(code)
+    base_components_k43 = component_counts_k43(code)
     all_aas = sorted(set(code.values()))
 
     candidates: list[CandidateMove] = []
@@ -268,9 +378,14 @@ def compute_candidate_features(
                     new_local += grantham_distance(new_aa, other_aa)
             delta_phys = new_local - base_local
 
-            # delta_topo: topology change
+            # delta_topo: topology change under Q_6 (encoding-dependent)
             is_breaking, delta_topo = topology_change(
                 code, base_components, codon, new_aa
+            )
+
+            # delta_topo_k43: topology change under K_4^3 (encoding-independent)
+            is_breaking_k43, delta_topo_k43 = topology_change_k43(
+                code, base_components_k43, codon, new_aa
             )
 
             # delta_trna: Hamming distance proxy for tRNA complexity
@@ -288,6 +403,8 @@ def compute_candidate_features(
                     delta_topo=delta_topo,
                     delta_trna=delta_trna,
                     is_observed=is_observed,
+                    topo_breaking_k43=is_breaking_k43,
+                    delta_topo_k43=delta_topo_k43,
                 )
             )
 
@@ -305,15 +422,18 @@ class ModelSpec:
 
     name: str
     use_phys: bool = True
-    use_topo: bool = False
+    use_topo: bool = False  # Q_6 topology (delta_topo)
     use_trna: bool = False
+    use_topo_k43: bool = False  # K_4^3 topology (delta_topo_k43, encoding-independent)
 
     @property
     def n_params(self) -> int:
-        return sum([self.use_phys, self.use_topo, self.use_trna])
+        return sum([self.use_phys, self.use_topo, self.use_trna, self.use_topo_k43])
 
 
-# The four nested models
+# The original four nested models (Q_6 topology) plus K_4^3 verification variants.
+# Per glm-5.1 review: M3 dominance must be confirmed under encoding-independent
+# topology before treating "topology adds independent power" as a primary claim.
 MODELS = {
     "M1_phys": ModelSpec("M1_phys", use_phys=True, use_topo=False, use_trna=False),
     "M2_topo": ModelSpec("M2_topo", use_phys=False, use_topo=True, use_trna=False),
@@ -321,6 +441,21 @@ MODELS = {
         "M3_phys_topo", use_phys=True, use_topo=True, use_trna=False
     ),
     "M4_full": ModelSpec("M4_full", use_phys=True, use_topo=True, use_trna=True),
+    # K_4^3 (encoding-independent) variants:
+    "M2_topo_k43": ModelSpec(
+        "M2_topo_k43",
+        use_phys=False,
+        use_topo=False,
+        use_trna=False,
+        use_topo_k43=True,
+    ),
+    "M3_phys_topo_k43": ModelSpec(
+        "M3_phys_topo_k43",
+        use_phys=True,
+        use_topo=False,
+        use_trna=False,
+        use_topo_k43=True,
+    ),
 }
 
 
@@ -333,6 +468,8 @@ def _feature_vector(move: CandidateMove, spec: ModelSpec) -> np.ndarray:
         feats.append(float(move.delta_topo))
     if spec.use_trna:
         feats.append(float(move.delta_trna))
+    if spec.use_topo_k43:
+        feats.append(float(move.delta_topo_k43))
     return np.array(feats, dtype=np.float64)
 
 
@@ -596,6 +733,309 @@ def order_averaged_log_likelihood(
 
 
 # ====================================================================
+# Vectorized fast path: precompute feature arrays once, then use
+# pure-numpy log-likelihood inside the optimizer's neg-LL evaluation.
+#
+# This replaces the O(N_iter * N_orderings * N_steps * N_candidates)
+# Python loop in `neg_ll_total` with batched numpy operations, yielding
+# 100-1000x speedup on the 27-table fit. The math is identical to the
+# loop-based functions above; those are retained for testing/clarity.
+# ====================================================================
+
+
+@dataclass
+class _PrecomputedTable:
+    """Stacked feature arrays for one table, all orderings, all steps.
+
+    For a table with `n_ord` orderings (each a sequence of `k` steps), we
+    flatten to a single matrix by concatenating all candidate-feature
+    vectors. `step_offsets` records where each step begins in the flat
+    matrix, and `obs_flat_idx` records the row index of the observed move
+    within each step. `ord_step_starts` records, for each ordering, the
+    flat index of its first step.
+
+    Shape conventions:
+        feat_matrix: (total_candidates, 3)  — columns are [phys, topo, trna]
+        step_offsets: (total_steps + 1,)    — half-open [start, end) per step
+        obs_flat_idx: (total_steps,)        — observed-row index in feat_matrix
+                                             (-1 if no observed move)
+        ord_step_starts: (n_ord + 1,)       — half-open [start, end) per ordering
+                                             (in units of steps, not rows)
+    """
+
+    feat_matrix: np.ndarray
+    step_offsets: np.ndarray
+    obs_flat_idx: np.ndarray
+    ord_step_starts: np.ndarray
+    n_orderings: int
+
+
+def _build_table_bundle(
+    orderings: list[list[StepChoiceSet]],
+) -> _PrecomputedTable:
+    """Pack all (codon, target_aa) candidate features for one table into
+    contiguous numpy arrays, ready for vectorized scoring.
+    """
+    feat_rows: list[np.ndarray] = []
+    step_offsets: list[int] = [0]
+    obs_flat_idx: list[int] = []
+    ord_step_starts: list[int] = [0]
+
+    cumulative_rows = 0
+    cumulative_steps = 0
+    for ordering_cs in orderings:
+        for cs in ordering_cs:
+            obs_local: int = -1
+            for j, m in enumerate(cs.candidates):
+                feat_rows.append(
+                    np.array(
+                        [
+                            m.delta_phys,
+                            float(m.delta_topo),
+                            float(m.delta_trna),
+                            float(m.delta_topo_k43),
+                        ],
+                        dtype=np.float64,
+                    )
+                )
+                if m.is_observed:
+                    obs_local = j
+            n_cands = len(cs.candidates)
+            obs_flat_idx.append(obs_local + cumulative_rows if obs_local >= 0 else -1)
+            cumulative_rows += n_cands
+            step_offsets.append(cumulative_rows)
+            cumulative_steps += 1
+        ord_step_starts.append(cumulative_steps)
+
+    if feat_rows:
+        feat_matrix = np.vstack(feat_rows)
+    else:
+        feat_matrix = np.zeros((0, 4), dtype=np.float64)
+
+    return _PrecomputedTable(
+        feat_matrix=feat_matrix,
+        step_offsets=np.asarray(step_offsets, dtype=np.int64),
+        obs_flat_idx=np.asarray(obs_flat_idx, dtype=np.int64),
+        ord_step_starts=np.asarray(ord_step_starts, dtype=np.int64),
+        n_orderings=len(orderings),
+    )
+
+
+def _precompute_feature_bundle(
+    all_choice_sets: dict[int, list[list[StepChoiceSet]]],
+) -> dict[int, _PrecomputedTable]:
+    """Build a vectorized bundle for every table at once."""
+    return {tid: _build_table_bundle(ords) for tid, ords in all_choice_sets.items()}
+
+
+def _global_normalization(
+    bundle: dict[int, _PrecomputedTable],
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute (means, stds) across the union of all candidates in the bundle.
+
+    Returns means/stds of shape (4,) covering [phys, topo, trna, topo_k43]
+    columns. Mirrors `_normalize_features` but on the flat numpy matrix.
+    """
+    rows = [pt.feat_matrix for pt in bundle.values() if pt.feat_matrix.size]
+    if not rows:
+        return np.zeros(4), np.ones(4)
+    mat = np.vstack(rows)
+    means = mat.mean(axis=0)
+    stds = mat.std(axis=0)
+    stds[stds == 0] = 1.0
+    return means, stds
+
+
+# Indices into the (phys, topo, trna, topo_k43) feature columns.
+_FEATURE_INDEX = {"phys": 0, "topo": 1, "trna": 2, "topo_k43": 3}
+
+
+def _spec_columns(spec: ModelSpec) -> list[int]:
+    """Map a ModelSpec to the feature-matrix column indices it uses."""
+    cols: list[int] = []
+    if spec.use_phys:
+        cols.append(_FEATURE_INDEX["phys"])
+    if spec.use_topo:
+        cols.append(_FEATURE_INDEX["topo"])
+    if spec.use_trna:
+        cols.append(_FEATURE_INDEX["trna"])
+    if spec.use_topo_k43:
+        cols.append(_FEATURE_INDEX["topo_k43"])
+    return cols
+
+
+def _table_log_likelihood_vec(
+    w: np.ndarray,
+    pt: _PrecomputedTable,
+    cols: list[int],
+    feat_means: np.ndarray,
+    feat_stds: np.ndarray,
+) -> float:
+    """Vectorized order-averaged log-likelihood for one precomputed table.
+
+    Replaces the per-step Python loop in
+    `conditional_logit_log_likelihood` + `order_averaged_log_likelihood`
+    with batched numpy ops:
+
+      1. Slice the feature matrix to the active columns and z-score in
+         a single broadcast op.
+      2. Compute utilities = X @ w in one matmul over the entire flat
+         matrix (not per step).
+      3. For each step, the per-step log-likelihood is
+            u[obs] - logsumexp(u[step_slice])
+         which we evaluate via a numpy-friendly group-logsumexp over
+         contiguous index ranges.
+      4. Order-average via logsumexp over the per-ordering totals minus
+         log(n_orderings).
+    """
+    if pt.feat_matrix.size == 0:
+        return 0.0
+
+    means_active = feat_means[cols]
+    stds_active = feat_stds[cols]
+    with np.errstate(invalid="ignore", over="ignore", divide="ignore"):
+        X = (pt.feat_matrix[:, cols] - means_active) / stds_active  # (N, k)
+        u = X @ w  # (N,)
+
+    n_steps = pt.obs_flat_idx.shape[0]
+    obs_u = np.where(
+        pt.obs_flat_idx >= 0,
+        u[np.clip(pt.obs_flat_idx, 0, u.shape[0] - 1)],
+        0.0,
+    )
+
+    # logsumexp over each step's contiguous slice
+    log_denoms = np.empty(n_steps, dtype=np.float64)
+    starts = pt.step_offsets[:-1]
+    ends = pt.step_offsets[1:]
+    for s in range(n_steps):
+        log_denoms[s] = _logsumexp(u[starts[s] : ends[s]])
+    step_lls = np.where(pt.obs_flat_idx >= 0, obs_u - log_denoms, 0.0)
+
+    # Sum step log-likelihoods within each ordering
+    ord_starts = pt.ord_step_starts[:-1]
+    ord_ends = pt.ord_step_starts[1:]
+    n_ord = pt.n_orderings
+    ord_lls = np.empty(n_ord, dtype=np.float64)
+    for i in range(n_ord):
+        ord_lls[i] = step_lls[ord_starts[i] : ord_ends[i]].sum()
+
+    if n_ord == 1:
+        return float(ord_lls[0])
+    return float(_logsumexp(ord_lls)) - math.log(n_ord)  # type: ignore[arg-type]
+
+
+def _total_log_likelihood_vec(
+    w_active: np.ndarray,
+    bundle: dict[int, _PrecomputedTable],
+    cols: list[int],
+    feat_means: np.ndarray,
+    feat_stds: np.ndarray,
+) -> float:
+    """Sum vectorized log-likelihood across all tables in the bundle."""
+    return sum(
+        _table_log_likelihood_vec(w_active, pt, cols, feat_means, feat_stds)
+        for pt in bundle.values()
+    )
+
+
+def _fit_one_model_vec(
+    model_name: str,
+    spec: ModelSpec,
+    bundle: dict[int, _PrecomputedTable],
+    feat_means_full: np.ndarray,
+    feat_stds_full: np.ndarray,
+    n_obs: int,
+) -> dict:
+    """Fit a single conditional-logit model on the precomputed bundle.
+
+    Mirrors the per-model branch of the original `fit_all_models` but
+    uses `_total_log_likelihood_vec` so each Nelder-Mead / L-BFGS-B
+    function evaluation is a few matrix multiplies rather than 10^5
+    Python-level dot products.
+    """
+    k = spec.n_params
+    if k == 0:
+        # Null model: uniform choice per step.
+        total_ll = 0.0
+        for pt in bundle.values():
+            for s in range(pt.obs_flat_idx.shape[0] // max(pt.n_orderings, 1)):
+                # In the null model order-averaging is irrelevant: every
+                # ordering gives the same step structure for the same table,
+                # so use the first ordering's step sizes.
+                start = pt.step_offsets[s]
+                end = pt.step_offsets[s + 1]
+                if pt.obs_flat_idx[s] >= 0:
+                    total_ll += -math.log(end - start)
+        return {
+            "model": model_name,
+            "weights": np.array([]),
+            "weights_raw": np.array([]),
+            "log_likelihood": total_ll,
+            "n_params": 0,
+            "n_obs": n_obs,
+            "aic": -2 * total_ll,
+            "aicc": -2 * total_ll,
+            "converged": True,
+        }
+
+    cols = _spec_columns(spec)
+
+    def neg_ll(w: np.ndarray) -> float:
+        return -_total_log_likelihood_vec(
+            w, bundle, cols, feat_means_full, feat_stds_full
+        )
+
+    w0 = np.zeros(k)
+    opt = minimize(
+        neg_ll,
+        w0,
+        method="Nelder-Mead",
+        options={"maxiter": 10_000, "xatol": 1e-8, "fatol": 1e-10},
+    )
+    try:
+        opt2 = minimize(neg_ll, opt.x, method="L-BFGS-B", options={"maxiter": 10_000})
+        if opt2.fun < opt.fun:
+            opt = opt2
+    except (ValueError, RuntimeError):
+        pass
+
+    ll = -opt.fun
+    w_norm = opt.x
+    feat_stds_active = feat_stds_full[cols]
+    feat_means_active = feat_means_full[cols]
+    w_raw = w_norm / feat_stds_active
+
+    aic = -2 * ll + 2 * k
+    aicc = aic + 2 * k * (k + 1) / (n_obs - k - 1) if n_obs > k + 1 else float("inf")
+
+    labels: list[str] = []
+    if spec.use_phys:
+        labels.append("delta_phys")
+    if spec.use_topo:
+        labels.append("delta_topo")
+    if spec.use_trna:
+        labels.append("delta_trna")
+    if spec.use_topo_k43:
+        labels.append("delta_topo_k43")
+
+    return {
+        "model": model_name,
+        "weights": w_norm,
+        "weights_raw": w_raw,
+        "weight_labels": labels,
+        "feat_means": feat_means_active,
+        "feat_stds": feat_stds_active,
+        "log_likelihood": ll,
+        "n_params": k,
+        "n_obs": n_obs,
+        "aic": aic,
+        "aicc": aicc,
+        "converged": opt.success,
+    }
+
+
+# ====================================================================
 # Full pipeline: build all choice sets, fit models, compare
 # ====================================================================
 
@@ -629,115 +1069,72 @@ def build_all_choice_sets(
 def fit_all_models(
     all_choice_sets: dict[int, list[list[StepChoiceSet]]],
     models: dict[str, ModelSpec] | None = None,
+    n_jobs: int = 2,
 ) -> dict[str, dict]:
     """Fit all models and return comparison results.
 
-    For tables with single ordering, uses standard conditional logit.
-    For tables with multiple orderings, uses order-averaged likelihood.
+    Uses the vectorized fast path: features are precomputed once into
+    numpy matrices, then each Nelder-Mead / L-BFGS-B function evaluation
+    becomes a small batch of matmul + logsumexp calls.
 
-    The likelihood for the full dataset is the product across tables.
+    Models are fit concurrently using a SHARED-MEMORY threading backend
+    (`prefer="threads"`) rather than `processes`, because the precomputed
+    feature bundle is several hundred MB and process-level parallelism
+    duplicates it per worker (memory-blowing). scipy.optimize releases
+    the GIL during BLAS calls, so threads still give meaningful overlap.
+
+    Default `n_jobs=2` keeps RAM bounded; pass `n_jobs=1` for fully
+    serial / debug execution. The math is identical to the loop-based
+    implementation: for tables with a single ordering, standard
+    conditional logit; for multiple orderings, order-averaged
+    likelihood. Total likelihood is the product across tables.
     """
     if models is None:
         models = MODELS
 
-    results: dict[str, dict] = {}
+    # Precompute feature bundles once and global normalization stats.
+    bundle = _precompute_feature_bundle(all_choice_sets)
+    feat_means_full, feat_stds_full = _global_normalization(bundle)
 
-    for model_name, spec in models.items():
-        k = spec.n_params
+    # Count observed events on the first ordering of each table.
+    n_obs = 0
+    for orderings in all_choice_sets.values():
+        for cs in orderings[0]:
+            if cs.observed_move is not None:
+                n_obs += 1
 
-        # Collect all single-ordering choice sets (for normalization)
-        all_cs_flat: list[StepChoiceSet] = []
-        for orderings in all_choice_sets.values():
-            # Use first ordering for normalization stats
-            all_cs_flat.extend(orderings[0])
+    items = list(models.items())
 
-        if k == 0:
-            # Null model
-            total_ll = 0.0
-            for cs in all_cs_flat:
-                if cs.observed_move is not None:
-                    total_ll += -math.log(cs.n_candidates)
-            n_obs = len([cs for cs in all_cs_flat if cs.observed_move is not None])
-            results[model_name] = {
-                "model": model_name,
-                "weights": np.array([]),
-                "log_likelihood": total_ll,
-                "n_params": 0,
-                "n_obs": n_obs,
-                "aic": -2 * total_ll,
-                "aicc": -2 * total_ll,
-                "converged": True,
-            }
-            continue
-
-        feat_means, feat_stds = _normalize_features(all_cs_flat, spec)
-
-        def neg_ll_total(w: np.ndarray) -> float:
-            total = 0.0
-            for orderings in all_choice_sets.values():
-                if len(orderings) == 1:
-                    # Single ordering: standard conditional logit
-                    total += conditional_logit_log_likelihood(
-                        w, orderings[0], spec, feat_means, feat_stds
-                    )
-                else:
-                    # Multiple orderings: order-averaged
-                    total += order_averaged_log_likelihood(
-                        w, orderings, spec, feat_means, feat_stds
-                    )
-            return -total
-
-        w0 = np.zeros(k)
-        opt = minimize(
-            neg_ll_total,
-            w0,
-            method="Nelder-Mead",
-            options={"maxiter": 10000, "xatol": 1e-8, "fatol": 1e-10},
-        )
-        try:
-            opt2 = minimize(
-                neg_ll_total, opt.x, method="L-BFGS-B", options={"maxiter": 10000}
+    use_parallel = (
+        _HAS_JOBLIB
+        and n_jobs != 1
+        and len(items) > 1
+        and Parallel is not None
+        and delayed is not None
+    )
+    if use_parallel:
+        assert Parallel is not None and delayed is not None  # narrowed via use_parallel
+        # threads (not processes): bundle is shared, no duplication
+        outputs = Parallel(n_jobs=n_jobs, prefer="threads", verbose=0)(
+            delayed(_fit_one_model_vec)(
+                name, spec, bundle, feat_means_full, feat_stds_full, n_obs
             )
-            if opt2.fun < opt.fun:
-                opt = opt2
-        except (ValueError, RuntimeError):
-            pass
-
-        ll = -opt.fun
-        w_norm = opt.x
-        w_raw = w_norm / feat_stds
-
-        n_obs = len([cs for cs in all_cs_flat if cs.observed_move is not None])
-        aic = -2 * ll + 2 * k
-        aicc = (
-            aic + 2 * k * (k + 1) / (n_obs - k - 1) if n_obs > k + 1 else float("inf")
+            for name, spec in items
         )
+    else:  # pragma: no cover  - serial fallback
+        outputs = [
+            _fit_one_model_vec(
+                name, spec, bundle, feat_means_full, feat_stds_full, n_obs
+            )
+            for name, spec in items
+        ]
 
-        # Feature labels
-        labels = []
-        if spec.use_phys:
-            labels.append("delta_phys")
-        if spec.use_topo:
-            labels.append("delta_topo")
-        if spec.use_trna:
-            labels.append("delta_trna")
-
-        results[model_name] = {
-            "model": model_name,
-            "weights": w_norm,
-            "weights_raw": w_raw,
-            "weight_labels": labels,
-            "feat_means": feat_means,
-            "feat_stds": feat_stds,
-            "log_likelihood": ll,
-            "n_params": k,
-            "n_obs": n_obs,
-            "aic": aic,
-            "aicc": aicc,
-            "converged": opt.success,
-        }
-
-    return results
+    out: dict[str, dict] = {}
+    for (name, _spec), result in zip(items, outputs):
+        if result is None:
+            continue
+        out[name] = result
+    return out
 
 
 # ====================================================================
@@ -965,6 +1362,121 @@ def posterior_predictive_topo_rate(
 # ====================================================================
 
 
+def run_clade_exclusion_sensitivity(
+    max_orderings_per_table: int = 720,
+) -> dict:
+    """Refit M1-M4 under each of 7 clade-exclusion regimes.
+
+    Reviewer R1.C / R2.M1 (RIGORA Major #1) noted that the topology-avoidance
+    hypergeometric/permutation tests have a clade-exclusion sensitivity
+    analysis (Sengupta et al. 2007), but the conditional logit does not.
+    This routine fits M1-M4 with each major clade dropped and reports
+    ΔAICc(M1->M3) and ΔAICc(M2->M3) for each. If both deltas remain large
+    across all exclusions, the topology coefficient is robust to phylogenetic
+    non-independence; if the effect concentrates in one or two clades, the
+    Section 3.5 / 4.2 framing needs softening.
+
+    Clade definitions match `synbio_feasibility.CLADE_GROUPS` so the
+    sensitivity is directly comparable to `phylogenetic_sensitivity.json`.
+    """
+    from codon_topo.analysis.synbio_feasibility import CLADE_GROUPS
+
+    base_table_ids = list(all_table_ids())
+    rows: list[dict] = []
+    for clade_name, excluded in CLADE_GROUPS.items():
+        keep = [t for t in base_table_ids if t not in set(excluded)]
+        all_cs = build_all_choice_sets(max_orderings_per_table, tables=keep)
+        if not all_cs:
+            rows.append(
+                {
+                    "excluded_clade": clade_name,
+                    "excluded_tables": sorted(excluded),
+                    "n_tables_remaining": 0,
+                    "n_events_remaining": 0,
+                    "skipped": "no remaining choice sets",
+                }
+            )
+            continue
+        fits = fit_all_models(all_cs)
+        m1 = fits.get("M1_phys")
+        m2 = fits.get("M2_topo")
+        m3 = fits.get("M3_phys_topo")
+        m4 = fits.get("M4_full")
+        n_events = sum(len(o[0]) for o in all_cs.values())
+        if m1 is None or m2 is None or m3 is None:
+            rows.append(
+                {
+                    "excluded_clade": clade_name,
+                    "excluded_tables": sorted(excluded),
+                    "n_tables_remaining": len(all_cs),
+                    "n_events_remaining": n_events,
+                    "skipped": "model fit returned None",
+                }
+            )
+            continue
+        delta_m1_m3 = m1["aicc"] - m3["aicc"]
+        delta_m2_m3 = m2["aicc"] - m3["aicc"]
+        delta_m3_m4 = (m4["aicc"] - m3["aicc"]) if m4 is not None else None
+        rows.append(
+            {
+                "excluded_clade": clade_name,
+                "excluded_tables": sorted(excluded),
+                "n_tables_remaining": len(all_cs),
+                "n_events_remaining": n_events,
+                "M1_aicc": m1["aicc"],
+                "M2_aicc": m2["aicc"],
+                "M3_aicc": m3["aicc"],
+                "M4_aicc": m4["aicc"] if m4 is not None else None,
+                "delta_aicc_M1_to_M3": delta_m1_m3,
+                "delta_aicc_M2_to_M3": delta_m2_m3,
+                "delta_aicc_M3_to_M4": delta_m3_m4,
+                "topo_coef_raw_M3": (
+                    m3.get("weights_raw", np.array([])).tolist()
+                    if isinstance(m3.get("weights_raw"), np.ndarray)
+                    else m3.get("weights_raw")
+                ),
+                "topo_coef_labels_M3": m3.get("weight_labels", []),
+                "M3_favored_over_M1": delta_m1_m3 > 2.0,
+                "M3_favored_over_M2": delta_m2_m3 > 2.0,
+            }
+        )
+
+    # Summary
+    valid = [r for r in rows if "delta_aicc_M1_to_M3" in r]
+    summary: dict[str, Any] = {
+        "method": (
+            "Conditional-logit clade-exclusion sensitivity. For each of 7 "
+            "phylogenetic-clade exclusion regimes (matching "
+            "phylogenetic_sensitivity.json), refit M1-M4 with the "
+            "indicated tables removed and report ΔAICc(M1->M3) and "
+            "ΔAICc(M2->M3). Reviewer R1.C / R2.M1: tests whether the "
+            "topology coefficient is robust to phylogenetic "
+            "non-independence."
+        ),
+        "rows": rows,
+        "all_M3_favored_over_M1": (
+            all(r["M3_favored_over_M1"] for r in valid) if valid else False
+        ),
+        "all_M3_favored_over_M2": (
+            all(r["M3_favored_over_M2"] for r in valid) if valid else False
+        ),
+    }
+    if valid:
+        deltas_m1 = [r["delta_aicc_M1_to_M3"] for r in valid]
+        deltas_m2 = [r["delta_aicc_M2_to_M3"] for r in valid]
+        summary.update(
+            {
+                "delta_M1_M3_min": min(deltas_m1),
+                "delta_M1_M3_max": max(deltas_m1),
+                "delta_M1_M3_median": sorted(deltas_m1)[len(deltas_m1) // 2],
+                "delta_M2_M3_min": min(deltas_m2),
+                "delta_M2_M3_max": max(deltas_m2),
+                "delta_M2_M3_median": sorted(deltas_m2)[len(deltas_m2) // 2],
+            }
+        )
+    return summary
+
+
 def run_evolutionary_simulation_analysis(
     max_orderings_per_table: int = 720,
     n_pp_simulations: int = 10_000,
@@ -987,20 +1499,33 @@ def run_evolutionary_simulation_analysis(
 
     # Step 3: Model comparison
     comparisons = {}
-    # M1 vs M3 (does topology help beyond phys?)
+    # --- Q_6 (encoding-dependent) topology comparisons (legacy primary) ---
+    # M1 vs M3 (does Q_6 topology help beyond phys?)
     if "M1_phys" in fits and "M3_phys_topo" in fits:
         comparisons["M1_vs_M3"] = likelihood_ratio_test(
             fits["M1_phys"], fits["M3_phys_topo"]
         )
-    # M2 vs M3 (does phys help beyond topology?)
+    # M2 vs M3 (does phys help beyond Q_6 topology?)
     if "M2_topo" in fits and "M3_phys_topo" in fits:
         comparisons["M2_vs_M3"] = likelihood_ratio_test(
             fits["M2_topo"], fits["M3_phys_topo"]
         )
-    # M3 vs M4 (does tRNA help beyond phys+topo?)
+    # M3 vs M4 (does tRNA help beyond phys+Q_6-topo?)
     if "M3_phys_topo" in fits and "M4_full" in fits:
         comparisons["M3_vs_M4"] = likelihood_ratio_test(
             fits["M3_phys_topo"], fits["M4_full"]
+        )
+    # --- K_4^3 (encoding-independent) topology comparisons ---
+    # Per glm-5.1 review: M3 dominance must be confirmed under
+    # encoding-independent topology before treating "topology adds
+    # independent power" as a primary claim.
+    if "M1_phys" in fits and "M3_phys_topo_k43" in fits:
+        comparisons["M1_vs_M3_k43"] = likelihood_ratio_test(
+            fits["M1_phys"], fits["M3_phys_topo_k43"]
+        )
+    if "M2_topo_k43" in fits and "M3_phys_topo_k43" in fits:
+        comparisons["M2_k43_vs_M3_k43"] = likelihood_ratio_test(
+            fits["M2_topo_k43"], fits["M3_phys_topo_k43"]
         )
 
     # Step 4: AICc ranking
@@ -1010,7 +1535,7 @@ def run_evolutionary_simulation_analysis(
     )
 
     # Step 5: Diagnostics
-    diagnostics = {}
+    diagnostics: dict[str, Any] = {}
     diagnostics["phys_topo_correlation"] = phys_topo_correlation(all_cs)
 
     for model_name, spec in MODELS.items():
@@ -1034,6 +1559,40 @@ def run_evolutionary_simulation_analysis(
     tables_used = sorted(all_cs.keys())
     total_events = sum(len(orderings[0]) for orderings in all_cs.values())
 
+    # Q_6 vs K_4^3 topology comparison block (manuscript-readable)
+    encoding_robustness: dict[str, Any] = {}
+    m1 = fits.get("M1_phys")
+    m3_q6 = fits.get("M3_phys_topo")
+    m3_k43 = fits.get("M3_phys_topo_k43")
+    m2_q6 = fits.get("M2_topo")
+    m2_k43 = fits.get("M2_topo_k43")
+    if m1 and m3_q6 and m3_k43:
+        encoding_robustness["delta_aicc_M1_to_M3_q6"] = m1["aicc"] - m3_q6["aicc"]
+        encoding_robustness["delta_aicc_M1_to_M3_k43"] = m1["aicc"] - m3_k43["aicc"]
+        encoding_robustness["m3_q6_aicc"] = m3_q6["aicc"]
+        encoding_robustness["m3_k43_aicc"] = m3_k43["aicc"]
+        encoding_robustness["m3_q6_log_likelihood"] = m3_q6["log_likelihood"]
+        encoding_robustness["m3_k43_log_likelihood"] = m3_k43["log_likelihood"]
+        encoding_robustness["m3_q6_minus_m3_k43_aicc"] = m3_q6["aicc"] - m3_k43["aicc"]
+        encoding_robustness["m3_k43_favored_over_m1"] = (
+            m1["aicc"] - m3_k43["aicc"]
+        ) > 2.0
+        encoding_robustness["m3_q6_favored_over_m1"] = (
+            m1["aicc"] - m3_q6["aicc"]
+        ) > 2.0
+    if m2_q6 and m2_k43 and m3_q6 and m3_k43:
+        encoding_robustness["delta_aicc_M2q6_to_M3q6"] = m2_q6["aicc"] - m3_q6["aicc"]
+        encoding_robustness["delta_aicc_M2k43_to_M3k43"] = (
+            m2_k43["aicc"] - m3_k43["aicc"]
+        )
+    encoding_robustness["interpretation"] = (
+        "If delta_aicc_M1_to_M3_k43 > 10 (K_4^3 phys+topo decisively beats "
+        "phys alone), M3 dominance is robust to the choice of topology "
+        "encoding (Q_6 vs encoding-independent K_4^3 / H(3,4)). If "
+        "delta_aicc_M1_to_M3_k43 << delta_aicc_M1_to_M3_q6, the headline "
+        "topology effect is partly an artifact of the Q_6 encoding."
+    )
+
     return {
         "tables_used": tables_used,
         "n_tables": len(tables_used),
@@ -1054,4 +1613,5 @@ def run_evolutionary_simulation_analysis(
         "aicc_ranking": aicc_ranking,
         "likelihood_ratio_tests": comparisons,
         "diagnostics": diagnostics,
+        "encoding_robustness": encoding_robustness,
     }

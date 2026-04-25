@@ -24,9 +24,34 @@ def test_standard_aug_is_met():
 
 def test_all_table_ids():
     ids = all_table_ids()
-    assert 1 in ids
-    assert 2 in ids
-    assert len(ids) == 25
+    # NCBI lists 27 codes: 1-6, 9-16, 21-33 (codes 7, 8, 17-20 deprecated)
+    expected = set(range(1, 7)) | set(range(9, 17)) | set(range(21, 34))
+    assert set(ids) == expected
+    assert len(ids) == 27
+
+
+def test_table_27_includes_uga_trp():
+    # Karyorelict Nuclear: UAA→Gln, UAG→Gln, UGA→Trp (NCBI gc.prt v4.6)
+    code = get_code(27)
+    assert code["UAA"] == "Gln"
+    assert code["UAG"] == "Gln"
+    assert code["UGA"] == "Trp"
+
+
+def test_table_28_condylostoma():
+    # Condylostoma Nuclear: same sense-codon mapping as Table 27
+    code = get_code(28)
+    assert code["UAA"] == "Gln"
+    assert code["UAG"] == "Gln"
+    assert code["UGA"] == "Trp"
+
+
+def test_table_32_balanophoraceae():
+    # Balanophoraceae Plastid: UAG → Trp; UAA, UGA remain stops
+    code = get_code(32)
+    assert code["UAG"] == "Trp"
+    assert code["UAA"] == "Stop"
+    assert code["UGA"] == "Stop"
 
 
 def test_get_code_table1_is_standard():

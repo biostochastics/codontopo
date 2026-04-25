@@ -146,7 +146,7 @@ p3 <- ggplot(bit_data, aes(x = label, y = count, fill = region)) +
   labs(
     title = "Bit-Position Bias in Codon Reassignment Events",
     subtitle = bquote(chi^2 ~ "= 16.26," ~ italic(p) ~ "= 0.006 (" *
-               italic(n) ~ "=" ~ .(total_n) ~ "bit-changes, 25 NCBI tables)"),
+               italic(n) ~ "=" ~ .(total_n) ~ "bit-changes, 27 NCBI tables)"),
     x = expression("Bit position in GF(2)"^6 ~ "vector"),
     y = "Number of bit changes"
   ) +

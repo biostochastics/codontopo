@@ -386,8 +386,16 @@ class TestFullPipeline:
         )
         fits = fit_all_models(all_cs)
 
-        # Should have results for all 4 models
-        assert len(fits) == 4
+        # Should have results for all 6 models (4 Q_6 + 2 K_4^3 verification variants)
+        assert len(fits) == 6
+        assert set(fits.keys()) == {
+            "M1_phys",
+            "M2_topo",
+            "M3_phys_topo",
+            "M4_full",
+            "M2_topo_k43",
+            "M3_phys_topo_k43",
+        }
         for _name, f in fits.items():
             assert math.isfinite(f["log_likelihood"])
             assert f["aic"] > 0 or f["n_params"] == 0

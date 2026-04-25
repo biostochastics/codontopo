@@ -29,18 +29,33 @@ def build_catalogue() -> list[Prediction]:
             id="WS1-C1",
             claim="Two-fold degeneracy is uniformly explained by bit-5 difference in GF(2)^6",
             workstream="WS1",
-            status="verified",
-            evidence_strength="very_strong",
-            implications="All 9 two-fold AAs show identical algebraic structure across all 25 NCBI tables",
-            notes="100% pass rate, zero exceptions, verified by test_regression.py",
+            status="tautological",
+            evidence_strength="encoding_dependent",
+            implications=(
+                "Tautological under default encoding: all 2-fold synonymous "
+                "pairs in the standard code end in {U,C} or {A,G}, so any "
+                "bijection placing those pairs at identical first-bit positions "
+                "yields the bit-5 pattern by construction. Holds in 16 of 24 "
+                "encodings; not a discovery about the code itself."
+            ),
+            notes=(
+                "Reclassified TAUTOLOGICAL per claim_hierarchy.py "
+                "two_fold_bit_5_filtration. Manuscript Table 1 lists this as "
+                "TAUTOLOGICAL; catalogue.json now agrees."
+            ),
         ),
         Prediction(
             id="WS1-C2",
             claim="Four-fold degeneracy corresponds to shared 4-bit prefix exhausting GF(2)^2",
             workstream="WS1",
-            status="verified",
-            evidence_strength="very_strong",
-            implications="Breaks only on stop->AA reassignments (structural necessity)",
+            status="tautological",
+            evidence_strength="encoding_dependent",
+            implications=(
+                "Trivial under any bijection from {A,C,G,U} to GF(2)^2: "
+                "four-fold degenerate codons {XYN} have third-base bits that "
+                "exhaust GF(2)^2 by definition. Not a claim about the genetic "
+                "code, just the definition of four-fold degeneracy."
+            ),
         ),
         Prediction(
             id="WS1-C3",
@@ -77,11 +92,26 @@ def build_catalogue() -> list[Prediction]:
         ),
         Prediction(
             id="WS1-NOVEL-2",
-            claim="Leucine is disconnected in chlorophycean mito (Table 16, epsilon=2)",
+            claim=(
+                "Leucine is disconnected in chlorophycean mitochondrial codes "
+                "(translation tables 16 and 22, epsilon=2)"
+            ),
             workstream="WS1",
             status="verified",
             evidence_strength="strong",
-            implications="UAG reassignment Stop->Leu creates algal-specific signature",
+            implications=(
+                "UAG reassignment Stop->Leu creates an algal-mitochondrial "
+                "signature shared by NCBI table 16 (chlorophycean mito) and "
+                "table 22 (Scenedesmus obliquus mito; table 22 additionally "
+                "reassigns UCA Ser->Stop). When de-duplicated to lineage-level "
+                "events, the two tables collapse to a single algal-mito "
+                "Leu-disconnection event."
+            ),
+            notes=(
+                "depth_calibration.py CALIBRATION_POINTS includes both "
+                "table 16 and table 22 with the same age range (500-700 Mya). "
+                "Manuscript Section 3.2 Disconnection catalogue lists both."
+            ),
         ),
         Prediction(
             id="WS1-NOVEL-3",
@@ -101,13 +131,31 @@ def build_catalogue() -> list[Prediction]:
         ),
         Prediction(
             id="WS2-DIR",
-            claim="Codon reassignment events show directional bias in GF(2)^6 bit positions",
+            claim=(
+                "Codon reassignment events show directional bias in GF(2)^6 "
+                "bit positions, but signal is marginal after correcting for "
+                "non-independence (de-duplicated p=0.075)"
+            ),
             workstream="WS2",
-            status="tested",
-            evidence_strength="strong",
-            p_value=0.006,
-            implications="Bit position 4 (first wobble bit) has 13 changes while position 2 has zero. Reassignments are non-random in GF(2)^6.",
-            notes="Chi-squared test on 61 events across 25 NCBI tables. chi2=16.26, p=0.006.",
+            status="exploratory",
+            evidence_strength="weak",
+            p_value=0.075,
+            implications=(
+                "Original 6-bin chi-squared p=0.006 was inflated by "
+                "non-independence (same codons reassigned across multiple "
+                "tables). After de-duplication to 20 unique (codon, target_aa) "
+                "events the marginal-position signal degrades to p=0.075; "
+                "table-preserving permutation p=0.27; codon-preserving "
+                "permutation p=1.0. The apparent positional bias is entirely "
+                "explained by which codons are 'hot' for reassignment, not "
+                "by an intrinsic preference for particular GF(2)^6 bit "
+                "positions."
+            ),
+            notes=(
+                "Reclassified EXPLORATORY/weak per claim_hierarchy.py "
+                "bit_position_bias_weighted. Manuscript Table 1 lists this "
+                "as EXPLORATORY with deduplicated p=0.075."
+            ),
         ),
         Prediction(
             id="WS2-PATH",

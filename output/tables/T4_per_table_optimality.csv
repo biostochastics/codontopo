@@ -19,8 +19,10 @@ table_id,table_name,observed_score,quantile_pct,p_value
 24,Rhabdopleuridae Mito,13387.0,1.5,0.015984015984015984
 25,Candidate Division SR1 / Gracilibacteria,13223.0,1.1,0.011988011988011988
 26,Pachysolen tannophilus Nuclear,13773.0,1.0,0.01098901098901099
-27,Karyorelictea Nuclear,12279.0,0.7,0.007992007992007992
+27,Karyorelict Nuclear,11680.0,0.2,0.002997002997002997
+28,Condylostoma Nuclear,11680.0,0.2,0.002997002997002997
 29,Mesodinium Nuclear,12524.0,2.4,0.024975024975024976
 30,Peritrich Nuclear,12371.0,0.0,0.000999000999000999
 31,Blastocrithidia Nuclear,11794.0,0.3,0.003996003996003996
+32,Balanophoraceae Plastid,13113.0,1.5,0.015984015984015984
 33,Cephalodiscidae Mito,12929.0,2.0,0.02097902097902098

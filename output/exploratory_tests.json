@@ -1,0 +1,21 @@
+{
+  "cub_correlation": {
+    "spearman_rho": 0.0012299797830286464,
+    "spearman_p": 0.9924938427930461,
+    "n_codons": 61,
+    "hypothesis": "Negative correlation: frequently used codons have lower local Grantham mismatch cost (sit in 'good' neighborhoods)",
+    "interpretation": "rho = 0.001, p = 0.9925. No significant correlation detected."
+  },
+  "mechanistic_discriminant": {
+    "n_breaking": 5,
+    "n_preserving": 8,
+    "mean_grantham_breaking": 92.8,
+    "mean_grantham_preserving": 93.125,
+    "mean_miyata_breaking": 1.18,
+    "mean_miyata_preserving": 1.67125,
+    "mann_whitney_U": 11.0,
+    "mann_whitney_p": 0.1028811791312394,
+    "hypothesis": "Topology-breaking reassignments involve smaller physicochemical jumps than topology-preserving ones (supports codon capture model)",
+    "interpretation": "Breaking: mean Grantham=92.8, Miyata=1.18 (n=5); Preserving: mean Grantham=93.1, Miyata=1.67 (n=8). Direction consistent across metrics (breaking < preserving under Miyata: 1.18 vs 1.67) but underpowered (n=5 vs 8; breaking events are dominated by a single codon box CUU/CUC/CUA/CUG in the CUG clade). Mann-Whitney p=0.103 \u2014 cannot distinguish mechanism."
+  }
+}

@@ -1,7 +1,5 @@
 # WS1: Core Package Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
-
 **Goal:** Refactor the 6 preliminary verification scripts into a tested, pip-installable Python package `codon_topo` that reproduces all verified results as regression tests, then implement the three null models.
 
 **Architecture:** Bottom-up build. First consolidate shared primitives (encoding, Hamming distance) into `core/`, then layer filtration, homology, embedding, and Fano modules on top. Each module gets property-based tests via hypothesis. Null models go in `analysis/`. Visualization is R/ggplot2 scripts in `visualization/R/`. The preliminary scripts stay untouched as the reference oracle.

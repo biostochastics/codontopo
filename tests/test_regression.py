@@ -15,14 +15,30 @@ from codon_topo.core.fano import is_fano_line
 
 
 class TestFiltrationInvariants:
-    """PRD Appendix 8, Claims 1-2."""
+    """PRD Appendix 8, Claims 1-2.
+
+    The bit-5 two-fold filtration is universal across the standard code's
+    nine 2-fold amino acids. When all 27 NCBI tables are analyzed, one
+    documented exception arises: Table 32 (Balanophoraceae plastid)
+    reassigns UAG -> Trp, creating a new 2-fold Trp pair (UGG, UAG) that
+    differs at bit 3 rather than bit 5 under the default encoding.
+    """
+
+    # See tests/test_filtration.py::TWOFOLD_FILTRATION_EXCEPTIONS for the
+    # canonical list of variant codes that introduce non-bit-5 2-fold pairs.
+    TWOFOLD_EXPECTED_FAILURES = {
+        32: {"Trp"},
+    }
 
     @pytest.mark.parametrize("table_id", all_table_ids())
     def test_twofold_100pct(self, table_id):
         code = get_code(table_id)
         results = check_twofold(code)
-        failures = [(aa, diff) for aa, ok, diff in results if not ok]
-        assert failures == [], f"Table {table_id}: {failures}"
+        expected = self.TWOFOLD_EXPECTED_FAILURES.get(table_id, set())
+        failures = [
+            (aa, diff) for aa, ok, diff in results if not ok and aa not in expected
+        ]
+        assert failures == [], f"Table {table_id}: unexpected failures {failures}"
 
     def test_fourfold_standard(self):
         results = check_fourfold(STANDARD)
@@ -101,6 +117,24 @@ class TestNovelDisconnections:
         assert len(ser) == 1
         assert ser[0]["n_components"] == 3
         assert ser[0]["reconnect_eps"] == 3
+
+    def test_trp_balanophoraceae_table32_not_disconnected(self):
+        """Table 32 (Balanophoraceae plastid, UAG -> Trp) creates a 2-fold
+        Trp pair (UGG, UAG). Under the default encoding these differ at bit
+        position 3 (Hamming distance = 1), so Trp is CONNECTED at epsilon = 1
+        and does NOT add a new entry to the disconnection catalogue.
+
+        The geometric finding is that Table 32 breaks the bit-5 filtration
+        (the new 2-fold pair differs at bit 3 rather than bit 5); see
+        tests/test_filtration.py::TWOFOLD_FILTRATION_EXCEPTIONS.
+        """
+        cat = disconnection_catalogue(get_code(32))
+        trp = [e for e in cat if e["aa"] == "Trp"]
+        assert trp == [], (
+            f"Trp in Table 32 should not appear in disconnection catalogue "
+            f"(UGG-UAG Hamming distance = 1, connected at epsilon = 1); "
+            f"got {trp}"
+        )
 
 
 class TestEmbedding:

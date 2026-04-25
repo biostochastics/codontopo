@@ -58,7 +58,7 @@ def main() -> None:
 
 @main.command()
 @click.option("--table", "table_id", default=1, help="NCBI translation table ID.")
-@click.option("--all-tables", is_flag=True, help="Run across all 25 NCBI tables.")
+@click.option("--all-tables", is_flag=True, help="Run across all 27 NCBI tables.")
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON.")
 def filtration(table_id: int, all_tables: bool, as_json: bool) -> None:
     """Check two-fold and four-fold filtration properties."""
@@ -93,7 +93,7 @@ def filtration(table_id: int, all_tables: bool, as_json: bool) -> None:
 
 @main.command()
 @click.option("--table", "table_id", default=1, help="NCBI translation table ID.")
-@click.option("--all-tables", is_flag=True, help="Run across all 25 NCBI tables.")
+@click.option("--all-tables", is_flag=True, help="Run across all 27 NCBI tables.")
 @click.option(
     "--extended", is_flag=True, help="Run null_model_c_extended across 24 encodings."
 )
@@ -682,6 +682,13 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     _step("Per-table optimality...")
     pertable_result = per_table_optimality(n_samples=min(n_samples, 1_000), seed=seed)
 
+    _step("Per-table proximity audit (standard-code-proximity sensitivity)...")
+    from codon_topo.analysis.coloring_optimality import per_table_proximity_audit
+
+    proximity_audit = per_table_proximity_audit(
+        n_samples=min(n_samples, 1_000), seed=seed
+    )
+
     decomp_result = score_decomposition_by_position()
 
     stop_results = stop_penalty_sensitivity(n_samples=1_000, seed=seed)
@@ -693,6 +700,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "multi_metric": metric_results,
             "rho_sweep": rho_result,
             "per_table": pertable_result,
+            "per_table_proximity_audit": proximity_audit,
             "decomposition": decomp_result,
             "stop_penalty": stop_results,
         },
@@ -714,26 +722,47 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         },
     )
 
-    # 8. Topology avoidance (Q6 + K4^3)
+    # 8. Topology avoidance (Q6 + K4^3 + definitions audit + 24-encoding sweep)
     _step("Topology avoidance (Q6 + K4^3)...")
     topo_q6 = _topo_avoidance()
     topo_k43 = topology_avoidance_k43(seed=seed)
-    _write_json(
-        out / "topology_avoidance.json",
-        {"Q6": topo_q6, "K43": topo_k43},
+    _step("Topology definitions audit (2x2 sensitivity)...")
+    from codon_topo.analysis.synbio_feasibility import (
+        topology_definitions_audit,
+        topology_avoidance_q6_encoding_sweep,
+        topology_denominator_sensitivity,
     )
 
-    # 9. tRNA evidence (with MIS analysis)
-    _step("tRNA evidence + MIS analysis...")
+    topo_audit = topology_definitions_audit()
+    _step("Topology Q_6 24-encoding sweep...")
+    topo_enc_sweep = topology_avoidance_q6_encoding_sweep()
+    topo_denom = topology_denominator_sensitivity()
+    _write_json(
+        out / "topology_avoidance.json",
+        {
+            "Q6": topo_q6,
+            "K43": topo_k43,
+            "definitions_audit": topo_audit,
+            "Q6_encoding_sweep": topo_enc_sweep,
+            "denominator_sensitivity": topo_denom,
+        },
+    )
+
+    # 9. tRNA evidence (with MIS analysis + topology-breaking subset)
+    _step("tRNA evidence + MIS analysis + topology-breaking subset...")
     trna_result = trna_duplication_correlation_test()
     fisher_result = fisher_exact_per_pairing()
     mis_result = maximal_independent_set_analysis()
+    from codon_topo.analysis.trna_evidence import topology_breaking_subset_test
+
+    trna_topo_subset = topology_breaking_subset_test()
     _write_json(
         out / "trna_evidence.json",
         {
             "sign_test": trna_result,
             "fisher_stouffer": fisher_result,
             "mis_analysis": mis_result,
+            "topology_breaking_subset": trna_topo_subset,
         },
     )
 
@@ -745,11 +774,17 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     # 11. Evolutionary simulation (conditional logit)
     _step("Conditional logit models (M1-M4)...")
     from codon_topo.analysis.evolutionary_simulation import (
+        run_clade_exclusion_sensitivity,
         run_evolutionary_simulation_analysis,
     )
 
     evosim_result = run_evolutionary_simulation_analysis(seed=seed)
     _write_json(out / "evolutionary_simulation.json", evosim_result)
+
+    # 11b. Conditional-logit clade-exclusion sensitivity (Reviewer R1.C / R2.M1)
+    _step("Conditional logit clade-exclusion sensitivity (7 regimes)...")
+    condlogit_clade = run_clade_exclusion_sensitivity()
+    _write_json(out / "condlogit_clade_sensitivity.json", condlogit_clade)
 
     # 12. Depth calibration
     _step("Depth calibration...")
@@ -828,7 +863,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         "_generated_by": "codon-topo all",
         "_seed": seed,
         "_n_samples": n_samples,
-        "_version": "0.3.0",
+        "_version": "0.3.1",
         # Section 3.1: Cross-metric coloring optimality
         "coloring": {
             "observed_score": coloring_result["observed_score"],
@@ -899,6 +934,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "aicc_ranking": evosim_result["aicc_ranking"],
             "model_fits": evosim_result["model_fits"],
             "lr_tests": lr_tests,
+            "encoding_robustness": evosim_result.get("encoding_robustness", {}),
         },
         # Section 3.6: tRNA enrichment
         "trna": {

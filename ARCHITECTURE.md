@@ -43,7 +43,7 @@ visualization.R/          -> output/tables/*.csv, output/tables/*.json
 ## Data Flow
 
 ```
-NCBI Translation Tables (25 tables)
+NCBI Translation Tables (27 tables: 1–6, 9–16, 21–33)
   |
   v
 core.genetic_codes.get_code(table_id) -> dict[str, str]
@@ -59,7 +59,7 @@ core.genetic_codes.get_code(table_id) -> dict[str, str]
   +----> analysis.coloring_optimality: Grantham-weighted edge mismatch, rho sweep, per-table
   +----> analysis.reassignment_db: cross-table diff -> Hamming paths, bit-position bias
   +----> analysis.synbio_feasibility: topology avoidance (permutation null)
-  +----> analysis.trna_evidence: tRNA enrichment (Fisher+Stouffer, 19 organisms)
+  +----> analysis.trna_evidence: tRNA enrichment (Fisher+Stouffer, 18 organisms; 17 tRNAscan-SE verified + 1 from literature)
   |
   v
 reports.claim_hierarchy: single source of truth for 15 claims
@@ -82,6 +82,7 @@ visualization.R/: ggplot2 + ggpubr -> output/figures/
 | FH | Freeland-Hurst block-preserving | Block contiguity, stop positions | Grantham edge mismatch | `coloring_optimality.monte_carlo_null(null_type="freeland_hurst")` |
 | CS | Class-size-preserving | Degeneracy sizes (no block contiguity) | Grantham edge mismatch | `coloring_optimality.monte_carlo_null(null_type="class_size")` |
 | TP | Table-preserving permutation | Within-table codon set | Novel disconnection rate | `synbio_feasibility.topology_avoidance_test()` |
+| CL | Conditional logit (M1-M4) | Event-level candidate features (Δ_local, topology, Hamming, tRNA-proxy) | Independent explanatory power via AICc / LRT | `evolutionary_simulation.run_evolutionary_simulation_analysis()` |
 
 ## Claim Hierarchy
 
@@ -96,7 +97,7 @@ Run `codon-topo claims` to view.
 
 ## Data Provenance
 
-tRNA gene counts verified by tRNAscan-SE 2.0.12 on NCBI genome assemblies:
+tRNA gene counts verified by tRNAscan-SE 2.0.12 on NCBI genome assemblies (representative sample shown; complete 18-organism dataset is in `data/assembly_accessions.tsv` and `data/trnascan_results/`):
 
 | Organism | Assembly | tRNAscan Total | Role |
 |----------|----------|----------------|------|
@@ -115,7 +116,7 @@ Raw results in `data/trnascan_results/`. Reproduce with `bash scripts/run_trnasc
 |------|-------------|
 | `output/tables/T1_claim_hierarchy.csv` | All 15 claims with status and p-values |
 | `output/tables/T3_coloring_optimality.json` | Monte Carlo null distribution (n=10,000) |
-| `output/tables/T4_per_table_optimality.csv` | Per-table quantiles (25 tables) |
+| `output/tables/T4_per_table_optimality.csv` | Per-table quantiles (27 tables) |
 | `output/tables/T5_rho_robustness.csv` | Rho sweep (11 values, 0.0 to 1.0) |
 | `output/tables/T7_trna_per_pairing.csv` | Fisher exact per pairing (11 rows) |
 | `output/tables/T9_topology_avoidance.csv` | Permutation + hypergeometric p-values |

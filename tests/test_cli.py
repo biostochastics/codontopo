@@ -205,7 +205,7 @@ class TestAll:
         stats_path = tmp_path / "manuscript_stats.json"
         assert stats_path.exists(), "manuscript_stats.json not generated"
         stats = json.loads(stats_path.read_text())
-        assert stats["_version"] == "0.3.0"
+        assert stats["_version"] == "0.3.1"
         assert "metrics" in stats
         assert "coloring" in stats
         assert "topology_avoidance_q6" in stats

@@ -1,8 +1,8 @@
 """Statistical utilities for confidence intervals and effect sizes.
 
 Provides Beta posterior CIs for permutation p-values, risk ratio CIs,
-quantile CIs, and other inferential summaries that GPT-5.2-pro flagged
-as missing from the manuscript's statistical reporting.
+quantile CIs, and other inferential summaries used in the manuscript's
+statistical reporting.
 """
 
 import math

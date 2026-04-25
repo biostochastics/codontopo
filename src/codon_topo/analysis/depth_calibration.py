@@ -42,7 +42,7 @@ CALIBRATION_POINTS: list[CalibrationPoint] = [
         age_mya_low=3500.0,
         age_mya_high=4000.0,
         lineage="Pre-LUCA, all domains of life",
-        notes="UCN-AGY split, min inter-block Hamming=4, present in all 25 NCBI tables",
+        notes="UCN-AGY split, min inter-block Hamming=4, present in all 27 NCBI tables",
     ),
     CalibrationPoint(
         aa="Thr",
@@ -106,10 +106,10 @@ def compute_correlation() -> dict:
     eps_values = [p.reconnect_eps for p in CALIBRATION_POINTS]
     age_values = [_age_midpoint(p) for p in CALIBRATION_POINTS]
 
-    rho, p_value = spearmanr(eps_values, age_values)
+    sr = spearmanr(eps_values, age_values)
     return {
-        "spearman_rho": float(rho),
-        "spearman_p": float(p_value),
+        "spearman_rho": float(sr.statistic),  # type: ignore[attr-defined]
+        "spearman_p": float(sr.pvalue),  # type: ignore[attr-defined]
         "n_points": len(CALIBRATION_POINTS),
     }
 
@@ -130,8 +130,8 @@ def bootstrap_ci(
         age_vals = [_age_midpoint(p) for p in sample]
         if len(set(eps_vals)) < 2 or len(set(age_vals)) < 2:
             continue
-        rho, _ = spearmanr(eps_vals, age_vals)
-        rhos.append(float(rho))
+        sr = spearmanr(eps_vals, age_vals)
+        rhos.append(float(sr.statistic))  # type: ignore[attr-defined]
 
     if not rhos:
         return {

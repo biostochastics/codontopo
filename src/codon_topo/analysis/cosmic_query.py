@@ -265,9 +265,12 @@ def fano_enrichment_test(
 
     # Fisher's exact test
     if a + b == 0 or c + d == 0:
-        odds_ratio, p_value = float("nan"), 1.0
+        odds_ratio: float = float("nan")
+        p_value: float = 1.0
     else:
-        odds_ratio, p_value = fisher_exact([[a, b], [c, d]], alternative="greater")
+        fr = fisher_exact([[a, b], [c, d]], alternative="greater")
+        odds_ratio = float(fr.statistic)  # type: ignore[attr-defined]
+        p_value = float(fr.pvalue)  # type: ignore[attr-defined]
 
     return {
         "variant": variant,
@@ -278,8 +281,8 @@ def fano_enrichment_test(
         "total_co_mutations": a + b,
         "background_count": c,
         "background_total": c + d,
-        "odds_ratio": float(odds_ratio),
-        "fishers_p": float(p_value),
+        "odds_ratio": odds_ratio,
+        "fishers_p": p_value,
     }
 
 

@@ -1,0 +1,137 @@
+[
+  {
+    "id": "hypercube_coloring_optimality",
+    "status": "supported",
+    "statement": "The standard genetic code is significantly error-minimizing under four independent physicochemical distance metrics: Grantham (p=0.003), Miyata (p=0.001), Woese polar requirement (p=0.004), and Kyte-Doolittle hydropathy (p=0.001)",
+    "p_value": 0.004,
+    "null_model": "freeland_hurst_block_preserving_x4_metrics",
+    "sample_size": 10000,
+    "publishable": true
+  },
+  {
+    "id": "per_table_optimality_preservation",
+    "status": "supported",
+    "statement": "24 of 25 NCBI translation tables remain in the top 5% of their own block-preserving null for Grantham edge-mismatch (BH-FDR corrected)",
+    "p_value": null,
+    "null_model": "freeland_hurst_block_preserving_per_table",
+    "sample_size": 25,
+    "publishable": true
+  },
+  {
+    "id": "optimality_rho_robustness",
+    "status": "supported",
+    "statement": "Coloring optimality is robust across all transversion weights rho in [0,1], including the full K4^3 mutation graph (p<0.01 at all rho values)",
+    "p_value": 0.003,
+    "null_model": "freeland_hurst_weighted_edges",
+    "sample_size": 1000,
+    "publishable": true
+  },
+  {
+    "id": "topology_avoidance_depletion",
+    "status": "supported",
+    "statement": "Natural codon reassignments are depleted for topology-breaking changes: 22% create new disconnections vs 73% of all possible single-codon reassignments",
+    "p_value": 0.0001,
+    "null_model": "table_preserving_permutation_10k",
+    "sample_size": 27,
+    "publishable": true
+  },
+  {
+    "id": "trna_enrichment_reassigned_aa",
+    "status": "suggestive",
+    "statement": "Organisms with variant genetic codes show elevated tRNA gene copy numbers for the reassigned amino acid, verified by tRNAscan-SE 2.0.12 on 18 NCBI genome assemblies across 5 variant genetic codes (24 pairings, 6 independent)",
+    "p_value": 0.045,
+    "null_model": "fisher_exact_stouffer_MIS_worst_case",
+    "sample_size": 6,
+    "publishable": true
+  },
+  {
+    "id": "bit_position_bias_weighted",
+    "status": "exploratory",
+    "statement": "Codon reassignment bit-flip distribution shows positional skew in GF(2)^6 coordinates, but signal is marginal after correcting for non-independence (de-duplicated p=0.075)",
+    "p_value": 0.075,
+    "null_model": "chi_square_deduplicated",
+    "sample_size": 20,
+    "publishable": true
+  },
+  {
+    "id": "mechanism_boundary_conditions",
+    "status": "exploratory",
+    "statement": "tRNA gene duplication accompanies codon reassignment in large nuclear genomes (ciliates, yeasts) but not in streamlined genomes (Blastocrithidia: anticodon stem shortening; Mycoplasma: anticodon modification)",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": 7,
+    "publishable": true
+  },
+  {
+    "id": "atchley_f3_serine_convergence",
+    "status": "exploratory",
+    "statement": "Serine's extreme Atchley Factor 3 score (F3 = \u22124.760, most extreme of 20 amino acids, 2.24 SD below mean) converges with the GF(2)^6 topological disconnection: F3 captures the mismatch between Serine's small physicochemical footprint and its disproportionate codon diversity, which the geometric framework identifies as maximal inter-family Hamming distance among 6-codon amino acids (4 vs 1 for Leu and Arg)",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": null,
+    "publishable": true
+  },
+  {
+    "id": "variant_code_disconnection_catalogue",
+    "status": "exploratory",
+    "statement": "Systematic survey of Hamming-graph connectivity across 25 NCBI translation tables identifies 4 variant-code cases with amino-acid disconnection at \u03b5=1 (Thr in yeast mito, Leu in chlorophycean mito, Ala in Pachysolen, Ser tripartite in Candida)",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": 25,
+    "publishable": true
+  },
+  {
+    "id": "kras_fano_clinical_prediction",
+    "status": "falsified",
+    "statement": "XOR 'Fano' relationships in GF(2)^6 predict enrichment of specific amino acids at KRAS G12 co-mutation sites",
+    "p_value": 1.0,
+    "null_model": "fisher_exact_bonferroni_corrected",
+    "sample_size": 1670,
+    "publishable": false
+  },
+  {
+    "id": "serine_min_distance_4_invariant",
+    "status": "rejected",
+    "statement": "Serine's minimum UCN-AGY Hamming distance = 4 holds invariantly across all 24 base-to-bit encodings",
+    "p_value": null,
+    "null_model": "counterexample_verification",
+    "sample_size": 24,
+    "publishable": false
+  },
+  {
+    "id": "psl_2_7_symmetry",
+    "status": "rejected",
+    "statement": "PSL(2,7) is the fundamental symmetry group of the genetic code",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": null,
+    "publishable": false
+  },
+  {
+    "id": "holomorphic_embedding",
+    "status": "rejected",
+    "statement": "The coordinate-wise map GF(2)^6 -> C^3 sending base-pairs to fourth roots of unity is a holomorphic embedding extending a character of GF(8)*",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": null,
+    "publishable": false
+  },
+  {
+    "id": "two_fold_bit_5_filtration",
+    "status": "tautological",
+    "statement": "All 2-fold synonymous codon pairs in the standard code differ at exactly bit position 5 under the default encoding",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": null,
+    "publishable": false
+  },
+  {
+    "id": "four_fold_prefix_filtration",
+    "status": "tautological",
+    "statement": "All 4-fold synonymous codon groups share a 4-bit prefix with 2-bit suffixes exhausting GF(2)^2",
+    "p_value": null,
+    "null_model": null,
+    "sample_size": null,
+    "publishable": false
+  }
+]

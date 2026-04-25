@@ -226,7 +226,7 @@ def leave_one_study_out(
         )
 
         try:
-            fit_model(train, loso_spec)
+            fit_model(train, loso_spec)  # type: ignore[arg-type]
         except Exception:
             continue
 
@@ -241,7 +241,7 @@ def leave_one_study_out(
 
         model = smf.glm(loso_spec.formula, data=train, family=family).fit()
         try:
-            test_clean = test.dropna(subset=[outcome_col])
+            test_clean = test.dropna(subset=[outcome_col])  # type: ignore[call-overload]
             preds = model.predict(test_clean)
         except Exception:
             continue

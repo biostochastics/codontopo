@@ -1,5 +1,5 @@
 {
-  "n_events": 61,
+  "n_events": 66,
   "hamming_paths": {
     "events": [
       {
@@ -237,18 +237,18 @@
     "n_events": 35
   },
   "directionality": {
-    "total_events": 61,
+    "total_events": 66,
     "sense_to_sense": 28,
     "sense_to_stop": 4,
-    "stop_to_sense": 29,
+    "stop_to_sense": 34,
     "unique_codons": 13,
     "unique_source_aas": 6,
     "unique_target_aas": 14,
     "top_codons": [
       "UGA",
+      "UAG",
       "AGA",
       "AGG",
-      "UAG",
       "UAA"
     ]
   }

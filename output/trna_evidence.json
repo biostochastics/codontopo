@@ -1,0 +1,951 @@
+{
+  "sign_test": {
+    "n_pairings": 24,
+    "n_with_elevated_trna": 17,
+    "binomial_p_value": 0.03195732831954956,
+    "mean_excess_trna_count": 7.541666666666667,
+    "hypothesis": "Disconnection organisms have more tRNA genes for reassigned AA than standard-code controls",
+    "pairings": [
+      {
+        "disconnection_organism": "Saccharomyces cerevisiae",
+        "disconnection_compartment": "mitochondrial",
+        "control_organism": "Yarrowia lipolytica",
+        "control_compartment": "mitochondrial",
+        "reassigned_aa": "Thr",
+        "disconnection_aa_trna_count": 2,
+        "control_aa_trna_count": 1,
+        "excess": 1,
+        "ratio": 2.0,
+        "source_disconnection": "PMC3113583 (Su et al. 2011 PNAS); yeast mito genome annotation",
+        "source_control": "NCBI RefSeq NC_002659 (Yarrowia lipolytica mito)"
+      },
+      {
+        "disconnection_organism": "Scenedesmus obliquus",
+        "disconnection_compartment": "mitochondrial",
+        "control_organism": "Chlamydomonas reinhardtii",
+        "control_compartment": "mitochondrial",
+        "reassigned_aa": "Leu",
+        "disconnection_aa_trna_count": 2,
+        "control_aa_trna_count": 1,
+        "excess": 1,
+        "ratio": 2.0,
+        "source_disconnection": "NCBI Scenedesmus obliquus mitochondrial genome; Knaap et al. 2002",
+        "source_control": "Chlamydomonas reinhardtii mitochondrial genome annotation"
+      },
+      {
+        "disconnection_organism": "Pachysolen tannophilus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Lachancea thermotolerans",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Ala",
+        "disconnection_aa_trna_count": 14,
+        "control_aa_trna_count": 11,
+        "excess": 3,
+        "ratio": 1.2727272727272727,
+        "source_disconnection": "Muhlhausen & Kollmar 2014, Genome Biology and Evolution",
+        "source_control": "GtRNAdb for Lachancea thermotolerans CBS 6340"
+      },
+      {
+        "disconnection_organism": "Candida albicans",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Lachancea thermotolerans",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Ser",
+        "disconnection_aa_trna_count": 16,
+        "control_aa_trna_count": 13,
+        "excess": 3,
+        "ratio": 1.2307692307692308,
+        "source_disconnection": "Candida Genome Database; Santos et al. 1996-2011 reviews",
+        "source_control": "GtRNAdb for Lachancea thermotolerans CBS 6340"
+      },
+      {
+        "disconnection_organism": "Tetrahymena thermophila",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 54,
+        "control_aa_trna_count": 3,
+        "excess": 51,
+        "ratio": 18.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000189635.1 (April 2026); Eisen et al. 2006 PLoS Biol 4:e286 (PMC1557398); Hanyu et al. 1986 EMBO J 5:1307-1311",
+        "source_control": "tRNAscan-SE 2.0.12 on GCF_000220395.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Paramecium tetraurelia",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 18,
+        "control_aa_trna_count": 3,
+        "excess": 15,
+        "ratio": 6.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000165425.1 (April 2026); Aury et al. 2006 Nature 444:171-178",
+        "source_control": "tRNAscan-SE 2.0.12 on GCF_000220395.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Tetrahymena thermophila",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 54,
+        "control_aa_trna_count": 11,
+        "excess": 43,
+        "ratio": 4.909090909090909,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000189635.1 (April 2026); Eisen et al. 2006 PLoS Biol 4:e286 (PMC1557398); Hanyu et al. 1986 EMBO J 5:1307-1311",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Paramecium tetraurelia",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 18,
+        "control_aa_trna_count": 11,
+        "excess": 7,
+        "ratio": 1.6363636363636365,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000165425.1 (April 2026); Aury et al. 2006 Nature 444:171-178",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Oxytricha trifallax",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 8,
+        "control_aa_trna_count": 11,
+        "excess": -3,
+        "ratio": 0.7272727272727273,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_000295675.1 (April 2026); Swart et al. 2013 PLoS Biol 11:e1001473",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes octocarinatus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 5,
+        "control_aa_trna_count": 7,
+        "excess": -2,
+        "ratio": 0.7142857142857143,
+        "source_disconnection": "Meyer et al. 1991 PNAS 88:3758-3761; Grimm et al. 1998 NAR 26:4557; Wang et al. 2016 Sci Rep 6:21139 (genome/transcriptome)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Blepharisma japonicum",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Trp",
+        "disconnection_aa_trna_count": 5,
+        "control_aa_trna_count": 6,
+        "excess": -1,
+        "ratio": 0.8333333333333334,
+        "source_disconnection": "Liang & Heckmann 1993; Swart et al. 2016 Mol Biol Evol 33:2885 (code survey)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes aediculatus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 4,
+        "control_aa_trna_count": 7,
+        "excess": -3,
+        "ratio": 0.5714285714285714,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_030463445.1 (April 2026); Jin et al. 2023",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes aediculatus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 4,
+        "control_aa_trna_count": 1,
+        "excess": 3,
+        "ratio": 4.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_030463445.1 (April 2026); Jin et al. 2023",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Euplotes amieti",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 8,
+        "control_aa_trna_count": 7,
+        "excess": 1,
+        "ratio": 1.1428571428571428,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_048569255.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes focardii",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 3,
+        "control_aa_trna_count": 1,
+        "excess": 2,
+        "ratio": 3.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_001880345.2 (April 2026); Mozzicafreddo et al. 2021",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Euplotes parawoodruffi",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 9,
+        "control_aa_trna_count": 7,
+        "excess": 2,
+        "ratio": 1.2857142857142858,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_021440025.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes weissei",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 20,
+        "control_aa_trna_count": 1,
+        "excess": 19,
+        "ratio": 20.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_021440005.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Euplotes woodruffi",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 4,
+        "control_aa_trna_count": 7,
+        "excess": -3,
+        "ratio": 0.5714285714285714,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_027382605.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Pseudocohnilembus persalinus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 20,
+        "control_aa_trna_count": 3,
+        "excess": 17,
+        "ratio": 6.666666666666667,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); Ensembl Protists",
+        "source_control": "tRNAscan-SE 2.0.12 on GCF_000220395.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Pseudocohnilembus persalinus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 20,
+        "control_aa_trna_count": 3,
+        "excess": 17,
+        "ratio": 6.666666666666667,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); Ensembl Protists",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Halteria grandinella",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 9,
+        "control_aa_trna_count": 11,
+        "excess": -2,
+        "ratio": 0.8181818181818182,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_006369765.1 (April 2026); Zheng et al. MBE 2021 (PMID 33500338)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Halteria grandinella",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 9,
+        "control_aa_trna_count": 3,
+        "excess": 6,
+        "ratio": 3.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_006369765.1 (April 2026); Zheng et al. MBE 2021 (PMID 33500338)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Blepharisma stoltei",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Trp",
+        "disconnection_aa_trna_count": 6,
+        "control_aa_trna_count": 6,
+        "excess": 0,
+        "ratio": 1.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_965603825.1 (April 2026); Singh et al. PNAS 2023 (PMID 36669098)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Blepharisma stoltei",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Trp",
+        "disconnection_aa_trna_count": 6,
+        "control_aa_trna_count": 2,
+        "excess": 4,
+        "ratio": 3.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_965603825.1 (April 2026); Singh et al. PNAS 2023 (PMID 36669098)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      }
+    ],
+    "caveat": "Small sample (n=4). Confirmed prior: Su et al. 2011 showed yeast mito tRNA-Thr2 derived from tRNA-His. This test extends the pattern and should be revisited with current GtRNAdb exports."
+  },
+  "fisher_stouffer": {
+    "per_pairing": [
+      {
+        "disconnection_key": "scerevisiae_mito",
+        "control_key": "ylipolytica_mito",
+        "reassigned_aa": "Thr",
+        "table": [
+          [
+            2,
+            21
+          ],
+          [
+            1,
+            19
+          ]
+        ],
+        "odds_ratio": 1.8095238095238095,
+        "fisher_p": 0.5535207843772789
+      },
+      {
+        "disconnection_key": "sobliquus_mito",
+        "control_key": "creinhardtii_mito",
+        "reassigned_aa": "Leu",
+        "table": [
+          [
+            2,
+            20
+          ],
+          [
+            1,
+            15
+          ]
+        ],
+        "odds_ratio": 1.5,
+        "fisher_p": 0.6206733048838312
+      },
+      {
+        "disconnection_key": "ptannophilus_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ala",
+        "table": [
+          [
+            14,
+            193
+          ],
+          [
+            11,
+            195
+          ]
+        ],
+        "odds_ratio": 1.2859161563824777,
+        "fisher_p": 0.3449437514865384
+      },
+      {
+        "disconnection_key": "calbicans_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ser",
+        "table": [
+          [
+            16,
+            191
+          ],
+          [
+            13,
+            193
+          ]
+        ],
+        "odds_ratio": 1.243656866693516,
+        "fisher_p": 0.35544017723799487
+      },
+      {
+        "disconnection_key": "tthermophila_nuclear",
+        "control_key": "imultifiliis_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            54,
+            658
+          ],
+          [
+            3,
+            138
+          ]
+        ],
+        "odds_ratio": 3.7750759878419453,
+        "fisher_p": 0.008426349137653201
+      },
+      {
+        "disconnection_key": "ptetraurelia_nuclear",
+        "control_key": "imultifiliis_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            18,
+            197
+          ],
+          [
+            3,
+            138
+          ]
+        ],
+        "odds_ratio": 4.2030456852791875,
+        "fisher_p": 0.010197632403706027
+      },
+      {
+        "disconnection_key": "tthermophila_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            54,
+            658
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 1.909919867366676,
+        "fisher_p": 0.03227019062953774
+      },
+      {
+        "disconnection_key": "ptetraurelia_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            18,
+            197
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 2.1264420858329487,
+        "fisher_p": 0.039602389780460684
+      },
+      {
+        "disconnection_key": "oxytricha_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            8,
+            82
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 2.270509977827051,
+        "fisher_p": 0.07513717580400886
+      },
+      {
+        "disconnection_key": "eoctocarinatus_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            5,
+            109
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 1.7038007863695936,
+        "fisher_p": 0.27175486262264137
+      },
+      {
+        "disconnection_key": "bjaponicum_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Trp",
+        "table": [
+          [
+            5,
+            110
+          ],
+          [
+            6,
+            261
+          ]
+        ],
+        "odds_ratio": 1.9772727272727273,
+        "fisher_p": 0.20969042225429652
+      },
+      {
+        "disconnection_key": "eaediculatus_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            4,
+            73
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 2.035225048923679,
+        "fisher_p": 0.214754701213773
+      },
+      {
+        "disconnection_key": "eaediculatus_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            4,
+            73
+          ],
+          [
+            1,
+            85
+          ]
+        ],
+        "odds_ratio": 4.657534246575342,
+        "fisher_p": 0.15104963621947606
+      },
+      {
+        "disconnection_key": "eamieti_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            8,
+            108
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 2.751322751322751,
+        "fisher_p": 0.04923189241625568
+      },
+      {
+        "disconnection_key": "efocardii_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            3,
+            56
+          ],
+          [
+            1,
+            85
+          ]
+        ],
+        "odds_ratio": 4.553571428571429,
+        "fisher_p": 0.18401786007419813
+      },
+      {
+        "disconnection_key": "eparawoodruffi_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            9,
+            136
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 2.457983193277311,
+        "fisher_p": 0.06540870533267415
+      },
+      {
+        "disconnection_key": "eweissei_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            20,
+            443
+          ],
+          [
+            1,
+            85
+          ]
+        ],
+        "odds_ratio": 3.8374717832957113,
+        "fisher_p": 0.13183920360874837
+      },
+      {
+        "disconnection_key": "ewoodruffi_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            4,
+            75
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 1.980952380952381,
+        "fisher_p": 0.2262660941963295
+      },
+      {
+        "disconnection_key": "ppersalinus_nuclear",
+        "control_key": "imultifiliis_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            20,
+            240
+          ],
+          [
+            3,
+            138
+          ]
+        ],
+        "odds_ratio": 3.8333333333333335,
+        "fisher_p": 0.015039153027039866
+      },
+      {
+        "disconnection_key": "ppersalinus_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            20,
+            240
+          ],
+          [
+            3,
+            83
+          ]
+        ],
+        "odds_ratio": 2.3055555555555554,
+        "fisher_p": 0.13166784854230562
+      },
+      {
+        "disconnection_key": "hgrandinella_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            9,
+            120
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 1.7454545454545454,
+        "fisher_p": 0.16503463045029354
+      },
+      {
+        "disconnection_key": "hgrandinella_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            9,
+            120
+          ],
+          [
+            3,
+            83
+          ]
+        ],
+        "odds_ratio": 2.075,
+        "fisher_p": 0.21819480924552223
+      },
+      {
+        "disconnection_key": "bstoltei_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Trp",
+        "table": [
+          [
+            6,
+            160
+          ],
+          [
+            6,
+            261
+          ]
+        ],
+        "odds_ratio": 1.63125,
+        "fisher_p": 0.2894176130312396
+      },
+      {
+        "disconnection_key": "bstoltei_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Trp",
+        "table": [
+          [
+            6,
+            160
+          ],
+          [
+            2,
+            84
+          ]
+        ],
+        "odds_ratio": 1.575,
+        "fisher_p": 0.4469256093780069
+      }
+    ],
+    "p_values": [
+      0.5535207843772789,
+      0.6206733048838312,
+      0.3449437514865384,
+      0.35544017723799487,
+      0.008426349137653201,
+      0.010197632403706027,
+      0.03227019062953774,
+      0.039602389780460684,
+      0.07513717580400886,
+      0.27175486262264137,
+      0.20969042225429652,
+      0.214754701213773,
+      0.15104963621947606,
+      0.04923189241625568,
+      0.18401786007419813,
+      0.06540870533267415,
+      0.13183920360874837,
+      0.2262660941963295,
+      0.015039153027039866,
+      0.13166784854230562,
+      0.16503463045029354,
+      0.21819480924552223,
+      0.2894176130312396,
+      0.4469256093780069
+    ],
+    "z_scores": [
+      -0.13456169221965825,
+      -0.30724960594289474,
+      0.39900773755831626,
+      0.37067400461794614,
+      2.389905721702146,
+      2.318995786223262,
+      1.84842848413559,
+      1.7553188757785037,
+      1.438563085324157,
+      0.6075141948902947,
+      0.8074958847304229,
+      0.7900314484420471,
+      1.031942035411914,
+      1.6523472375236001,
+      0.9001588524508634,
+      1.5108863442206326,
+      1.1177391725141983,
+      0.7512001858435572,
+      2.1690576674476736,
+      1.11854172348893,
+      0.9739743786949607,
+      0.7783043384148506,
+      0.5550868950312501,
+      0.1334326582761964
+    ],
+    "stouffer_z": 5.098367014629634,
+    "stouffer_p": 1.7129804374960145e-07,
+    "stouffer_z_independent": 2.1314491214946427,
+    "stouffer_p_independent": 0.01652607987435928,
+    "n_independent_pairings": 6,
+    "n_pairings": 24,
+    "method": "Fisher's exact (one-sided) per pairing, Stouffer's Z combination",
+    "caveat": "Pairings are not fully independent (some share control organisms). The stouffer_p_independent field uses only pairings with no shared organisms."
+  },
+  "mis_analysis": {
+    "n_pairings": 24,
+    "n_mis_total": 2,
+    "n_mis_size_ge2": 2,
+    "median_stouffer_p": 0.04489292052810068,
+    "worst_case_stouffer_p": 0.04489292052810068,
+    "best_case_stouffer_p": 0.04380929523299426,
+    "fraction_significant_p05": 1.0,
+    "fraction_significant_p01": 0.0,
+    "best_mis": {
+      "mis_indices": [
+        0,
+        1,
+        2,
+        5,
+        11,
+        16
+      ],
+      "mis_size": 6,
+      "pairings": [
+        "scerevisiae_mito vs ylipolytica_mito (Thr)",
+        "sobliquus_mito vs creinhardtii_mito (Leu)",
+        "ptannophilus_nuclear vs lthermotolerans_nuclear (Ala)",
+        "ptetraurelia_nuclear vs imultifiliis_nuclear (Gln)",
+        "eaediculatus_nuclear vs scoeruleus_nuclear (Cys)",
+        "eweissei_nuclear vs fsalina_nuclear (Cys)"
+      ],
+      "fisher_p_values": [
+        0.5535207843772789,
+        0.6206733048838312,
+        0.3449437514865384,
+        0.010197632403706027,
+        0.214754701213773,
+        0.13183920360874837
+      ],
+      "stouffer_z": 1.7080956794786726,
+      "stouffer_p": 0.04380929523299426
+    },
+    "worst_mis": {
+      "mis_indices": [
+        0,
+        1,
+        3,
+        5,
+        11,
+        16
+      ],
+      "mis_size": 6,
+      "pairings": [
+        "scerevisiae_mito vs ylipolytica_mito (Thr)",
+        "sobliquus_mito vs creinhardtii_mito (Leu)",
+        "calbicans_nuclear vs lthermotolerans_nuclear (Ser)",
+        "ptetraurelia_nuclear vs imultifiliis_nuclear (Gln)",
+        "eaediculatus_nuclear vs scoeruleus_nuclear (Cys)",
+        "eweissei_nuclear vs fsalina_nuclear (Cys)"
+      ],
+      "fisher_p_values": [
+        0.5535207843772789,
+        0.6206733048838312,
+        0.35544017723799487,
+        0.010197632403706027,
+        0.214754701213773,
+        0.13183920360874837
+      ],
+      "stouffer_z": 1.6965284814433064,
+      "stouffer_p": 0.04489292052810068
+    },
+    "all_mis_p_values": [
+      0.04380929523299426,
+      0.04489292052810068
+    ],
+    "method": "Bron-Kerbosch enumeration of all maximal independent sets from the conflict graph (edges = shared organisms). Stouffer's Z combination computed for each MIS with >=2 members.",
+    "interpretation": "Robust: worst-case MIS p = 0.0449, median MIS p = 0.0449, 2/2 MIS significant at p<0.05."
+  },
+  "topology_breaking_subset": {
+    "method": "Topology-breaking subset of the tRNA-enrichment analysis. Restricts the 24-pairing all-pairings analysis to the 4 pairings whose underlying variant-code reassignment creates a new amino-acid disconnection in GF(2)^6 (yeast mito Thr, Scenedesmus mito Leu, Pachysolen Ala, Candida Ser). Reviewer R1.E / R1.8: more direct test of the compensation-via-tRNA-duplication hypothesis.",
+    "n_pairings": 4,
+    "per_pairing": [
+      {
+        "disconnection_key": "scerevisiae_mito",
+        "control_key": "ylipolytica_mito",
+        "reassigned_aa": "Thr",
+        "table_id_lineage": "table_3_yeast_mito",
+        "table": [
+          [
+            2,
+            21
+          ],
+          [
+            1,
+            19
+          ]
+        ],
+        "odds_ratio": 1.8095238095238095,
+        "fisher_p": 0.5535207843772789
+      },
+      {
+        "disconnection_key": "sobliquus_mito",
+        "control_key": "creinhardtii_mito",
+        "reassigned_aa": "Leu",
+        "table_id_lineage": "table_22_scenedesmus_mito",
+        "table": [
+          [
+            2,
+            20
+          ],
+          [
+            1,
+            15
+          ]
+        ],
+        "odds_ratio": 1.5,
+        "fisher_p": 0.6206733048838312
+      },
+      {
+        "disconnection_key": "ptannophilus_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ala",
+        "table_id_lineage": "table_26_pachysolen_nuclear",
+        "table": [
+          [
+            14,
+            193
+          ],
+          [
+            11,
+            195
+          ]
+        ],
+        "odds_ratio": 1.2859161563824777,
+        "fisher_p": 0.3449437514865384
+      },
+      {
+        "disconnection_key": "calbicans_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ser",
+        "table_id_lineage": "table_12_candida_nuclear",
+        "table": [
+          [
+            16,
+            191
+          ],
+          [
+            13,
+            193
+          ]
+        ],
+        "odds_ratio": 1.243656866693516,
+        "fisher_p": 0.35544017723799487
+      }
+    ],
+    "stouffer_z_topology_breaking": 0.1639352220068547,
+    "stouffer_p_topology_breaking": 0.43489106951522516,
+    "caveat": "Sample size n=4 is small; this is a restricted subset analysis. Reported alongside the all-pairings result for transparency. Some pairings use literature/GtRNAdb counts rather than tRNAscan-SE-verified counts; see tRNARepertoire.source field."
+  }
+}

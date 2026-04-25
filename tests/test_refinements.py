@@ -229,6 +229,6 @@ class TestColoringOptimality:
 
     def test_cross_table_optimality_includes_all_tables(self):
         result = cross_table_optimality()
-        # 25 NCBI tables (though some are flagged as deprecated)
-        assert len(result["per_table"]) >= 20
+        # 27 NCBI tables (1-6, 9-16, 21-33; codes 7, 8, 17-20 deprecated)
+        assert len(result["per_table"]) == 27
         assert result["standard_score"] > 0

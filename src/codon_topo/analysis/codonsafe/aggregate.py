@@ -136,7 +136,8 @@ def aggregate_to_units(
         agg_dict[f"max_delta_F_{metric}"] = (col, "max")
 
     grouped = df.groupby([study_col, unit_id_col])
-    result = grouped.agg(**agg_dict)
+    # groupby(...).agg(**kwargs) returns a DataFrame; the union type is overly broad
+    result: pd.DataFrame = grouped.agg(**agg_dict)  # type: ignore[assignment]
 
     # Ser boundary crossings (handle None values)
     if "crosses_component_boundary_eps1" in df.columns:

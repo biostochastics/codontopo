@@ -192,10 +192,12 @@ def topology_avoidance_test() -> dict:
     b = observed_no_disc
     c_complement = K - a  # possible disc-creating NOT in observed
     d_complement = (N - K) - b  # possible non-disc NOT in observed
-    odds_ratio, fisher_p = fisher_exact(
+    fr = fisher_exact(
         [[a, b], [max(c_complement, 0), max(d_complement, 0)]],
         alternative="less",
     )
+    odds_ratio = float(fr.statistic)  # type: ignore[attr-defined]
+    fisher_p = float(fr.pvalue)  # type: ignore[attr-defined]
 
     # Table-preserving permutation null: within each table, keep which
     # codons change but permute their target AAs among that table's
@@ -247,8 +249,8 @@ def topology_avoidance_test() -> dict:
         "hypergeom_p": hypergeom_p,
         "permutation_p": perm_p,
         "n_permutations": n_perm,
-        "odds_ratio": float(odds_ratio),
-        "fisher_p": float(fisher_p),
+        "odds_ratio": odds_ratio,
+        "fisher_p": fisher_p,
         "hypothesis": (
             "Natural reassignments are depleted for topology-breaking "
             "changes relative to the space of possible reassignments"
@@ -311,10 +313,10 @@ CLADE_GROUPS: dict[str, list[int]] = {
 def topology_avoidance_k43(seed: int = 135325) -> dict:
     """Topology avoidance test using K4^3 (nucleotide-level) adjacency.
 
-    Addresses the reviewer concern that Hamming-1 in GF(2)^6 misses ~1/3
-    of single-nucleotide mutations. Here we define amino acid codon-family
-    graphs using full single-nucleotide adjacency: two codons are neighbors
-    iff they differ at exactly one nucleotide position (encoding-independent).
+    Hamming-1 in GF(2)^6 misses ~1/3 of single-nucleotide mutations. Here we
+    define amino acid codon-family graphs using full single-nucleotide
+    adjacency: two codons are neighbors iff they differ at exactly one
+    nucleotide position (encoding-independent).
 
     A reassignment is topology-breaking if it increases the number of
     connected components in ANY amino acid's codon graph under K4^3.
@@ -482,8 +484,9 @@ def topology_avoidance_k43(seed: int = 135325) -> dict:
 def topology_avoidance_phylogenetic_sensitivity() -> dict:
     """Re-run topology avoidance test with phylogenetic corrections.
 
-    Addresses the reviewer concern about non-independence of reassignment
-    events across NCBI tables sharing evolutionary ancestry.
+    NCBI tables share evolutionary ancestry, so reassignment events across
+    tables are not strictly independent. This routine quantifies the impact
+    of that non-independence on the topology-avoidance result.
 
     Three analyses:
     1. Lineage-collapsed: one event per unique (lineage, codon, target_aa)
@@ -595,4 +598,435 @@ def topology_avoidance_phylogenetic_sensitivity() -> dict:
             "target_aa). Clade-exclusion: remove major taxonomic groups and "
             "retest."
         ),
+    }
+
+
+# ====================================================================
+# Definitions audit: 2 adjacencies x 2 topology-breaking definitions
+# ====================================================================
+
+
+def _q6_components_per_aa(
+    code: dict[str, str],
+    encoding: dict[str, tuple[int, int]] | None = None,
+) -> dict[str, int]:
+    """Count Q_6 (Hamming-1, encoding-dependent) connected components per AA."""
+    from collections import defaultdict
+
+    from codon_topo.core.encoding import codon_to_vector, DEFAULT_ENCODING
+    from codon_topo.core.homology import _partition
+
+    enc = encoding or DEFAULT_ENCODING
+    aa_codons: dict[str, list[str]] = defaultdict(list)
+    for c, aa in code.items():
+        if aa != "Stop":
+            aa_codons[aa].append(c)
+
+    out: dict[str, int] = {}
+    for aa, codons in aa_codons.items():
+        if not codons:
+            out[aa] = 0
+        elif len(codons) == 1:
+            out[aa] = 1
+        else:
+            vectors = [codon_to_vector(c, enc) for c in codons]
+            out[aa] = len(_partition(vectors, 1))
+    return out
+
+
+def _k43_components_per_aa(code: dict[str, str]) -> dict[str, int]:
+    """Count K_4^3 (nucleotide-level, encoding-independent) components per AA."""
+    from collections import defaultdict
+
+    from codon_topo.core.encoding import nucleotide_distance
+
+    aa_codons: dict[str, list[str]] = defaultdict(list)
+    for c, aa in code.items():
+        if aa != "Stop":
+            aa_codons[aa].append(c)
+
+    out: dict[str, int] = {}
+    for aa, codons in aa_codons.items():
+        if not codons:
+            out[aa] = 0
+            continue
+        if len(codons) == 1:
+            out[aa] = 1
+            continue
+        parent = list(range(len(codons)))
+
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+
+        for i in range(len(codons)):
+            for j in range(i + 1, len(codons)):
+                if nucleotide_distance(codons[i], codons[j]) == 1:
+                    pi, pj = find(i), find(j)
+                    if pi != pj:
+                        parent[pi] = pj
+        out[aa] = len({find(i) for i in range(len(codons))})
+    return out
+
+
+def _classify_move(
+    standard_q6: dict[str, int],
+    standard_k43: dict[str, int],
+    standard_q6_disc: set[str],
+    standard_k43_disc: set[str],
+    variant_q6: dict[str, int],
+    variant_k43: dict[str, int],
+) -> dict[str, bool]:
+    """Classify a single candidate move under all four definitions.
+
+    Returns four bool keys:
+      - q6_new_disc:  variant has AAs newly disconnected (variant_q6[aa] > 1
+                      AND aa not in standard_q6_disc)
+      - q6_beta0:     variant has any AA whose Q_6 component count exceeds
+                      its standard value (Δβ₀ > 0)
+      - k43_new_disc: variant has AAs newly disconnected under K_4^3
+      - k43_beta0:    variant has any AA whose K_4^3 component count exceeds
+                      its standard value
+    """
+    variant_q6_disc = {aa for aa, n in variant_q6.items() if n > 1}
+    variant_k43_disc = {aa for aa, n in variant_k43.items() if n > 1}
+    novel_q6 = variant_q6_disc - standard_q6_disc
+    novel_k43 = variant_k43_disc - standard_k43_disc
+
+    q6_beta0 = any(
+        variant_q6.get(aa, 0) > standard_q6.get(aa, 0)
+        for aa in set(variant_q6) | set(standard_q6)
+    )
+    k43_beta0 = any(
+        variant_k43.get(aa, 0) > standard_k43.get(aa, 0)
+        for aa in set(variant_k43) | set(standard_k43)
+    )
+
+    return {
+        "q6_new_disc": bool(novel_q6),
+        "q6_beta0": q6_beta0,
+        "k43_new_disc": bool(novel_k43),
+        "k43_beta0": k43_beta0,
+    }
+
+
+def topology_definitions_audit() -> dict:
+    """Compute the 2 (adjacency) x 2 (definition) sensitivity audit.
+
+    Reviewer R1 noted that the manuscript Methods text claims the Δβ₀>0
+    (any-component-increase) definition while Q_6 numbers (931 of 1280
+    possible) actually correspond to the narrower "creates a new
+    disconnection from a previously connected family" definition. This
+    routine computes all four cells so the manuscript can pick one
+    definition consistently and report the other as a sensitivity column.
+
+    Cells (possible_breaks, observed_breaks, rate_obs, rate_poss,
+    depletion, hypergeom_p, RR, CI):
+      - Q_6 with new-disconnection (legacy primary)
+      - Q_6 with Δβ₀>0
+      - K_4^3 with new-disconnection
+      - K_4^3 with Δβ₀>0 (legacy primary for K_4^3)
+    """
+    import math
+
+    from scipy.stats import hypergeom
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db
+    from codon_topo.core.encoding import ALL_CODONS
+
+    standard_q6 = _q6_components_per_aa(STANDARD)
+    standard_k43 = _k43_components_per_aa(STANDARD)
+    standard_q6_disc = {aa for aa, n in standard_q6.items() if n > 1}
+    standard_k43_disc = {aa for aa, n in standard_k43.items() if n > 1}
+
+    cells: dict[str, dict[str, int]] = {
+        "q6_new_disc": {"possible": 0, "observed": 0},
+        "q6_beta0": {"possible": 0, "observed": 0},
+        "k43_new_disc": {"possible": 0, "observed": 0},
+        "k43_beta0": {"possible": 0, "observed": 0},
+    }
+    possible_total = 0
+
+    all_aas = sorted(set(STANDARD.values()))
+    for codon in ALL_CODONS:
+        orig = STANDARD[codon]
+        for new_aa in all_aas:
+            if new_aa == orig:
+                continue
+            possible_total += 1
+            variant = dict(STANDARD)
+            variant[codon] = new_aa
+            v_q6 = _q6_components_per_aa(variant)
+            v_k43 = _k43_components_per_aa(variant)
+            flags = _classify_move(
+                standard_q6,
+                standard_k43,
+                standard_q6_disc,
+                standard_k43_disc,
+                v_q6,
+                v_k43,
+            )
+            for k, v in flags.items():
+                if v:
+                    cells[k]["possible"] += 1
+
+    db = build_reassignment_db()
+    seen: set[tuple[str, str]] = set()
+    observed_total = 0
+    for e in db:
+        key = (e.codon, e.target_aa)
+        if key in seen:
+            continue
+        seen.add(key)
+        observed_total += 1
+        variant = dict(STANDARD)
+        variant[e.codon] = e.target_aa
+        v_q6 = _q6_components_per_aa(variant)
+        v_k43 = _k43_components_per_aa(variant)
+        flags = _classify_move(
+            standard_q6,
+            standard_k43,
+            standard_q6_disc,
+            standard_k43_disc,
+            v_q6,
+            v_k43,
+        )
+        for k, v in flags.items():
+            if v:
+                cells[k]["observed"] += 1
+
+    audit_rows = []
+    for cell_name, c in cells.items():
+        K = c["possible"]
+        x = c["observed"]
+        N = possible_total
+        n = observed_total
+        rate_obs = x / max(n, 1)
+        rate_poss = K / max(N, 1)
+        depletion = rate_poss / max(rate_obs, 1e-10)
+        hp = float(hypergeom.cdf(x, N, K, n))
+        if x > 0 and n > x and K > 0 and N > K:
+            se_log_rr = math.sqrt((1 / max(x, 1) - 1 / n) + (1 / max(K, 1) - 1 / N))
+            rr = rate_obs / max(rate_poss, 1e-10)
+            rr_lo = math.exp(math.log(rr) - 1.96 * se_log_rr)
+            rr_hi = math.exp(math.log(rr) + 1.96 * se_log_rr)
+        else:
+            rr = float("nan")
+            rr_lo, rr_hi = float("nan"), float("nan")
+        audit_rows.append(
+            {
+                "cell": cell_name,
+                "adjacency": "Q_6" if cell_name.startswith("q6") else "K_4^3",
+                "definition": (
+                    "new_disconnection_in_previously_connected_family"
+                    if cell_name.endswith("new_disc")
+                    else "increase_in_components_(Δβ₀>0)"
+                ),
+                "possible_breaks": K,
+                "possible_total": N,
+                "rate_possible": rate_poss,
+                "observed_breaks": x,
+                "observed_total": n,
+                "rate_observed": rate_obs,
+                "depletion_fold": depletion,
+                "risk_ratio": rr,
+                "risk_ratio_ci_95": (rr_lo, rr_hi),
+                "hypergeom_p": hp,
+            }
+        )
+
+    return {
+        "method": (
+            "Two-by-two audit of topology-breaking under (Q_6, K_4^3) "
+            "x (new-disconnection-in-previously-connected-family, Δβ₀>0). "
+            "All four cells share the same denominators (1280 candidate "
+            "moves; 28 de-duplicated observed events) but differ in how "
+            "'topology-breaking' is defined. Reviewer R1 noted the "
+            "manuscript Methods text described Δβ₀>0 while Q_6 reported "
+            "counts matched the new-disconnection definition; both are "
+            "now reported transparently."
+        ),
+        "audit_rows": audit_rows,
+    }
+
+
+def topology_avoidance_q6_encoding_sweep() -> dict:
+    """Recompute Q_6 topology avoidance under all 24 base-to-bit encodings.
+
+    K_4^3 adjacency is encoding-independent and does not need this sweep.
+    The Q_6 result depends on which 192 of the 288 single-nucleotide edges
+    are designated as Hamming-1 (vs the 96 Hamming-2 'diagonals'); reviewer
+    R1.B asked for confirmation that the depletion holds across all 24
+    bijections, not just the default C=00, U=01, A=10, G=11.
+
+    Uses the new-disconnection definition (legacy primary for Q_6).
+    """
+    from scipy.stats import hypergeom
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db
+    from codon_topo.core.encoding import ALL_CODONS, all_encodings
+
+    db = build_reassignment_db()
+
+    rows = []
+    for idx, enc in enumerate(all_encodings()):
+        # encoding label as concatenated base->bits string
+        label = "".join(f"{b}={enc[b][0]}{enc[b][1]}" for b in ("C", "U", "A", "G"))
+        standard_q6 = _q6_components_per_aa(STANDARD, enc)
+        standard_disc = {aa for aa, n in standard_q6.items() if n > 1}
+
+        possible_breaks = 0
+        possible_total = 0
+        all_aas = sorted(set(STANDARD.values()))
+        for codon in ALL_CODONS:
+            orig = STANDARD[codon]
+            for new_aa in all_aas:
+                if new_aa == orig:
+                    continue
+                possible_total += 1
+                variant = dict(STANDARD)
+                variant[codon] = new_aa
+                v_q6 = _q6_components_per_aa(variant, enc)
+                variant_disc = {aa for aa, n in v_q6.items() if n > 1}
+                if variant_disc - standard_disc:
+                    possible_breaks += 1
+
+        observed_breaks = 0
+        observed_total = 0
+        seen: set[tuple[str, str]] = set()
+        for e in db:
+            key = (e.codon, e.target_aa)
+            if key in seen:
+                continue
+            seen.add(key)
+            observed_total += 1
+            variant = dict(STANDARD)
+            variant[e.codon] = e.target_aa
+            v_q6 = _q6_components_per_aa(variant, enc)
+            variant_disc = {aa for aa, n in v_q6.items() if n > 1}
+            if variant_disc - standard_disc:
+                observed_breaks += 1
+
+        rate_obs = observed_breaks / max(observed_total, 1)
+        rate_poss = possible_breaks / max(possible_total, 1)
+        depletion = rate_poss / max(rate_obs, 1e-10)
+        hp = float(
+            hypergeom.cdf(
+                observed_breaks, possible_total, possible_breaks, observed_total
+            )
+        )
+        rows.append(
+            {
+                "encoding_index": idx,
+                "encoding_label": label,
+                "rate_observed": rate_obs,
+                "rate_possible": rate_poss,
+                "depletion_fold": depletion,
+                "hypergeom_p": hp,
+                "observed_breaks": observed_breaks,
+                "possible_breaks": possible_breaks,
+            }
+        )
+
+    rates_obs = [r["rate_observed"] for r in rows]
+    rates_poss = [r["rate_possible"] for r in rows]
+    depletions = [r["depletion_fold"] for r in rows]
+    pvals = [r["hypergeom_p"] for r in rows]
+    return {
+        "method": (
+            "Q_6 topology-avoidance recomputed under all 24 base-to-bit "
+            "encodings (the K_4^3 result is encoding-independent and "
+            "needs no sweep). Uses the new-disconnection definition. "
+            "All 24 encodings share the same denominators (1280 candidate "
+            "moves; 28 de-duplicated observed events). The default "
+            "encoding (C=00, U=01, A=10, G=11) is encoding_index 0."
+        ),
+        "n_encodings": len(rows),
+        "rate_obs_min": min(rates_obs),
+        "rate_obs_median": sorted(rates_obs)[len(rates_obs) // 2],
+        "rate_obs_max": max(rates_obs),
+        "rate_poss_min": min(rates_poss),
+        "rate_poss_median": sorted(rates_poss)[len(rates_poss) // 2],
+        "rate_poss_max": max(rates_poss),
+        "depletion_min": min(depletions),
+        "depletion_median": sorted(depletions)[len(depletions) // 2],
+        "depletion_max": max(depletions),
+        "p_max": max(pvals),
+        "p_median": sorted(pvals)[len(pvals) // 2],
+        "p_min": min(pvals),
+        "all_significant_at_0p01": all(p < 0.01 for p in pvals),
+        "all_significant_at_0p05": all(p < 0.05 for p in pvals),
+        "rows": rows,
+    }
+
+
+def topology_denominator_sensitivity() -> dict:
+    """Report the four candidate-universe definitions side-by-side.
+
+    Reviewer R1.D / R1.2 asked for an explicit denominator-sensitivity
+    table covering:
+      1. 21-label targets, identity-excluded: |M| = 64 x 20 = 1280
+         (each codon gets 20 alternative labels = 19 AAs + Stop, OR
+         20 AAs if currently Stop)
+      2. Amino-acid-only targets, identity-excluded: |M| = 1219
+         (61 sense codons x 19 AA alternatives + 3 stop codons x 20)
+      3. AA targets including no-op (current label allowed): |M| = 64 x 20
+         = 1280, but where 64 of those are no-ops (codon -> current AA)
+      4. Stop-inclusive with no-ops: |M| = 64 x 21 = 1344
+    """
+    from codon_topo.core.encoding import ALL_CODONS
+
+    n_codons = 64
+    n_sense = sum(1 for c in ALL_CODONS if STANDARD[c] != "Stop")
+    n_stop = n_codons - n_sense
+
+    # Define each universe
+    rows = [
+        {
+            "universe": "U1_21label_no_identity",
+            "description": (
+                "y in {A_20 union Stop}, y != C(x); each codon has "
+                "exactly 20 alternative labels"
+            ),
+            "size": n_codons * 20,  # 1280
+            "is_primary": True,
+        },
+        {
+            "universe": "U2_AA_only_no_identity",
+            "description": (
+                "y in A_20, y != C(x); 61 sense codons get 19 alts, "
+                "3 stop codons get 20 alts"
+            ),
+            "size": n_sense * 19 + n_stop * 20,  # 1219 for standard code
+        },
+        {
+            "universe": "U3_AA_with_noop",
+            "description": (
+                "y in A_20, no identity restriction; 64 candidates are "
+                "no-ops (codon -> current AA)"
+            ),
+            "size": n_codons * 20,  # 1280; semantically different from U1
+        },
+        {
+            "universe": "U4_stop_inclusive_with_noop",
+            "description": (
+                "y in {A_20 union Stop}, no identity restriction; 64 no-ops included"
+            ),
+            "size": n_codons * 21,  # 1344
+        },
+    ]
+    return {
+        "method": (
+            "Reviewer R1.D / R1.2 denominator-sensitivity audit: four "
+            "candidate-universe definitions for the topology-avoidance "
+            "denominator. Primary for the manuscript is U1 "
+            "(21-label, identity-excluded) = 1280 single-codon relabelings. "
+            "U2 (AA-only) gives 1219 for the standard code; the difference "
+            "matters when interpretating the hypergeometric parameter K. "
+            "U3 and U4 are listed for completeness but are not used in "
+            "the primary analysis."
+        ),
+        "rows": rows,
     }

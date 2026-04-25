@@ -1445,7 +1445,9 @@ def fisher_exact_per_pairing() -> dict:
         c = ctl.by_amino_acid.get(aa, 0)
         d = sum(ctl.by_amino_acid.values()) - c
 
-        odds_ratio, p = fisher_exact([[a, b], [c, d]], alternative="greater")
+        fr = fisher_exact([[a, b], [c, d]], alternative="greater")
+        odds_ratio = float(fr.statistic)  # type: ignore[attr-defined]
+        p = float(fr.pvalue)  # type: ignore[attr-defined]
 
         per_pairing.append(
             {
@@ -1453,11 +1455,11 @@ def fisher_exact_per_pairing() -> dict:
                 "control_key": ctl_key,
                 "reassigned_aa": aa,
                 "table": [[a, b], [c, d]],
-                "odds_ratio": float(odds_ratio),
-                "fisher_p": float(p),
+                "odds_ratio": odds_ratio,
+                "fisher_p": p,
             }
         )
-        p_values.append(float(p))
+        p_values.append(p)
 
     # Stouffer's Z combination
     # Symmetric clipping to avoid infinite z-scores
@@ -1471,7 +1473,7 @@ def fisher_exact_per_pairing() -> dict:
     # that favors the strongest-effect pairings.
     seen_organisms: set[str] = set()
     independent_p: list[float] = []
-    sorted_pairings = sorted(per_pairing, key=lambda x: float(x["fisher_p"]))
+    sorted_pairings = sorted(per_pairing, key=lambda x: float(x["fisher_p"]))  # type: ignore[arg-type]
     for pp in sorted_pairings:
         if (
             pp["disconnection_key"] in seen_organisms
@@ -1524,11 +1526,10 @@ def _stouffer_combine(p_values: list[float]) -> tuple[float, float]:
 def maximal_independent_set_analysis() -> dict:
     """Enumerate all maximal independent sets (MIS) and compute Stouffer p-values.
 
-    Addresses the reviewer concern that greedy selection by strongest effect
-    biases the independent-pairings Stouffer p-value downward. Instead of
-    selecting one set, we enumerate ALL maximal independent sets from the
-    conflict graph (edges connect pairings sharing an organism) and report
-    the distribution of Stouffer p-values.
+    Greedy selection by strongest effect would bias the independent-pairings
+    Stouffer p-value downward. Instead of selecting one set, we enumerate ALL
+    maximal independent sets from the conflict graph (edges connect pairings
+    sharing an organism) and report the distribution of Stouffer p-values.
 
     A maximal independent set is a set of pairings where no two share an
     organism AND no additional pairing can be added without creating a conflict.
@@ -1545,8 +1546,8 @@ def maximal_independent_set_analysis() -> dict:
         b = sum(dis.by_amino_acid.values()) - a
         c = ctl.by_amino_acid.get(aa, 0)
         d = sum(ctl.by_amino_acid.values()) - c
-        _, p = fisher_exact([[a, b], [c, d]], alternative="greater")
-        pairing_p.append(float(p))
+        fr = fisher_exact([[a, b], [c, d]], alternative="greater")
+        pairing_p.append(float(fr.pvalue))  # type: ignore[attr-defined]
         pairing_keys.append((dis_key, ctl_key, aa))
 
     n = len(DISCONNECTION_PAIRINGS)
@@ -1736,17 +1737,114 @@ def aa_label_permutation_test(
     }
 
 
+def topology_breaking_subset_test() -> dict:
+    """Restrict tRNA enrichment to topology-breaking reassignment events only.
+
+    Reviewer R1.E / R1.8 noted that the all-pairings (n=24) Stouffer result
+    blends several event classes — topology-breaking disconnections (yeast
+    mito Thr, Scenedesmus Leu, Pachysolen Ala, Candida Ser), topology-
+    preserving stop-to-sense reassignments (UAR-Gln in ciliates, UGA-Cys
+    in Euplotes, UGA-Trp in Blepharisma), and ambiguous stop/sense systems.
+    The headline framing ("variant-code lineages with topology-breaking
+    reassignments show elevated tRNA gene counts") is best supported by
+    restricting analysis to the topology-breaking subset.
+
+    The 4 topology-breaking pairings:
+      - scerevisiae_mito vs ylipolytica_mito for Thr (table 3, CUN-Thr)
+      - sobliquus_mito vs creinhardtii_mito for Leu (table 22, UAG-Leu;
+        equivalent to chlorophycean mito table 16)
+      - ptannophilus_nuclear vs lthermotolerans_nuclear for Ala (table 26)
+      - calbicans_nuclear vs lthermotolerans_nuclear for Ser (table 12)
+    """
+    from scipy.stats import fisher_exact, norm
+
+    topology_breaking_keys = {
+        ("scerevisiae_mito", "ylipolytica_mito", "Thr"),
+        ("sobliquus_mito", "creinhardtii_mito", "Leu"),
+        ("ptannophilus_nuclear", "lthermotolerans_nuclear", "Ala"),
+        ("calbicans_nuclear", "lthermotolerans_nuclear", "Ser"),
+    }
+
+    per_pairing = []
+    p_values: list[float] = []
+    for dis_key, ctl_key, aa in DISCONNECTION_PAIRINGS:
+        if (dis_key, ctl_key, aa) not in topology_breaking_keys:
+            continue
+        dis = get_repertoire(dis_key)
+        ctl = get_repertoire(ctl_key)
+        a = dis.by_amino_acid.get(aa, 0)
+        b = sum(dis.by_amino_acid.values()) - a
+        c = ctl.by_amino_acid.get(aa, 0)
+        d = sum(ctl.by_amino_acid.values()) - c
+        fr = fisher_exact([[a, b], [c, d]], alternative="greater")
+        odds_ratio = float(fr.statistic)  # type: ignore[attr-defined]
+        p = float(fr.pvalue)  # type: ignore[attr-defined]
+        per_pairing.append(
+            {
+                "disconnection_key": dis_key,
+                "control_key": ctl_key,
+                "reassigned_aa": aa,
+                "table_id_lineage": (
+                    "table_3_yeast_mito"
+                    if dis_key == "scerevisiae_mito"
+                    else "table_22_scenedesmus_mito"
+                    if dis_key == "sobliquus_mito"
+                    else "table_26_pachysolen_nuclear"
+                    if dis_key == "ptannophilus_nuclear"
+                    else "table_12_candida_nuclear"
+                ),
+                "table": [[a, b], [c, d]],
+                "odds_ratio": odds_ratio,
+                "fisher_p": p,
+            }
+        )
+        p_values.append(p)
+
+    # Stouffer's Z combination on topology-breaking subset
+    _CLIP_LO, _CLIP_HI = 1e-10, 1 - 1e-10
+    z_scores = [float(norm.ppf(1 - max(min(p, _CLIP_HI), _CLIP_LO))) for p in p_values]
+    if z_scores:
+        combined_z = sum(z_scores) / (len(z_scores) ** 0.5)
+        combined_p = float(1 - norm.cdf(combined_z))
+    else:
+        combined_z, combined_p = 0.0, 1.0
+
+    return {
+        "method": (
+            "Topology-breaking subset of the tRNA-enrichment analysis. "
+            "Restricts the 24-pairing all-pairings analysis to the 4 "
+            "pairings whose underlying variant-code reassignment creates "
+            "a new amino-acid disconnection in GF(2)^6 (yeast mito Thr, "
+            "Scenedesmus mito Leu, Pachysolen Ala, Candida Ser). "
+            "Reviewer R1.E / R1.8: more direct test of the "
+            "compensation-via-tRNA-duplication hypothesis."
+        ),
+        "n_pairings": len(per_pairing),
+        "per_pairing": per_pairing,
+        "stouffer_z_topology_breaking": combined_z,
+        "stouffer_p_topology_breaking": combined_p,
+        "caveat": (
+            "Sample size n=4 is small; this is a restricted subset analysis. "
+            "Reported alongside the all-pairings result for transparency. "
+            "Some pairings use literature/GtRNAdb counts rather than "
+            "tRNAscan-SE-verified counts; see tRNARepertoire.source field."
+        ),
+    }
+
+
 def trna_evidence_summary() -> dict:
     """Summary for paper or report, including all statistical tests."""
     sign_test = trna_duplication_correlation_test()
     fisher_test = fisher_exact_per_pairing()
     mis_test = maximal_independent_set_analysis()
     perm_test = aa_label_permutation_test()
+    topo_subset = topology_breaking_subset_test()
     return {
         "sign_test": sign_test,
         "fisher_stouffer": fisher_test,
         "mis_analysis": mis_test,
         "permutation_test": perm_test,
+        "topology_breaking_subset": topo_subset,
         "repertoires_used": list(CURATED_REPERTOIRES.keys()),
         "n_disconnection_organisms": sum(
             1 for r in CURATED_REPERTOIRES.values() if r.has_disconnection

@@ -101,7 +101,7 @@ def load_recoding_landscape() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
 
     for _, row in df.iterrows():
         gene = str(row.get("Gene", row.get("gene", "")))
-        pos = int(row.get("Position", row.get("position", 0)))
+        pos = int(row.get("Position", row.get("position", 0)) or 0)
         source_dna = str(row.get("WT_Codon", row.get("codon", "")))
 
         if source_dna.upper() not in SYN57_RECODE_MAP:

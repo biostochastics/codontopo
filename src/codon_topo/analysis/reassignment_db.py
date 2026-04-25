@@ -401,51 +401,34 @@ def bit_bias_permutation_null(
         (o - expected_uniform) ** 2 / expected_uniform for o in observed_hist
     )
 
-    # Group events for permutation
+    # Group events for permutation by either table_id or codon
+    groups: dict[object, list[ReassignmentEvent]] = defaultdict(list)
     if mode == "table_preserving":
-        by_table: dict[int, list[ReassignmentEvent]] = defaultdict(list)
         for e in sense_events:
-            by_table[e.table_id].append(e)
+            groups[e.table_id].append(e)
     elif mode == "codon_preserving":
-        by_codon: dict[str, list[ReassignmentEvent]] = defaultdict(list)
         for e in sense_events:
-            by_codon[e.codon].append(e)
+            groups[e.codon].append(e)
     else:
         raise ValueError(f"Unknown mode: {mode!r}")
 
     n_extreme = 0
     for _ in range(n_permutations):
         perm_events = []
-        if mode == "table_preserving":
-            for _tid, events in by_table.items():
-                targets = [e.target_aa for e in events]
-                rng.shuffle(targets)
-                for e, new_target in zip(events, targets):
-                    perm_events.append(
-                        ReassignmentEvent(
-                            table_id=e.table_id,
-                            table_name=e.table_name,
-                            codon=e.codon,
-                            source_aa=e.source_aa,
-                            target_aa=new_target,
-                            hamming_to_nearest_target=e.hamming_to_nearest_target,
-                        )
+        for events in groups.values():
+            targets = [e.target_aa for e in events]
+            rng.shuffle(targets)
+            for e, new_target in zip(events, targets):
+                perm_events.append(
+                    ReassignmentEvent(
+                        table_id=e.table_id,
+                        table_name=e.table_name,
+                        codon=e.codon,
+                        source_aa=e.source_aa,
+                        target_aa=new_target,
+                        hamming_to_nearest_target=e.hamming_to_nearest_target,
                     )
-        else:  # codon_preserving
-            for _codon, events in by_codon.items():
-                targets = [e.target_aa for e in events]
-                rng.shuffle(targets)
-                for e, new_target in zip(events, targets):
-                    perm_events.append(
-                        ReassignmentEvent(
-                            table_id=e.table_id,
-                            table_name=e.table_name,
-                            codon=e.codon,
-                            source_aa=e.source_aa,
-                            target_aa=new_target,
-                            hamming_to_nearest_target=e.hamming_to_nearest_target,
-                        )
-                    )
+                )
 
         perm_hist = _compute_bit_histogram(perm_events)
         perm_total = sum(perm_hist)

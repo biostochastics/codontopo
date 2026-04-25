@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+title: "codon-topo: Codon Geometry Validation & Prediction Engine"
+message: "If you use this software, please cite the accompanying manuscript."
+type: software
+authors:
+  - given-names: Paul
+    family-names: Clayworth
+    affiliation: "Logocentricity Inc., Austin, TX, USA"
+  - given-names: Sergey
+    family-names: Kornilov
+    email: sergey@biostochastics.com
+    affiliation: "Biostochastics, LLC, Seattle, WA, USA"
+    orcid: "https://orcid.org/0000-0003-1234-5678"
+version: 0.4.0
+date-released: "2026-04-24"
+license: CC-BY-NC-4.0
+repository-code: "https://github.com/biostochastics/codon-topo"
+keywords:
+  - genetic-code
+  - codon
+  - error-minimization
+  - graph-theory
+  - GF(2)^6
+  - persistent-homology
+  - evolutionary-biology
+preferred-citation:
+  type: article
+  title: "Robust error-minimization in the genetic code across physicochemical metrics and variant codes: a graph-theoretic analysis in GF(2)^6"
+  authors:
+    - given-names: Paul
+      family-names: Clayworth
+    - given-names: Sergey
+      family-names: Kornilov
+  year: 2026
+  notes: "Manuscript under review."

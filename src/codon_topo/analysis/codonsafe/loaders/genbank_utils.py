@@ -90,7 +90,7 @@ def _extract_codons_from_cds(
     # For compound locations (joins), this handles all parts
     # Skip codon_start bases from the position list to match the trimmed sequence
     positions = []
-    _all_positions = []
+    _all_positions: list[int] = []
     for part in feature.location.parts:
         start = int(part.start)
         end = int(part.end)

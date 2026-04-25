@@ -2,7 +2,7 @@
 
 **Cross-study retrospective meta-analysis of genome recoding experiments**
 
-*Companion analysis to Clayworth & Kornilov (2026). Journal of Theoretical Biology.*
+*Companion analysis to Clayworth & Kornilov (2026). Manuscript under review.*
 
 ---
 
@@ -104,7 +104,8 @@ codon-topo (core theory)
                     ├── fredens2019.py
                     ├── genbank_utils.py
                     ├── napolitano2016.py
-                    └── ostrov2016.py
+                    ├── ostrov2016.py
+                    └── robertson2025_syn57.py
 ```
 
 Visualization scripts: `src/codon_topo/visualization/R/codonsafe_figures.R`
@@ -113,4 +114,4 @@ Visualization scripts: `src/codon_topo/visualization/R/codonsafe_figures.R`
 
 ## License
 
-MIT. See main [`codon-topo`](../README.md) repository.
+CC BY-NC 4.0 — same as the parent [`codon-topo`](../README.md) repository. See [`../LICENSE`](../LICENSE).

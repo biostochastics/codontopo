@@ -1,0 +1,1674 @@
+{
+  "monte_carlo": {
+    "metric": "grantham",
+    "null_type": "freeland_hurst",
+    "include_stops": true,
+    "observed_score": 13477.0,
+    "null_mean": 14954.4802,
+    "null_std": 628.0173120084972,
+    "null_min": 12781.0,
+    "null_max": 17283.0,
+    "quantile_of_observed": 0.6,
+    "n_beaten_observed": 60,
+    "n_samples": 10000,
+    "p_value_raw": 0.006,
+    "p_value_conservative": 0.006099390060993901,
+    "p_value_lower_bound": 9.999000099990002e-05,
+    "effect_size_z": 2.3526106235428257,
+    "interpretation": "Strongly optimal (p = 0.0060)"
+  },
+  "cross_table": {
+    "per_table": [
+      {
+        "table_id": 1,
+        "score": 13477.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 2,
+        "score": 14612.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 3,
+        "score": 13448.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 4,
+        "score": 13178.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 5,
+        "score": 13306.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 6,
+        "score": 12279.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 9,
+        "score": 13210.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 10,
+        "score": 13369.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 11,
+        "score": 13477.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 12,
+        "score": 14016.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 13,
+        "score": 13332.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "table_id": 14,
+        "score": 12752.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 15,
+        "score": 12943.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 16,
+        "score": 13110.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 21,
+        "score": 13197.0,
+        "degeneracy_profile": [
+          8,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 22,
+        "score": 13652.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 23,
+        "score": 14208.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 24,
+        "score": 13387.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 25,
+        "score": 13223.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          5,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 26,
+        "score": 13773.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          5,
+          5,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 27,
+        "score": 11680.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 28,
+        "score": 11680.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 29,
+        "score": 12524.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 30,
+        "score": 12371.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "table_id": 31,
+        "score": 11794.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 32,
+        "score": 13113.0,
+        "degeneracy_profile": [
+          6,
+          6,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "table_id": 33,
+        "score": 12929.0,
+        "degeneracy_profile": [
+          7,
+          6,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      }
+    ],
+    "standard_score": 13477.0,
+    "min_score": 11680.0,
+    "max_score": 14612.0,
+    "relative_to_standard": [
+      {
+        "table_id": 1,
+        "score": 13477.0,
+        "pct_of_standard": 100.0
+      },
+      {
+        "table_id": 2,
+        "score": 14612.0,
+        "pct_of_standard": 108.42175558358686
+      },
+      {
+        "table_id": 3,
+        "score": 13448.0,
+        "pct_of_standard": 99.78481857980263
+      },
+      {
+        "table_id": 4,
+        "score": 13178.0,
+        "pct_of_standard": 97.78140535727536
+      },
+      {
+        "table_id": 5,
+        "score": 13306.0,
+        "pct_of_standard": 98.73117162573273
+      },
+      {
+        "table_id": 6,
+        "score": 12279.0,
+        "pct_of_standard": 91.11078133115679
+      },
+      {
+        "table_id": 9,
+        "score": 13210.0,
+        "pct_of_standard": 98.0188469243897
+      },
+      {
+        "table_id": 10,
+        "score": 13369.0,
+        "pct_of_standard": 99.1986347109891
+      },
+      {
+        "table_id": 11,
+        "score": 13477.0,
+        "pct_of_standard": 100.0
+      },
+      {
+        "table_id": 12,
+        "score": 14016.0,
+        "pct_of_standard": 103.99940639608221
+      },
+      {
+        "table_id": 13,
+        "score": 13332.0,
+        "pct_of_standard": 98.92409289901313
+      },
+      {
+        "table_id": 14,
+        "score": 12752.0,
+        "pct_of_standard": 94.62046449506566
+      },
+      {
+        "table_id": 15,
+        "score": 12943.0,
+        "pct_of_standard": 96.0376938487794
+      },
+      {
+        "table_id": 16,
+        "score": 13110.0,
+        "pct_of_standard": 97.27684202715739
+      },
+      {
+        "table_id": 21,
+        "score": 13197.0,
+        "pct_of_standard": 97.9223862877495
+      },
+      {
+        "table_id": 22,
+        "score": 13652.0,
+        "pct_of_standard": 101.29850857015656
+      },
+      {
+        "table_id": 23,
+        "score": 14208.0,
+        "pct_of_standard": 105.42405579876826
+      },
+      {
+        "table_id": 24,
+        "score": 13387.0,
+        "pct_of_standard": 99.3321955924909
+      },
+      {
+        "table_id": 25,
+        "score": 13223.0,
+        "pct_of_standard": 98.11530756102991
+      },
+      {
+        "table_id": 26,
+        "score": 13773.0,
+        "pct_of_standard": 102.19633449580768
+      },
+      {
+        "table_id": 27,
+        "score": 11680.0,
+        "pct_of_standard": 86.66617199673517
+      },
+      {
+        "table_id": 28,
+        "score": 11680.0,
+        "pct_of_standard": 86.66617199673517
+      },
+      {
+        "table_id": 29,
+        "score": 12524.0,
+        "pct_of_standard": 92.92869332937597
+      },
+      {
+        "table_id": 30,
+        "score": 12371.0,
+        "pct_of_standard": 91.79342583661052
+      },
+      {
+        "table_id": 31,
+        "score": 11794.0,
+        "pct_of_standard": 87.51205757958003
+      },
+      {
+        "table_id": 32,
+        "score": 13113.0,
+        "pct_of_standard": 97.29910217407435
+      },
+      {
+        "table_id": 33,
+        "score": 12929.0,
+        "pct_of_standard": 95.93381316316687
+      }
+    ]
+  },
+  "multi_metric": {
+    "metrics_tested": [
+      "grantham",
+      "miyata",
+      "polar_requirement",
+      "kyte_doolittle"
+    ],
+    "per_metric": [
+      {
+        "metric": "grantham",
+        "observed_score": 13477.0,
+        "null_mean": 14954.4802,
+        "null_std": 628.0173120084972,
+        "quantile": 0.6,
+        "p_value_conservative": 0.006099390060993901,
+        "effect_size_z": 2.3526106235428257,
+        "n_samples": 10000
+      },
+      {
+        "metric": "miyata",
+        "observed_score": 235.30000000000015,
+        "null_mean": 275.6736859999999,
+        "null_std": 12.87702362299389,
+        "quantile": 0.03,
+        "p_value_conservative": 0.00039996000399960006,
+        "effect_size_z": 3.1353274779978184,
+        "n_samples": 10000
+      },
+      {
+        "metric": "polar_requirement",
+        "observed_score": 347.29999999999984,
+        "null_mean": 410.4517999999998,
+        "null_std": 23.11206636199266,
+        "quantile": 0.25,
+        "p_value_conservative": 0.0025997400259974,
+        "effect_size_z": 2.732416868785557,
+        "n_samples": 10000
+      },
+      {
+        "metric": "kyte_doolittle",
+        "observed_score": 457.20000000000005,
+        "null_mean": 570.69364,
+        "null_std": 40.857084253330754,
+        "quantile": 0.13,
+        "p_value_conservative": 0.0013998600139986002,
+        "effect_size_z": 2.777820348028082,
+        "n_samples": 10000
+      }
+    ],
+    "all_significant_p05": true,
+    "all_significant_p01": true,
+    "note": "Freeland & Hurst (1998) used polar requirement (Woese 1973); cross-metric robustness elevates the finding from metric-specific to a general structural property of the genetic code."
+  },
+  "rho_sweep": {
+    "metric": "grantham",
+    "rho_values": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "per_rho": [
+      {
+        "rho": 0.0,
+        "observed_score": 13477.0,
+        "null_mean": 14954.4802,
+        "null_std": 628.0173120084972,
+        "quantile": 0.6,
+        "p_value": 0.006099390060993901,
+        "effect_size_z": 2.3526106235428257
+      },
+      {
+        "rho": 0.25,
+        "observed_score": 15334.75,
+        "null_mean": 17019.740875,
+        "null_std": 608.9652948617179,
+        "quantile": 0.22,
+        "p_value": 0.0022997700229977,
+        "effect_size_z": 2.766973568473426
+      },
+      {
+        "rho": 0.5,
+        "observed_score": 17192.5,
+        "null_mean": 19085.00155,
+        "null_std": 612.8714901338938,
+        "quantile": 0.06,
+        "p_value": 0.0006999300069993001,
+        "effect_size_z": 3.087925577328694
+      },
+      {
+        "rho": 0.75,
+        "observed_score": 19050.25,
+        "null_mean": 21150.262225,
+        "null_std": 639.3152144295797,
+        "quantile": 0.02,
+        "p_value": 0.00029997000299970003,
+        "effect_size_z": 3.2847837461113856
+      },
+      {
+        "rho": 1.0,
+        "observed_score": 20908.0,
+        "null_mean": 23215.5229,
+        "null_std": 685.6939333934779,
+        "quantile": 0.02,
+        "p_value": 0.00029997000299970003,
+        "effect_size_z": 3.365237444321756
+      }
+    ],
+    "all_significant_p05": true,
+    "all_significant_p01": true
+  },
+  "per_table": {
+    "per_table": [
+      {
+        "table_id": 1,
+        "observed_score": 13477.0,
+        "quantile": 0.6,
+        "p_value": 0.006993006993006993,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 2,
+        "observed_score": 14612.0,
+        "quantile": 1.4,
+        "p_value": 0.014985014985014986,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 3,
+        "observed_score": 13448.0,
+        "quantile": 7.4,
+        "p_value": 0.07492507492507493,
+        "p_value_bh": 0.07492507492507493
+      },
+      {
+        "table_id": 4,
+        "observed_score": 13178.0,
+        "quantile": 1.0,
+        "p_value": 0.01098901098901099,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 5,
+        "observed_score": 13306.0,
+        "quantile": 2.4,
+        "p_value": 0.024975024975024976,
+        "p_value_bh": 0.025935602858679782
+      },
+      {
+        "table_id": 6,
+        "observed_score": 12279.0,
+        "quantile": 0.3,
+        "p_value": 0.003996003996003996,
+        "p_value_bh": 0.01798201798201798
+      },
+      {
+        "table_id": 9,
+        "observed_score": 13210.0,
+        "quantile": 1.4,
+        "p_value": 0.014985014985014986,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 10,
+        "observed_score": 13369.0,
+        "quantile": 0.5,
+        "p_value": 0.005994005994005994,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 11,
+        "observed_score": 13477.0,
+        "quantile": 1.2,
+        "p_value": 0.012987012987012988,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 12,
+        "observed_score": 14016.0,
+        "quantile": 0.8,
+        "p_value": 0.008991008991008992,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 13,
+        "observed_score": 13332.0,
+        "quantile": 2.4,
+        "p_value": 0.024975024975024976,
+        "p_value_bh": 0.025935602858679782
+      },
+      {
+        "table_id": 14,
+        "observed_score": 12752.0,
+        "quantile": 2.2,
+        "p_value": 0.022977022977022976,
+        "p_value_bh": 0.025935602858679782
+      },
+      {
+        "table_id": 15,
+        "observed_score": 12943.0,
+        "quantile": 0.3,
+        "p_value": 0.003996003996003996,
+        "p_value_bh": 0.01798201798201798
+      },
+      {
+        "table_id": 16,
+        "observed_score": 13110.0,
+        "quantile": 1.9,
+        "p_value": 0.01998001998001998,
+        "p_value_bh": 0.02568859711716855
+      },
+      {
+        "table_id": 21,
+        "observed_score": 13197.0,
+        "quantile": 1.4,
+        "p_value": 0.014985014985014986,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 22,
+        "observed_score": 13652.0,
+        "quantile": 0.8,
+        "p_value": 0.008991008991008992,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 23,
+        "observed_score": 14208.0,
+        "quantile": 0.8,
+        "p_value": 0.008991008991008992,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 24,
+        "observed_score": 13387.0,
+        "quantile": 1.5,
+        "p_value": 0.015984015984015984,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 25,
+        "observed_score": 13223.0,
+        "quantile": 1.1,
+        "p_value": 0.011988011988011988,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 26,
+        "observed_score": 13773.0,
+        "quantile": 1.0,
+        "p_value": 0.01098901098901099,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 27,
+        "observed_score": 11680.0,
+        "quantile": 0.2,
+        "p_value": 0.002997002997002997,
+        "p_value_bh": 0.01798201798201798
+      },
+      {
+        "table_id": 28,
+        "observed_score": 11680.0,
+        "quantile": 0.2,
+        "p_value": 0.002997002997002997,
+        "p_value_bh": 0.01798201798201798
+      },
+      {
+        "table_id": 29,
+        "observed_score": 12524.0,
+        "quantile": 2.4,
+        "p_value": 0.024975024975024976,
+        "p_value_bh": 0.025935602858679782
+      },
+      {
+        "table_id": 30,
+        "observed_score": 12371.0,
+        "quantile": 0.0,
+        "p_value": 0.000999000999000999,
+        "p_value_bh": 0.01798201798201798
+      },
+      {
+        "table_id": 31,
+        "observed_score": 11794.0,
+        "quantile": 0.3,
+        "p_value": 0.003996003996003996,
+        "p_value_bh": 0.01798201798201798
+      },
+      {
+        "table_id": 32,
+        "observed_score": 13113.0,
+        "quantile": 1.5,
+        "p_value": 0.015984015984015984,
+        "p_value_bh": 0.02157842157842158
+      },
+      {
+        "table_id": 33,
+        "observed_score": 12929.0,
+        "quantile": 2.0,
+        "p_value": 0.02097902097902098,
+        "p_value_bh": 0.02574698029243484
+      }
+    ],
+    "n_tables": 27,
+    "n_significant_p05_raw": 26,
+    "n_significant_p05_bh": 26,
+    "mean_quantile": 1.3703703703703705,
+    "max_quantile": 7.4,
+    "all_below_5pct": false,
+    "hypothesis": "Most variant genetic codes remain in the top 5% of their own block-preserving null for Grantham edge-mismatch"
+  },
+  "per_table_proximity_audit": {
+    "method": "Per-table standard-code-proximity audit. For each NCBI translation table, computes the Hamming distance from the standard code (number of codons with different AA labels) for both the observed variant code and each block-preserving null draw, then reports the variant's null quantile both unconditionally and conditional on null draws within \u00b12 codons of the variant's dH. If the conditional quantile remains low (variant beats most null draws at the same dH), per-table optimality is independent of proximity to standard. If conditional and unconditional quantiles diverge sharply, the per-table test is largely a standard-code-proximity test.",
+    "n_tables": 27,
+    "per_table": [
+      {
+        "table_id": 1,
+        "n_reassignments_from_standard": 0,
+        "observed_score": 13477.0,
+        "quantile_unconditional": 0.6,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 36,
+        "null_dH_max": 56,
+        "null_dH_mean": 51.108,
+        "null_dH_median": 52,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 2,
+        "n_reassignments_from_standard": 4,
+        "observed_score": 14612.0,
+        "quantile_unconditional": 1.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 36,
+        "null_dH_max": 58,
+        "null_dH_mean": 53.606,
+        "null_dH_median": 54,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 3,
+        "n_reassignments_from_standard": 6,
+        "observed_score": 13448.0,
+        "quantile_unconditional": 7.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 37,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.328,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 4,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 13178.0,
+        "quantile_unconditional": 1.0,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 38,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.215,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 5,
+        "n_reassignments_from_standard": 4,
+        "observed_score": 13306.0,
+        "quantile_unconditional": 2.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 38,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.531,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 6,
+        "n_reassignments_from_standard": 2,
+        "observed_score": 12279.0,
+        "quantile_unconditional": 0.3,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 40,
+        "null_dH_max": 60,
+        "null_dH_mean": 54.904,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 9,
+        "n_reassignments_from_standard": 4,
+        "observed_score": 13210.0,
+        "quantile_unconditional": 1.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 36,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.465,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 10,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 13369.0,
+        "quantile_unconditional": 0.5,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 40,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.089,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 11,
+        "n_reassignments_from_standard": 0,
+        "observed_score": 13477.0,
+        "quantile_unconditional": 1.2,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 34,
+        "null_dH_max": 56,
+        "null_dH_mean": 50.982,
+        "null_dH_median": 52,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 12,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 14016.0,
+        "quantile_unconditional": 0.8,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 35,
+        "null_dH_max": 56,
+        "null_dH_mean": 51.098,
+        "null_dH_median": 52,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 13,
+        "n_reassignments_from_standard": 4,
+        "observed_score": 13332.0,
+        "quantile_unconditional": 2.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 32,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.443,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 14,
+        "n_reassignments_from_standard": 5,
+        "observed_score": 12752.0,
+        "quantile_unconditional": 2.2,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 38,
+        "null_dH_max": 61,
+        "null_dH_mean": 56.466,
+        "null_dH_median": 57,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 15,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 12943.0,
+        "quantile_unconditional": 0.3,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 35,
+        "null_dH_max": 57,
+        "null_dH_mean": 51.968,
+        "null_dH_median": 53,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 16,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 13110.0,
+        "quantile_unconditional": 1.9,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 33,
+        "null_dH_max": 57,
+        "null_dH_mean": 52.132,
+        "null_dH_median": 53,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 21,
+        "n_reassignments_from_standard": 5,
+        "observed_score": 13197.0,
+        "quantile_unconditional": 1.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 39,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.504,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 22,
+        "n_reassignments_from_standard": 2,
+        "observed_score": 13652.0,
+        "quantile_unconditional": 0.8,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 30,
+        "null_dH_max": 54,
+        "null_dH_mean": 49.21,
+        "null_dH_median": 50,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 23,
+        "n_reassignments_from_standard": 2,
+        "observed_score": 14208.0,
+        "quantile_unconditional": 0.8,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 35,
+        "null_dH_max": 57,
+        "null_dH_mean": 52.437,
+        "null_dH_median": 53,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 24,
+        "n_reassignments_from_standard": 3,
+        "observed_score": 13387.0,
+        "quantile_unconditional": 1.5,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 40,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.247,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 25,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 13223.0,
+        "quantile_unconditional": 1.1,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 36,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.05,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 26,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 13773.0,
+        "quantile_unconditional": 1.0,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 32,
+        "null_dH_max": 56,
+        "null_dH_mean": 51.15,
+        "null_dH_median": 52,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 27,
+        "n_reassignments_from_standard": 3,
+        "observed_score": 11680.0,
+        "quantile_unconditional": 0.2,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 37,
+        "null_dH_max": 64,
+        "null_dH_mean": 59.235,
+        "null_dH_median": 60,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 28,
+        "n_reassignments_from_standard": 3,
+        "observed_score": 11680.0,
+        "quantile_unconditional": 0.2,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 44,
+        "null_dH_max": 64,
+        "null_dH_mean": 59.376,
+        "null_dH_median": 60,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 29,
+        "n_reassignments_from_standard": 2,
+        "observed_score": 12524.0,
+        "quantile_unconditional": 2.4,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 38,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.32,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 30,
+        "n_reassignments_from_standard": 2,
+        "observed_score": 12371.0,
+        "quantile_unconditional": 0.0,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 38,
+        "null_dH_max": 60,
+        "null_dH_mean": 55.086,
+        "null_dH_median": 56,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 31,
+        "n_reassignments_from_standard": 3,
+        "observed_score": 11794.0,
+        "quantile_unconditional": 0.3,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 44,
+        "null_dH_max": 64,
+        "null_dH_mean": 59.18,
+        "null_dH_median": 60,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 32,
+        "n_reassignments_from_standard": 1,
+        "observed_score": 13113.0,
+        "quantile_unconditional": 1.5,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 35,
+        "null_dH_max": 57,
+        "null_dH_mean": 52.284,
+        "null_dH_median": 53,
+        "frac_null_dH_le_obs": 0.0
+      },
+      {
+        "table_id": 33,
+        "n_reassignments_from_standard": 4,
+        "observed_score": 12929.0,
+        "quantile_unconditional": 2.0,
+        "quantile_conditional_dH_within_2": NaN,
+        "n_null_in_dH_bucket": 0,
+        "null_dH_min": 41,
+        "null_dH_max": 61,
+        "null_dH_mean": 56.325,
+        "null_dH_median": 57,
+        "frac_null_dH_le_obs": 0.0
+      }
+    ]
+  },
+  "decomposition": {
+    "total_score": 13477.0,
+    "by_nucleotide_position": {
+      "pos1": 5143.0,
+      "pos2": 6649.0,
+      "pos3_wobble": 1685.0
+    },
+    "position_fractions": {
+      "pos1": 0.3816131186465831,
+      "pos2": 0.4933590561697707,
+      "pos3_wobble": 0.12502782518364622
+    },
+    "top_aa_pairs": [
+      {
+        "pair": [
+          "Arg",
+          "Ser"
+        ],
+        "score": 440.0,
+        "fraction": 0.03264821547822216
+      },
+      {
+        "pair": [
+          "Gly",
+          "Val"
+        ],
+        "score": 436.0,
+        "fraction": 0.03235141351932923
+      },
+      {
+        "pair": [
+          "Gln",
+          "Stop"
+        ],
+        "score": 430.0,
+        "fraction": 0.03190621058098984
+      },
+      {
+        "pair": [
+          "Ser",
+          "Stop"
+        ],
+        "score": 430.0,
+        "fraction": 0.03190621058098984
+      },
+      {
+        "pair": [
+          "Stop",
+          "Tyr"
+        ],
+        "score": 430.0,
+        "fraction": 0.03190621058098984
+      },
+      {
+        "pair": [
+          "Glu",
+          "Stop"
+        ],
+        "score": 430.0,
+        "fraction": 0.03190621058098984
+      },
+      {
+        "pair": [
+          "Stop",
+          "Trp"
+        ],
+        "score": 430.0,
+        "fraction": 0.03190621058098984
+      },
+      {
+        "pair": [
+          "Cys",
+          "Phe"
+        ],
+        "score": 410.0,
+        "fraction": 0.030422200786525192
+      },
+      {
+        "pair": [
+          "Arg",
+          "Leu"
+        ],
+        "score": 408.0,
+        "fraction": 0.030273799807078727
+      },
+      {
+        "pair": [
+          "Ala",
+          "Ser"
+        ],
+        "score": 396.0,
+        "fraction": 0.029383393930399942
+      }
+    ]
+  },
+  "stop_penalty": {
+    "penalties_tested": [
+      0.0,
+      150.0,
+      215.0,
+      300.0
+    ],
+    "per_penalty": [
+      {
+        "stop_penalty": 0.0,
+        "include_stops": false,
+        "observed_score": 10467.0,
+        "quantile": 0.2,
+        "p_value_conservative": 0.002997002997002997,
+        "effect_size_z": 2.4836068503136763
+      },
+      {
+        "stop_penalty": 150.0,
+        "include_stops": true,
+        "observed_score": 12567.0,
+        "quantile": 0.2,
+        "p_value_conservative": 0.002997002997002997,
+        "effect_size_z": 2.4836068503136763
+      },
+      {
+        "stop_penalty": 215.0,
+        "include_stops": true,
+        "observed_score": 13477.0,
+        "quantile": 0.2,
+        "p_value_conservative": 0.002997002997002997,
+        "effect_size_z": 2.4836068503136763
+      },
+      {
+        "stop_penalty": 300.0,
+        "include_stops": true,
+        "observed_score": 14667.0,
+        "quantile": 0.2,
+        "p_value_conservative": 0.002997002997002997,
+        "effect_size_z": 2.4836068503136763
+      }
+    ],
+    "all_significant_p05": true,
+    "conclusion": "Stop penalty is immaterial to ranking because stops are fixed across null models \u2014 confirmed by sensitivity analysis."
+  }
+}

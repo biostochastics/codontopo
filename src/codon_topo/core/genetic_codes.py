@@ -1,6 +1,14 @@
 """NCBI translation tables.
 
 Reference: https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
+NCBI gc.prt (https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt)
+version 4.6, retrieved 2026-04-25.
+
+NCBI currently lists 27 genetic codes: 1-6, 9-16, 21-33 (codes 7, 8, 17-20 are
+deprecated). All 27 are encoded in this module. Tables 27 and 28 (Karyorelict,
+Condylostoma) have identical sense-codon mappings and differ only in their
+start-codon tables (sncbieaa); they are retained as separate entries to match
+NCBI numbering. The sense-codon mapping is the only thing this module models.
 """
 
 STANDARD: dict[str, str] = {
@@ -119,10 +127,18 @@ _CODES: dict[int, tuple[str, dict[str, str]]] = {
     24: ("Rhabdopleuridae Mito", {"AGA": "Ser", "AGG": "Lys", "UGA": "Trp"}),
     25: ("Candidate Division SR1 / Gracilibacteria", {"UGA": "Gly"}),
     26: ("Pachysolen tannophilus Nuclear", {"CUG": "Ala"}),
-    27: ("Karyorelictea Nuclear", {"UAG": "Gln", "UAA": "Gln"}),
+    27: (
+        "Karyorelict Nuclear",
+        {"UAA": "Gln", "UAG": "Gln", "UGA": "Trp"},
+    ),
+    28: (
+        "Condylostoma Nuclear",
+        {"UAA": "Gln", "UAG": "Gln", "UGA": "Trp"},
+    ),
     29: ("Mesodinium Nuclear", {"UAA": "Tyr", "UAG": "Tyr"}),
     30: ("Peritrich Nuclear", {"UAA": "Glu", "UAG": "Glu"}),
     31: ("Blastocrithidia Nuclear", {"UGA": "Trp", "UAG": "Glu", "UAA": "Glu"}),
+    32: ("Balanophoraceae Plastid", {"UAG": "Trp"}),
     33: (
         "Cephalodiscidae Mito",
         {"AGA": "Ser", "AGG": "Lys", "UAA": "Tyr", "UGA": "Trp"},
@@ -132,7 +148,7 @@ _CODES: dict[int, tuple[str, dict[str, str]]] = {
 
 def get_code(table_id: int) -> dict[str, str]:
     """Return the codon->AA mapping for an NCBI translation table."""
-    name, changes = _CODES[table_id]
+    _, changes = _CODES[table_id]
     code = dict(STANDARD)
     code.update(changes)
     return code

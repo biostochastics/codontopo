@@ -72,7 +72,7 @@ def load_target_codons() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
 
     for _, row in df.iterrows():
         gene = str(row.get("Gene", row.get("gene", "")))
-        pos = int(row.get("Position", row.get("position", 0)))
+        pos = int(row.get("Position", row.get("position", 0)) or 0)
         source_dna = str(row.get("WT_Codon", row.get("codon", "NNN")))
 
         if source_dna not in recode_map:

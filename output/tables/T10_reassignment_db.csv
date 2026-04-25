@@ -47,8 +47,12 @@ table_id,table_name,codon,source_aa,target_aa,hamming_to_nearest_target
 24,Rhabdopleuridae Mito,UGA,Stop,Trp,1
 25,Candidate Division SR1 / Gracilibacteria,UGA,Stop,Gly,1
 26,Pachysolen tannophilus Nuclear,CUG,Leu,Ala,3
-27,Karyorelictea Nuclear,UAG,Stop,Gln,1
-27,Karyorelictea Nuclear,UAA,Stop,Gln,1
+27,Karyorelict Nuclear,UAA,Stop,Gln,1
+27,Karyorelict Nuclear,UAG,Stop,Gln,1
+27,Karyorelict Nuclear,UGA,Stop,Trp,1
+28,Condylostoma Nuclear,UAA,Stop,Gln,1
+28,Condylostoma Nuclear,UAG,Stop,Gln,1
+28,Condylostoma Nuclear,UGA,Stop,Trp,1
 29,Mesodinium Nuclear,UAA,Stop,Tyr,1
 29,Mesodinium Nuclear,UAG,Stop,Tyr,1
 30,Peritrich Nuclear,UAA,Stop,Glu,1
@@ -56,6 +60,7 @@ table_id,table_name,codon,source_aa,target_aa,hamming_to_nearest_target
 31,Blastocrithidia Nuclear,UGA,Stop,Trp,1
 31,Blastocrithidia Nuclear,UAG,Stop,Glu,1
 31,Blastocrithidia Nuclear,UAA,Stop,Glu,1
+32,Balanophoraceae Plastid,UAG,Stop,Trp,1
 33,Cephalodiscidae Mito,AGA,Arg,Ser,1
 33,Cephalodiscidae Mito,AGG,Arg,Lys,1
 33,Cephalodiscidae Mito,UAA,Stop,Tyr,1

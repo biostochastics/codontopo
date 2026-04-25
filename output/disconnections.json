@@ -505,6 +505,25 @@
         "UCU"
       ]
     ],
+    "table_id": 28
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
     "table_id": 29
   },
   {
@@ -544,6 +563,25 @@
       ]
     ],
     "table_id": 31
+  },
+  {
+    "aa": "Ser",
+    "n_components": 2,
+    "reconnect_eps": 4,
+    "min_inter_distance": 4,
+    "blocks": [
+      [
+        "AGC",
+        "AGU"
+      ],
+      [
+        "UCA",
+        "UCC",
+        "UCG",
+        "UCU"
+      ]
+    ],
+    "table_id": 32
   },
   {
     "aa": "Ser",

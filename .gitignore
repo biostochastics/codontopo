@@ -8,6 +8,9 @@ build/
 .coverage
 .hypothesis/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.benchmarks/
 *.egg
 .DS_Store
 .claude/

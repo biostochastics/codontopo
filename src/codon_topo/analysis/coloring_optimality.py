@@ -11,7 +11,7 @@ codes for mutational error minimization using *polar requirement* (Woese
 1973). This module extends the analysis across multiple physicochemical
 distance metrics (Grantham 1974, Miyata 1979, polar requirement, Kyte-
 Doolittle hydropathy) in the explicit GF(2)^6 coloring framework and
-tests robustness across all 25 NCBI translation tables.
+tests robustness across all 27 NCBI translation tables.
 
 Central result:
   Among all colorings of Q_6 with class-size distribution matching the
@@ -388,7 +388,9 @@ def rho_robustness_sweep(
     using the weighted score F_ρ. Reports the quantile and p-value at
     each ρ.
 
-    Addresses reviewer concern: "you ignored 1/3 of mutations."
+    Tests robustness of the optimality result to the relative weighting of
+    transition vs. transversion edges, since pure Hamming-1 in GF(2)^6
+    omits ~1/3 of single-nucleotide mutations.
     """
     if rho_values is None:
         rho_values = [0.0, 0.25, 0.5, 0.75, 1.0]
@@ -789,9 +791,7 @@ def reassignment_local_cost_test() -> dict:
         local_costs[c] for c in ALL_CODONS if c not in reassigned_codons
     ]
 
-    stat, p = mannwhitneyu(
-        costs_reassigned, costs_non_reassigned, alternative="greater"
-    )
+    mw = mannwhitneyu(costs_reassigned, costs_non_reassigned, alternative="greater")
 
     return {
         "n_reassigned": len(costs_reassigned),
@@ -804,12 +804,127 @@ def reassignment_local_cost_test() -> dict:
         "median_cost_non_reassigned": sorted(costs_non_reassigned)[
             len(costs_non_reassigned) // 2
         ],
-        "mann_whitney_U": float(stat),
-        "mann_whitney_p": float(p),
+        "mann_whitney_U": float(mw.statistic),  # type: ignore[attr-defined]
+        "mann_whitney_p": float(mw.pvalue),  # type: ignore[attr-defined]
         "hypothesis": (
             "Reassigned codons have higher local Grantham mismatch cost "
             "than non-reassigned codons (one-sided, greater)"
         ),
+    }
+
+
+def _code_distance_to_standard(code: dict[str, str]) -> int:
+    """Hamming distance between a code and the standard code (number of codons
+    with different AA labels)."""
+    return sum(1 for c in ALL_CODONS if code[c] != STANDARD[c])
+
+
+def per_table_proximity_audit(
+    n_samples: int = 1_000,
+    seed: int | None = None,
+) -> dict:
+    """Audit how much per-table optimality is explained by proximity to the
+    standard code, addressing the methodological-nuance concern that a variant
+    code which differs from standard by only a few reassignments may have a
+    null distribution dominated by near-standard permutations.
+
+    For each NCBI table:
+      - dH_obs: Hamming distance (codon count) between the observed variant
+        code and the standard code
+      - dH_null_distribution: Hamming distance from standard for each null
+        draw (the same block-preserving null used in per_table_optimality)
+      - frac_null_dH_le_obs: fraction of null draws as close to standard as
+        observed (or closer)
+      - quantile_unconditional: variant's null quantile (matches
+        per_table_optimality)
+      - quantile_conditional_dH: variant's quantile within the subset of
+        null draws at the same dH bucket (within ±2 codons)
+      - quantile_unconditional_minus_conditional: if positive, the variant's
+        score is independently low (unconditional rank LOW vs conditional
+        rank LOW+); if near zero, the test is dominated by proximity
+    """
+    results = []
+    for tid in all_table_ids():
+        code = get_code(tid)
+        dH_obs = _code_distance_to_standard(code)
+
+        # Re-run the per-table null while tracking dH from standard
+        rng = random.Random((seed or 0) + tid)
+        dist_fn = get_distance_func("grantham")
+
+        observed_score = hypercube_edge_mismatch_score(
+            code, include_stops=True, distance_func=dist_fn
+        )
+
+        null_scores: list[float] = []
+        null_dHs: list[int] = []
+        for _ in range(n_samples):
+            random_code = _generate_random_code_freeland_hurst(code, rng)
+            f = hypercube_edge_mismatch_score(
+                random_code, include_stops=True, distance_func=dist_fn
+            )
+            null_scores.append(f)
+            null_dHs.append(_code_distance_to_standard(random_code))
+
+        # Unconditional quantile
+        n_below = sum(1 for s in null_scores if s < observed_score)
+        quantile_unconditional = 100.0 * n_below / max(n_samples, 1)
+
+        # Conditional: within ±2 codons of observed dH
+        same_bucket_idx = [
+            i for i in range(n_samples) if abs(null_dHs[i] - dH_obs) <= 2
+        ]
+        if len(same_bucket_idx) >= 10:
+            cond_below = sum(
+                1 for i in same_bucket_idx if null_scores[i] < observed_score
+            )
+            quantile_conditional = 100.0 * cond_below / len(same_bucket_idx)
+            cond_n = len(same_bucket_idx)
+        else:
+            quantile_conditional = float("nan")
+            cond_n = len(same_bucket_idx)
+
+        # Distribution of dH in null
+        dH_min = min(null_dHs)
+        dH_max = max(null_dHs)
+        dH_mean = sum(null_dHs) / max(n_samples, 1)
+        dH_median = sorted(null_dHs)[n_samples // 2]
+        frac_null_dH_le_obs = sum(1 for d in null_dHs if d <= dH_obs) / max(
+            n_samples, 1
+        )
+
+        results.append(
+            {
+                "table_id": tid,
+                "n_reassignments_from_standard": dH_obs,
+                "observed_score": observed_score,
+                "quantile_unconditional": quantile_unconditional,
+                "quantile_conditional_dH_within_2": quantile_conditional,
+                "n_null_in_dH_bucket": cond_n,
+                "null_dH_min": dH_min,
+                "null_dH_max": dH_max,
+                "null_dH_mean": dH_mean,
+                "null_dH_median": dH_median,
+                "frac_null_dH_le_obs": frac_null_dH_le_obs,
+            }
+        )
+
+    return {
+        "method": (
+            "Per-table standard-code-proximity audit. For each NCBI "
+            "translation table, computes the Hamming distance from the "
+            "standard code (number of codons with different AA labels) "
+            "for both the observed variant code and each block-preserving "
+            "null draw, then reports the variant's null quantile both "
+            "unconditionally and conditional on null draws within ±2 "
+            "codons of the variant's dH. If the conditional quantile "
+            "remains low (variant beats most null draws at the same dH), "
+            "per-table optimality is independent of proximity to standard. "
+            "If conditional and unconditional quantiles diverge sharply, "
+            "the per-table test is largely a standard-code-proximity test."
+        ),
+        "n_tables": len(results),
+        "per_table": results,
     }
 
 
@@ -886,9 +1001,8 @@ def score_decomposition_by_position(
     """Decompose the mismatch score by nucleotide position and top AA pairs.
 
     Breaks F(code) into contributions from edges flipping bits in each
-    nucleotide position. Also identifies which AA pairs contribute the most
-    to the total score. Helps reviewers understand what biology drives the
-    statistic.
+    nucleotide position, and identifies which AA pairs contribute most to
+    the total score, exposing the biology that drives the statistic.
     """
     ref = code if code is not None else STANDARD
     enc = encoding or DEFAULT_ENCODING
@@ -1020,10 +1134,10 @@ def multi_metric_sensitivity(
 ) -> dict:
     """Run the core coloring optimality test across multiple distance metrics.
 
-    Addresses the reviewer concern that the result may be Grantham-specific.
-    Freeland & Hurst (1998) used polar requirement; demonstrating robustness
-    across Grantham, Miyata, polar requirement, and Kyte-Doolittle establishes
-    that the optimality is a general property of the code, not a metric artifact.
+    Tests whether the result is Grantham-specific. Freeland & Hurst (1998)
+    used polar requirement; demonstrating robustness across Grantham, Miyata,
+    polar requirement, and Kyte-Doolittle establishes that the optimality is
+    a general property of the code, not a metric artifact.
     """
     if metrics is None:
         metrics = list(AVAILABLE_METRICS)
@@ -1133,7 +1247,7 @@ def stop_penalty_sensitivity(
 
 
 # ====================================================================
-# Novel test: Codon Usage Bias correlation (Gemini 3.1 suggestion)
+# Codon Usage Bias correlation
 # ====================================================================
 
 # Human codon usage frequencies (per 1000 codons).
@@ -1210,9 +1324,9 @@ _HUMAN_CODON_USAGE: dict[str, float] = {
 def codon_usage_vs_local_mismatch() -> dict:
     """Test whether highly-used codons sit in low-mismatch neighborhoods.
 
-    Hypothesis (from Gemini 3.1 Pro): Highly expressed genes actively
-    avoid codons sitting in "bad neighborhoods" (high local Grantham cost)
-    to prevent costly mistranslation errors.
+    Hypothesis: highly expressed genes preferentially use codons in
+    low-local-mismatch positions (low local Grantham cost), avoiding
+    "bad neighborhoods" where mistranslation errors would be costly.
 
     Uses Spearman rank correlation between per-codon local mismatch cost
     and human codon usage frequency (excluding stop codons).
@@ -1226,11 +1340,13 @@ def codon_usage_vs_local_mismatch() -> dict:
     costs = [local_costs[c] for c in sense_codons]
     usages = [_HUMAN_CODON_USAGE.get(c, 0.0) for c in sense_codons]
 
-    rho, p = spearmanr(costs, usages)
+    sr = spearmanr(costs, usages)
+    rho = float(sr.statistic)  # type: ignore[attr-defined]
+    p = float(sr.pvalue)  # type: ignore[attr-defined]
 
     return {
-        "spearman_rho": float(rho),
-        "spearman_p": float(p),
+        "spearman_rho": rho,
+        "spearman_p": p,
         "n_codons": len(sense_codons),
         "hypothesis": (
             "Negative correlation: frequently used codons have lower "
@@ -1307,9 +1423,9 @@ def mechanistic_discriminant_test() -> dict:
             "n_preserving": len(topo_preserving_jumps),
         }
 
-    stat, p = mannwhitneyu(
-        topo_breaking_jumps, topo_preserving_jumps, alternative="less"
-    )
+    mw = mannwhitneyu(topo_breaking_jumps, topo_preserving_jumps, alternative="less")
+    stat = float(mw.statistic)  # type: ignore[attr-defined]
+    p = float(mw.pvalue)  # type: ignore[attr-defined]
 
     mean_breaking = mean(topo_breaking_jumps)
     mean_preserving = mean(topo_preserving_jumps)
@@ -1345,8 +1461,8 @@ def mechanistic_discriminant_test() -> dict:
         "mean_grantham_preserving": mean_preserving,
         "mean_miyata_breaking": mean_breaking_miyata,
         "mean_miyata_preserving": mean_preserving_miyata,
-        "mann_whitney_U": float(stat),
-        "mann_whitney_p": float(p),
+        "mann_whitney_U": stat,
+        "mann_whitney_p": p,
         "hypothesis": (
             "Topology-breaking reassignments involve smaller physicochemical "
             "jumps than topology-preserving ones (supports codon capture model)"
@@ -1360,6 +1476,6 @@ def mechanistic_discriminant_test() -> dict:
             f"Miyata: {mean_breaking_miyata:.2f} vs {mean_preserving_miyata:.2f}) "
             f"but underpowered (n=5 vs 8; breaking events are dominated by a "
             f"single codon box CUU/CUC/CUA/CUG in the CUG clade). "
-            f"Mann-Whitney p={float(p):.3f} — cannot distinguish mechanism."
+            f"Mann-Whitney p={p:.3f} — cannot distinguish mechanism."
         ),
     }

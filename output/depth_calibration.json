@@ -14,7 +14,7 @@
       "age_mya_high": 4000.0,
       "age_midpoint_mya": 3750.0,
       "lineage": "Pre-LUCA, all domains of life",
-      "notes": "UCN-AGY split, min inter-block Hamming=4, present in all 25 NCBI tables"
+      "notes": "UCN-AGY split, min inter-block Hamming=4, present in all 27 NCBI tables"
     },
     {
       "aa": "Thr",

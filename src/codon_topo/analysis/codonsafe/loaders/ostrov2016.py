@@ -73,7 +73,7 @@ def load_segment_viability() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
     for _, row in df.iterrows():
         segment = str(row.get("Segment", row.get("segment", "")))
         viable = row.get("Viable", row.get("viable", True))
-        n_codons = int(row.get("N_codons", row.get("n_codons", 0)))
+        n_codons = int(row.get("N_codons", row.get("n_codons", 0)) or 0)
 
         # Use AGA->CGU as representative swap for segment-level events.
         # AGA is the most common forbidden codon in the Ostrov design.
@@ -122,7 +122,7 @@ def load_lethal_exceptions() -> list[tuple[CodonSwapEvent, RecodingOutcome]]:
     for _, row in df.iterrows():
         gene = str(row.get("Gene", row.get("gene", "")))
         source_dna = str(row.get("WT_Codon", row.get("codon", "NNN")))
-        pos = int(row.get("Position", row.get("position", 0)))
+        pos = int(row.get("Position", row.get("position", 0)) or 0)
 
         target_dna = OSTROV_RECODE_MAP.get(source_dna, "NNN")
 

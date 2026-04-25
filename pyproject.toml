@@ -4,10 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codon-topo"
-version = "0.3.0"
+version = "0.4.0"
 description = "Codon Geometry Validation & Prediction Engine — algebraic structure of genetic codes in GF(2)^6"
 readme = "README.md"
-license = "MIT"
+license = "CC-BY-NC-4.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [
     { name = "Paul Clayworth" },
@@ -28,8 +29,8 @@ dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
     "requests>=2.28",
-    "click>=8.1",
-    "rich>=13.0",
+    "click>=8.1,<10",
+    "rich>=13.0,<15",
 ]
 
 [project.scripts]
@@ -42,12 +43,10 @@ codonsafe = [
     "biopython>=1.81",
 ]
 dev = [
+    "codon-topo[codonsafe]",
     "pytest>=7.0",
     "hypothesis>=6.0",
     "pytest-cov",
-    "pandas>=2.0",
-    "openpyxl>=3.1",
-    "biopython>=1.81",
 ]
 all = [
     "codon-topo[codonsafe]",
@@ -56,9 +55,35 @@ all = [
 [project.urls]
 Repository = "https://github.com/biostochastics/codon-topo"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/codon_topo"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/codon_topo",
+    "tests",
+    "data/assembly_accessions.tsv",
+    "data/codonsafe/DATA_MANIFEST.md",
+    "data/codonsafe/ANALYSIS_RESULTS.md",
+    "data/trnascan_results",
+    "scripts",
+    "README.md",
+    "LICENSE",
+    "CITATION.cff",
+    "CHANGELOG.md",
+    "ARCHITECTURE.md",
+    "pyproject.toml",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.pyright]
+include = ["src", "tests"]
+reportMissingImports = "none"
+reportMissingTypeStubs = "none"
+pythonVersion = "3.11"

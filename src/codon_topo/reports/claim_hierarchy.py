@@ -77,60 +77,87 @@ CLAIM_HIERARCHY: list[Claim] = [
     Claim(
         id="per_table_optimality_preservation",
         statement=(
-            "24 of 25 NCBI translation tables remain in the top 5% of "
+            "26 of 27 NCBI translation tables remain in the top 5% of "
             "their own block-preserving null for Grantham edge-mismatch "
-            "(BH-FDR corrected)"
+            "(BH-FDR corrected); only translation table 3 (yeast mito) "
+            "exceeds the threshold"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=None,  # Aggregate: 24/25 significant after BH-FDR
+        evidence_p_value=None,  # Aggregate: count from manuscript_stats.json per_table.n_significant_bh
         null_model="freeland_hurst_block_preserving_per_table",
-        sample_size=25,
+        sample_size=10_000,
         justification=(
             "Each variant code tested against its own block-preserving null "
-            "(n=1,000 per table). 24/25 significant at p<0.05 after "
-            "Benjamini-Hochberg FDR correction. Mean quantile 1.4%. "
-            "Only Table 3 (yeast mito, 6 changes) marginally fails at 7.4%. "
-            "Variant codes preserve error-minimization structure."
+            "(n=10,000 per table, common-seed design, BH-FDR corrected). "
+            "Across 27 NCBI tables (codes 1-6, 9-16, 21-33; codes 7, 8, "
+            "17-20 deprecated): 26 significant at adjusted p<0.05. Mean "
+            "quantile ~1.4%. Only table 3 (yeast mitochondrial, 6 codon "
+            "reassignments including the topology-breaking CUN-Thr) "
+            "exceeds the threshold. Tables 1/11 and 27/28 share identical "
+            "sense-codon mappings; the per-table null seeds differ so "
+            "rendered quantiles differ slightly even when the codes are "
+            "sense-codon-identical. A standard-code-proximity audit "
+            "(Supplement) confirms the variant-code quantile is not driven "
+            "purely by closeness to the standard code."
         ),
     ),
     Claim(
         id="optimality_rho_robustness",
         statement=(
-            "Coloring optimality is robust across all transversion weights "
-            "rho in [0,1], including the full K4^3 mutation graph (p<0.01 "
+            "Coloring optimality is robust across all diagonal-edge weights "
+            "rho in [0,1], including the full Hamming graph H(3,4) = "
+            "K_4 □ K_4 □ K_4 of single-nucleotide substitutions (p<0.01 "
             "at all rho values)"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=0.003,  # max p across all rho values
+        evidence_p_value=0.0061,  # max p across all rho values (rho=0)
         null_model="freeland_hurst_weighted_edges",
-        sample_size=1_000,
+        sample_size=10_000,
         justification=(
             "Adding within-nucleotide distance-2 'diagonal' edges (completing "
-            "K4^3 from Q6) preserves and strengthens optimality. At rho=1 "
-            "(all 288 single-nucleotide edges equally weighted), p<0.001. "
-            "Addresses reviewer concern: 'you ignored 1/3 of mutations.'"
+            "H(3,4) from Q_6) preserves and strengthens optimality. At rho=1 "
+            "(all 288 single-nucleotide edges equally weighted), p=3e-4. "
+            "Common-seed design with n=10,000 block-preserving null samples "
+            "per rho value. Exact p-values: rho=0 p=0.0061, rho=0.25 "
+            "p=0.0023, rho=0.5 p=0.0007, rho=0.75 p=0.0003, rho=1 p=0.0003. "
+            "Confirms the optimality is not an artifact of the Q_6 subgraph "
+            "omitting the 96 within-nucleotide diagonal edges (~1/3 of "
+            "single-nucleotide mutations). The rho parameter is a "
+            "diagonal-edge weight, NOT a transition/transversion weight: "
+            "16 of 24 encodings mix transitions and transversions equally "
+            "among Hamming-1 edges."
         ),
     ),
     Claim(
         id="topology_avoidance_depletion",
         statement=(
             "Natural codon reassignments are depleted for topology-breaking "
-            "changes: 22% create new disconnections vs 73% of all possible "
-            "single-codon reassignments"
+            "changes — moves that fragment an amino acid's codon family — "
+            "at approximately 21% of observed events vs 66-73% of the "
+            "candidate landscape, robust to adjacency definition (Q_6 vs "
+            "the full Hamming graph H(3,4)) and clade exclusion"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=0.0001,  # Table-preserving permutation (n=10,000)
-        null_model="table_preserving_permutation_10k",
-        sample_size=27,
+        evidence_p_value=1e-4,  # Permutation p across both adjacency definitions
+        null_model="hypergeometric + table_preserving_permutation_10k",
+        sample_size=28,
         justification=(
-            "Table-preserving permutation null (n=10,000, seed=135325): "
-            "p=0.0001 (0/10,000 permutations as extreme as observed). "
-            "Hypergeometric p=4.8e-8 (finite-landscape effect size). "
-            "Both tests confirm strong depletion: observed 6/27 (22%) "
-            "topology-breaking vs 73% of all possible single-codon "
-            "reassignments. Phylogenetic clade-exclusion sensitivity "
-            "(Sengupta et al. 2007): all exclusions significant at p<1e-5. "
-            "Result not driven by any single clade."
+            "Candidate universe N=1,280 single-codon relabelings "
+            "((x,y): x in 64 codons, y in 20 amino acids + Stop, y != C(x)). "
+            "Q_6 adjacency: 931 of 1,280 (72.7%) candidates create a new "
+            "disconnection in a previously connected family; observed 6 of "
+            "28 events (21.4%); hypergeometric p=1.6e-8, permutation "
+            "p<=1e-4, RR=0.29 (95% CI [0.16, 0.66]). H(3,4) adjacency "
+            "(encoding-independent): 846 of 1,280 (66.1%); same 6 of 28 "
+            "events; hypergeometric p=1.3e-6, permutation p<=1e-4, RR=0.32 "
+            "(95% CI [0.16, 0.66]). Phylogenetic clade-exclusion sensitivity "
+            "(Sengupta et al. 2007): all 7 exclusion regimes remain "
+            "significant; excluding yeast mito (Table 3) actually "
+            "strengthens depletion (rate drops 21.4%->8.3%, p drops "
+            "1.6e-8->3.6e-11). Yeast mito accounts for 4 of 6 "
+            "topology-breaking events and is the marginal outlier across "
+            "three independent analyses (per-table optimality, "
+            "topology-avoidance counts, conditional-logit case ranks)."
         ),
     ),
     # ============================================================
@@ -240,20 +267,32 @@ CLAIM_HIERARCHY: list[Claim] = [
     Claim(
         id="variant_code_disconnection_catalogue",
         statement=(
-            "Systematic survey of Hamming-graph connectivity across 25 NCBI "
-            "translation tables identifies 4 variant-code cases with "
-            "amino-acid disconnection at ε=1 (Thr in yeast mito, Leu in "
-            "chlorophycean mito, Ala in Pachysolen, Ser tripartite in Candida)"
+            "Systematic survey of Hamming-graph connectivity across 27 NCBI "
+            "translation tables identifies 4 lineage-collapsed variant-code "
+            "amino-acid disconnections at epsilon=1 under the default "
+            "encoding: Thr in yeast mitochondrial code (table 3), Leu in "
+            "chlorophycean mitochondrial codes (tables 16 and 22, collapsed "
+            "to a single algal-mito event), Ala in Pachysolen tannophilus "
+            "nuclear code (table 26), and tripartite Ser in Candida-clade "
+            "alternative yeast nuclear code (table 12)"
         ),
         status=ClaimStatus.EXPLORATORY,
         evidence_p_value=None,  # Descriptive catalogue, not inferential
         null_model=None,
-        sample_size=25,
+        sample_size=27,
         justification=(
-            "Descriptive survey — complete and computationally verifiable "
-            "but not itself a statistical claim. Links to literature: yeast "
-            "mito Thr (Miranda 2006), chlorophycean UAG->Leu "
-            "(Knaap 2002), Candida CUG->Ser (Santos 1996)."
+            "Descriptive survey across all 27 current NCBI translation tables "
+            "(codes 1-6, 9-16, 21-33; codes 7, 8, 17-20 deprecated). "
+            "Tables 16 and 22 (chlorophycean and Scenedesmus obliquus mito "
+            "respectively) both reassign UAG-Leu and produce equivalent "
+            "epsilon=2 reconnection profiles for Leu; lineage-collapsed they "
+            "are a single event. Table 22 additionally reassigns UCA Ser->Stop. "
+            "Links to literature: yeast mito CUN-Thr (Miranda 2006), "
+            "chlorophycean UAG-Leu (Knaap 2002), Candida CUG-Ser "
+            "(Santos 1996), Pachysolen CUG-Ala (Muhlhausen 2018). A "
+            "separate filtration-only deviation (translation table 32, "
+            "Balanophoraceae plastid, UAG-Trp at bit 3) is documented but "
+            "does not introduce a new disconnection."
         ),
     ),
     # ============================================================
