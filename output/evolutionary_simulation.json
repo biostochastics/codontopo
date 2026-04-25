@@ -39,14 +39,14 @@
       "weights_raw": [
         -0.004888022399449203
       ],
-      "weight_labels": [
-        "delta_phys"
-      ],
       "weights_normalized": [
         -1.3293443756103531
       ],
       "feat_stds": [
         271.95955070912675
+      ],
+      "weight_labels": [
+        "delta_phys"
       ]
     },
     "M2_topo": {
@@ -59,14 +59,14 @@
       "weights_raw": [
         -3.5837637044599058
       ],
-      "weight_labels": [
-        "delta_topo"
-      ],
       "weights_normalized": [
         -1.6697873229980487
       ],
       "feat_stds": [
         0.465931199905853
+      ],
+      "weight_labels": [
+        "delta_topo"
       ]
     },
     "M3_phys_topo": {
@@ -80,10 +80,6 @@
         -0.004317389210753695,
         -3.315800708651331
       ],
-      "weight_labels": [
-        "delta_phys",
-        "delta_topo"
-      ],
       "weights_normalized": [
         -1.1741552299930063,
         -1.5449350028305924
@@ -91,6 +87,10 @@
       "feat_stds": [
         271.95955070912675,
         0.465931199905853
+      ],
+      "weight_labels": [
+        "delta_phys",
+        "delta_topo"
       ]
     },
     "M4_full": {
@@ -105,11 +105,6 @@
         -2.985532394290398,
         -0.2033225825326316
       ],
-      "weight_labels": [
-        "delta_phys",
-        "delta_topo",
-        "delta_trna"
-      ],
       "weights_normalized": [
         -1.1704605118250275,
         -1.3910526908295195,
@@ -119,6 +114,11 @@
         271.95955070912675,
         0.465931199905853,
         1.032506423416992
+      ],
+      "weight_labels": [
+        "delta_phys",
+        "delta_topo",
+        "delta_trna"
       ]
     },
     "M2_topo_k43": {
@@ -131,14 +131,14 @@
       "weights_raw": [
         -3.695719162956247
       ],
-      "weight_labels": [
-        "delta_topo_k43"
-      ],
       "weights_normalized": [
         -1.7925821533203141
       ],
       "feat_stds": [
         0.48504284938317865
+      ],
+      "weight_labels": [
+        "delta_topo_k43"
       ]
     },
     "M3_phys_topo_k43": {
@@ -152,10 +152,6 @@
         -0.004570054892275767,
         -3.45200592205363
       ],
-      "weight_labels": [
-        "delta_phys",
-        "delta_topo_k43"
-      ],
       "weights_normalized": [
         -1.2428700752193642,
         -1.6743707885204997
@@ -163,6 +159,10 @@
       "feat_stds": [
         271.95955070912675,
         0.48504284938317865
+      ],
+      "weight_labels": [
+        "delta_phys",
+        "delta_topo_k43"
       ]
     }
   },

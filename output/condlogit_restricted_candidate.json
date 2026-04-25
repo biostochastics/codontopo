@@ -1,7 +1,5 @@
 {
   "_doc": "Restricted-candidate-set sensitivity for the conditional logit. Candidates are filtered by delta_trna (Hamming distance to nearest existing target-AA codon). Observed moves are always retained.",
-  "_source_run": "scripts/restricted_candidate_sensitivity.py (initial run 2026-04-25, seed 135325)",
-  "_note": "Initial run reported ΔAICc + counts; this JSON was reconstructed from the run's stdout because the original write failed on a numpy bool. The serialization bug is fixed in scripts/restricted_candidate_sensitivity.py.",
   "full_set_summary": {
     "n_choice_sets": 66,
     "candidates_min": 1280,
@@ -15,45 +13,228 @@
       "max_trna": 1,
       "candidate_summary": {
         "n_choice_sets": 66,
-        "candidates_mean": 275.0,
+        "candidates_min": 273,
+        "candidates_max": 279,
+        "candidates_mean": 274.6515151515151,
         "observed_in_filtered_set": 66,
         "observed_total": 66
       },
+      "model_aicc": {
+        "M1_phys": 674.7794172444816,
+        "M2_topo": 734.1978096190711,
+        "M3_phys_topo": 660.9323879638754,
+        "M4_full": 565.5892487807813,
+        "M2_topo_k43": 731.9610589619033,
+        "M3_phys_topo_k43": 659.3320814620947
+      },
+      "model_log_likelihood": {
+        "M1_phys": -336.3584586222408,
+        "M2_topo": -366.06765480953555,
+        "M3_phys_topo": -328.3709558866996,
+        "M4_full": -279.6010760032939,
+        "M2_topo_k43": -364.94927948095165,
+        "M3_phys_topo_k43": -327.5708026358093
+      },
       "delta_aicc": {
-        "M1_to_M3": 13.8,
-        "M2_to_M3": 73.3,
-        "M3_to_M4": 95.3,
-        "M1_to_M3_k43": 15.4
+        "M1_to_M3": 13.847029280606193,
+        "M2_to_M3": 73.26542165519572,
+        "M3_to_M4": 95.34313918309408,
+        "M1_to_M3_k43": 15.447335782386858,
+        "M2k43_to_M3k43": 72.62897749980857
+      },
+      "lr_tests": {
+        "M1_vs_M3": {
+          "restricted_model": "M1_phys",
+          "full_model": "M3_phys_topo",
+          "lr_statistic": 15.97500547108234,
+          "df": 1,
+          "p_value": 6.41843164022049e-05,
+          "significant_p05": "True"
+        },
+        "M2_vs_M3": {
+          "restricted_model": "M2_topo",
+          "full_model": "M3_phys_topo",
+          "lr_statistic": 75.39339784567187,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        },
+        "M3_vs_M4": {
+          "restricted_model": "M3_phys_topo",
+          "full_model": "M4_full",
+          "lr_statistic": 97.53975976681147,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        },
+        "M1_vs_M3_k43": {
+          "restricted_model": "M1_phys",
+          "full_model": "M3_phys_topo_k43",
+          "lr_statistic": 17.575311972863005,
+          "df": 1,
+          "p_value": 2.76150270508424e-05,
+          "significant_p05": "True"
+        },
+        "M2_k43_vs_M3_k43": {
+          "restricted_model": "M2_topo_k43",
+          "full_model": "M3_phys_topo_k43",
+          "lr_statistic": 74.75695369028472,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        }
       }
     },
     "2": {
       "max_trna": 2,
       "candidate_summary": {
         "n_choice_sets": 66,
-        "candidates_mean": 727.0,
+        "candidates_min": 718,
+        "candidates_max": 741,
+        "candidates_mean": 727.3333333333334,
         "observed_in_filtered_set": 66,
         "observed_total": 66
       },
+      "model_aicc": {
+        "M1_phys": 773.8347413442463,
+        "M2_topo": 791.4857363646876,
+        "M3_phys_topo": 714.2062225856092,
+        "M4_full": 696.8995412927295,
+        "M2_topo_k43": 819.0878728569344,
+        "M3_phys_topo_k43": 733.0472633511198
+      },
+      "model_log_likelihood": {
+        "M1_phys": -385.8861206721231,
+        "M2_topo": -394.7116181823438,
+        "M3_phys_topo": -355.00787319756654,
+        "M4_full": -345.256222259268,
+        "M2_topo_k43": -408.5126864284672,
+        "M3_phys_topo_k43": -364.4283935803218
+      },
       "delta_aicc": {
-        "M1_to_M3": 59.6,
-        "M2_to_M3": 77.3,
-        "M3_to_M4": 17.3,
-        "M1_to_M3_k43": 40.8
+        "M1_to_M3": 59.62851875863703,
+        "M2_to_M3": 77.27951377907834,
+        "M3_to_M4": 17.306681292879716,
+        "M1_to_M3_k43": 40.78747799312646,
+        "M2k43_to_M3k43": 86.04060950581459
+      },
+      "lr_tests": {
+        "M1_vs_M3": {
+          "restricted_model": "M1_phys",
+          "full_model": "M3_phys_topo",
+          "lr_statistic": 61.756494949113176,
+          "df": 1,
+          "p_value": 3.885780586188048e-15,
+          "significant_p05": "True"
+        },
+        "M2_vs_M3": {
+          "restricted_model": "M2_topo",
+          "full_model": "M3_phys_topo",
+          "lr_statistic": 79.40748996955449,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        },
+        "M3_vs_M4": {
+          "restricted_model": "M3_phys_topo",
+          "full_model": "M4_full",
+          "lr_statistic": 19.503301876597106,
+          "df": 1,
+          "p_value": 1.0042594024151086e-05,
+          "significant_p05": "True"
+        },
+        "M1_vs_M3_k43": {
+          "restricted_model": "M1_phys",
+          "full_model": "M3_phys_topo_k43",
+          "lr_statistic": 42.915454183602606,
+          "df": 1,
+          "p_value": 5.715738993217201e-11,
+          "significant_p05": "True"
+        },
+        "M2_k43_vs_M3_k43": {
+          "restricted_model": "M2_topo_k43",
+          "full_model": "M3_phys_topo_k43",
+          "lr_statistic": 88.16858569629073,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        }
       }
     },
     "3": {
       "max_trna": 3,
       "candidate_summary": {
         "n_choice_sets": 66,
-        "candidates_mean": 1088.0,
+        "candidates_min": 1080,
+        "candidates_max": 1100,
+        "candidates_mean": 1087.7121212121212,
         "observed_in_filtered_set": 66,
         "observed_total": 66
       },
+      "model_aicc": {
+        "M1_phys": 814.2609685550309,
+        "M2_topo": 804.8454610493633,
+        "M3_phys_topo": 719.61697361913,
+        "M4_full": 721.2223295660137,
+        "M2_topo_k43": 829.1170701654096,
+        "M3_phys_topo_k43": 737.0996316443217
+      },
+      "model_log_likelihood": {
+        "M1_phys": -406.09923427751545,
+        "M2_topo": -401.39148052468164,
+        "M3_phys_topo": -357.71324871432694,
+        "M4_full": -357.4176163959101,
+        "M2_topo_k43": -413.5272850827048,
+        "M3_phys_topo_k43": -366.45457772692276
+      },
       "delta_aicc": {
-        "M1_to_M3": 94.6,
-        "M2_to_M3": 85.2,
-        "M3_to_M4": -1.6,
-        "M1_to_M3_k43": 77.2
+        "M1_to_M3": 94.64399493590088,
+        "M2_to_M3": 85.22848743023326,
+        "M3_to_M4": -1.6053559468837193,
+        "M1_to_M3_k43": 77.16133691070922,
+        "M2k43_to_M3k43": 92.01743852108791
+      },
+      "lr_tests": {
+        "M1_vs_M3": {
+          "restricted_model": "M1_phys",
+          "full_model": "M3_phys_topo",
+          "lr_statistic": 96.77197112637703,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        },
+        "M2_vs_M3": {
+          "restricted_model": "M2_topo",
+          "full_model": "M3_phys_topo",
+          "lr_statistic": 87.3564636207094,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        },
+        "M3_vs_M4": {
+          "restricted_model": "M3_phys_topo",
+          "full_model": "M4_full",
+          "lr_statistic": 0.5912646368336709,
+          "df": 1,
+          "p_value": 0.44193050775731135,
+          "significant_p05": "False"
+        },
+        "M1_vs_M3_k43": {
+          "restricted_model": "M1_phys",
+          "full_model": "M3_phys_topo_k43",
+          "lr_statistic": 79.28931310118537,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        },
+        "M2_k43_vs_M3_k43": {
+          "restricted_model": "M2_topo_k43",
+          "full_model": "M3_phys_topo_k43",
+          "lr_statistic": 94.14541471156406,
+          "df": 1,
+          "p_value": 0.0,
+          "significant_p05": "True"
+        }
       }
     }
   }

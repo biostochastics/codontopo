@@ -1,203 +1,203 @@
 {
- "method": "Conditional-logit clade-exclusion sensitivity. For each of 7 phylogenetic-clade exclusion regimes (matching phylogenetic_sensitivity.json), refit M1-M4 with the indicated tables removed and report \u0394AICc(M1->M3) and \u0394AICc(M2->M3). tests whether the topology coefficient is robust to phylogenetic non-independence.",
- "rows": [
- {
- "excluded_clade": "all_ciliates",
- "excluded_tables": [
- 6,
- 10,
- 15,
- 27,
- 28,
- 29,
- 30
- ],
- "n_tables_remaining": 18,
- "n_events_remaining": 52,
- "M1_aicc": 698.8096481958289,
- "M2_aicc": 646.6714406386797,
- "M3_aicc": 615.0907342560735,
- "M4_aicc": 616.8733194703434,
- "delta_aicc_M1_to_M3": 83.71891393975545,
- "delta_aicc_M2_to_M3": 31.580706382606195,
- "delta_aicc_M3_to_M4": 1.7825852142699432,
- "topo_coef_raw_M3": [
- -0.002902488452273611,
- -3.1509332657273217
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- },
- {
- "excluded_clade": "all_yeast_mito",
- "excluded_tables": [
- 3
- ],
- "n_tables_remaining": 24,
- "n_events_remaining": 60,
- "M1_aicc": 746.4943071874876,
- "M2_aicc": 731.0121990544735,
- "M3_aicc": 643.3584485279207,
- "M4_aicc": 645.5619733790097,
- "delta_aicc_M1_to_M3": 103.1358586595669,
- "delta_aicc_M2_to_M3": 87.65375052655281,
- "delta_aicc_M3_to_M4": 2.203524851089014,
- "topo_coef_raw_M3": [
- -0.004474097994685642,
- -3.4529921246810136
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- },
- {
- "excluded_clade": "all_CUG_clade",
- "excluded_tables": [
- 12,
- 26
- ],
- "n_tables_remaining": 23,
- "n_events_remaining": 64,
- "M1_aicc": 793.705572547776,
- "M2_aicc": 771.9082122572613,
- "M3_aicc": 677.009927372858,
- "M4_aicc": 679.2006860377226,
- "delta_aicc_M1_to_M3": 116.69564517491801,
- "delta_aicc_M2_to_M3": 94.89828488440332,
- "delta_aicc_M3_to_M4": 2.1907586648645747,
- "topo_coef_raw_M3": [
- -0.004531839194081987,
- -3.8126098814266927
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- },
- {
- "excluded_clade": "all_metazoan_mito",
- "excluded_tables": [
- 2,
- 5,
- 9,
- 13,
- 14,
- 21
- ],
- "n_tables_remaining": 19,
- "n_events_remaining": 40,
- "M1_aicc": 466.09699281978266,
- "M2_aicc": 505.9100836220851,
- "M3_aicc": 417.2764728331953,
- "M4_aicc": 417.63361578633953,
- "delta_aicc_M1_to_M3": 48.82051998658733,
- "delta_aicc_M2_to_M3": 88.63361078888977,
- "delta_aicc_M3_to_M4": 0.35714295314420497,
- "topo_coef_raw_M3": [
- -0.005680747216536278,
- -2.679767573015585
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- },
- {
- "excluded_clade": "all_algal_mito",
- "excluded_tables": [
- 16,
- 22
- ],
- "n_tables_remaining": 23,
- "n_events_remaining": 63,
- "M1_aicc": 790.0734327220168,
- "M2_aicc": 760.3068178653259,
- "M3_aicc": 674.6089902639804,
- "M4_aicc": 676.5601392219204,
- "delta_aicc_M1_to_M3": 115.46444245803639,
- "delta_aicc_M2_to_M3": 85.69782760134547,
- "delta_aicc_M3_to_M4": 1.9511489579399495,
- "topo_coef_raw_M3": [
- -0.004322118027324462,
- -3.808598109224406
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- },
- {
- "excluded_clade": "all_protist_mito",
- "excluded_tables": [
- 4,
- 23
- ],
- "n_tables_remaining": 23,
- "n_events_remaining": 63,
- "M1_aicc": 783.7766727898373,
- "M2_aicc": 775.4344428384288,
- "M3_aicc": 683.0361296132653,
- "M4_aicc": 684.8911806904613,
- "delta_aicc_M1_to_M3": 100.74054317657203,
- "delta_aicc_M2_to_M3": 92.39831322516352,
- "delta_aicc_M3_to_M4": 1.8550510771959807,
- "topo_coef_raw_M3": [
- -0.004506394397661218,
- -3.2528170778999215
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- },
- {
- "excluded_clade": "all_hemichordate_mito",
- "excluded_tables": [
- 24,
- 33
- ],
- "n_tables_remaining": 23,
- "n_events_remaining": 59,
- "M1_aicc": 737.6104566613038,
- "M2_aicc": 728.8080351473851,
- "M3_aicc": 645.3091773560394,
- "M4_aicc": 647.4331314500531,
- "delta_aicc_M1_to_M3": 92.30127930526442,
- "delta_aicc_M2_to_M3": 83.4988577913457,
- "delta_aicc_M3_to_M4": 2.1239540940136976,
- "topo_coef_raw_M3": [
- -0.004441141679641991,
- -3.1849441747727565
- ],
- "topo_coef_labels_M3": [
- "delta_phys",
- "delta_topo"
- ],
- "M3_favored_over_M1": "True",
- "M3_favored_over_M2": "True"
- }
- ],
- "all_M3_favored_over_M1": true,
- "all_M3_favored_over_M2": true,
- "delta_M1_M3_min": 48.82051998658733,
- "delta_M1_M3_max": 116.69564517491801,
- "delta_M1_M3_median": 100.74054317657203,
- "delta_M2_M3_min": 31.580706382606195,
- "delta_M2_M3_max": 94.89828488440332,
- "delta_M2_M3_median": 87.65375052655281
+  "method": "Conditional-logit clade-exclusion sensitivity. For each of 7 phylogenetic-clade exclusion regimes (matching phylogenetic_sensitivity.json), refit M1-M4 with the indicated tables removed and report \u0394AICc(M1->M3) and \u0394AICc(M2->M3); tests whether the topology coefficient is robust to phylogenetic non-independence.",
+  "rows": [
+    {
+      "excluded_clade": "all_ciliates",
+      "excluded_tables": [
+        6,
+        10,
+        15,
+        27,
+        28,
+        29,
+        30
+      ],
+      "n_tables_remaining": 18,
+      "n_events_remaining": 52,
+      "M1_aicc": 698.8096481958289,
+      "M2_aicc": 646.6714406386797,
+      "M3_aicc": 615.0907342560735,
+      "M4_aicc": 616.8733194703434,
+      "delta_aicc_M1_to_M3": 83.71891393975545,
+      "delta_aicc_M2_to_M3": 31.580706382606195,
+      "delta_aicc_M3_to_M4": 1.7825852142699432,
+      "topo_coef_raw_M3": [
+        -0.002902488452273611,
+        -3.1509332657273217
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    },
+    {
+      "excluded_clade": "all_yeast_mito",
+      "excluded_tables": [
+        3
+      ],
+      "n_tables_remaining": 24,
+      "n_events_remaining": 60,
+      "M1_aicc": 746.4943071874876,
+      "M2_aicc": 731.0121990544735,
+      "M3_aicc": 643.3584485279207,
+      "M4_aicc": 645.5619733790097,
+      "delta_aicc_M1_to_M3": 103.1358586595669,
+      "delta_aicc_M2_to_M3": 87.65375052655281,
+      "delta_aicc_M3_to_M4": 2.203524851089014,
+      "topo_coef_raw_M3": [
+        -0.004474097994685642,
+        -3.4529921246810136
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    },
+    {
+      "excluded_clade": "all_CUG_clade",
+      "excluded_tables": [
+        12,
+        26
+      ],
+      "n_tables_remaining": 23,
+      "n_events_remaining": 64,
+      "M1_aicc": 793.705572547776,
+      "M2_aicc": 771.9082122572613,
+      "M3_aicc": 677.009927372858,
+      "M4_aicc": 679.2006860377226,
+      "delta_aicc_M1_to_M3": 116.69564517491801,
+      "delta_aicc_M2_to_M3": 94.89828488440332,
+      "delta_aicc_M3_to_M4": 2.1907586648645747,
+      "topo_coef_raw_M3": [
+        -0.004531839194081987,
+        -3.8126098814266927
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    },
+    {
+      "excluded_clade": "all_metazoan_mito",
+      "excluded_tables": [
+        2,
+        5,
+        9,
+        13,
+        14,
+        21
+      ],
+      "n_tables_remaining": 19,
+      "n_events_remaining": 40,
+      "M1_aicc": 466.09699281978266,
+      "M2_aicc": 505.9100836220851,
+      "M3_aicc": 417.2764728331953,
+      "M4_aicc": 417.63361578633953,
+      "delta_aicc_M1_to_M3": 48.82051998658733,
+      "delta_aicc_M2_to_M3": 88.63361078888977,
+      "delta_aicc_M3_to_M4": 0.35714295314420497,
+      "topo_coef_raw_M3": [
+        -0.005680747216536278,
+        -2.679767573015585
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    },
+    {
+      "excluded_clade": "all_algal_mito",
+      "excluded_tables": [
+        16,
+        22
+      ],
+      "n_tables_remaining": 23,
+      "n_events_remaining": 63,
+      "M1_aicc": 790.0734327220168,
+      "M2_aicc": 760.3068178653259,
+      "M3_aicc": 674.6089902639804,
+      "M4_aicc": 676.5601392219204,
+      "delta_aicc_M1_to_M3": 115.46444245803639,
+      "delta_aicc_M2_to_M3": 85.69782760134547,
+      "delta_aicc_M3_to_M4": 1.9511489579399495,
+      "topo_coef_raw_M3": [
+        -0.004322118027324462,
+        -3.808598109224406
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    },
+    {
+      "excluded_clade": "all_protist_mito",
+      "excluded_tables": [
+        4,
+        23
+      ],
+      "n_tables_remaining": 23,
+      "n_events_remaining": 63,
+      "M1_aicc": 783.7766727898373,
+      "M2_aicc": 775.4344428384288,
+      "M3_aicc": 683.0361296132653,
+      "M4_aicc": 684.8911806904613,
+      "delta_aicc_M1_to_M3": 100.74054317657203,
+      "delta_aicc_M2_to_M3": 92.39831322516352,
+      "delta_aicc_M3_to_M4": 1.8550510771959807,
+      "topo_coef_raw_M3": [
+        -0.004506394397661218,
+        -3.2528170778999215
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    },
+    {
+      "excluded_clade": "all_hemichordate_mito",
+      "excluded_tables": [
+        24,
+        33
+      ],
+      "n_tables_remaining": 23,
+      "n_events_remaining": 59,
+      "M1_aicc": 737.6104566613038,
+      "M2_aicc": 728.8080351473851,
+      "M3_aicc": 645.3091773560394,
+      "M4_aicc": 647.4331314500531,
+      "delta_aicc_M1_to_M3": 92.30127930526442,
+      "delta_aicc_M2_to_M3": 83.4988577913457,
+      "delta_aicc_M3_to_M4": 2.1239540940136976,
+      "topo_coef_raw_M3": [
+        -0.004441141679641991,
+        -3.1849441747727565
+      ],
+      "topo_coef_labels_M3": [
+        "delta_phys",
+        "delta_topo"
+      ],
+      "M3_favored_over_M1": "True",
+      "M3_favored_over_M2": "True"
+    }
+  ],
+  "all_M3_favored_over_M1": true,
+  "all_M3_favored_over_M2": true,
+  "delta_M1_M3_min": 48.82051998658733,
+  "delta_M1_M3_max": 116.69564517491801,
+  "delta_M1_M3_median": 100.74054317657203,
+  "delta_M2_M3_min": 31.580706382606195,
+  "delta_M2_M3_max": 94.89828488440332,
+  "delta_M2_M3_median": 87.65375052655281
 }

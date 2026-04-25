@@ -155,6 +155,76 @@ def main() -> None:
             f"  [+] topology_avoidance_q6.depletion_fold = {depletion:.2f}x backfilled"
         )
 
+    # 12. Backfill per_table fields used by the manuscript prose:
+    # marginal_table, marginal_p_bh, informative_*/near_standard_* counts.
+    # The "marginal" exception is the table with the *highest* BH-corrected
+    # p-value (closest to or above 0.05). Informative-distance tables have
+    # >=3 codon reassignments from the standard code; near-standard have
+    # <=2. The single source of truth for reassignment counts is
+    # codon_topo.core.genetic_codes.get_changes.
+    pt = stats.get("per_table", {})
+    rows = pt.get("per_table", []) or []
+    if rows and pt.get("marginal_table") is None:
+        # Find row with highest p_bh
+        marginal = max(
+            rows,
+            key=lambda r: r.get(
+                "p_bh", r.get("p_value_bh", r.get("p_value_conservative_bh", 0.0))
+            ),
+        )
+        marginal_p = marginal.get(
+            "p_bh", marginal.get("p_value_bh", marginal.get("p_value_conservative_bh"))
+        )
+        pt["marginal_table"] = marginal["table_id"]
+        pt["marginal_p_bh"] = round(float(marginal_p), 4)
+        print(
+            f"  [+] per_table.marginal_table = {pt['marginal_table']} "
+            f"(p_bh = {pt['marginal_p_bh']}) backfilled"
+        )
+    if rows and pt.get("informative_total") is None:
+        # Need reassignment counts to partition tables into informative
+        # (>=3 reassignments) vs near-standard (<=2). Lazy import to keep
+        # this script lightweight when the codon_topo package is not on
+        # PYTHONPATH (e.g. the standalone post-processor).
+        import sys
+
+        sys.path.insert(0, str(OUTPUT.parent / "src"))
+        try:
+            from codon_topo.core.genetic_codes import get_changes
+        except ImportError:
+            print("  [!] codon_topo not importable; skipping informative split")
+        else:
+            inf_total = inf_sig = near_total = near_sig = 0
+            INFORMATIVE_THRESHOLD = 3
+            for r in rows:
+                tid = r["table_id"]
+                if tid == 1:
+                    # Standard code is the reference; it's neither
+                    # informative-distance nor a near-standard variant
+                    # (it IS the standard). Excluded from the split.
+                    continue
+                n_changes = len(get_changes(tid))
+                p_bh = r.get(
+                    "p_bh", r.get("p_value_bh", r.get("p_value_conservative_bh", 1.0))
+                )
+                is_sig = float(p_bh) < 0.05
+                if n_changes >= INFORMATIVE_THRESHOLD:
+                    inf_total += 1
+                    if is_sig:
+                        inf_sig += 1
+                else:
+                    near_total += 1
+                    if is_sig:
+                        near_sig += 1
+            pt["informative_total"] = inf_total
+            pt["informative_significant"] = inf_sig
+            pt["near_standard_total"] = near_total
+            pt["near_standard_significant"] = near_sig
+            print(
+                f"  [+] per_table informative={inf_sig}/{inf_total}, "
+                f"near-standard={near_sig}/{near_total} backfilled"
+            )
+
     write_json(OUTPUT / "manuscript_stats.json", stats)
     print(f"\nUpdated {OUTPUT / 'manuscript_stats.json'}")
 
