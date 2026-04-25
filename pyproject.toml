@@ -53,7 +53,7 @@ all = [
 ]
 
 [project.urls]
-Repository = "https://github.com/biostochastics/codon-topo"
+Repository = "https://github.com/biostochastics/codontopo"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/codon_topo"]

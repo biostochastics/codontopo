@@ -863,7 +863,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         "_generated_by": "codon-topo all",
         "_seed": seed,
         "_n_samples": n_samples,
-        "_version": "0.3.1",
+        "_version": "0.4.0",
         # Section 3.1: Cross-metric coloring optimality
         "coloring": {
             "observed_score": coloring_result["observed_score"],

@@ -34,11 +34,11 @@ CODON-TOPO validates the algebraic structure of genetic codes when encoded as 6-
 | **Falsified** | 1 | KRAS-Fano clinical prediction (p = 1.0 on n = 1,670 MSK-IMPACT mutations) |
 | **Tautological** | 2 | Two-fold bit-5 filtration (encoding-dependent); four-fold prefix filtration |
 
-**Notation update (v0.3.2):** The full single-nucleotide mutation graph is now consistently written as **H(3,4) = K₄ □ K₄ □ K₄** (the Hamming graph; 64 vertices, regular degree 9, 288 undirected edges) rather than the ambiguous K₄³. Q₆ is a 192-edge subgraph of H(3,4); the remaining 96 within-nucleotide diagonal edges complete H(3,4).
+**Notation:** The full single-nucleotide mutation graph is consistently written as **H(3,4) = K₄ □ K₄ □ K₄** (the Hamming graph; 64 vertices, regular degree 9, 288 undirected edges) rather than the ambiguous K₄³. Q₆ is a 192-edge subgraph of H(3,4); the remaining 96 within-nucleotide diagonal edges complete H(3,4). CLI flags retain the legacy `k43` spelling (e.g. `topology-avoidance-k43`) for backward compatibility.
 
 **Encoding sensitivity (24 base-to-bit bijection sweep):** The Q₆ topology-avoidance result is encoding-dependent — 8 of 24 bijections give a Q₆ candidate-landscape rate near 36% (rather than 73% under the default encoding) and no statistically significant depletion. The H(3,4) result is encoding-independent and **is reported as the primary topology-avoidance test**; Q₆ is now framed as a coordinate-dependent decomposition. Q₆ remains useful for the ρ-sweep (continuous interpolation between Q₆ and H(3,4)).
 
-**Conditional logit (M3 phys+topo) under both topology encodings:** Decisively favored over single-feature models (M1: ΔAICc ≥ 89 vs M3 with Q₆ topology; ΔAICc ≥ 89 vs M3 with H(3,4) topology, confirming encoding-independence per *encoding-robustness* block in `manuscript_stats.json`). Adding the tRNA-distance proxy (M4) does not improve fit (LR = 0.12, p = 0.73). Spearman ρ between Δ_phys and Δ_topo across the 1,280-move candidate landscape = 0.15 (largely independent predictors). Conditional-logit clade-exclusion sensitivity (per Sengupta et al. 2007) and posterior-predictive validation (observed 0.076 vs simulated 0.077; pp p = 0.60) confirm robustness.
+**Conditional logit (M3 phys+topo) under both topology encodings:** Decisively favored over single-feature models. Under encoding-dependent Q₆ topology: ΔAICc(M1→M3) = 108.2, ΔAICc(M2→M3) = 89.1. Under encoding-independent H(3,4) topology (verifying that the result is not an artifact of the Q₆ encoding): ΔAICc(M1→M3_H(3,4)) = **91.3**, ΔAICc(M2_H(3,4)→M3_H(3,4)) = **95.1** — both decisive (>10) and similar in magnitude to the Q₆ counterparts. Adding the tRNA-distance proxy (M4) does not improve fit (LR = 0.12, p = 0.73). Spearman ρ between Δ_phys and Δ_topo across the 1,280-move candidate landscape = 0.15 (largely independent predictors). Conditional-logit clade-exclusion sensitivity (per Sengupta et al. 2007, refitting M1-M4 with each major clade dropped) and posterior-predictive validation (observed 0.076 vs simulated 0.077; pp p = 0.60) confirm robustness.
 
 **Methodological caveats explicitly disclosed in Limitations:**
 - Survivorship bias: cross-sectional NCBI data cannot distinguish "selection against attempting topology-breaking moves" from "selection against the lineages that attempted them"
@@ -63,8 +63,8 @@ Run `codon-topo claims` for the full hierarchy with p-values and justifications.
 ### Installation
 
 ```bash
-git clone https://github.com/biostochastics/codon-topo.git
-cd codon-topo
+git clone https://github.com/biostochastics/codontopo.git
+cd codontopo
 
 # With uv (recommended)
 uv sync --all-extras
@@ -127,8 +127,8 @@ The core design principle: **a user who clones this repo should be able to regen
 
 ```bash
 # Full reproducibility from scratch
-git clone https://github.com/biostochastics/codon-topo.git
-cd codon-topo
+git clone https://github.com/biostochastics/codontopo.git
+cd codontopo
 uv sync --all-extras
 uv run codon-topo all --output-dir=./output --seed=135325
 # -> generates output/manuscript_stats.json

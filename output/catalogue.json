@@ -3,16 +3,16 @@
     "id": "WS1-C1",
     "claim": "Two-fold degeneracy is uniformly explained by bit-5 difference in GF(2)^6",
     "workstream": "WS1",
-    "status": "verified",
-    "evidence_strength": "very_strong",
+    "status": "tautological",
+    "evidence_strength": "encoding_dependent",
     "p_value": null
   },
   {
     "id": "WS1-C2",
     "claim": "Four-fold degeneracy corresponds to shared 4-bit prefix exhausting GF(2)^2",
     "workstream": "WS1",
-    "status": "verified",
-    "evidence_strength": "very_strong",
+    "status": "tautological",
+    "evidence_strength": "encoding_dependent",
     "p_value": null
   },
   {
@@ -49,7 +49,7 @@
   },
   {
     "id": "WS1-NOVEL-2",
-    "claim": "Leucine is disconnected in chlorophycean mito (Table 16, epsilon=2)",
+    "claim": "Leucine is disconnected in chlorophycean mitochondrial codes (translation tables 16 and 22, epsilon=2)",
     "workstream": "WS1",
     "status": "verified",
     "evidence_strength": "strong",
@@ -73,11 +73,11 @@
   },
   {
     "id": "WS2-DIR",
-    "claim": "Codon reassignment events show directional bias in GF(2)^6 bit positions",
+    "claim": "Codon reassignment events show directional bias in GF(2)^6 bit positions, but signal is marginal after correcting for non-independence (de-duplicated p=0.075)",
     "workstream": "WS2",
-    "status": "tested",
-    "evidence_strength": "strong",
-    "p_value": 0.006
+    "status": "exploratory",
+    "evidence_strength": "weak",
+    "p_value": 0.075
   },
   {
     "id": "WS2-PATH",

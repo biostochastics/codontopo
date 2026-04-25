@@ -1606,6 +1606,16 @@ def run_evolutionary_simulation_analysis(
                 "aicc": f["aicc"],
                 "converged": f["converged"],
                 "weights_raw": f.get("weights_raw", np.array([])).tolist(),
+                "weights_normalized": (
+                    f.get("weights", np.array([])).tolist()
+                    if isinstance(f.get("weights"), np.ndarray)
+                    else f.get("weights", [])
+                ),
+                "feat_stds": (
+                    f.get("feat_stds", np.array([])).tolist()
+                    if isinstance(f.get("feat_stds"), np.ndarray)
+                    else f.get("feat_stds", [])
+                ),
                 "weight_labels": f.get("weight_labels", []),
             }
             for name, f in fits.items()

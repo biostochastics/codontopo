@@ -43,13 +43,23 @@ df$signif <- df$hypergeom_p < 0.05
 # Sort by depletion fold for visual order
 df$encoding_label <- factor(df$encoding_label, levels = df$encoding_label[order(df$depletion_fold)])
 
+df$p_label <- vapply(df$hypergeom_p, function(p) {
+  if (p < 1e-10) "<10^-10"
+  else if (p < 0.001) sprintf("%.0e", p)
+  else if (p < 0.01) sprintf("%.3f", p)
+  else sprintf("%.2f", p)
+}, character(1))
+
 p1 <- ggplot(df, aes(x = encoding_label, y = depletion_fold, fill = signif)) +
   geom_col(color = "grey30", linewidth = 0.2) +
   geom_hline(yintercept = 1.0, linetype = "dashed", color = "grey50") +
-  geom_text(aes(label = sprintf("p=%.2g", hypergeom_p)),
-            angle = 90, hjust = -0.1, size = 2.5) +
+  # p-value labels in plot reading orientation (horizontal under coord_flip);
+  # placed just past the bar end with a small fixed offset.
+  geom_text(aes(label = p_label),
+            hjust = -0.15, size = 2.4, family = "sans") +
   scale_fill_manual(values = c("FALSE" = "grey80", "TRUE" = "#3182bd"),
                     name = "p < 0.05") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.18))) +
   labs(x = "Base-to-bit encoding (sorted by Q_6 depletion fold)",
        y = "Q_6 depletion fold (rate_possible / rate_observed)",
        title = "Q_6 topology-avoidance is encoding-sensitive",
@@ -58,8 +68,8 @@ p1 <- ggplot(df, aes(x = encoding_label, y = depletion_fold, fill = signif)) +
   if (exists("theme_codon_pub")) theme_codon_pub(base_size = 9) else theme_minimal(base_size = 9)
 
 # Save
-ggsave(file.path(output_dir, "FigS_encoding_sweep.png"), p1, width = 7, height = 8, dpi = 300)
-ggsave(file.path(output_dir, "FigS_encoding_sweep.pdf"), p1, width = 7, height = 8)
+ggsave(file.path(output_dir, "FigS_encoding_sweep.png"), p1, width = 7, height = 5.5, dpi = 300)
+ggsave(file.path(output_dir, "FigS_encoding_sweep.pdf"), p1, width = 7, height = 5.5)
 cat("  Wrote FigS_encoding_sweep.{png,pdf}\n")
 
 # Also export a tidy CSV for the table

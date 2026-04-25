@@ -296,4 +296,133 @@ for e in db:
     )
 write_csv(OUT / "T10_reassignment_db.csv", rows)
 
+# ── Conditional-logit tables (T_model_comparison, T_likelihood_ratio_tests, T_ranks_*) ──
+# Source: manuscript_stats.json + evolutionary_simulation.json (current pipeline run)
+print("Conditional-logit: T_model_comparison, T_likelihood_ratio_tests, T_ranks_*")
+
+ROOT = Path(__file__).parent.parent
+ms_path = ROOT / "output" / "manuscript_stats.json"
+es_path = ROOT / "output" / "evolutionary_simulation.json"
+
+if ms_path.exists() and es_path.exists():
+    with ms_path.open() as f:
+        ms = json.load(f)
+    with es_path.open() as f:
+        es = json.load(f)
+
+    cl = ms.get("condlogit", {})
+    fits = cl.get("model_fits", {})
+
+    # ── T_model_comparison: rank by AICc ascending; first row is best (Δ=0).
+    # Description map for the 6 models (Q_6 + H(3,4) variants).
+    DESC = {
+        "M1_phys": "Physicochemistry only",
+        "M2_topo": "Topology only (Q_6)",
+        "M3_phys_topo": "Physicochemistry + topology (Q_6)",
+        "M4_full": "Physicochemistry + topology (Q_6) + tRNA",
+        "M2_topo_k43": "Topology only (H(3,4))",
+        "M3_phys_topo_k43": "Physicochemistry + topology (H(3,4))",
+    }
+    n_obs = cl.get("total_events")
+    if fits:
+        best_aicc = min(f["aicc"] for f in fits.values())
+        rows_mc = []
+        for name, f in fits.items():
+            rows_mc.append(
+                {
+                    "Model": name,
+                    "Description": DESC.get(name, name),
+                    "k": f.get("n_params"),
+                    "n": n_obs,
+                    "LL": round(f.get("log_likelihood", 0.0), 2),
+                    "AIC": round(f.get("aic", 0.0), 2),
+                    "AICc": round(f.get("aicc", 0.0), 2),
+                    "Delta_AICc": round(f.get("aicc", 0.0) - best_aicc, 2),
+                    "Converged": f.get("converged", True),
+                }
+            )
+        # Sort rows by AICc ascending (best on top)
+        rows_mc.sort(key=lambda r: r["AICc"])
+        write_csv(OUT / "T_model_comparison.csv", rows_mc)
+
+    # ── T_likelihood_ratio_tests: each LR test entry; uses keys
+    # M1_vs_M3, M2_vs_M3, M3_vs_M4, M1_vs_M3_k43, M2_k43_vs_M3_k43.
+    LR_PAIRS = {
+        "M1_vs_M3": ("M1_phys", "M3_phys_topo"),
+        "M2_vs_M3": ("M2_topo", "M3_phys_topo"),
+        "M3_vs_M4": ("M3_phys_topo", "M4_full"),
+        "M1_vs_M3_k43": ("M1_phys", "M3_phys_topo_k43"),
+        "M2_k43_vs_M3_k43": ("M2_topo_k43", "M3_phys_topo_k43"),
+    }
+    lrs = cl.get("lr_tests", {})
+    rows_lr = []
+    for key, (restricted, full) in LR_PAIRS.items():
+        if key not in lrs:
+            continue
+        lr = lrs[key]
+        rows_lr.append(
+            {
+                "Restricted": restricted,
+                "Full": full,
+                "LR_statistic": round(lr.get("lr_statistic", 0.0), 3),
+                "df": lr.get("df", 1),
+                "p_value": f"{lr.get('p_value', 1.0):.2e}",
+                "Significant_p05": lr.get("p_value", 1.0) < 0.05,
+            }
+        )
+    if rows_lr:
+        write_csv(OUT / "T_likelihood_ratio_tests.csv", rows_lr)
+
+    # ── T_model_coefficients: raw + normalized betas per model
+    rows_coef = []
+    for name, f in fits.items():
+        labels = f.get("weight_labels", []) or []
+        raws = f.get("weights_raw", []) or []
+        norms = f.get("weights_normalized", []) or []
+        for lbl, r, n in zip(labels, raws, norms):
+            rows_coef.append(
+                {
+                    "Model": name,
+                    "Feature": lbl,
+                    "beta_raw": round(r, 5),
+                    "beta_normalized": round(n, 4),
+                }
+            )
+    if rows_coef:
+        write_csv(OUT / "T_model_coefficients.csv", rows_coef)
+
+    # ── T_ranks_<MODEL>: per-event observed-move ranks
+    diag = es.get("diagnostics", {})
+    for model_name in [
+        "M1_phys",
+        "M2_topo",
+        "M3_phys_topo",
+        "M4_full",
+        "M2_topo_k43",
+        "M3_phys_topo_k43",
+    ]:
+        ranks = diag.get(f"ranks_{model_name}")
+        if not ranks:
+            continue
+        rows_r = []
+        for r in ranks:
+            rows_r.append(
+                {
+                    "Model": model_name,
+                    "Table_ID": r.get("table_id"),
+                    "Step": r.get("step"),
+                    "Codon": r.get("codon"),
+                    "Target_AA": r.get("target_aa"),
+                    "Rank": r.get("rank"),
+                    "N_candidates": r.get("n_candidates"),
+                    "Percentile": round(r.get("percentile", 0.0), 1),
+                }
+            )
+        write_csv(OUT / f"T_ranks_{model_name}.csv", rows_r)
+else:
+    print(
+        "  manuscript_stats.json or evolutionary_simulation.json missing; skipping condlogit tables"
+    )
+
+
 print(f"\nDone. {len(list(OUT.glob('*')))} files written to {OUT}/")

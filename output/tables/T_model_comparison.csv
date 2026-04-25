@@ -1,5 +1,7 @@
 Model,Description,k,n,LL,AIC,AICc,Delta_AICc,Converged
-M3_phys_topo,Physicochemistry + topology,2,61,-339.14,682.29,682.49,0.00,True
-M4_full,Physicochemistry + topology + tRNA,3,61,-338.87,683.75,684.17,1.67,True
-M2_topo,Topology only,1,61,-373.70,749.41,749.48,66.98,True
-M1_phys,Physicochemistry only,1,61,-390.98,783.96,784.02,101.53,True
+M3_phys_topo,Physicochemistry + topology (Q_6),2,66,-358.61,721.22,721.41,0.0,True
+M4_full,Physicochemistry + topology (Q_6) + tRNA,3,66,-358.55,723.1,723.49,2.08,True
+M3_phys_topo_k43,"Physicochemistry + topology (H(3,4))",2,66,-367.09,738.17,738.36,16.95,True
+M2_topo,Topology only (Q_6),1,66,-404.2,810.41,810.47,89.05,True
+M1_phys,Physicochemistry only,1,66,-413.8,829.6,829.66,108.25,True
+M2_topo_k43,"Topology only (H(3,4))",1,66,-415.72,833.44,833.5,112.09,True

@@ -209,8 +209,18 @@ depth <- read.csv(file.path(input_dir, "depth_calibration.csv"))
 
 p3b <- ggplot(depth, aes(x = age_midpoint_mya, y = reconnect_eps,
                            color = aa, shape = aa)) +
-  geom_errorbar(aes(xmin = age_mya_low, xmax = age_mya_high),
-                width = 0.1, linewidth = 0.5, alpha = 0.6, orientation = "y") +
+  # Horizontal CI segments rendered manually so the right-most Ser (Pre-LUCA,
+  # tight log-scale CI) is still visible above the marker glyph.
+  geom_segment(aes(x = age_mya_low, xend = age_mya_high,
+                   y = reconnect_eps, yend = reconnect_eps),
+               linewidth = 0.7, alpha = 0.85,
+               lineend = "butt", show.legend = FALSE) +
+  geom_segment(aes(x = age_mya_low, xend = age_mya_low,
+                   y = reconnect_eps - 0.18, yend = reconnect_eps + 0.18),
+               linewidth = 0.7, alpha = 0.85, show.legend = FALSE) +
+  geom_segment(aes(x = age_mya_high, xend = age_mya_high,
+                   y = reconnect_eps - 0.18, yend = reconnect_eps + 0.18),
+               linewidth = 0.7, alpha = 0.85, show.legend = FALSE) +
   geom_point(size = 3, stroke = 0.6) +
   scale_color_manual(values = c("Ala" = PAL_PURPLE, "Leu" = PAL_BLUE,
                                  "Ser" = PAL_TEAL, "Thr" = PAL_ORANGE)) +
@@ -222,25 +232,42 @@ p3b <- ggplot(depth, aes(x = age_midpoint_mya, y = reconnect_eps,
   tc() +
   theme(legend.key.size = unit(0.25, "cm"))
 
-# Panel C: Topology avoidance
-ta <- read.csv(file.path(table_dir, "T9_topology_avoidance.csv"))
+# Panel C: Topology avoidance — primary H(3,4) (encoding-independent),
+# with Q_6 (encoding-dependent) shown alongside as sensitivity
+stats_path <- file.path(dirname(table_dir), "manuscript_stats.json")
+ms <- jsonlite::fromJSON(stats_path)
+tk43 <- ms$topology_avoidance_k43
+tq6  <- ms$topology_avoidance_q6
+
 df_ta <- data.frame(
-  category = factor(c("Observed", "Possible"), levels = c("Observed", "Possible")),
-  rate = c(ta$rate_observed_pct[1], ta$rate_possible_pct[1])
+  graph    = factor(rep(c("H(3,4) (primary)", "Q[6] (sensitivity)"), each = 2),
+                    levels = c("H(3,4) (primary)", "Q[6] (sensitivity)")),
+  category = factor(rep(c("Observed", "Candidate"), 2),
+                    levels = c("Observed", "Candidate")),
+  rate     = c(tk43$rate_observed * 100, tk43$rate_possible * 100,
+               tq6$rate_observed  * 100, tq6$rate_possible  * 100)
 )
 
 p3c <- ggplot(df_ta, aes(x = category, y = rate, fill = category)) +
-  geom_col(width = 0.5, color = "grey30", linewidth = 0.2) +
+  geom_col(width = 0.6, color = "grey30", linewidth = 0.2) +
   geom_text(aes(label = paste0(round(rate, 1), "%")),
-            vjust = -0.4, size = 3.5, fontface = "bold") +
-  scale_fill_manual(values = c("Observed" = PAL_BLUE, "Possible" = PAL_GREY_LT)) +
-  scale_y_continuous(limits = c(0, 100), expand = expansion(mult = c(0, 0.08))) +
-  labs(x = NULL, y = "% new disconnections",
-       subtitle = paste0("Perm. p = ",
-                         format(ta$permutation_p[1], digits = 2, scientific = TRUE))) +
+            vjust = -0.4, size = 2.8, fontface = "bold") +
+  scale_fill_manual(values = c("Observed" = PAL_BLUE, "Candidate" = PAL_GREY_LT)) +
+  scale_y_continuous(limits = c(0, 92), expand = expansion(mult = c(0, 0.10))) +
+  facet_wrap(~ graph, scales = "free_x") +
+  labs(x = NULL, y = "% topology-breaking moves",
+       subtitle = sprintf("H(3,4) RR=%.2f, p<1e-4   Q_6 %.1f-fold depl.",
+                          tk43$risk_ratio,
+                          tq6$rate_possible / max(tq6$rate_observed, 0.001))) +
   tc() +
   theme(legend.position = "none",
-        plot.subtitle = element_text(size = 7, color = PAL_RED))
+        plot.subtitle = element_text(size = 6.0, color = PAL_RED,
+                                      margin = margin(b = 4)),
+        strip.text = element_text(size = 7.0,
+                                   margin = margin(t = 2, b = 2)),
+        strip.background = element_rect(fill = "grey95", color = NA),
+        panel.spacing = unit(0.8, "lines"),
+        axis.text.x = element_text(size = 7))
 
 # Panel D: tRNA enrichment
 trna <- read.csv(file.path(table_dir, "T7_trna_per_pairing.csv"))
@@ -371,33 +398,43 @@ save_figure(fig4, file.path(output_dir, "Fig4_translational"), width = 7, height
 cat("  [5/5] Conditional logit diagnostics (3-panel)\n")
 
 model_comp <- read.csv("output/tables/T_model_comparison.csv", stringsAsFactors = FALSE)
-rank_files <- c("M1_phys", "M2_topo", "M3_phys_topo", "M4_full")
+rank_files <- c("M1_phys", "M2_topo", "M3_phys_topo", "M4_full",
+                "M2_topo_k43", "M3_phys_topo_k43")
 all_ranks <- do.call(rbind, lapply(rank_files, function(m) {
   fp <- paste0("output/tables/T_ranks_", m, ".csv")
   if (file.exists(fp)) read.csv(fp, stringsAsFactors = FALSE) else NULL
 }))
 
-# Panel A: AICc
-label_map <- c("M1_phys" = "M1\nPhys", "M2_topo" = "M2\nTopo",
-               "M3_phys_topo" = "M3\nPhys+Topo", "M4_full" = "M4\nFull")
-if ("Model" %in% names(model_comp)) {
-  model_comp$Model_label <- label_map[model_comp$Model]
-} else {
-  model_comp$Model_label <- c("M3\nPhys+Topo", "M4\nFull", "M2\nTopo", "M1\nPhys")
-}
-model_comp$Model_label <- factor(model_comp$Model_label, levels = rev(unname(label_map)))
+# Panel A: AICc — covers all 6 models (Q_6 + H(3,4) variants).
+label_map <- c(
+  "M1_phys"           = "M1\nPhys",
+  "M2_topo"           = "M2\nTopo (Q₆)",
+  "M3_phys_topo"      = "M3\nPhys+Topo (Q₆)",
+  "M4_full"           = "M4\n+ tRNA",
+  "M2_topo_k43"       = "M2\nTopo H(3,4)",
+  "M3_phys_topo_k43"  = "M3\nPhys+Topo H(3,4)"
+)
+# Drop any rows whose Model isn't in the label_map (shouldn't happen, but guards
+# against silent NA labels if the CSV adds new models without corresponding labels).
+model_comp <- model_comp[model_comp$Model %in% names(label_map), ]
+model_comp$Model_label <- label_map[model_comp$Model]
+# Keep the same row order Python wrote (sorted by AICc ascending), then reverse
+# for coord_flip so the best model appears at the top of the panel.
+model_comp$Model_label <- factor(model_comp$Model_label,
+                                 levels = rev(model_comp$Model_label))
 model_comp$is_best <- model_comp$Delta_AICc == 0
 
 p5a <- ggplot(model_comp, aes(x = Model_label, y = AICc, fill = is_best)) +
   geom_col(width = 0.55, color = "grey30", linewidth = 0.2) +
-  geom_text(aes(label = paste0("d=", sprintf("%.1f", Delta_AICc))),
+  geom_text(aes(label = paste0("Δ=", sprintf("%.1f", Delta_AICc))),
             hjust = -0.1, size = ANNOT_SIZE_S, color = "grey30") +
   scale_fill_manual(values = c("TRUE" = PAL_BLUE, "FALSE" = PAL_BLUE_PALE), guide = "none") +
-  coord_flip(ylim = c(min(model_comp$AICc) * 0.97, max(model_comp$AICc) * 1.02)) +
+  coord_flip(ylim = c(min(model_comp$AICc) * 0.97, max(model_comp$AICc) * 1.05)) +
   labs(x = NULL, y = "AICc") +
   tc() +
   theme(panel.grid.major.y = element_blank(),
-        panel.grid.major.x = element_line(color = "grey92", linewidth = 0.2))
+        panel.grid.major.x = element_line(color = "grey92", linewidth = 0.2),
+        axis.text.y = element_text(size = 7))
 
 # Panel B: Percentile ranks
 ranks_m1 <- all_ranks[all_ranks$Model == "M1_phys", ]
@@ -420,24 +457,41 @@ p5b <- ggplot(ranks_combined, aes(x = Percentile, fill = Model)) +
         legend.text = element_text(size = 7),
         legend.key.size = unit(0.25, "cm"))
 
-# Panel C: LRT
-lrt_data <- data.frame(
-  Test = c("M1->M3\n(+Topo)", "M2->M3\n(+Phys)", "M3->M4\n(+tRNA)"),
-  LR = c(102.2, 68.8, 0.15),
-  p_val = c("<0.001", "<0.001", "0.70"),
-  is_sig = c(TRUE, TRUE, FALSE)
+# Panel C: LRT — read all 5 LR tests from the CSV (3 Q_6 + 2 H(3,4) variants).
+lrt_csv <- read.csv("output/tables/T_likelihood_ratio_tests.csv", stringsAsFactors = FALSE)
+# Map (Restricted, Full) to a short label.
+lrt_label_map <- c(
+  "M1_phys|M3_phys_topo"               = "M1→M3\n(+Q₆ topo)",
+  "M2_topo|M3_phys_topo"               = "M2→M3\n(+phys)",
+  "M3_phys_topo|M4_full"               = "M3→M4\n(+tRNA)",
+  "M1_phys|M3_phys_topo_k43"           = "M1→M3 H(3,4)\n(+H(3,4) topo)",
+  "M2_topo_k43|M3_phys_topo_k43"       = "M2→M3 H(3,4)\n(+phys)"
 )
-lrt_data$Test <- factor(lrt_data$Test, levels = lrt_data$Test)
-lrt_data$label <- paste0(ifelse(lrt_data$is_sig, "***", "n.s."), "\np=", lrt_data$p_val)
+lrt_csv$key <- paste(lrt_csv$Restricted, lrt_csv$Full, sep = "|")
+lrt_csv$Test_label <- lrt_label_map[lrt_csv$key]
+lrt_csv <- lrt_csv[!is.na(lrt_csv$Test_label), ]
+lrt_csv$Test_label <- factor(lrt_csv$Test_label, levels = unname(lrt_label_map))
+lrt_csv$is_sig <- lrt_csv$Significant_p05
+# Pretty-print p-value
+fmt_p <- function(p_str) {
+  p <- suppressWarnings(as.numeric(p_str))
+  if (is.na(p)) p_str
+  else if (p < 1e-10) "<10⁻¹⁰"
+  else if (p < 0.001) sprintf("%.1e", p)
+  else sprintf("%.2f", p)
+}
+lrt_csv$p_pretty <- vapply(as.character(lrt_csv$p_value), fmt_p, character(1))
+lrt_csv$annot <- paste0(ifelse(lrt_csv$is_sig, "***", "n.s."), "\np=", lrt_csv$p_pretty)
 
-p5c <- ggplot(lrt_data, aes(x = Test, y = LR, fill = is_sig)) +
-  geom_col(width = 0.5, color = "grey30", linewidth = 0.2) +
-  geom_text(aes(label = label), vjust = -0.2, size = 2.5, fontface = "bold",
+p5c <- ggplot(lrt_csv, aes(x = Test_label, y = LR_statistic, fill = is_sig)) +
+  geom_col(width = 0.55, color = "grey30", linewidth = 0.2) +
+  geom_text(aes(label = annot), vjust = -0.2, size = 2.3, fontface = "bold",
             lineheight = 0.85) +
   scale_fill_manual(values = c("TRUE" = PAL_RED, "FALSE" = PAL_GREY_LT), guide = "none") +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.18))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.20))) +
   labs(x = NULL, y = "Likelihood ratio") +
-  tc()
+  tc() +
+  theme(axis.text.x = element_text(size = 6.5))
 
 fig5 <- p5a / (p5b | p5c) +
   plot_layout(heights = c(1, 1.2)) +

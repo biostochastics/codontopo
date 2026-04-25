@@ -11,28 +11,28 @@
   {
     "id": "per_table_optimality_preservation",
     "status": "supported",
-    "statement": "24 of 25 NCBI translation tables remain in the top 5% of their own block-preserving null for Grantham edge-mismatch (BH-FDR corrected)",
+    "statement": "26 of 27 NCBI translation tables remain in the top 5% of their own block-preserving null for Grantham edge-mismatch (BH-FDR corrected); only translation table 3 (yeast mito) exceeds the threshold",
     "p_value": null,
     "null_model": "freeland_hurst_block_preserving_per_table",
-    "sample_size": 25,
+    "sample_size": 10000,
     "publishable": true
   },
   {
     "id": "optimality_rho_robustness",
     "status": "supported",
-    "statement": "Coloring optimality is robust across all transversion weights rho in [0,1], including the full K4^3 mutation graph (p<0.01 at all rho values)",
-    "p_value": 0.003,
+    "statement": "Coloring optimality is robust across all diagonal-edge weights rho in [0,1], including the full Hamming graph H(3,4) = K_4 \u25a1 K_4 \u25a1 K_4 of single-nucleotide substitutions (p<0.01 at all rho values)",
+    "p_value": 0.0061,
     "null_model": "freeland_hurst_weighted_edges",
-    "sample_size": 1000,
+    "sample_size": 10000,
     "publishable": true
   },
   {
     "id": "topology_avoidance_depletion",
     "status": "supported",
-    "statement": "Natural codon reassignments are depleted for topology-breaking changes: 22% create new disconnections vs 73% of all possible single-codon reassignments",
+    "statement": "Natural codon reassignments are depleted for topology-breaking changes \u2014 moves that fragment an amino acid's codon family \u2014 at approximately 21% of observed events vs 66-73% of the candidate landscape, robust to adjacency definition (Q_6 vs the full Hamming graph H(3,4)) and clade exclusion",
     "p_value": 0.0001,
-    "null_model": "table_preserving_permutation_10k",
-    "sample_size": 27,
+    "null_model": "hypergeometric + table_preserving_permutation_10k",
+    "sample_size": 28,
     "publishable": true
   },
   {
@@ -74,10 +74,10 @@
   {
     "id": "variant_code_disconnection_catalogue",
     "status": "exploratory",
-    "statement": "Systematic survey of Hamming-graph connectivity across 25 NCBI translation tables identifies 4 variant-code cases with amino-acid disconnection at \u03b5=1 (Thr in yeast mito, Leu in chlorophycean mito, Ala in Pachysolen, Ser tripartite in Candida)",
+    "statement": "Systematic survey of Hamming-graph connectivity across 27 NCBI translation tables identifies 4 lineage-collapsed variant-code amino-acid disconnections at epsilon=1 under the default encoding: Thr in yeast mitochondrial code (table 3), Leu in chlorophycean mitochondrial codes (tables 16 and 22, collapsed to a single algal-mito event), Ala in Pachysolen tannophilus nuclear code (table 26), and tripartite Ser in Candida-clade alternative yeast nuclear code (table 12)",
     "p_value": null,
     "null_model": null,
-    "sample_size": 25,
+    "sample_size": 27,
     "publishable": true
   },
   {

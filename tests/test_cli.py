@@ -2,6 +2,7 @@
 
 import json
 
+import pytest
 from click.testing import CliRunner
 
 from codon_topo.cli import main
@@ -185,6 +186,13 @@ class TestPerTable:
 
 
 class TestAll:
+    # The "all" pipeline now includes conditional-logit fits with 6 models
+    # plus 7-clade-exclusion sensitivity (42 fits total). The Monte Carlo
+    # sample size --n=50 does not control those fit times; the full run
+    # takes 60+ minutes at production n=10,000 and ~30+ min at n=50 due
+    # to the model-fit overhead. Mark slow and bump timeout.
+    @pytest.mark.slow
+    @pytest.mark.timeout(3600)
     def test_run_all(self, tmp_path):
         result = runner.invoke(
             main, ["all", "--output-dir", str(tmp_path), "--n", "50"]
@@ -197,6 +205,8 @@ class TestAll:
             data = json.loads(jf.read_text())
             assert data is not None
 
+    @pytest.mark.slow
+    @pytest.mark.timeout(3600)
     def test_manuscript_stats_json(self, tmp_path):
         result = runner.invoke(
             main, ["all", "--output-dir", str(tmp_path), "--n", "50"]
@@ -205,7 +215,7 @@ class TestAll:
         stats_path = tmp_path / "manuscript_stats.json"
         assert stats_path.exists(), "manuscript_stats.json not generated"
         stats = json.loads(stats_path.read_text())
-        assert stats["_version"] == "0.3.1"
+        assert stats["_version"] == "0.4.0"
         assert "metrics" in stats
         assert "coloring" in stats
         assert "topology_avoidance_q6" in stats
