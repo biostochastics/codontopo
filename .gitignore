@@ -31,3 +31,7 @@ data/codonsafe/*/
 uv.lock
 .venv/
 *.dist-info/
+
+# Submission cover letter (kept locally only)
+output/cover_letter.typ
+output/cover_letter.pdf
