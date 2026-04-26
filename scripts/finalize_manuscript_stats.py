@@ -33,6 +33,9 @@ def main() -> None:
     stats = load_json(OUTPUT / "manuscript_stats.json")
     topo = load_json(OUTPUT / "topology_avoidance.json")
     evosim = load_json(OUTPUT / "evolutionary_simulation.json")
+    coloring = load_json(OUTPUT / "coloring_optimality.json")
+    phylo_path = OUTPUT / "phylogenetic_sensitivity.json"
+    phylo = load_json(phylo_path) if phylo_path.exists() else None
     clade_path = OUTPUT / "condlogit_clade_sensitivity.json"
     clade = load_json(clade_path) if clade_path.exists() else None
     restricted_path = OUTPUT / "condlogit_restricted_candidate.json"
@@ -52,6 +55,40 @@ def main() -> None:
     if "denominator_sensitivity" in topo:
         stats["topology_denominator_sensitivity"] = topo["denominator_sensitivity"]
         print("  [+] topology_denominator_sensitivity added")
+
+    # 3a. Inject per_table_proximity_audit (consumed by Supplement §S8).
+    if "per_table_proximity_audit" in coloring:
+        if "coloring" not in stats:
+            stats["coloring"] = {}
+        stats["coloring"]["per_table_proximity_audit"] = coloring[
+            "per_table_proximity_audit"
+        ]
+        n = len(coloring["per_table_proximity_audit"].get("per_table", []))
+        print(f"  [+] coloring.per_table_proximity_audit ({n} rows) added")
+
+    # 3b. Inject coloring 24-encoding sensitivity sweep summary into
+    #     stats.coloring.encoding_sensitivity (consumed by Supplement §S2).
+    if "encoding_sensitivity" in coloring:
+        ces = coloring["encoding_sensitivity"]
+        if "coloring" not in stats:
+            stats["coloring"] = {}
+        per_enc = ces.get("per_encoding", []) or []
+        p_cons_vals = [r.get("p_value_conservative", 1.0) for r in per_enc]
+        stats["coloring"]["encoding_sensitivity"] = {
+            "n_encodings": ces.get("n_encodings"),
+            "null_type": ces.get("null_type"),
+            "quantile_min": ces.get("quantile_range", [None, None])[0],
+            "quantile_max": ces.get("quantile_range", [None, None])[1],
+            "mean_quantile": ces.get("mean_quantile"),
+            "all_significant_p05": ces.get("all_encodings_significant_p05"),
+            "p_max": max(p_cons_vals) if p_cons_vals else None,
+            "p_min": min(p_cons_vals) if p_cons_vals else None,
+        }
+        print(
+            f"  [+] coloring.encoding_sensitivity (mean_quantile = "
+            f"{ces.get('mean_quantile', 0):.2f}%, all_p<0.05 = "
+            f"{ces.get('all_encodings_significant_p05')}) added"
+        )
 
     # 4. Inject encoding_robustness from evolutionary_simulation.json into
     #    the condlogit block in manuscript_stats.json
@@ -96,6 +133,16 @@ def main() -> None:
             stats["condlogit"] = {}
         stats["condlogit"]["restricted_candidate"] = restricted
         print("  [+] condlogit.restricted_candidate added")
+
+    # 7c. Inject phylo.clade_exclusion (per-regime hypergeometric numbers
+    # used by Supplement §S9). We backfill rather than overwrite so older
+    # manuscript_stats.json files gain the clade_exclusion array without
+    # losing existing fields.
+    if phylo is not None and "clade_exclusion" in phylo:
+        if "phylo" not in stats:
+            stats["phylo"] = {}
+        stats["phylo"]["clade_exclusion"] = phylo["clade_exclusion"]
+        print("  [+] phylo.clade_exclusion added")
 
     # 8. Inject phys_topo_rho from evosim diagnostics block (used by abstract/results)
     diag = evosim.get("diagnostics", {})

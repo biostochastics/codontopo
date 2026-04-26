@@ -9,7 +9,21 @@
 #set par(justify: true, leading: 0.65em)
 #set heading(numbering: "S1.1")
 // Inline figure placement (no float) keeps figures next to their text.
-#set figure(gap: 0.6em, placement: none)
+#set figure(gap: 1.0em, placement: none)
+// Add generous breathing room around figures so they don't blend into the
+// surrounding prose. Top/bottom margins are intentionally larger than the
+// inter-paragraph spacing.
+#show figure: it => {
+  v(1.2em, weak: false)
+  it
+  v(1.2em, weak: false)
+}
+// Numbering: figures and tables get distinct counters with the "S" prefix so
+// that the supplement reads "Figure S1", "Table S1", etc. independently of
+// the main manuscript's numbering.
+#set figure(numbering: n => "S" + str(n))
+#show figure.where(kind: table): set figure(supplement: [Table])
+#show figure.where(kind: image): set figure(supplement: [Figure])
 // Allow long tables to break across pages so they don't push to a new page
 // and leave a large gap at the bottom of the previous page.
 #show figure.where(kind: table): set block(breakable: true)
@@ -40,6 +54,21 @@
 #let stats = json("manuscript_stats.json")
 #let cl = stats.condlogit
 #let trna = stats.trna
+#let coloring_enc = stats.coloring.at("encoding_sensitivity", default: (:))
+
+// Helper: format a small probability in scientific notation (matches the
+// helper in manuscript.typ so supplement and manuscript render identically).
+#let sci(n, sig: 2) = {
+  if n == 0 {
+    [0]
+  } else if calc.abs(n) >= 0.001 and calc.abs(n) < 1 {
+    str(calc.round(n, digits: sig + 1))
+  } else {
+    let exp = int(calc.floor(calc.log(calc.abs(n), base: 10)))
+    let mant = calc.round(n / calc.pow(10.0, exp), digits: sig)
+    $#mant times 10^(#exp)$
+  }
+}
 
 #align(center)[
   #text(14pt, weight: "bold")[Supplementary Material]
@@ -64,46 +93,46 @@
 
 #v(0.8em)
 
-*Roadmap.* This supplement documents (i) the full claim hierarchy used to organise the manuscript's evidentiary tiers (§S1); (ii) sensitivity analyses for the central optimality and topology-avoidance results---encoding sweeps (§S2, §S4), the $2 times 2$ definition $times$ adjacency audit (§S3), candidate-universe denominators (§S5), conditional-logit IIA and clade-exclusion robustness (§S6, §S7), and a standard-code-proximity audit for the per-table claim (§S8); (iii) the topology-avoidance hypergeometric/permutation clade-exclusion analysis matched to #cite(<sengupta2007>, form: "prose") (§S9); (iv) the complete tRNAscan-SE 2.0.12 dataset for the 18 verified genomes (§S10) and the de-duplicated reassignment database (§S11); (v) the synthetic-biology feasibility-score implementation referenced from main-text §2.5 (§S12); (vi) detailed KRAS--Fano falsification numbers (§S13); (vii) the full event-level conditional-logit specification including feature definitions, fitted coefficients (raw and normalised), likelihood-ratio tests, confounding diagnostics, and the order-averaging implementation (§S14); and (viii) software, version, and reproducibility metadata (§S15). All numbers reported here are rendered from the same `manuscript_stats.json` and per-analysis JSON artifacts that drive the main text, so the two documents cannot drift from each other within a single pipeline run.
+*Roadmap.* This supplement is organised around three roles. Sections §S1--§S5 give the *evidentiary scaffolding* underpinning every main-text claim: a registered hierarchy of all 15 claims with status and justification (@sec:s-claims), and the four sensitivity analyses that probe whether each load-bearing result depends on a definitional choice---the 24-encoding sweep for cross-metric coloring optimality (@sec:s-encoding), the $2 times 2$ adjacency $times$ topology-breaking-definition audit (@sec:s-topology-defs), the per-encoding $Q_6$ topology-avoidance sweep (@sec:s-encoding-sweep), and the four candidate-universe denominators (@sec:s-denominator). Sections §S6--§S9 give the *robustness checks for the conditional-logit and topology-avoidance tests*: the IIA discussion and restricted-candidate sensitivity (@sec:s-iia, @sec:s-iia-restricted), conditional-logit clade exclusion (@sec:s-condlogit-clade), the standard-code-proximity audit for the per-table optimality test (@sec:s-proximity), and the hypergeometric/permutation clade-exclusion counterpart (@sec:s-clade). Sections §S10--§S15 give the *complete experimental and computational record*: the tRNAscan-SE 2.0.12 dataset on all 18 verified genomes (@sec:s-trna), the per-table reassignment database (@sec:s-reassignment), the synthetic-biology feasibility score implementation (@sec:s-feasibility), the per-variant KRAS--Fano falsification (@sec:s-kras), the full event-level conditional-logit specification with fitted coefficients and likelihood-ratio tests (@sec:s-condlogit), and software/version/reproducibility metadata (@sec:s-software). All numbers reported here are rendered from the same `manuscript_stats.json` and per-analysis JSON artifacts that drive the main text, so the two documents cannot drift from each other within a single pipeline run.
 
 #v(0.5em)
 
 // ============================================================
 = Claim hierarchy with full justifications <sec:s-claims>
 
-The 15 evaluated claims are organised into six evidentiary tiers (Supported / Suggestive / Exploratory / Falsified / Rejected / Tautological). The hierarchy is registered in code (`src/codon_topo/reports/claim_hierarchy.py` in https://github.com/biostochastics/codontopo) so that every analysis run produces a verifiable status report (`codon-topo claims`) rather than the status table being maintained as prose. The "Falsified" and "Rejected" rows record claims this paper or earlier work has tested and found to be wrong; we list them so that the framework's negative scope is visible alongside its positive results.
+The 15 evaluated claims are organised into six evidentiary tiers (Supported / Suggestive / Exploratory / Falsified / Rejected / Tautological) and listed with full justifications in @tbl:s-claims. The hierarchy is registered in code (`src/codon_topo/reports/claim_hierarchy.py` in https://github.com/biostochastics/codontopo) so that every analysis run produces a verifiable status report (`codon-topo claims`) rather than the status table being maintained as prose. The "Falsified" and "Rejected" rows record claims this paper or earlier work has tested and found to be wrong; we list them so that the framework's negative scope is visible alongside its positive results.
 
 #figure(
   table(
-    columns: (auto, auto, 1fr),
+    columns: (1fr, auto, 1.1fr),
     align: (left, center, left),
-    inset: 5pt,
+    inset: (x: 6pt, y: 7pt),
     stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-    table.header([*Claim ID*], [*Status*], [*Justification*]),
-    [hypercube_coloring_optimality], [Supported], [Cross-metric sensitivity: Grantham $p = 0.006$, Miyata $p < 0.001$, polar requirement $p = 0.003$, Kyte--Doolittle $p = 0.001$ (block-preserving null, $n = $10,000). Stop penalty sensitivity (0/150/215/300): immaterial.],
-    [per_table_optimality_preservation], [Supported], [Per-table block-preserving null applied to all 27 NCBI tables; significant fraction (BH--FDR $p < 0.05$) and per-table quantiles are reported in the main text and the per-table CSV `output/tables/T4_per_table_optimality.csv` (released in the `codontopo` repository). Translation table 3 (yeast mito) is the marginal exception.],
-    [optimality_rho_robustness], [Supported], [$rho$-sweep at $n = $10,000: $p lt.eq 0.006$ at all $rho$ values; effect-size $z$ increases monotonically from $rho = 0$ to $rho = 1$.],
-    [topology_avoidance_depletion], [Supported], [Permutation $p lt.eq 10^(-4)$ under both $Q_6$ and $H(3,4)$; hypergeometric $p = 1.6 times 10^(-8)$ ($Q_6$, new disconnection) and $p = 1.3 times 10^(-6)$ ($H(3,4)$, $Delta beta_0 > 0$). 5--7 of 28 de-duplicated events are topology-breaking versus $approx 64$--$75$% of the candidate landscape ($approx 3.0$--$3.4$-fold depletion). $Q_6$ is encoding-dependent (8 of 24 bijections give no depletion); $H(3,4)$ is encoding-independent and is the primary test. Clade-exclusion sensitivity (7 regimes): all $p < 10^(-5)$.],
-    [trna_enrichment_reassigned_aa], [Suggestive], [MIS worst-case $p = 0.045$. 18 tRNAscan-SE-verified assemblies (15 variant + 3 standard controls), 24 pairings across 5 variant codes.],
-    [bit_position_bias_weighted], [Exploratory], [Uniform $p = 0.006$ inflated by non-independence. De-duplicated $p = 0.075$.],
-    [mechanism_boundary_conditions], [Exploratory], [Three-tier pattern: duplication / stem shortening / modification. Descriptive.],
-    [atchley_f3_serine_convergence], [Exploratory], [Serine $F_3 = -4.760$, 2.24 SD below mean. Complementary, not independent.],
-    [variant_code_disconnection_catalogue], [Exploratory], [4 variant-code cases at $epsilon = 1$ in $Q_6$ (default encoding): Thr (Table 3, yeast mito), Leu (Tables 16/22, chlorophycean and _S. obliquus_ mito; collapsed to one algal-mito event), Ala (Table 26, _Pachysolen_), Ser (Table 12, _Candida_). Separately, Table 32 (Balanophoraceae plastid, UAG→Trp) creates a 2-fold Trp pair (UGG, UAG) that remains connected at ε=1 but breaks the bit-5 two-fold filtration --- a filtration finding, not a disconnection.],
-    [kras_fano_clinical_prediction], [Falsified], [$p = 1.0$ across all 6 G12 variants. $n = $1,670 MSK-IMPACT mutations.],
-    [serine_min_distance_4_invariant], [Rejected], [16/24 encodings give distance 2. Only 8/24 give distance 4.],
-    [psl_2_7_symmetry], [Rejected], [No 64-dim irrep. #cite(<antoneli2011>, form: "prose").],
-    [holomorphic_embedding], [Rejected], [Domain is finite discrete. Character identity fails: $i^2 = -1 eq.not 1$.],
-    [two_fold_bit_5_filtration], [Tautological], [Forced by encoding choice. Holds in 16/24 encodings.],
-    [four_fold_prefix_filtration], [Tautological], [Trivial under any bijection from 4 bases to $"GF"(2)^2$.],
+    table.header([*Claim ID and statement*], [*Status*], [*Justification*]),
+    [*hypercube_coloring_optimality* \ The standard genetic code is significantly error-minimizing under four independent physicochemical distance metrics: Grantham ($p = 0.003$), Miyata ($p = 0.001$), Woese polar requirement ($p = 0.004$), and Kyte--Doolittle hydropathy ($p = 0.001$).], [Supported], [Cross-metric sensitivity: Grantham $p = 0.006$, Miyata $p < 0.001$, polar requirement $p = 0.003$, Kyte--Doolittle $p = 0.001$ (block-preserving null, $n = $10,000). Stop penalty sensitivity (0/150/215/300): immaterial.],
+    [*per_table_optimality_preservation* \ 26 of 27 NCBI translation tables remain in the top 5% of their own block-preserving null for Grantham edge-mismatch (BH--FDR corrected); only translation table 3 (yeast mito) exceeds the threshold.], [Supported], [Per-table block-preserving null applied to all 27 NCBI tables; significant fraction (BH--FDR $p < 0.05$) and per-table quantiles are reported in the main text and the per-table CSV `output/tables/T4_per_table_optimality.csv` (released in the `codontopo` repository). Translation table 3 (yeast mito) is the marginal exception.],
+    [*optimality_rho_robustness* \ Coloring optimality is robust across all diagonal-edge weights $rho in [0, 1]$, including the full Hamming graph $H(3,4) = K_4 square.stroked K_4 square.stroked K_4$ of single-nucleotide substitutions ($p < 0.01$ at all $rho$ values).], [Supported], [$rho$-sweep at $n = $10,000: $p lt.eq 0.006$ at all $rho$ values; effect-size $z$ increases monotonically from $rho = 0$ to $rho = 1$.],
+    [*topology_avoidance_depletion* \ Natural codon reassignments are depleted for topology-breaking changes --- moves that fragment an amino acid's codon family --- at approximately 21% of observed events vs 66--73% of the candidate landscape, robust to adjacency definition ($Q_6$ vs the full Hamming graph $H(3,4)$) and clade exclusion.], [Supported], [Permutation $p lt.eq 10^(-4)$ under both $Q_6$ and $H(3,4)$; hypergeometric $p = 1.6 times 10^(-8)$ ($Q_6$, new disconnection) and $p = 1.3 times 10^(-6)$ ($H(3,4)$, $Delta beta_0 > 0$). 5--7 of 28 de-duplicated events are topology-breaking versus $approx 64$--$75$% of the candidate landscape ($approx 3.0$--$3.4$-fold depletion). $Q_6$ is encoding-dependent (8 of 24 bijections give no depletion); $H(3,4)$ is encoding-independent and is the primary test. Clade-exclusion sensitivity (7 regimes): all $p < 10^(-5)$.],
+    [*trna_enrichment_reassigned_aa* \ Organisms with variant genetic codes show elevated tRNA gene copy numbers for the reassigned amino acid, verified by tRNAscan-SE 2.0.12 on 18 NCBI genome assemblies across 5 variant genetic codes (24 pairings, 6 independent).], [Suggestive], [MIS worst-case $p = 0.045$. 18 tRNAscan-SE-verified assemblies (15 variant + 3 standard controls), 24 pairings across 5 variant codes.],
+    [*bit_position_bias_weighted* \ Codon reassignment bit-flip distribution shows positional skew in $"GF"(2)^6$ coordinates, but signal is marginal after correcting for non-independence (de-duplicated $p = 0.075$).], [Exploratory], [Uniform $p = 0.006$ inflated by non-independence. De-duplicated $p = 0.075$.],
+    [*mechanism_boundary_conditions* \ tRNA gene duplication accompanies codon reassignment in large nuclear genomes (ciliates, yeasts) but not in streamlined genomes (_Blastocrithidia_: anticodon stem shortening; _Mycoplasma_: anticodon modification).], [Exploratory], [Three-tier pattern: duplication / stem shortening / modification. Descriptive.],
+    [*atchley_f3_serine_convergence* \ Serine's extreme Atchley Factor 3 score ($F_3 = -4.760$, most extreme of 20 amino acids, 2.24 SD below mean) converges with the $"GF"(2)^6$ topological disconnection: $F_3$ captures the mismatch between Serine's small physicochemical footprint and its disproportionate codon diversity, which the geometric framework identifies as maximal inter-family Hamming distance among 6-codon amino acids (4 vs 1 for Leu and Arg).], [Exploratory], [Serine $F_3 = -4.760$, 2.24 SD below mean. Complementary, not independent.],
+    [*variant_code_disconnection_catalogue* \ Systematic survey of Hamming-graph connectivity across 27 NCBI translation tables identifies 4 lineage-collapsed variant-code amino-acid disconnections at $epsilon = 1$ under the default encoding: Thr in yeast mitochondrial code (table 3), Leu in chlorophycean mitochondrial codes (tables 16 and 22, collapsed to a single algal-mito event), Ala in _Pachysolen tannophilus_ nuclear code (table 26), and tripartite Ser in _Candida_-clade alternative yeast nuclear code (table 12).], [Exploratory], [4 variant-code cases at $epsilon = 1$ in $Q_6$ (default encoding): Thr (Table 3, yeast mito), Leu (Tables 16/22, chlorophycean and _S. obliquus_ mito; collapsed to one algal-mito event), Ala (Table 26, _Pachysolen_), Ser (Table 12, _Candida_). Separately, Table 32 (Balanophoraceae plastid, UAG→Trp) creates a 2-fold Trp pair (UGG, UAG) that remains connected at ε=1 but breaks the bit-5 two-fold filtration --- a filtration finding, not a disconnection.],
+    [*kras_fano_clinical_prediction* \ XOR "Fano" relationships in $"GF"(2)^6$ predict enrichment of specific amino acids at KRAS G12 co-mutation sites.], [Falsified], [$p = 1.0$ across all 6 G12 variants. $n = $1,670 MSK-IMPACT mutations.],
+    [*serine_min_distance_4_invariant* \ Serine's minimum UCN--AGY Hamming distance $= 4$ holds invariantly across all 24 base-to-bit encodings.], [Rejected], [16/24 encodings give distance 2. Only 8/24 give distance 4.],
+    [*psl_2_7_symmetry* \ $"PSL"(2,7)$ is the fundamental symmetry group of the genetic code.], [Rejected], [No 64-dim irrep. #cite(<antoneli2011>, form: "prose").],
+    [*holomorphic_embedding* \ The coordinate-wise map $"GF"(2)^6 arrow.r CC^3$ sending base-pairs to fourth roots of unity is a holomorphic embedding extending a character of $"GF"(8)^*$.], [Rejected], [Domain is finite discrete. Character identity fails: $i^2 = -1 eq.not 1$.],
+    [*two_fold_bit_5_filtration* \ All 2-fold synonymous codon pairs in the standard code differ at exactly bit position 5 under the default encoding.], [Tautological], [Forced by encoding choice. Holds in 16/24 encodings.],
+    [*four_fold_prefix_filtration* \ All 4-fold synonymous codon groups share a 4-bit prefix with 2-bit suffixes exhausting $"GF"(2)^2$.], [Tautological], [Trivial under any bijection from 4 bases to $"GF"(2)^2$.],
   ),
-  caption: [Complete claim hierarchy with justifications.],
+  caption: [Complete claim hierarchy with full claim statements and justifications.],
 ) <tbl:s-claims>
 
 
 // ============================================================
 = Encoding sensitivity analysis (coloring optimality) <sec:s-encoding>
 
-There are $4! = 24$ distinct bijections from ${C, U, A, G}$ to $"GF"(2)^2$ (24 ways to assign the four nucleotide letters to the four 2-bit binary patterns 00/01/10/11). The default encoding used in the main text is $C |-> 00$, $U |-> 01$, $A |-> 10$, $G |-> 11$ (rationale stated in main-text §2.1). To check that the coloring-optimality result is not specific to that choice, we re-ran the cross-metric block-preserving null analysis under each of the 23 alternative encodings, holding everything else fixed. All 24 encodings yield significant optimality ($p < 0.05$ under the block-preserving null with $n = $10,000); the mean per-encoding quantile is 1.8%, confirming that the result is not an artifact of the default encoding.
+There are $4! = 24$ distinct bijections from ${C, U, A, G}$ to $"GF"(2)^2$ (24 ways to assign the four nucleotide letters to the four 2-bit binary patterns 00/01/10/11). The default encoding used in the main text is $C |-> 00$, $U |-> 01$, $A |-> 10$, $G |-> 11$ (rationale stated in main-text §2.1). To check that the coloring-optimality result is not specific to that choice, we re-ran the Grantham block-preserving null analysis under each of the 23 alternative encodings, holding everything else fixed (per-encoding $n = $10,000 null draws, seed 135325). All #coloring_enc.at("n_encodings", default: 24) encodings yield significant optimality ($p < 0.05$ under the block-preserving null), with all per-encoding conservative $p$-values bracketed by $#str(calc.round(coloring_enc.at("p_min", default: 0.0002), digits: 4))$ (best) and $#str(calc.round(coloring_enc.at("p_max", default: 0.0278), digits: 4))$ (worst). The mean per-encoding quantile is #str(calc.round(coloring_enc.at("mean_quantile", default: 1.09), digits: 2))% (range #str(calc.round(coloring_enc.at("quantile_min", default: 0.01), digits: 2))%--#str(calc.round(coloring_enc.at("quantile_max", default: 2.77), digits: 2))%), confirming that the result is not an artifact of the default encoding.
 
 Properties that are encoding-invariant:
 - Serine disconnection at $epsilon = 1$ (holds under all 24 encodings)
@@ -117,7 +146,7 @@ Properties that are encoding-dependent:
 - $Q_6$ (Hamming-1) adjacency partition of $H(3,4)$, and the topology-avoidance signal computed under $Q_6$ adjacency (see §S4)
 - Specific score values and rank orderings
 
-Full per-encoding results are reproducible from the `codontopo` repository via `codon-topo coloring --all-encodings`.
+Full per-encoding results are written to `output/coloring_optimality.json` (block `encoding_sensitivity`) by the standard `codon-topo all` invocation, and reproducible from the `codontopo` repository.
 
 
 // ============================================================
@@ -132,23 +161,28 @@ We define two notions of "topology-breaking" candidate move:
 + *Increase in components* ($Delta beta_0 > 0$, the conditional-logit feature): the total number of connected components, summed across amino-acid codon graphs, strictly increases:
   $ Delta_"topo" = sum_a beta_0(G_a^"after") - sum_a beta_0(G_a^"before") > 0. $
 
-Both definitions are reported under both $Q_6$ adjacency (Hamming-1 in the default $"GF"(2)^6$ encoding) and $H(3,4)$ adjacency (full single-nucleotide adjacency, encoding-independent), giving four cells. All four share the same denominators (1,280 candidate moves, 28 de-duplicated observed events).
+Both definitions are reported under both $Q_6$ adjacency (Hamming-1 in the default $"GF"(2)^6$ encoding) and $H(3,4)$ adjacency (full single-nucleotide adjacency, encoding-independent), giving four cells. All four share the same denominators (1,280 candidate moves, 28 de-duplicated observed events). The full $2 times 2$ result is shown in @tbl:s-topo-audit.
 
-#table(
-  columns: (auto, auto, auto, auto, auto, auto),
-  align: (left, left, right, right, right, right),
-  inset: 6pt,
-  stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-  table.header(
-    [*Adjacency*], [*Definition*], [*$K\/N$ possible*], [*$x\/n$ obs*], [*Hyper. $p$*], [*RR (95% CI)*],
+#figure(
+  table(
+    columns: (auto, 1fr, auto, auto, auto, auto),
+    align: (left, left, right, right, right, right),
+    inset: (x: 7pt, y: 8pt),
+    stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+    table.header(
+      [*Adjacency*], [*Topology-breaking definition*], [*$K\/N$*], [*$x\/n$*], [*Hyper. $p$*], [*RR (95% CI)*],
+    ),
+    [$H(3,4)$ (primary)], [$Delta beta_0 > 0$ (increase in components)], [846 / 1,280], [6 / 28], [$1.3 times 10^(-6)$], [0.32 (0.16--0.66)],
+    [$H(3,4)$], [new disconnection in connected family], [822 / 1,280], [5 / 28], [$5.0 times 10^(-7)$], [0.28 (0.13--0.62)],
+    [$Q_6$], [$Delta beta_0 > 0$ (increase in components)], [963 / 1,280], [7 / 28], [$2.2 times 10^(-8)$], [0.33 (0.17--0.63)],
+    [$Q_6$], [new disconnection in connected family], [931 / 1,280], [6 / 28], [$1.6 times 10^(-8)$], [0.29 (0.14--0.60)],
   ),
-  [$H(3,4)$ (primary)], [$Delta beta_0 > 0$], [846 / 1,280], [6 / 28], [$1.3 times 10^(-6)$], [0.32 (0.16--0.66)],
-  [$H(3,4)$], [new disconnection], [822 / 1,280], [5 / 28], [$5.0 times 10^(-7)$], [0.28 (0.13--0.62)],
-  [$Q_6$], [$Delta beta_0 > 0$], [963 / 1,280], [7 / 28], [$2.2 times 10^(-8)$], [0.33 (0.17--0.63)],
-  [$Q_6$], [new disconnection], [931 / 1,280], [6 / 28], [$1.6 times 10^(-8)$], [0.29 (0.14--0.60)],
-)
+  caption: [
+    *Topology-avoidance $2 times 2$ definition $times$ adjacency audit.* All four cells share the same denominators (1,280 candidate moves, 28 de-duplicated observed events) and differ only in (i) which adjacency graph defines codon-family connectivity ($Q_6$ Hamming-1 vs encoding-independent $H(3,4)$) and (ii) what counts as a topology-breaking move ($Delta beta_0 > 0$ summed over amino acids vs creation of a *new* disconnection in a previously connected family). $K\/N$ = topology-breaking candidates among all candidates; $x\/n$ = topology-breaking observed events among all observed events. All four cells yield depletion in the same direction with comparable risk ratios (0.28--0.33) and hypergeometric $p < 10^(-5)$. The main text uses the $H(3,4)$, $Delta beta_0 > 0$ cell as primary (encoding-independent adjacency, definition matched to the conditional-logit feature).
+  ],
+) <tbl:s-topo-audit>
 
-The four cells agree qualitatively: depletion is highly significant under all four combinations, with risk ratios in the range 0.28--0.33 and hypergeometric $p < 10^(-5)$ throughout. The main text uses the $H(3,4)$ Hamming graph with the *increase-in-components* ($Delta beta_0 > 0$) definition as the primary cell (encoding-independent adjacency, definition matched to the conditional-logit feature). The full machine-readable audit is released as part of the `codontopo` repository's `output/` artifacts (the `definitions_audit` block in the topology-avoidance results file).
+The full machine-readable audit is released as part of the `codontopo` repository's `output/` artifacts (the `definitions_audit` block in the topology-avoidance results file).
 
 
 // ============================================================
@@ -158,12 +192,12 @@ This section documents what motivated the demotion of $Q_6$ from primary to seco
 
 The $H(3,4)$ Hamming graph is encoding-independent: every two-bit bijection from ${A, C, G, U}$ to ${0, 1}^2$ produces the same nucleotide-level adjacency, because $H(3,4)$ depends only on which nucleotide letters differ between two codons, not on their binary encoding. The $Q_6$ subgraph, however, depends on the encoding because the partition into Hamming-1 (single-bit-change) edges versus Hamming-2 (within-nucleotide diagonal) edges is bijection-specific---under one encoding two codons that differ at exactly one nucleotide may project to a Hamming-1 edge of $Q_6$, under another encoding they may project to a Hamming-2 edge. To test whether the $Q_6$ topology-avoidance result survives this representation choice, we recomputed the $Q_6$ candidate-landscape rate, observed rate, depletion fold, and hypergeometric $p$-value under all 24 base-to-bit bijections, holding the same 1,280 candidate moves and 28 observed events.
 
-Across all 24 encodings:
+Across all #stats.topology_q6_encoding_sweep.n_encodings encodings:
 
-- candidate-landscape rate: min 36.0%, median 69.9%, max 72.7%
-- observed rate: min 21.4%, median 28.6%, max 35.7%
-- depletion fold: min 1.01, median 2.45, max 3.39
-- hypergeometric $p$: min $1.6 times 10^(-8)$, median $6.1 times 10^(-6)$, max 0.572
+- candidate-landscape rate: min #str(calc.round(stats.topology_q6_encoding_sweep.rate_poss_min * 100, digits: 1))%, median #str(calc.round(stats.topology_q6_encoding_sweep.rate_poss_median * 100, digits: 1))%, max #str(calc.round(stats.topology_q6_encoding_sweep.rate_poss_max * 100, digits: 1))%
+- observed rate: min #str(calc.round(stats.topology_q6_encoding_sweep.rate_obs_min * 100, digits: 1))%, median #str(calc.round(stats.topology_q6_encoding_sweep.rate_obs_median * 100, digits: 1))%, max #str(calc.round(stats.topology_q6_encoding_sweep.rate_obs_max * 100, digits: 1))%
+- depletion fold: min #str(calc.round(stats.topology_q6_encoding_sweep.depletion_min, digits: 2)), median #str(calc.round(stats.topology_q6_encoding_sweep.depletion_median, digits: 2)), max #str(calc.round(stats.topology_q6_encoding_sweep.depletion_max, digits: 2))
+- hypergeometric $p$: min #sci(stats.topology_q6_encoding_sweep.p_min), median #sci(stats.topology_q6_encoding_sweep.p_median), max #str(calc.round(stats.topology_q6_encoding_sweep.p_max, digits: 3))
 
 The default encoding (C=00, U=01, A=10, G=11) gives the largest depletion and the smallest $p$. Eight of 24 encodings give a candidate-landscape rate of approximately 36%, under which the observed rate of 21--36% does not significantly differ from candidate ($p > 0.5$). The $Q_6$ result is therefore not encoding-invariant. We accordingly present the encoding-independent $H(3,4)$ result as the primary topology-avoidance test, with $Q_6$ reported as a representation-specific decomposition for continuity with the broader $"GF"(2)^6$ framework. The default encoding was adopted in companion methodological work (#cite(<clayworth2026>, form: "prose")) prior to the present encoding sweep, on the grounds of visualization clarity (it places the standard code's nine 2-fold-degenerate amino acids on bit-5 differences). We make no claim that this encoding is biologically privileged. The full per-encoding sweep is released as part of the `codontopo` repository's `output/` artifacts (the `Q6_encoding_sweep` block in the topology-avoidance results file); @fig:s-encoding-sweep visualizes the per-encoding depletion fold and hypergeometric $p$.
 
@@ -182,25 +216,30 @@ The default encoding (C=00, U=01, A=10, G=11) gives the largest depletion and th
 
 The hypergeometric and permutation tests of topology avoidance, and the conditional-logit denominator, both depend on a definition of the candidate-move universe $cal(M)(C)$ from the standard code $C$. Three definitional choices interact: whether stop-codon targets are admitted, whether identity moves ($y = C(x)$) are excluded, and whether the source codon may itself be a stop. The combinations give the variants below; we adopt U1 as primary throughout and report U2 and U4 as sensitivity universes.
 
-Formally, the primary candidate-universe is $cal(M)(C) = {(x, y) : x in cal(C), y in cal(A)_20 union {"Stop"}, y eq.not C(x)}$ with $abs(cal(M)(C)) = 64 times 20 = $1,280.
+Formally, the primary candidate-universe is $cal(M)(C) = {(x, y) : x in cal(C), y in cal(A)_20 union {"Stop"}, y eq.not C(x)}$ with $abs(cal(M)(C)) = 64 times 20 = $1,280. The four definitional variants and their sizes are listed in @tbl:s-denominators.
 
-#table(
-  columns: (auto, auto, auto),
-  align: (left, right, left),
-  inset: 6pt,
-  stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-  table.header([*Universe*], [*$abs(cal(M))$*], [*Definition*]),
-  [U1: 21-label, no identity (primary)], [1,280],
-    [$y in cal(A)_20 union {"Stop"}$, $y eq.not C(x)$; each codon has exactly 20 alternative labels],
-  [U2: AA-only, no identity], [1,219],
-    [$y in cal(A)_20$, $y eq.not C(x)$; 61 sense codons get 19 AA alternatives, 3 stop codons get 20 AA alternatives],
-  [U3: AA, with no-ops], [1,280],
-    [$y in cal(A)_20$, no identity restriction; 64 candidates are no-ops $y = C(x)$],
-  [U4: stop-inclusive with no-ops], [1,344],
-    [$y in cal(A)_20 union {"Stop"}$, no identity restriction; 64 no-ops included],
-)
+#figure(
+  table(
+    columns: (auto, auto, 1fr),
+    align: (left, right, left),
+    inset: (x: 7pt, y: 7pt),
+    stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+    table.header([*Universe*], [*$abs(cal(M))$*], [*Definition*]),
+    [U1: 21-label, no identity (primary)], [1,280],
+      [$y in cal(A)_20 union {"Stop"}$, $y eq.not C(x)$; each codon has exactly 20 alternative labels],
+    [U2: AA-only, no identity], [1,219],
+      [$y in cal(A)_20$, $y eq.not C(x)$; 61 sense codons get 19 AA alternatives, 3 stop codons get 20 AA alternatives],
+    [U3: AA, with no-ops], [1,280],
+      [$y in cal(A)_20$, no identity restriction; 64 candidates are no-ops $y = C(x)$],
+    [U4: stop-inclusive with no-ops], [1,344],
+      [$y in cal(A)_20 union {"Stop"}$, no identity restriction; 64 no-ops included],
+  ),
+  caption: [
+    *Candidate-universe denominator definitions for the topology-avoidance test.* The four variants (U1--U4) interact along three definitional axes: whether stop-codon targets are admitted ($cal(A)_20 union {"Stop"}$ vs $cal(A)_20$), whether identity moves $y = C(x)$ are excluded, and whether the source codon may itself be a stop codon. We adopt U1 as the primary universe because it (i) has a uniform alternative count per codon, (ii) cleanly excludes identity moves which contribute no signal, and (iii) admits stop-codon reassignment, which is biologically attested.
+  ],
+) <tbl:s-denominators>
 
-We adopt U1 as the primary universe because it (i) has a uniform alternative count per codon, (ii) cleanly excludes identity moves which contribute no signal, and (iii) admits stop-codon reassignment which is biologically attested. Topology-avoidance results under U2 and U4 are qualitatively identical (depletion remains $p < 10^(-5)$); the per-cell counts differ only by the constant rescaling $K_2 = K_1 - text("(stop-target candidates)")$ for U2. Detailed per-universe numbers are released as part of the `codontopo` repository's `output/` artifacts (the `denominator_sensitivity` block in the topology-avoidance results file).
+Topology-avoidance results under U2 and U4 are qualitatively identical (depletion remains $p < 10^(-5)$); the per-cell counts differ only by the constant rescaling $K_2 = K_1 - text("(stop-target candidates)")$ for U2. Detailed per-universe numbers are released as part of the `codontopo` repository's `output/` artifacts (the `denominator_sensitivity` block in the topology-avoidance results file).
 
 
 // ============================================================
@@ -208,13 +247,15 @@ We adopt U1 as the primary universe because it (i) has a uniform alternative cou
 
 The conditional-logit framework assumes Independence of Irrelevant Alternatives (IIA): for any two candidate moves $m_1$ and $m_2$ in a choice set $cal(N)$, the relative probability $P(m_1) \/ P(m_2)$ is the same regardless of which other candidates are in $cal(N)$. In the reassignment context, candidate moves are not exchangeable: a move that targets an amino acid already serviced by many codons is plausibly more substitutable with similar moves than the IIA structure allows.
 
-We adopt IIA here because the goal is _explanatory_ rather than _predictive_: the test asks whether topology adds explanatory value beyond physicochemical cost (LR test, ΔAICc) within the same candidate set, not whether the model accurately predicts which specific reassignment will occur next. The relative-probability ratios that IIA constrains are not the quantities we report; the LR statistics depend only on whether the observed event occupies a high-likelihood position within the candidate set, which is robust to substitution patterns among non-observed candidates. A mixed logit relaxing IIA would be more appropriate if the goal were prediction; future work could pursue this once a larger event set permits identification of mixed-logit covariance parameters. The posterior-predictive simulation reported in the main text (§3.5; observed topology-breaking rate 0.076 vs simulated mean 0.077; $p = 0.60$) provides a calibration check that the chosen explanatory model reproduces the marginal feature distribution rather than just maximizing in-sample AICc.
+We adopt IIA here because the goal is _explanatory_ rather than _predictive_: the test asks whether topology adds explanatory value beyond physicochemical cost (LR test, $Delta$AICc) within the same candidate set, not whether the model accurately predicts which specific reassignment will occur next. The relative-probability ratios that IIA constrains are not the quantities we report; the LR statistics depend only on whether the observed event occupies a high-likelihood position within the candidate set, which is robust to substitution patterns among non-observed candidates. A mixed logit relaxing IIA would be more appropriate if the goal were prediction; future work could pursue this once a larger event set permits identification of mixed-logit covariance parameters. The posterior-predictive simulation reported in the main text (§3.5; observed topology-breaking rate 0.076 vs simulated mean 0.077; $p = 0.60$) provides a calibration check that the chosen explanatory model reproduces the marginal feature distribution rather than just maximizing in-sample AICc.
+
+A second, structurally distinct concern about the candidate set is its *composition*---whether the universe of $approx 1{,}280$ moves contains so many biologically implausible alternatives that the fitted topology coefficient is partly identifying their absence rather than a topology-specific avoidance effect. We address this concern in @sec:s-iia-restricted by refitting M1--M4 on candidate sets that have been pruned to biologically plausible alternatives only.
 
 == Candidate-set composition: restricted-candidate sensitivity <sec:s-iia-restricted>
 
 A separate concern about the candidate set is that the universe of $approx $1,280 single-codon moves admits biologically catastrophic alternatives---reassigning AUG-Met, simultaneous multi-codon changes implicit in the single-step framing, reassignments to stop in essential codons---that natural selection has already removed from the option set. Models with strongly negative coefficients on $Delta_"topo"$ and $Delta_"phys"$ may therefore be partly rediscovering that natural reassignments are not biologically catastrophic, inflating ΔAICc magnitudes beyond what the explanatory thesis (topology adds value beyond physicochemistry) strictly requires. The qualitative claim is unaffected by this concern, but the magnitudes need calibration.
 
-We address this by refitting M1--M4 (and the $H(3,4)$ verification variants) on a *restricted candidate set*: at each event-step we retain only candidates whose target amino acid is already serviced by a codon at Hamming distance $lt.eq d$ from the reassigned codon (i.e., $Delta_"tRNA" lt.eq d$), with $d in {1, 2, 3}$. The observed move is always retained regardless of its $Delta_"tRNA"$ so the likelihood remains well-defined. The Hamming-$lt.eq 2$ filter is the primary biological-plausibility criterion (target AA already accessible via at most two nucleotide-position changes); the $lt.eq 1$ filter is the most stringent biological-plausibility cut, and $lt.eq 3$ is included as a looser bound to bracket the choice.
+We address this by refitting M1--M4 (and the $H(3,4)$ verification variants) on a *restricted candidate set*: at each event-step we retain only candidates whose target amino acid is already serviced by a codon at Hamming distance $lt.eq d$ from the reassigned codon (i.e., $Delta_"tRNA" lt.eq d$), with $d in {1, 2, 3}$. The observed move is always retained regardless of its $Delta_"tRNA"$ so the likelihood remains well-defined. The Hamming-$lt.eq 2$ filter is the primary biological-plausibility criterion (target AA already accessible via at most two nucleotide-position changes); the $lt.eq 1$ filter is the most stringent biological-plausibility cut, and $lt.eq 3$ is included as a looser bound to bracket the choice. @tbl:s-condlogit-restricted reports the resulting $Delta$AICc gaps under all four candidate sets.
 
 #let cl_restr = cl.at("restricted_candidate", default: (:))
 #let _restr_block(d) = cl_restr.at("by_max_trna", default: (:)).at(d, default: (:))
@@ -239,16 +280,16 @@ We address this by refitting M1--M4 (and the $H(3,4)$ verification variants) on 
     table(
       columns: (auto, auto, auto, auto, auto, auto, auto),
       align: (center, right, right, right, right, right, right),
-      inset: 6pt,
+      inset: (x: 6pt, y: 7pt),
       stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
       table.header(
-        [*Filter $Delta_"tRNA" lt.eq d$*],
-        [*Mean cand. set*],
-        [*Obs. retained*],
-        [*ΔAICc(M1→M3)*],
-        [*ΔAICc(M2→M3)*],
-        [*ΔAICc(M3→M4)*],
-        [*ΔAICc(M1→M3#sub[H(3,4)])*],
+        [*Filter*],
+        [*Mean cand.*],
+        [*Obs. kept*],
+        [*$Delta$AICc \ M1$arrow.r$M3*],
+        [*$Delta$AICc \ M2$arrow.r$M3*],
+        [*$Delta$AICc \ M3$arrow.r$M4*],
+        [*$Delta$AICc \ M1$arrow.r$M3#sub[$H(3,4)$]*],
       ),
       [Full ($d = 7$)],
         [#str(calc.round(cl_restr.at("full_set_summary", default: (:)).at("candidates_mean", default: 0), digits: 0))],
@@ -260,7 +301,7 @@ We address this by refitting M1--M4 (and the $H(3,4)$ verification variants) on 
       ..("3", "2", "1").map(d => {
         let (kept, total) = _restr_obs(d)
         (
-          [$d = #d$],
+          [$Delta_"tRNA" lt.eq #d$],
           [#str(calc.round(_restr_csize(d), digits: 0))],
           [#kept / #total],
           [#str(calc.round(_restr_field(d, "M1_to_M3"), digits: 0))],
@@ -285,7 +326,7 @@ Two structural points are worth flagging beyond the table itself. First, the ΔA
 // ============================================================
 = Conditional logit: clade-exclusion sensitivity <sec:s-condlogit-clade>
 
-The conditional-logit framework can confound a single clade's reassignment events with a global topology-avoidance signal if that clade is unusually extensive (or unusually idiosyncratic). To bound this concern, we refit M1--M4 under each of seven clade-exclusion regimes, removing the indicated NCBI translation tables from the event-step list and re-running the full conditional-logit pipeline end-to-end (build candidate sets $arrow.r$ enumerate event orderings up to $k!$ for $k lt.eq 6$ $arrow.r$ vectorised maximum-likelihood fit $arrow.r$ ΔAICc against M1 and M2). The seven exclusion regimes match those applied to the hypergeometric topology-avoidance test (§S9), which themselves follow the phylogenetic-distribution analysis in #cite(<sengupta2007>, form: "prose").
+The conditional-logit framework can confound a single clade's reassignment events with a global topology-avoidance signal if that clade is unusually extensive (or unusually idiosyncratic). To bound this concern, we refit M1--M4 under each of seven clade-exclusion regimes (@tbl:s-condlogit-clade), removing the indicated NCBI translation tables from the event-step list and re-running the full conditional-logit pipeline end-to-end (build candidate sets $arrow.r$ enumerate event orderings up to $k!$ for $k lt.eq 6$ $arrow.r$ vectorised maximum-likelihood fit $arrow.r$ ΔAICc against M1 and M2). The seven exclusion regimes match those applied to the hypergeometric topology-avoidance test (@sec:s-clade), which themselves follow the phylogenetic-distribution analysis in #cite(<sengupta2007>, form: "prose").
 
 // dynamic table from condlogit_clade_sensitivity.json (read as 'cl.clade_exclusion.rows' if present)
 #let clade_rows = cl.at("clade_exclusion", default: (:)).at("rows", default: ())
@@ -297,11 +338,18 @@ The conditional-logit framework can confound a single clade's reassignment event
 #if clade_rows.len() > 0 [
   #figure(
     table(
-      columns: (auto, auto, auto, auto, auto, auto),
-      align: (left, center, center, right, right, right),
-      inset: 5pt,
+      columns: (auto, 1fr, auto, auto, auto, auto),
+      align: (left, left, center, right, right, right),
+      inset: (x: 6pt, y: 7pt),
       stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-      table.header([*Excluded clade*], [*Tables out*], [*$n$ events*], [*ΔAICc(M1→M3)*], [*ΔAICc(M2→M3)*], [*ΔAICc(M3→M4)*]),
+      table.header(
+        [*Excluded clade*],
+        [*Tables out*],
+        [*$n$*],
+        [*$Delta$AICc \ M1$arrow.r$M3*],
+        [*$Delta$AICc \ M2$arrow.r$M3*],
+        [*$Delta$AICc \ M3$arrow.r$M4*],
+      ),
       ..clade_rows.map(r => (
         [#_format_clade_label(r.excluded_clade)],
         [#r.excluded_tables.map(str).join(", ")],
@@ -312,7 +360,7 @@ The conditional-logit framework can confound a single clade's reassignment event
       )).flatten(),
     ),
     caption: [
-      Per-regime conditional-logit clade-exclusion sensitivity (7 regimes). Each row refits M1--M4 with the indicated NCBI translation tables removed. M3 (physicochemistry + $Q_6$ topology) remains robustly favored over both M1 (physicochemistry only) and M2 (topology only) in every regime. The minimum ΔAICc(M1→M3) across all seven regimes is #str(calc.round(cl.at("clade_exclusion", default: (:)).at("delta_M1_M3_min", default: 0), digits: 0)); the maximum is #str(calc.round(cl.at("clade_exclusion", default: (:)).at("delta_M1_M3_max", default: 0), digits: 0)). The conventional Burnham--Anderson reference of ΔAICc>10 was calibrated on linear-regression contexts, so we use it as a reference threshold rather than a formally calibrated cut-off in this conditional-logit setting; the posterior-predictive simulation reported in §3.5 (observed topology-breaking rate 0.076 vs simulated 0.077, $p = 0.60$) is the more directly interpretable calibration check. ΔAICc(M3→M4) values near 2 indicate that adding the heuristic tRNA-distance proxy provides no incremental fit.
+      *Per-regime conditional-logit clade-exclusion sensitivity (7 regimes).* Each row refits M1--M4 with the indicated NCBI translation tables removed; $n$ = remaining event-steps. M3 (physicochemistry + $Q_6$ topology) remains robustly favored over both M1 (physicochemistry only) and M2 (topology only) in every regime. The minimum $Delta$AICc(M1$arrow.r$M3) across all seven regimes is #str(calc.round(cl.at("clade_exclusion", default: (:)).at("delta_M1_M3_min", default: 0), digits: 0)); the maximum is #str(calc.round(cl.at("clade_exclusion", default: (:)).at("delta_M1_M3_max", default: 0), digits: 0)). The conventional Burnham--Anderson reference of $Delta$AICc$>10$ was calibrated on linear-regression contexts, so we use it as a reference threshold rather than a formally calibrated cut-off in this conditional-logit setting; the posterior-predictive simulation reported in main-text §3.5 (observed topology-breaking rate 0.076 vs simulated 0.077, $p = 0.60$) is the more directly interpretable calibration check. $Delta$AICc(M3$arrow.r$M4) values near 2 indicate that adding the heuristic tRNA-distance proxy provides no incremental fit.
     ],
   ) <tbl:s-condlogit-clade>
 ] else [
@@ -320,11 +368,18 @@ The conditional-logit framework can confound a single clade's reassignment event
   // older pipeline that omitted the per-regime rows).
   #figure(
     table(
-      columns: (auto, auto, auto, auto, auto, auto),
-      align: (left, center, center, right, right, right),
-      inset: 5pt,
+      columns: (auto, 1fr, auto, auto, auto, auto),
+      align: (left, left, center, right, right, right),
+      inset: (x: 6pt, y: 7pt),
       stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-      table.header([*Excluded clade*], [*Tables out*], [*$n$ events*], [*ΔAICc(M1→M3)*], [*ΔAICc(M2→M3)*], [*ΔAICc(M3→M4)*]),
+      table.header(
+        [*Excluded clade*],
+        [*Tables out*],
+        [*$n$*],
+        [*$Delta$AICc \ M1$arrow.r$M3*],
+        [*$Delta$AICc \ M2$arrow.r$M3*],
+        [*$Delta$AICc \ M3$arrow.r$M4*],
+      ),
       [ciliates], [6, 10, 15, 27, 28, 29, 30], [52], [83.7], [31.6], [1.8],
       [yeast mito], [3], [60], [103.1], [87.7], [2.2],
       [CUG-clade], [12, 26], [64], [116.7], [94.9], [2.2],
@@ -334,7 +389,7 @@ The conditional-logit framework can confound a single clade's reassignment event
       [hemichordate mito], [24, 33], [59], [92.3], [83.5], [2.1],
     ),
     caption: [
-      Per-regime conditional-logit clade-exclusion sensitivity (7 regimes). M3 remains robustly favored across all regimes. Static fallback table (a current pipeline run will populate the dynamic version above).
+      *Per-regime conditional-logit clade-exclusion sensitivity (7 regimes).* M3 remains robustly favored across all regimes. Static fallback table (a current pipeline run will populate the dynamic version above).
     ],
   ) <tbl:s-condlogit-clade>
 ]
@@ -347,21 +402,137 @@ This audit grounds the disaggregation reported in main-text §3.3, where we sepa
 
 The methodological concern: a variant code that differs from the standard by only a few reassignments has a per-table block-preserving null distribution dominated by permutations very close to the standard code, simply because few permutations of the variant's block structure yield codes that are far from standard. In that limit, "table $X$ falls in the bottom 5% of permutations preserving $X$'s block structure" partly tests whether $X$ is close to the standard code (which it is, by construction), not whether $X$ is independently optimal.
 
-To address this, for each NCBI translation table we computed two quantities alongside the unconditional per-table quantile: (i) the Hamming distance from the standard code (number of codons with different AA labels) for both the observed variant code and each block-preserving null draw; and (ii) the variant's null quantile *conditional* on null draws that are within $plus.minus 2$ codons of the variant's distance from standard. If the conditional and unconditional quantiles agree, the per-table optimality is independent of standard-code proximity; if they diverge sharply, the per-table test is largely a proximity test.
+For each NCBI translation table we computed three quantities alongside the unconditional per-table quantile: (i) the Hamming distance $d_H$ from the standard code (number of codons with a different AA label) for both the observed variant code and each block-preserving null draw, (ii) the variant's null quantile *conditional* on null draws within $plus.minus 2$ codons of the variant's $d_H$, and (iii) the fraction of null draws whose $d_H$ is at most the variant's $d_H$ (a complementary "proximity rank" of the variant against the null). The motivation for the conditional quantile was to ask whether variants with low unconditional $p$-values would still appear unusually low-cost when restricted to null draws of equivalent $d_H$. As @tbl:s-proximity shows, the conditional bucket turns out to be empty for every variant: under block-preserving permutation, every null draw has $d_H gt.eq 30$ from the standard code (the lowest observed $d_H$ in the null distribution across all 27 tables is 30, while the highest variant $d_H$ in the registry is 6), so no null draws fall within $plus.minus 2$ codons of any variant's $d_H$. The conditional quantile is therefore *not informative* about whether a variant's optimality is intrinsic versus standard-code-proximity-driven.
 
-Detailed per-table results are released as part of the `codontopo` repository's `output/` artifacts (the `per_table_proximity_audit` block in the coloring-optimality results file). The audit confirms that for variant tables differing from standard by 3 or more codon reassignments, the conditional-on-distance quantile is similar to the unconditional quantile, supporting the interpretation that variant codes preserve error-minimization structure independently of their similarity to the standard code. For variants with ≤2 reassignments, the per-table null contains few sufficiently-distant draws and the test cannot distinguish proximity from independent optimality; we therefore treat those cases as confirmatory of standard-code geometry rather than as evidence for variant-specific optimization.
+The proximity-rank diagnostic in the rightmost column is informative: every variant in the registry has $d_H$ smaller than every null draw, so all variants sit at the extreme low-$d_H$ tail of the block-preserving null distribution. This means each variant's per-table $p$-value is, structurally, partly a proximity-to-standard-code measurement, and the "informative-distance" vs "near-standard" disaggregation in main-text §3.3 is therefore based on absolute $d_H$ thresholds (3 reassignments) rather than on this audit's conditional quantile.
+
+#let prox_audit = stats.coloring.at("per_table_proximity_audit", default: (:))
+#let prox_rows = prox_audit.at("per_table", default: ())
+// Drop the standard code itself (table 1, dH=0) from the audit table
+#let _prox_filtered = prox_rows.filter(r => r.table_id != 1)
+#let _prox_informative = _prox_filtered.filter(r => r.n_reassignments_from_standard >= 3).sorted(key: r => r.n_reassignments_from_standard).rev()
+#let _prox_near = _prox_filtered.filter(r => r.n_reassignments_from_standard <= 2).sorted(key: r => r.n_reassignments_from_standard).rev()
+#let _fmt_q(q) = if q == none [---] else [#str(calc.round(q, digits: 1))%]
+
+#if _prox_filtered.len() > 0 [
+  #figure(
+    table(
+      columns: (auto, auto, auto, auto, auto, auto),
+      align: (center, center, right, right, right, right),
+      inset: (x: 6pt, y: 6pt),
+      stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+      table.header(
+        [*Table*],
+        [*$d_H$ (variant)*],
+        [*Null $d_H$ range*],
+        [*Quantile (uncond.)*],
+        [*$n$ in $d_H plus.minus 2$ bucket*],
+        [*Frac. null $d_H lt.eq d_H^"obs"$*],
+      ),
+      table.cell(colspan: 6, fill: luma(240), align: left)[
+        *Informative-distance tables ($d_H gt.eq 3$ codon reassignments from standard).*
+      ],
+      ..(_prox_informative.map(r => (
+        [#r.table_id],
+        [#r.n_reassignments_from_standard],
+        [#{r.null_dH_min}--#{r.null_dH_max}],
+        [#_fmt_q(r.quantile_unconditional)],
+        [#r.n_null_in_dH_bucket],
+        [#str(calc.round(r.frac_null_dH_le_obs * 100, digits: 1))%],
+      )).flatten()),
+      table.cell(colspan: 6, fill: luma(240), align: left)[
+        *Near-standard tables ($d_H lt.eq 2$ codon reassignments from standard).*
+      ],
+      ..(_prox_near.map(r => (
+        [#r.table_id],
+        [#r.n_reassignments_from_standard],
+        [#{r.null_dH_min}--#{r.null_dH_max}],
+        [#_fmt_q(r.quantile_unconditional)],
+        [#r.n_null_in_dH_bucket],
+        [#str(calc.round(r.frac_null_dH_le_obs * 100, digits: 1))%],
+      )).flatten()),
+    ),
+    caption: [
+      *Per-table standard-code-proximity audit.* For each NCBI translation table other than the standard code (table 1), $d_H$ is the number of codons with a different AA label from the standard code. *Null $d_H$ range* is the (min, max) of $d_H$ across the 1,000 block-preserving null draws for that table. *Quantile (uncond.)* is the variant's per-table block-preserving-null quantile from main-text §3.3 (lower = more error-minimising). *$n$ in $d_H plus.minus 2$ bucket* counts null draws with $d_H$ within $plus.minus 2$ of the variant's $d_H$ (would have been the conditional-quantile denominator); this is zero for every table because every block-preserving null draw has $d_H gt.eq 30$ while every variant has $d_H lt.eq 6$. *Frac. null $d_H lt.eq d_H^"obs"$* is the fraction of null draws closer to (or as close as) the variant in $d_H$; this is uniformly $0$%, confirming that every variant sits at the extreme low-$d_H$ tail of its block-preserving null. The conditional-quantile diagnostic is therefore not informative on this data, and the disaggregation in main-text §3.3 rests on the absolute $d_H gt.eq 3$ threshold rather than on this conditional analysis.
+    ],
+  ) <tbl:s-proximity>
+] else [
+  Per-table proximity-audit table will be populated by `codon-topo all` (block `coloring.per_table_proximity_audit` in `manuscript_stats.json`).
+]
+
+The full per-table audit, including $d_H$ summary statistics for the null distribution and the per-table observed score, is released in `output/coloring_optimality.json` under the `per_table_proximity_audit` key.
 
 
 // ============================================================
 = Topology avoidance: clade-exclusion sensitivity (hypergeometric/permutation) <sec:s-clade>
 
-This section provides the hypergeometric/permutation counterpart to the conditional-logit clade-exclusion analysis in §S7. The two tests probe related but distinct quantities: §S7 tests whether the $Delta_"topo"$ regression coefficient survives clade exclusion; this section tests whether the global landscape-vs-observed depletion ratio survives clade exclusion. Following the phylogenetic-distribution analysis of mitochondrial reassignment events by #cite(<sengupta2007>, form: "prose"), we iteratively excluded:
-- All ciliate reassignments
-- All metazoan mitochondrial reassignments
-- All CUG-clade yeast reassignments
-- All chlorophycean reassignments
+This section provides the hypergeometric/permutation counterpart to the conditional-logit clade-exclusion analysis in @sec:s-condlogit-clade. The two tests probe related but distinct quantities: @sec:s-condlogit-clade tests whether the $Delta_"topo"$ regression coefficient survives clade exclusion; this section tests whether the global landscape-vs-observed depletion ratio survives clade exclusion. Following the phylogenetic-distribution analysis of mitochondrial reassignment events by #cite(<sengupta2007>, form: "prose"), we iteratively excluded each of seven major taxonomic groups (@tbl:s-phylo-clade) and re-ran the $Q_6$ topology-avoidance hypergeometric on the reduced event set, holding the 1,280-move candidate landscape fixed.
 
-In every exclusion, the depletion remains highly significant ($p < 10^(-5)$), confirming that the $approx 3.4$-fold ($Q_6$) and $approx 3.1$-fold ($H(3,4)$) depletion of topology-breaking changes is a pan-taxonomic pattern, not an artifact of any single lineage. Excluding yeast mitochondrial (table 3) actually strengthens the depletion (rate drops from 21.4% to 8.3%; hypergeometric $p$ from $1.6 times 10^(-8)$ to $3.6 times 10^(-11)$), because table 3 contributes 4 of the 6 topology-breaking events. Detailed per-clade counts are released as part of the `codontopo` repository's `output/` artifacts (the phylogenetic-sensitivity results file).
+#let phylo_rows = stats.phylo.at("clade_exclusion", default: ())
+#let _phylo_label(s) = {
+  let parts = s.replace("_", " ").split(" ")
+  parts.slice(1).join(" ")
+}
+
+#if phylo_rows.len() > 0 [
+  #figure(
+    table(
+      columns: (auto, 1fr, auto, auto, auto, auto),
+      align: (left, left, center, right, right, right),
+      inset: (x: 6pt, y: 7pt),
+      stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+      table.header(
+        [*Excluded clade*],
+        [*Tables out*],
+        [*$n$*],
+        [*Breakers*],
+        [*Rate (%)*],
+        [*Hyper. $p$*],
+      ),
+      ..phylo_rows.map(r => (
+        [#_phylo_label(r.excluded_clade)],
+        [#r.excluded_tables.map(str).join(", ")],
+        [#r.n_events_remaining],
+        [#r.creates_disc],
+        [#str(calc.round(r.rate_observed * 100, digits: 1))],
+        [#sci(r.hypergeom_p)],
+      )).flatten(),
+    ),
+    caption: [
+      *Hypergeometric clade-exclusion sensitivity for the $Q_6$ topology-avoidance test.* Each row removes the indicated NCBI translation tables (matching the clade definitions of #cite(<sengupta2007>, form: "prose")) from the de-duplicated event list and re-runs the hypergeometric depletion test against the same 1,280-move candidate landscape. *Breakers* = topology-breaking events (new disconnection, $Q_6$ adjacency); *Rate* = observed breaker rate (vs candidate-landscape rate of 72.7% under the default encoding). All seven exclusions yield $p < 10^(-5)$. Excluding yeast mitochondrial (table 3) *strengthens* the depletion to $p approx 3.6 times 10^(-11)$ because table 3 contributes 4 of the 6 lineage-collapsed topology-breakers; this is the denominator-effect noted in main-text §3.4.
+    ],
+  ) <tbl:s-phylo-clade>
+] else [
+  // Fallback static table
+  #figure(
+    table(
+      columns: (auto, 1fr, auto, auto, auto, auto),
+      align: (left, left, center, right, right, right),
+      inset: (x: 6pt, y: 7pt),
+      stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+      table.header(
+        [*Excluded clade*],
+        [*Tables out*],
+        [*$n$*],
+        [*Breakers*],
+        [*Rate (%)*],
+        [*Hyper. $p$*],
+      ),
+      [ciliates], [6, 10, 15, 27, 28, 29, 30], [24], [6], [25.0], [$1.2 times 10^(-6)$],
+      [yeast mito], [3], [24], [2], [8.3], [$3.6 times 10^(-11)$],
+      [CUG-clade], [12, 26], [26], [5], [19.2], [$1.4 times 10^(-8)$],
+      [metazoan mito], [2, 5, 9, 13, 14, 21], [22], [6], [27.3], [$9.8 times 10^(-6)$],
+      [algal mito], [16, 22], [26], [5], [19.2], [$1.4 times 10^(-8)$],
+      [protist mito], [4, 23], [27], [6], [22.2], [$4.8 times 10^(-8)$],
+      [hemichordate mito], [24, 33], [27], [6], [22.2], [$4.8 times 10^(-8)$],
+    ),
+    caption: [
+      *Hypergeometric clade-exclusion sensitivity for the $Q_6$ topology-avoidance test.* All seven exclusions yield $p < 10^(-5)$. Excluding yeast mitochondrial strengthens the depletion because table 3 contributes 4 of the 6 lineage-collapsed topology-breakers. Static fallback table; a current pipeline run will populate the dynamic version above.
+    ],
+  ) <tbl:s-phylo-clade>
+]
+
+In every exclusion, the depletion remains highly significant ($p < 10^(-5)$), confirming that the $approx 3.4$-fold ($Q_6$) and $approx 3.1$-fold ($H(3,4)$) depletion of topology-breaking changes is a pan-taxonomic pattern, not an artifact of any single lineage. The clade-exclusion robustness is a denominator effect (removing clades that contributed zero or one topology-breaking event each leaves the breakage rate essentially unchanged) rather than a numerator effect; the *avoidance* of topology-breaking moves is what propagates across many lineages, while the *attempts* to break topology are concentrated in yeast mitochondrial. Detailed per-clade counts are released as part of the `codontopo` repository's `output/` artifacts (the `phylogenetic_sensitivity.json` file).
 
 
 // ============================================================
@@ -371,13 +542,13 @@ This section documents the empirical foundation for the tRNA enrichment analysis
 
 == tRNAscan-SE verified organisms
 
-All tRNA gene counts were obtained by running tRNAscan-SE 2.0.12 @chan2019 with Infernal 1.1.4 on NCBI genome assemblies. Eukaryotic organisms were scanned in `-E` mode; _Mycoplasma_ species in `-B` (bacterial) mode. Total counts are Infernal-confirmed (the more conservative count after the second-pass filter) and match the Total column of main-text Table 8. The five-column breakdown below sums exactly to Total: Std20 (decoding the standard 20 amino acids) + SeC (selenocysteine, anticodon UCA, scanned via the dedicated `TRNAinf-euk-SeC.cm` model) + Supp (possible suppressor tRNAs with CTA/TTA/UCA anticodons) + Undet (predicted tRNAs whose isotype could not be determined) + Pseudo (predicted pseudogenes filtered by the Infernal second-pass isotype validation).
+All tRNA gene counts were obtained by running tRNAscan-SE 2.0.12 @chan2019 with Infernal 1.1.4 on NCBI genome assemblies. Eukaryotic organisms were scanned in `-E` mode; _Mycoplasma_ species in `-B` (bacterial) mode. Total counts are Infernal-confirmed (the more conservative count after the second-pass filter) and match the Total column of main-text Table 8. The five-column breakdown in @tbl:s-trna sums exactly to Total: Std20 (decoding the standard 20 amino acids) + SeC (selenocysteine, anticodon UCA, scanned via the dedicated `TRNAinf-euk-SeC.cm` model) + Supp (possible suppressor tRNAs with CTA/TTA/UCA anticodons) + Undet (predicted tRNAs whose isotype could not be determined) + Pseudo (predicted pseudogenes filtered by the Infernal second-pass isotype validation).
 
 #figure(
   table(
-    columns: (auto, auto, auto, auto, auto, auto, auto, auto, auto, auto),
+    columns: (auto, auto, auto, auto, auto, auto, auto, auto, auto, 1fr),
     align: (left, center, left, right, right, right, right, right, right, left),
-    inset: 4pt,
+    inset: (x: 5pt, y: 6pt),
     stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
     table.header([*Organism*], [*Tbl*], [*Assembly*], [*Total*], [*Std20*], [*SeC*], [*Supp*], [*Undet*], [*Pseudo*], [*Reassigned AA*]),
     [_T. thermophila_], [6], [GCF_000189635.1], [718], [672], [1], [37], [4], [4], [Gln: 54 (15+39)],
@@ -422,9 +593,32 @@ The _Saccharomyces cerevisiae_ tRNA gene counts used in the yeast-mito Thr disco
 // ============================================================
 = Complete reassignment database <sec:s-reassignment>
 
-The reassignment database underpins both the topology-avoidance test (§3.4) and the conditional-logit fits (§3.5). It comprises all codon reassignment events across the 27 NCBI translation tables, relative to the standard code (Table 1). Each event records the codon, source amino acid, target amino acid, and Hamming distance to the nearest codon already encoding the target amino acid in the standard code. De-duplication to unique (codon, target amino acid) pairs yields the event set used in the topology-avoidance analysis. Exact counts (which depend on the most recent NCBI gc.prt revision, currently v4.6 retrieved 2026-04-25) are reported inline in the main text from the same pipeline run that generated this supplement.
+The reassignment database underpins both the topology-avoidance test (main-text §3.4) and the conditional-logit fits (main-text §3.5). It comprises every codon reassignment event across the 27 NCBI translation tables, relative to the standard code (table 1). Each event records the codon, source amino acid, target amino acid, and Hamming distance to the nearest codon already encoding the target amino acid in the standard code. De-duplication to unique (codon, target amino acid) pairs yields the event set used in the topology-avoidance hypergeometric and table-preserving permutation tests. The conditional-logit model operates on the full per-table event-step list, which preserves recurrent reassignments across independent lineages. Exact counts depend on the most recent NCBI gc.prt revision (currently v4.6 retrieved 2026-04-25); a current pipeline run yields #stats.reassignment.n_events raw events de-duplicating to #stats.reassignment.n_dedup unique (codon, target-AA) pairs.
 
-The complete database is released as `output/tables/T10_reassignment_db.csv` in the `codontopo` repository.
+#let reass_rows = stats.reassignment.at("per_table_counts", default: ())
+
+#if reass_rows.len() > 0 [
+  #figure(
+    table(
+      columns: (auto, 1fr, auto),
+      align: (center, left, center),
+      inset: (x: 7pt, y: 6pt),
+      stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+      table.header([*Table*], [*NCBI translation table*], [*Events*]),
+      ..reass_rows.map(r => (
+        [#r.table_id],
+        [#r.table_name],
+        [#r.n_events],
+      )).flatten(),
+    ),
+    caption: [
+      *Per-table reassignment-event counts (raw, before de-duplication).* The 25 NCBI translation tables that differ from the standard code account for #stats.reassignment.n_events raw codon-reassignment events. Tables 1 (Standard) and 11 (Bacterial / Archaeal / Plant Plastid) share identical sense-codon mappings and contribute zero reassignment events. Tables 27 (Karyorelict Nuclear) and 28 (Condylostoma Nuclear) likewise share identical sense-codon mappings and are listed separately to match NCBI numbering. The 25-table counts sum to the all-events total, which de-duplicates to #stats.reassignment.n_dedup unique (codon, target-AA) pairs across the registry. The complete event-level database (with codon, source-AA, target-AA, Hamming-to-nearest-target columns) is released as `output/tables/T10_reassignment_db.csv` in the `codontopo` repository.
+    ],
+  ) <tbl:s-reassignment>
+] else [
+  // Fallback when manuscript_stats.json predates the per-table-counts field.
+  Per-table reassignment-event summary will be populated by `codon-topo all` (block `reassignment.per_table_counts` in `manuscript_stats.json`). The complete event-level database is released as `output/tables/T10_reassignment_db.csv` in the `codontopo` repository.
+]
 
 
 // ============================================================
@@ -450,11 +644,35 @@ Filtration-preserving variants ($I_F = 1$) score $gt.eq 0.8$ under this composit
 // ============================================================
 = KRAS--Fano clinical prediction: detailed results <sec:s-kras>
 
-The KRAS--Fano clinical prediction is the most concrete biomedical extrapolation considered for the $"GF"(2)^6$ framework, and we tested it directly to delimit scope. The conjecture: XOR ("Fano") relationships in $"GF"(2)^6$ predict enrichment of specific amino acids at KRAS G12 co-mutation sites. We tested it against 1,670 KRAS mutations from the MSK-IMPACT dataset @zehir2017.
+The KRAS--Fano clinical prediction is the most concrete biomedical extrapolation considered for the $"GF"(2)^6$ framework, and we tested it directly to delimit scope. The conjecture: XOR ("Fano") relationships in $"GF"(2)^6$ predict enrichment of specific amino acids at KRAS G12 co-mutation sites. For each of the six common somatic KRAS G12 variants, we computed the predicted Fano partner codon as $G G U xor m_i = "partner"_i$ where $m_i$ is the mutant codon for that variant and $xor$ is bitwise XOR in $"GF"(2)^6$ (@tbl:s-kras). We then tested for co-mutation enrichment of the predicted partner amino acid against 1,670 KRAS-mutant samples from the MSK-IMPACT pan-cancer dataset @zehir2017 using Fisher's exact test with Bonferroni correction across the six variants.
 
-For each of the 6 KRAS G12 variant types (G12D, G12V, G12C, G12A, G12R, G12S), we identified the XOR-predicted amino acid partners and tested for co-mutation enrichment via Fisher's exact test with Bonferroni correction. All 6 tests yielded $p = 1.0$, with odds ratios near 1.0.
+#figure(
+  table(
+    columns: (auto, auto, auto, auto, auto, auto),
+    align: (center, center, center, center, center, right),
+    inset: (x: 7pt, y: 7pt),
+    stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
+    table.header(
+      [*Variant*],
+      [*WT codon*],
+      [*Mutant codon*],
+      [*Fano partner codon*],
+      [*Predicted partner AA*],
+      [*Fisher $p$ (Bonf.)*],
+    ),
+    [G12V], [GGU], [GUU], [CAC], [His (H)], [1.0],
+    [G12D], [GGU], [GAU], [CUC], [Leu (L)], [1.0],
+    [G12A], [GGU], [GCU], [CGC], [Arg (R)], [1.0],
+    [G12R], [GGU], [CGU], [GCC], [Ala (A)], [1.0],
+    [G12C], [GGU], [UGU], [ACC], [Thr (T)], [1.0],
+    [G12S], [GGU], [AGU], [UCC], [Ser (S)], [1.0],
+  ),
+  caption: [
+    *KRAS--Fano clinical prediction tested against MSK-IMPACT.* For each KRAS G12 variant, the Fano partner codon is computed as the bitwise XOR (in $"GF"(2)^6$) of the wild-type and mutant codons against a fixed reference; the predicted partner amino acid is the standard-code translation of that codon. Fisher's exact test for co-mutation enrichment of the predicted partner amino acid in MSK-IMPACT samples bearing each KRAS G12 variant ($n = $1,670 KRAS-mutant tumours; @zehir2017) yields $p = 1.0$ for all six variants after Bonferroni correction across the six tests. Odds ratios are near 1.0 throughout. The conjecture is cleanly falsified.
+  ],
+) <tbl:s-kras>
 
-This result cleanly separates code-level error-minimization (which operates on the amino acid assignment structure) from mutation-level algebraic predictions (which would require DNA polymerase errors to respect the binary encoding --- a biologically implausible mechanism).
+This result cleanly separates code-level error-minimization, which operates on the amino acid assignment structure, from mutation-level algebraic predictions, which would require DNA polymerase errors to respect the binary encoding---a biologically implausible mechanism. The Fano-line construction was a meaningful test of whether the binary representation has predictive power at the *mutation* level (in addition to the *assignment* level where it does carry signal); the answer is no, and we record this falsification explicitly in @tbl:s-claims.
 
 
 // ============================================================
@@ -474,11 +692,13 @@ $ Delta_"phys" = sum_({c,c'}: d(c,c')=1) [Delta(a', "code"(c')) - Delta(a, "code
 
 This captures the local impact on error-minimization at the reassigned position. When a neighboring codon is assigned Stop, we set $Delta(a, "Stop")$ equal to the maximum Grantham distance (215), consistent with the stop-penalty convention used in the coloring objective (Methods §2.2 of the main manuscript).
 
-*Topology disruption ($Delta_"topo,Q_6"$)*: The total increase in connected components (at $epsilon = 1$) summed across all amino acid codon graphs under $Q_6$ adjacency. Stop codons are excluded from the topology sum; $Delta_"topo"$ counts connected-component changes only for amino acid codon families. A move that splits one amino acid's codon family into two components contributes $+1$; a move that fragments two families contributes $+2$; topology-preserving moves contribute $0$. The default $Delta_"topo,Q_6"$ uses $Q_6$ adjacency (Hamming-1 in the default $"GF"(2)^6$ encoding $C arrow.r 00$, $U arrow.r 01$, $A arrow.r 10$, $G arrow.r 11$). Because $Q_6$ adjacency is encoding-dependent (8 of 24 base-to-bit bijections give no $Q_6$ topology depletion at the candidate-landscape level; §S4), we additionally compute $Delta_"topo,H(3,4)"$ using the encoding-independent $H(3,4)$ adjacency (two codons are neighbors iff they differ at exactly one nucleotide position) and refit two model variants: M2#sub[H(3,4)] (topology-only with $Delta_"topo,H(3,4)"$) and M3#sub[H(3,4)] (physicochemistry + $Delta_"topo,H(3,4)"$). The encoding-robustness comparison ΔAICc(M1 → M3#sub[H(3,4)]) vs ΔAICc(M1 → M3) is reported in the next subsection.
+*Topology disruption ($Delta_"topo,Q_6"$)*: The total increase in connected components (at $epsilon = 1$) summed across all amino acid codon graphs under $Q_6$ adjacency. Stop codons are excluded from the topology sum; $Delta_"topo"$ counts connected-component changes only for amino acid codon families. A move that splits one amino acid's codon family into two components contributes $+1$; a move that fragments two families contributes $+2$; topology-preserving moves contribute $0$. The default $Delta_"topo,Q_6"$ uses $Q_6$ adjacency (Hamming-1 in the default $"GF"(2)^6$ encoding $C arrow.r 00$, $U arrow.r 01$, $A arrow.r 10$, $G arrow.r 11$). Because $Q_6$ adjacency is encoding-dependent (8 of 24 base-to-bit bijections give no $Q_6$ topology depletion at the candidate-landscape level; @sec:s-encoding-sweep), we additionally compute $Delta_"topo,H(3,4)"$ using the encoding-independent $H(3,4)$ adjacency (two codons are neighbors iff they differ at exactly one nucleotide position) and refit two model variants: M2#sub[$H(3,4)$] (topology-only with $Delta_"topo,H(3,4)"$) and M3#sub[$H(3,4)$] (physicochemistry + $Delta_"topo,H(3,4)"$). The encoding-robustness comparison $Delta$AICc(M1 $arrow.r$ M3#sub[$H(3,4)$]) vs $Delta$AICc(M1 $arrow.r$ M3) is reported in the next subsection.
 
 *tRNA complexity proxy ($Delta_"tRNA"$)*: The Hamming distance from the reassigned codon to the nearest codon already encoding the target amino acid in the current code. This serves as a heuristic for the tRNA repertoire change required to service the reassigned codon, with larger distances implying more novel tRNA machinery needed.
 
 == Fitted coefficients
+
+@tbl:s-condlogit-coefs reports the maximum-likelihood coefficient estimates for all six model variants (M1, M2, M3, M4 under $Q_6$ topology, plus M2#sub[$H(3,4)$] and M3#sub[$H(3,4)$] under encoding-independent $H(3,4)$ topology).
 
 #let mf = cl.model_fits
 #let _raw = (name, idx) => {
@@ -502,11 +722,11 @@ This captures the local impact on error-minimization at the reassigned position.
 
 #figure(
   table(
-    columns: (auto, auto, auto, auto),
+    columns: (auto, 1fr, auto, auto),
     align: (left, left, center, center),
-    inset: 5pt,
+    inset: (x: 6pt, y: 6pt),
     stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-    table.header([Model], [Feature], [$hat(beta)$ (raw)], [$hat(beta)$ (normalized)]),
+    table.header([*Model*], [*Feature*], [*$hat(beta)$ (raw)*], [*$hat(beta)$ (normalized)*]),
     // Q_6 topology variants (legacy primary)
     [M1], [$Delta_"phys"$], _raw("M1_phys", 0), _norm("M1_phys", 0),
     [M2 ($Q_6$)], [$Delta_"topo,Q_6"$], _raw("M2_topo", 0), _norm("M2_topo", 0),
@@ -527,6 +747,8 @@ This captures the local impact on error-minimization at the reassigned position.
 
 == Likelihood ratio tests
 
+@tbl:s-condlogit-lrt reports nested-model likelihood-ratio statistics under both $Q_6$ and $H(3,4)$ topology variants.
+
 #let lr = cl.at("lr_tests", default: (:))
 #let _lr_row = (key) => {
   let row = lr.at(key, default: (:))
@@ -536,16 +758,16 @@ This captures the local impact on error-minimization at the reassigned position.
 
 #figure(
   table(
-    columns: (auto, auto, auto, auto, auto),
+    columns: (1fr, 1fr, auto, auto, auto),
     align: (left, left, center, center, center),
-    inset: 5pt,
+    inset: (x: 6pt, y: 6pt),
     stroke: (x, y) => if y == 0 { (bottom: 0.7pt) } else { none },
-    table.header([Restricted], [Full], [LR], [df], [$p$]),
+    table.header([*Restricted*], [*Full*], [*LR*], [*df*], [*$p$*]),
     [M1 (phys)], [M3 (phys+topo, $Q_6$)], [#_lr_row("M1_vs_M3")], [1], [$lt.double 10^(-10)$],
     [M2 (topo, $Q_6$)], [M3 (phys+topo, $Q_6$)], [#_lr_row("M2_vs_M3")], [1], [$lt.double 10^(-10)$],
     [M3 (phys+topo, $Q_6$)], [M4 (full)], [#_lr_row("M3_vs_M4")], [1], [$0.73$],
-    [M1 (phys)], [M3#sub[H(3,4)] (phys+topo, $H(3,4)$)], [#_lr_row("M1_vs_M3_k43")], [1], [$lt.double 10^(-10)$],
-    [M2#sub[H(3,4)] (topo, $H(3,4)$)], [M3#sub[H(3,4)] (phys+topo, $H(3,4)$)], [#_lr_row("M2_k43_vs_M3_k43")], [1], [$lt.double 10^(-10)$],
+    [M1 (phys)], [M3#sub[$H(3,4)$] (phys+topo, $H(3,4)$)], [#_lr_row("M1_vs_M3_k43")], [1], [$lt.double 10^(-10)$],
+    [M2#sub[$H(3,4)$] (topo, $H(3,4)$)], [M3#sub[$H(3,4)$] (phys+topo, $H(3,4)$)], [#_lr_row("M2_k43_vs_M3_k43")], [1], [$lt.double 10^(-10)$],
   ),
   caption: [
     Likelihood-ratio tests for nested conditional logit models, including both $Q_6$ topology variants (legacy primary) and $H(3,4)$ topology verification variants. Both topology features (Q_6 added to M1, H(3,4) added to M1) and physicochemistry (added to M2 / M2#sub[H(3,4)]) provide highly significant improvements. The tRNA-complexity proxy does not improve on the phys+topo model.

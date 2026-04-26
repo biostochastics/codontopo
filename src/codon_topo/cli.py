@@ -18,10 +18,45 @@ class _NumpyEncoder(json.JSONEncoder):
         if isinstance(o, np.integer):
             return int(o)
         if isinstance(o, np.floating):
+            # NaN/Inf are not JSON-spec; emit null so downstream readers
+            # (e.g. Typst's json()) parse cleanly.
+            if not np.isfinite(o):
+                return None
             return float(o)
         if isinstance(o, np.ndarray):
             return o.tolist()
         return super().default(o)
+
+
+def _write_json_strict(path, data) -> None:
+    """JSON dump with allow_nan=False so NaN/Inf raise rather than emit non-spec.
+
+    Combined with _NumpyEncoder above, this guarantees that every JSON file
+    written by the pipeline parses under strict (RFC 8259) JSON readers,
+    including the Typst json() function used by manuscript.typ and
+    supplement.typ.
+    """
+    with open(path, "w") as f:
+        json.dump(data, f, indent=2, cls=_NumpyEncoder, default=str, allow_nan=False)
+
+
+def _per_table_reassignment_counts(db: list) -> list[dict]:
+    """Summary of raw reassignment events per NCBI translation table.
+
+    Used by Supplement §S11. Returns a sorted list of dicts:
+        [{"table_id": int, "table_name": str, "n_events": int}, ...]
+    """
+    from collections import defaultdict
+
+    by_table: dict[int, dict] = defaultdict(
+        lambda: {"table_id": 0, "table_name": "", "n_events": 0}
+    )
+    for e in db:
+        row = by_table[e.table_id]
+        row["table_id"] = e.table_id
+        row["table_name"] = e.table_name
+        row["n_events"] += 1
+    return sorted(by_table.values(), key=lambda r: r["table_id"])
 
 
 def _json_out(data: dict | list) -> None:
@@ -744,10 +779,20 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     pertable_result = per_table_optimality(n_samples=min(n_samples, 1_000), seed=seed)
 
     _step("Per-table proximity audit (standard-code-proximity sensitivity)...")
-    from codon_topo.analysis.coloring_optimality import per_table_proximity_audit
+    from codon_topo.analysis.coloring_optimality import (
+        encoding_sensitivity_of_optimality,
+        per_table_proximity_audit,
+    )
 
     proximity_audit = per_table_proximity_audit(
         n_samples=min(n_samples, 1_000), seed=seed
+    )
+
+    _step("Coloring 24-encoding sensitivity sweep...")
+    coloring_enc_sweep = encoding_sensitivity_of_optimality(
+        n_samples=min(n_samples, 10_000),
+        seed=seed,
+        null_type="freeland_hurst",
     )
 
     decomp_result = score_decomposition_by_position()
@@ -762,6 +807,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "rho_sweep": rho_result,
             "per_table": pertable_result,
             "per_table_proximity_audit": proximity_audit,
+            "encoding_sensitivity": coloring_enc_sweep,
             "decomposition": decomp_result,
             "stop_penalty": stop_results,
         },
@@ -941,6 +987,25 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "quantile": coloring_result["quantile_of_observed"],
             "p_value": coloring_result["p_value_conservative"],
             "n_samples": n_samples,
+            # 24-encoding sensitivity summary (Supplement §S2)
+            "encoding_sensitivity": {
+                "n_encodings": coloring_enc_sweep["n_encodings"],
+                "null_type": coloring_enc_sweep["null_type"],
+                "quantile_min": coloring_enc_sweep["quantile_range"][0],
+                "quantile_max": coloring_enc_sweep["quantile_range"][1],
+                "mean_quantile": coloring_enc_sweep["mean_quantile"],
+                "all_significant_p05": coloring_enc_sweep[
+                    "all_encodings_significant_p05"
+                ],
+                "p_max": max(
+                    r["p_value_conservative"]
+                    for r in coloring_enc_sweep["per_encoding"]
+                ),
+                "p_min": min(
+                    r["p_value_conservative"]
+                    for r in coloring_enc_sweep["per_encoding"]
+                ),
+            },
         },
         "metrics": {
             name: {
@@ -1019,15 +1084,18 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "mis_best_p": mis_result.get("best_case_stouffer_p"),
             "n_mis": mis_result.get("n_mis_size_ge2"),
         },
-        # Phylogenetic sensitivity
+        # Phylogenetic sensitivity (Supplement §S9)
         "phylo": {
             "all_significant": phylo_result["all_clade_exclusions_significant"],
             "lineage_collapsed": phylo_result["lineage_collapsed"],
+            "clade_exclusion": phylo_result["clade_exclusion"],
         },
-        # Reassignment DB
+        # Reassignment DB (Supplement §S11)
         "reassignment": {
             "n_events": len(db),
             "n_dedup": topo_q6["observed_total"],
+            # Per-table count of raw reassignment events (used by §S11 table)
+            "per_table_counts": _per_table_reassignment_counts(db),
         },
         # Pipeline metadata
         "pipeline": {
