@@ -821,7 +821,7 @@ We thank the NCBI, GtRNAdb, and cBioPortal teams for maintaining public database
 
 #heading(numbering: none)[Declaration of generative AI and AI-assisted technologies]
 
-During preparation of this work, the authors used generative AI tools to scaffold and review code, review the manuscript outline, and assist in drafting and revising manuscript text. The authors reviewed and edited all AI-assisted outputs and take full responsibility for the content of the publication. No generative AI or AI-assisted tools were used to create or alter figures or images.
+During the preparation of this work the authors used GPT-5.2-Pro, GPT-5.5-Pro, Claude Opus 4.5, Claude Opus 4.7, GLM-5.1, Kimi-K2.5, MiniMax-M2.7, and Gemini 3 Pro to scaffold and review code, review the manuscript outline, and assist in drafting and revising the manuscript text. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication. No generative AI or AI-assisted tools were used to create or alter figures or images in this manuscript.
 
 #heading(numbering: none)[Declaration of competing interest]
 
