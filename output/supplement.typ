@@ -796,7 +796,7 @@ For tables with $k > 1$ reassignment events, the temporal ordering is unknown. W
 
 This section provides the metadata needed to reproduce every number in the manuscript and supplement bit-for-bit from the public repository. Every figure, table, and inline statistic is rendered by the Typst sources `manuscript.typ` and `supplement.typ` (also in the repository) from the JSON outputs of a single `codon-topo all` invocation, so the manuscript and supplement cannot drift from each other within a single pipeline run.
 
-All analyses were performed using the `codon-topo` Python package (version #stats._version, commit #raw("bd92dfe"), tag #raw("v0.4.0")). The code is publicly released at https://github.com/biostochastics/codontopo. Dependencies and runtime requirements:
+All analyses were performed using the `codon-topo` Python package (version #stats._version, commit #raw("696cbb7"), tag #raw("v0.4.0")). The code is publicly released at https://github.com/biostochastics/codontopo. Dependencies and runtime requirements:
 
 - Python 3.11, NumPy 1.24+, SciPy 1.10+
 - R 4.5, ggplot2, ggpubr, viridis, patchwork (for figures)
