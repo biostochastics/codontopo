@@ -831,7 +831,7 @@ This study did not involve human subjects, animal experiments, or clinical sampl
 
 #heading(numbering: none)[Data and code availability]
 
-All code, raw data, and intermediate analysis outputs are publicly released in the `codontopo` repository at https://github.com/biostochastics/codontopo (version #stats._version, commit #raw("e333582")). Install with `pip install -e ".[all]"` or `uv sync --all-extras`. Analyses are fully reproducible via:
+All code, raw data, and intermediate analysis outputs are publicly released in the `codontopo` repository at https://github.com/biostochastics/codontopo (version #stats._version, commit #raw("bd92dfe"), tag #raw("v0.4.0")). Install with `pip install -e ".[all]"` or `uv sync --all-extras`. Analyses are fully reproducible via:
 
 ```
 git clone https://github.com/biostochastics/codontopo.git
