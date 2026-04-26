@@ -5,7 +5,7 @@
   **Codon Geometry Validation & Prediction Engine**
 
   [![Version](https://img.shields.io/badge/version-0.4.0-blue)]()
-  [![Tests](https://img.shields.io/badge/tests-416%20passing-success)]()
+  [![Tests](https://img.shields.io/badge/tests-432%20passing-success)]()
   [![Coverage](https://img.shields.io/badge/coverage-%E2%89%A596%25-brightgreen)]()
   [![Python](https://img.shields.io/badge/python-3.11%2B-yellow)]()
   [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](LICENSE)
@@ -19,7 +19,7 @@
 CODON-TOPO validates the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. It provides a complete, reproducible pipeline for the analyses described in:
 
 > **Robust error-minimization in the genetic code across physicochemical metrics and variant codes: a graph-theoretic analysis in GF(2)^6**
-> Paul Clayworth & Sergey Kornilov (2026). Pre-submission manuscript; PDF compiles from `output/manuscript.typ`.
+> Paul Clayworth & Sergey Kornilov (2026). Manuscript prepared for submission to the *Journal of Theoretical Biology*; PDF compiles from `output/manuscript.typ` (Elsevier-Harvard reference style). Highlights, CRediT statement, generative-AI-use declaration, and ethical statement are included in the manuscript end-matter.
 
 ### Key Findings
 
@@ -261,7 +261,7 @@ All subcommands support `--json` for machine-readable output. Interactive mode u
 
 - **Python 3.11+**, NumPy, SciPy for core computation
 - **click + rich** for CLI
-- **pytest + hypothesis** for property-based testing (416 tests, >=96% coverage)
+- **pytest + hypothesis** for property-based testing (432 tests, >=96% coverage)
 - **ggplot2 + ggpubr** (R) for publication figures (300 DPI, colorblind-friendly viridis)
 - **Typst** for manuscript typesetting (reads `manuscript_stats.json` for dynamic stats)
 - **tRNAscan-SE 2.0.12** + Infernal 1.1.4 for tRNA verification (18 genomes across 5 variant codes + 3 standard-code controls)

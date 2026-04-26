@@ -587,7 +587,7 @@ With 24 total pairings, 2 MIS of size 6 were identified. Both are significant at
 
 == _Saccharomyces cerevisiae_ literature-derived control
 
-The _Saccharomyces cerevisiae_ tRNA gene counts used in the yeast-mito Thr disconnection pairing come from GtRNAdb @gtrnadb rather than tRNAscan-SE 2.0.12 in this work. We retain them to keep the well-characterized yeast-mito Thr case in the pairing set and flag the difference in source explicitly.
+The _Saccharomyces cerevisiae_ tRNA gene counts used in the yeast-mito Thr disconnection pairing come from GtRNAdb @chan2016 rather than tRNAscan-SE 2.0.12 in this work. We retain them to keep the well-characterized yeast-mito Thr case in the pairing set and flag the difference in source explicitly.
 
 
 // ============================================================
@@ -792,7 +792,7 @@ For tables with $k > 1$ reassignment events, the temporal ordering is unknown. W
 
 This section provides the metadata needed to reproduce every number in the manuscript and supplement bit-for-bit from the public repository. Every figure, table, and inline statistic is rendered by the Typst sources `manuscript.typ` and `supplement.typ` (also in the repository) from the JSON outputs of a single `codon-topo all` invocation, so the manuscript and supplement cannot drift from each other within a single pipeline run.
 
-All analyses were performed using the `codon-topo` Python package (version #stats._version, commit #raw(stats.at("_commit", default: "see repo HEAD"))). The code is publicly released at https://github.com/biostochastics/codontopo. Dependencies and runtime requirements:
+All analyses were performed using the `codon-topo` Python package (version #stats._version, commit #raw("e333582")). The code is publicly released at https://github.com/biostochastics/codontopo. Dependencies and runtime requirements:
 
 - Python 3.11, NumPy 1.24+, SciPy 1.10+
 - R 4.5, ggplot2, ggpubr, viridis, patchwork (for figures)

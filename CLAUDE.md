@@ -97,7 +97,7 @@ tests/
 
 ```bash
 pip install -e ".[dev]"                              # Install in development mode
-python3.11 -m pytest                                  # Run all tests (416 tests)
+python3.11 -m pytest                                  # Run all tests (432 tests)
 python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
 python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
 python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (≥96%)
