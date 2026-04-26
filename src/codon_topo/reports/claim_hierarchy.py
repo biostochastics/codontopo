@@ -57,11 +57,11 @@ CLAIM_HIERARCHY: list[Claim] = [
         statement=(
             "The standard genetic code is significantly error-minimizing "
             "under four independent physicochemical distance metrics: "
-            "Grantham (p=0.003), Miyata (p=0.001), Woese polar requirement "
-            "(p=0.004), and Kyte-Doolittle hydropathy (p=0.001)"
+            "Grantham (p=0.006), Miyata (p<0.001), Woese polar requirement "
+            "(p=0.003), and Kyte-Doolittle hydropathy (p=0.001)"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=0.004,  # max p across all 4 metrics
+        evidence_p_value=0.006,  # max p across all 4 metrics
         null_model="freeland_hurst_block_preserving_x4_metrics",
         sample_size=10_000,
         justification=(
