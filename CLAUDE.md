@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CODON-TOPO** — Codon Geometry Validation & Prediction Engine. A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 27 NCBI translation tables (codes 1–6, 9–16, 21–33; codes 7, 8, 17–20 deprecated).
+**CODON-TOPO** — Codon Geometry Validation & Prediction Engine (package `codon-topo`, version 0.4.0, license CC-BY-NC-4.0). A computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6. The project verifies and extends claims from Clayworth TN-2026-11 across all 27 NCBI translation tables (codes 1–6, 9–16, 21–33; codes 7, 8, 17–20 deprecated). Authored by Paul Clayworth and Sergey Kornilov (biostochastics).
 
-Authoritative scientific scope: see `src/codon_topo/reports/claim_hierarchy.py` (15 claims, status + p-values + justifications) and the manuscript at `output/manuscript.typ`. The original product-requirements document was internal-only and has been removed from the public release.
+Authoritative scientific scope: see `src/codon_topo/reports/claim_hierarchy.py` (15 claims, status + p-values + justifications) and the manuscript at `output/manuscript.typ` (with `output/supplement.typ`). The original product-requirements document was internal-only and has been removed from the public release.
+
+The manuscript is fully reproducible: `scripts/generate_manuscript_stats.py` (re-run via `codon-topo all`) regenerates `output/manuscript_stats.json`, from which `manuscript.typ` reads every inline statistic. Never hand-edit numbers into the manuscript — change the analysis and regenerate the JSON.
 
 ## Core Domain Concepts
 
@@ -50,16 +52,29 @@ src/codon_topo/
     synbio_feasibility.py # Synthetic biology feasibility scoring, reassignment landscape
     coloring_optimality.py # Hypercube coloring Monte Carlo (primary publishable result)
     trna_evidence.py     # tRNA enrichment test (18 organisms, 17 tRNAscan-SE verified + 1 from literature)
+    evolutionary_simulation.py # Conditional logit model of codon reassignment (topology avoidance as independent constraint)
+    statistical_utils.py # Beta-posterior CIs for permutation p-values, risk-ratio/quantile CIs, effect sizes
+    codonsafe/           # WS6 cross-study genome-recoding meta-analysis (9 datasets, >248k codon positions)
+      models.py          # Dataclasses for recoding records/results
+      loaders/           # Per-study parsers (fredens2019, napolitano2016, ostrov2016, robertson2025_syn57, genbank_utils)
+      normalize.py       # Harmonize datasets to a common schema
+      classify.py        # Topology-breaking vs. preserving codon classification
+      stats.py           # Per-study and pooled statistics
+      aggregate.py       # Cross-study aggregation
+      run_analyses.py    # Orchestrates the full CodonSafe pipeline
   data/
     grantham.json        # Grantham 1974 physicochemical distance matrix
     assembly_accessions.tsv  # NCBI genome assemblies for tRNAscan-SE verification
     trnascan_results/    # Raw tRNAscan-SE .out/.stats files
+    codonsafe/           # DATA_MANIFEST.md + ANALYSIS_RESULTS.md (raw study data not vendored; see manifest)
   visualization/
     data_export.py       # CSV export for R visualization (all workstreams)
+    R/                   # ggplot2 + ggpubr figure scripts (manuscript_figures.R, codonsafe_figures.R, all_figures.R, ...)
   reports/
     catalogue.py         # Prediction catalogue with evidence grading (WS5 synthesis)
     claim_hierarchy.py   # Single source of truth for claim status (15 claims)
 tests/
+  conftest.py            # Shared fixtures
   test_encoding.py       # Encoding primitives + hypothesis property tests
   test_genetic_codes.py  # All 27 NCBI tables
   test_filtration.py     # Two-fold/four-fold checks across all tables
@@ -80,15 +95,22 @@ tests/
   test_cli.py                   # CLI subcommand tests
   test_ws_exports.py            # WS2-WS6 data exports
   test_integration_ws2_ws6.py   # Cross-workstream integration tests
+  test_codonsafe.py             # WS6 CodonSafe meta-analysis (loaders, classify, stats, aggregate)
+  test_evolutionary_simulation.py # Conditional logit model
+  test_new_analyses.py          # rho-sweep, decompose, metric-sensitivity, mis-analysis, etc.
+  test_visualization.py         # Data-export / figure-input checks
 ```
+
+A separate companion package lives in `toposafe/` (its own `pyproject.toml`, `scripts/download_data.sh`, `scripts/run.sh`) — a standalone redistributable of the WS6 cross-study recoding meta-analysis. It mirrors the `codon_topo.analysis.codonsafe` logic for external users; keep the two in sync when changing recoding analysis.
 
 ## Technology Stack
 
-- **Python 3.11+**, NumPy, SciPy for core computation
-- **GUDHI or Ripser.py** for production persistent homology (hand-rolled code is verification-only)
-- **ggplot2 + ggpubr** (R) for all figures — publication-quality, statistical annotations via ggpubr
+- **Python 3.11+**, NumPy (>=1.24), SciPy (>=1.10) for core computation
 - **click + rich** for CLI (`codon-topo` command)
 - **requests** for cBioPortal API
+- **pandas + openpyxl + biopython** — optional `codonsafe` extra, required only for the WS6 cross-study meta-analysis loaders
+- **GUDHI or Ripser.py** for production persistent homology (hand-rolled code is verification-only)
+- **ggplot2 + ggpubr** (R) for all figures — scripts in `src/codon_topo/visualization/R/`; publication-quality, statistical annotations via ggpubr
 - **SciPy.stats, statsmodels** for permutation tests, bootstrap CIs, multiple testing correction
 - **pytest + hypothesis** for property-based testing of mathematical invariants
 - **Sphinx + NumPy-style docstrings** for documentation
@@ -96,17 +118,28 @@ tests/
 ## Build & Test Commands
 
 ```bash
-pip install -e ".[dev]"                              # Install in development mode
-python3.11 -m pytest                                  # Run all tests (432 tests)
+pip install -e ".[dev]"                              # Install in dev mode (includes codonsafe extras + pytest/hypothesis)
+python3.11 -m pytest                                  # Run all tests (~430 across 24 test files; some marked 'slow')
+python3.11 -m pytest -m "not slow"                    # Skip slow tests
 python3.11 -m pytest tests/test_encoding.py -v        # Run a single test file
-python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (105 tests)
+python3.11 -m pytest tests/test_regression.py -v      # Run regression suite (~105 tests)
 python3.11 -m pytest --cov=codon_topo --cov-report=term-missing  # Coverage (≥96%)
 codon-topo --help                                     # CLI usage
 codon-topo claims                                     # View claim hierarchy
-codon-topo all --output-dir=./output                  # Run all analyses
+codon-topo all --output-dir=./output                  # Run all analyses + regenerate manuscript_stats.json
 ```
 
 Note: Use `python3.11 -m pytest` (not bare `pytest`) because the system default Python is 3.14 but dev dependencies are installed under 3.11.
+
+## CLI Subcommands
+
+Entry point is `codon_topo.cli:main` (`codon-topo <command>`). Most commands accept `--json` for machine-readable output.
+
+- **Core**: `filtration` (`--table`/`--all-tables`), `disconnections`, `coloring`, `claims`, `decompose`
+- **WS2/WS3/WS4**: `bit-bias`, `kras` (`--offline`), `trna`
+- **WS6 / topology avoidance**: `topology-avoidance`, `topology-avoidance-k43`, `condlogit`, `condlogit-restricted`, `phylo-sensitivity`, `codonsafe`
+- **Robustness sweeps**: `rho-sweep`, `per-table`, `metric-sensitivity`, `mis-analysis`
+- **`all`**: runs every analysis, writes CSV/JSON to `--output-dir` (default `./output`) and refreshes `manuscript_stats.json`
 
 ## Workstreams (WS1-WS6)
 
