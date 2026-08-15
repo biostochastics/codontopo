@@ -1,0 +1,1281 @@
+{
+  "sign_test": {
+    "n_pairings": 24,
+    "n_with_elevated_trna": 17,
+    "binomial_p_value": 0.03195732831954956,
+    "mean_excess_trna_count": 7.541666666666667,
+    "hypothesis": "Disconnection organisms have more tRNA genes for reassigned AA than standard-code controls",
+    "pairings": [
+      {
+        "disconnection_organism": "Saccharomyces cerevisiae",
+        "disconnection_compartment": "mitochondrial",
+        "control_organism": "Yarrowia lipolytica",
+        "control_compartment": "mitochondrial",
+        "reassigned_aa": "Thr",
+        "disconnection_aa_trna_count": 2,
+        "control_aa_trna_count": 1,
+        "excess": 1,
+        "ratio": 2.0,
+        "source_disconnection": "PMC3113583 (Su et al. 2011 PNAS); yeast mito genome annotation",
+        "source_control": "NCBI RefSeq NC_002659 (Yarrowia lipolytica mito)"
+      },
+      {
+        "disconnection_organism": "Scenedesmus obliquus",
+        "disconnection_compartment": "mitochondrial",
+        "control_organism": "Chlamydomonas reinhardtii",
+        "control_compartment": "mitochondrial",
+        "reassigned_aa": "Leu",
+        "disconnection_aa_trna_count": 2,
+        "control_aa_trna_count": 1,
+        "excess": 1,
+        "ratio": 2.0,
+        "source_disconnection": "NCBI Scenedesmus obliquus mitochondrial genome; Knaap et al. 2002",
+        "source_control": "Chlamydomonas reinhardtii mitochondrial genome annotation"
+      },
+      {
+        "disconnection_organism": "Pachysolen tannophilus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Lachancea thermotolerans",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Ala",
+        "disconnection_aa_trna_count": 14,
+        "control_aa_trna_count": 11,
+        "excess": 3,
+        "ratio": 1.2727272727272727,
+        "source_disconnection": "Muhlhausen & Kollmar 2014, Genome Biology and Evolution",
+        "source_control": "GtRNAdb for Lachancea thermotolerans CBS 6340"
+      },
+      {
+        "disconnection_organism": "Candida albicans",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Lachancea thermotolerans",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Ser",
+        "disconnection_aa_trna_count": 16,
+        "control_aa_trna_count": 13,
+        "excess": 3,
+        "ratio": 1.2307692307692308,
+        "source_disconnection": "Candida Genome Database; Santos et al. 1996-2011 reviews",
+        "source_control": "GtRNAdb for Lachancea thermotolerans CBS 6340"
+      },
+      {
+        "disconnection_organism": "Tetrahymena thermophila",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 54,
+        "control_aa_trna_count": 3,
+        "excess": 51,
+        "ratio": 18.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000189635.1 (April 2026); Eisen et al. 2006 PLoS Biol 4:e286 (PMC1557398); Hanyu et al. 1986 EMBO J 5:1307-1311",
+        "source_control": "tRNAscan-SE 2.0.12 on GCF_000220395.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Paramecium tetraurelia",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 18,
+        "control_aa_trna_count": 3,
+        "excess": 15,
+        "ratio": 6.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000165425.1 (April 2026); Aury et al. 2006 Nature 444:171-178",
+        "source_control": "tRNAscan-SE 2.0.12 on GCF_000220395.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Tetrahymena thermophila",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 54,
+        "control_aa_trna_count": 11,
+        "excess": 43,
+        "ratio": 4.909090909090909,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000189635.1 (April 2026); Eisen et al. 2006 PLoS Biol 4:e286 (PMC1557398); Hanyu et al. 1986 EMBO J 5:1307-1311",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Paramecium tetraurelia",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 18,
+        "control_aa_trna_count": 11,
+        "excess": 7,
+        "ratio": 1.6363636363636365,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCF_000165425.1 (April 2026); Aury et al. 2006 Nature 444:171-178",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Oxytricha trifallax",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 8,
+        "control_aa_trna_count": 11,
+        "excess": -3,
+        "ratio": 0.7272727272727273,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_000295675.1 (April 2026); Swart et al. 2013 PLoS Biol 11:e1001473",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes octocarinatus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 5,
+        "control_aa_trna_count": 7,
+        "excess": -2,
+        "ratio": 0.7142857142857143,
+        "source_disconnection": "Meyer et al. 1991 PNAS 88:3758-3761; Grimm et al. 1998 NAR 26:4557; Wang et al. 2016 Sci Rep 6:21139 (genome/transcriptome)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Blepharisma japonicum",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Trp",
+        "disconnection_aa_trna_count": 5,
+        "control_aa_trna_count": 6,
+        "excess": -1,
+        "ratio": 0.8333333333333334,
+        "source_disconnection": "Liang & Heckmann 1993; Swart et al. 2016 Mol Biol Evol 33:2885 (code survey)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes aediculatus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 4,
+        "control_aa_trna_count": 7,
+        "excess": -3,
+        "ratio": 0.5714285714285714,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_030463445.1 (April 2026); Jin et al. 2023",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes aediculatus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 4,
+        "control_aa_trna_count": 1,
+        "excess": 3,
+        "ratio": 4.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_030463445.1 (April 2026); Jin et al. 2023",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Euplotes amieti",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 8,
+        "control_aa_trna_count": 7,
+        "excess": 1,
+        "ratio": 1.1428571428571428,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_048569255.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes focardii",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 3,
+        "control_aa_trna_count": 1,
+        "excess": 2,
+        "ratio": 3.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_001880345.2 (April 2026); Mozzicafreddo et al. 2021",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Euplotes parawoodruffi",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 9,
+        "control_aa_trna_count": 7,
+        "excess": 2,
+        "ratio": 1.2857142857142858,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_021440025.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Euplotes weissei",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 20,
+        "control_aa_trna_count": 1,
+        "excess": 19,
+        "ratio": 20.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_021440005.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Euplotes woodruffi",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Cys",
+        "disconnection_aa_trna_count": 4,
+        "control_aa_trna_count": 7,
+        "excess": -3,
+        "ratio": 0.5714285714285714,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_027382605.1 (April 2026)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Pseudocohnilembus persalinus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 20,
+        "control_aa_trna_count": 3,
+        "excess": 17,
+        "ratio": 6.666666666666667,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); Ensembl Protists",
+        "source_control": "tRNAscan-SE 2.0.12 on GCF_000220395.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Pseudocohnilembus persalinus",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 20,
+        "control_aa_trna_count": 3,
+        "excess": 17,
+        "ratio": 6.666666666666667,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_001447515.1 (April 2026); Ensembl Protists",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Halteria grandinella",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 9,
+        "control_aa_trna_count": 11,
+        "excess": -2,
+        "ratio": 0.8181818181818182,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_006369765.1 (April 2026); Zheng et al. MBE 2021 (PMID 33500338)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Halteria grandinella",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Gln",
+        "disconnection_aa_trna_count": 9,
+        "control_aa_trna_count": 3,
+        "excess": 6,
+        "ratio": 3.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_006369765.1 (April 2026); Zheng et al. MBE 2021 (PMID 33500338)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      },
+      {
+        "disconnection_organism": "Blepharisma stoltei",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Trp",
+        "disconnection_aa_trna_count": 6,
+        "control_aa_trna_count": 6,
+        "excess": 0,
+        "ratio": 1.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_965603825.1 (April 2026); Singh et al. PNAS 2023 (PMID 36669098)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_001970955.1 (April 2026)"
+      },
+      {
+        "disconnection_organism": "Blepharisma stoltei",
+        "disconnection_compartment": "nuclear",
+        "control_organism": "Fabrea salina",
+        "control_compartment": "nuclear",
+        "reassigned_aa": "Trp",
+        "disconnection_aa_trna_count": 6,
+        "control_aa_trna_count": 2,
+        "excess": 4,
+        "ratio": 3.0,
+        "source_disconnection": "tRNAscan-SE 2.0.12 on GCA_965603825.1 (April 2026); Singh et al. PNAS 2023 (PMID 36669098)",
+        "source_control": "tRNAscan-SE 2.0.12 on GCA_022984795.1 (April 2026); Zhang et al. 2022 MBE (PMID 35325184)"
+      }
+    ],
+    "caveat": "Small sample (n=4). Confirmed prior: Su et al. 2011 showed yeast mito tRNA-Thr2 derived from tRNA-His. This test extends the pattern and should be revisited with current GtRNAdb exports."
+  },
+  "fisher_stouffer": {
+    "per_pairing": [
+      {
+        "disconnection_key": "scerevisiae_mito",
+        "control_key": "ylipolytica_mito",
+        "reassigned_aa": "Thr",
+        "table": [
+          [
+            2,
+            21
+          ],
+          [
+            1,
+            19
+          ]
+        ],
+        "odds_ratio": 1.8095238095238095,
+        "fisher_p": 0.5535207843772789
+      },
+      {
+        "disconnection_key": "sobliquus_mito",
+        "control_key": "creinhardtii_mito",
+        "reassigned_aa": "Leu",
+        "table": [
+          [
+            2,
+            20
+          ],
+          [
+            1,
+            15
+          ]
+        ],
+        "odds_ratio": 1.5,
+        "fisher_p": 0.6206733048838312
+      },
+      {
+        "disconnection_key": "ptannophilus_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ala",
+        "table": [
+          [
+            14,
+            193
+          ],
+          [
+            11,
+            195
+          ]
+        ],
+        "odds_ratio": 1.2859161563824777,
+        "fisher_p": 0.3449437514865384
+      },
+      {
+        "disconnection_key": "calbicans_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ser",
+        "table": [
+          [
+            16,
+            191
+          ],
+          [
+            13,
+            193
+          ]
+        ],
+        "odds_ratio": 1.243656866693516,
+        "fisher_p": 0.35544017723799487
+      },
+      {
+        "disconnection_key": "tthermophila_nuclear",
+        "control_key": "imultifiliis_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            54,
+            658
+          ],
+          [
+            3,
+            138
+          ]
+        ],
+        "odds_ratio": 3.7750759878419453,
+        "fisher_p": 0.008426349137653201
+      },
+      {
+        "disconnection_key": "ptetraurelia_nuclear",
+        "control_key": "imultifiliis_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            18,
+            197
+          ],
+          [
+            3,
+            138
+          ]
+        ],
+        "odds_ratio": 4.2030456852791875,
+        "fisher_p": 0.010197632403706027
+      },
+      {
+        "disconnection_key": "tthermophila_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            54,
+            658
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 1.909919867366676,
+        "fisher_p": 0.03227019062953774
+      },
+      {
+        "disconnection_key": "ptetraurelia_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            18,
+            197
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 2.1264420858329487,
+        "fisher_p": 0.039602389780460684
+      },
+      {
+        "disconnection_key": "oxytricha_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            8,
+            82
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 2.270509977827051,
+        "fisher_p": 0.07513717580400886
+      },
+      {
+        "disconnection_key": "eoctocarinatus_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            5,
+            109
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 1.7038007863695936,
+        "fisher_p": 0.27175486262264137
+      },
+      {
+        "disconnection_key": "bjaponicum_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Trp",
+        "table": [
+          [
+            5,
+            110
+          ],
+          [
+            6,
+            261
+          ]
+        ],
+        "odds_ratio": 1.9772727272727273,
+        "fisher_p": 0.20969042225429652
+      },
+      {
+        "disconnection_key": "eaediculatus_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            4,
+            73
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 2.035225048923679,
+        "fisher_p": 0.214754701213773
+      },
+      {
+        "disconnection_key": "eaediculatus_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            4,
+            73
+          ],
+          [
+            1,
+            85
+          ]
+        ],
+        "odds_ratio": 4.657534246575342,
+        "fisher_p": 0.15104963621947606
+      },
+      {
+        "disconnection_key": "eamieti_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            8,
+            108
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 2.751322751322751,
+        "fisher_p": 0.04923189241625568
+      },
+      {
+        "disconnection_key": "efocardii_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            3,
+            56
+          ],
+          [
+            1,
+            85
+          ]
+        ],
+        "odds_ratio": 4.553571428571429,
+        "fisher_p": 0.18401786007419813
+      },
+      {
+        "disconnection_key": "eparawoodruffi_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            9,
+            136
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 2.457983193277311,
+        "fisher_p": 0.06540870533267415
+      },
+      {
+        "disconnection_key": "eweissei_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            20,
+            443
+          ],
+          [
+            1,
+            85
+          ]
+        ],
+        "odds_ratio": 3.8374717832957113,
+        "fisher_p": 0.13183920360874837
+      },
+      {
+        "disconnection_key": "ewoodruffi_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Cys",
+        "table": [
+          [
+            4,
+            75
+          ],
+          [
+            7,
+            260
+          ]
+        ],
+        "odds_ratio": 1.980952380952381,
+        "fisher_p": 0.2262660941963295
+      },
+      {
+        "disconnection_key": "ppersalinus_nuclear",
+        "control_key": "imultifiliis_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            20,
+            240
+          ],
+          [
+            3,
+            138
+          ]
+        ],
+        "odds_ratio": 3.8333333333333335,
+        "fisher_p": 0.015039153027039866
+      },
+      {
+        "disconnection_key": "ppersalinus_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            20,
+            240
+          ],
+          [
+            3,
+            83
+          ]
+        ],
+        "odds_ratio": 2.3055555555555554,
+        "fisher_p": 0.13166784854230562
+      },
+      {
+        "disconnection_key": "hgrandinella_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            9,
+            120
+          ],
+          [
+            11,
+            256
+          ]
+        ],
+        "odds_ratio": 1.7454545454545454,
+        "fisher_p": 0.16503463045029354
+      },
+      {
+        "disconnection_key": "hgrandinella_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Gln",
+        "table": [
+          [
+            9,
+            120
+          ],
+          [
+            3,
+            83
+          ]
+        ],
+        "odds_ratio": 2.075,
+        "fisher_p": 0.21819480924552223
+      },
+      {
+        "disconnection_key": "bstoltei_nuclear",
+        "control_key": "scoeruleus_nuclear",
+        "reassigned_aa": "Trp",
+        "table": [
+          [
+            6,
+            160
+          ],
+          [
+            6,
+            261
+          ]
+        ],
+        "odds_ratio": 1.63125,
+        "fisher_p": 0.2894176130312396
+      },
+      {
+        "disconnection_key": "bstoltei_nuclear",
+        "control_key": "fsalina_nuclear",
+        "reassigned_aa": "Trp",
+        "table": [
+          [
+            6,
+            160
+          ],
+          [
+            2,
+            84
+          ]
+        ],
+        "odds_ratio": 1.575,
+        "fisher_p": 0.4469256093780069
+      }
+    ],
+    "p_values": [
+      0.5535207843772789,
+      0.6206733048838312,
+      0.3449437514865384,
+      0.35544017723799487,
+      0.008426349137653201,
+      0.010197632403706027,
+      0.03227019062953774,
+      0.039602389780460684,
+      0.07513717580400886,
+      0.27175486262264137,
+      0.20969042225429652,
+      0.214754701213773,
+      0.15104963621947606,
+      0.04923189241625568,
+      0.18401786007419813,
+      0.06540870533267415,
+      0.13183920360874837,
+      0.2262660941963295,
+      0.015039153027039866,
+      0.13166784854230562,
+      0.16503463045029354,
+      0.21819480924552223,
+      0.2894176130312396,
+      0.4469256093780069
+    ],
+    "z_scores": [
+      -0.13456169221965825,
+      -0.30724960594289474,
+      0.39900773755831626,
+      0.37067400461794614,
+      2.389905721702146,
+      2.318995786223262,
+      1.84842848413559,
+      1.7553188757785037,
+      1.438563085324157,
+      0.6075141948902947,
+      0.8074958847304229,
+      0.7900314484420471,
+      1.031942035411914,
+      1.6523472375236001,
+      0.9001588524508634,
+      1.5108863442206326,
+      1.1177391725141983,
+      0.7512001858435572,
+      2.1690576674476736,
+      1.11854172348893,
+      0.9739743786949607,
+      0.7783043384148506,
+      0.5550868950312501,
+      0.1334326582761964
+    ],
+    "stouffer_z": 5.098367014629634,
+    "stouffer_p": 1.7129804374960145e-07,
+    "stouffer_z_independent": 2.1314491214946427,
+    "stouffer_p_independent": 0.01652607987435928,
+    "n_independent_pairings": 6,
+    "n_pairings": 24,
+    "method": "Fisher's exact (one-sided) per pairing, Stouffer's Z combination",
+    "caveat": "Pairings are not fully independent (some share control organisms). The stouffer_p_independent field uses only pairings with no shared organisms."
+  },
+  "mis_analysis": {
+    "n_pairings": 24,
+    "n_mis_total": 332,
+    "n_mis_size_ge2": 332,
+    "median_stouffer_p": 0.04580633417284696,
+    "worst_case_stouffer_p": 0.12323569627764963,
+    "best_case_stouffer_p": 0.016156701999232914,
+    "fraction_significant_p05": 0.572289156626506,
+    "fraction_significant_p01": 0.0,
+    "best_mis": {
+      "mis_indices": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        19
+      ],
+      "mis_size": 6,
+      "pairings": [
+        "scerevisiae_mito vs ylipolytica_mito (Thr)",
+        "sobliquus_mito vs creinhardtii_mito (Leu)",
+        "ptannophilus_nuclear vs lthermotolerans_nuclear (Ala)",
+        "ptetraurelia_nuclear vs imultifiliis_nuclear (Gln)",
+        "tthermophila_nuclear vs scoeruleus_nuclear (Gln)",
+        "ppersalinus_nuclear vs fsalina_nuclear (Gln)"
+      ],
+      "fisher_p_values": [
+        0.5535207843772789,
+        0.6206733048838312,
+        0.3449437514865384,
+        0.010197632403706027,
+        0.03227019062953774,
+        0.13166784854230562
+      ],
+      "stouffer_z": 2.140512099996026,
+      "stouffer_p": 0.016156701999232914
+    },
+    "worst_mis": {
+      "mis_indices": [
+        0,
+        1,
+        3,
+        9,
+        18,
+        23
+      ],
+      "mis_size": 6,
+      "pairings": [
+        "scerevisiae_mito vs ylipolytica_mito (Thr)",
+        "sobliquus_mito vs creinhardtii_mito (Leu)",
+        "calbicans_nuclear vs lthermotolerans_nuclear (Ser)",
+        "eoctocarinatus_nuclear vs scoeruleus_nuclear (Cys)",
+        "ppersalinus_nuclear vs imultifiliis_nuclear (Gln)",
+        "bstoltei_nuclear vs fsalina_nuclear (Trp)"
+      ],
+      "fisher_p_values": [
+        0.5535207843772789,
+        0.6206733048838312,
+        0.35544017723799487,
+        0.27175486262264137,
+        0.015039153027039866,
+        0.4469256093780069
+      ],
+      "stouffer_z": 1.1589626923050342,
+      "stouffer_p": 0.12323569627764963
+    },
+    "all_mis_p_values": [
+      0.016156701999232914,
+      0.016169931268470328,
+      0.01652607987435928,
+      0.01653956771522269,
+      0.016629409604489886,
+      0.01664296958267153,
+      0.017008002098874764,
+      0.017021825663282475,
+      0.01763878168582267,
+      0.018036884592729452,
+      0.018148227144114015,
+      0.01833536526506574,
+      0.01835010430817874,
+      0.018556094424381553,
+      0.01880994002610381,
+      0.018861868183848496,
+      0.018876966750325685,
+      0.019347990515836133,
+      0.01967718479613878,
+      0.019692836225969623,
+      0.019985089947682333,
+      0.020116064249385612,
+      0.020236188349979645,
+      0.020252216190708827,
+      0.020479443781298512,
+      0.020551487393865808,
+      0.020561154370488555,
+      0.020627369721414213,
+      0.02068559979882445,
+      0.021057663997441467,
+      0.021094046105971542,
+      0.021110647536018656,
+      0.02114132306965888,
+      0.021209116231437286,
+      0.021428133106457525,
+      0.021686883336532015,
+      0.0217038783615795,
+      0.022028878698521326,
+      0.022431639396503056,
+      0.022604153423239404,
+      0.022621753078554185,
+      0.022635154839000027,
+      0.022652774838541445,
+      0.022663304933858264,
+      0.02273627643215126,
+      0.02280836205712322,
+      0.02295032444373013,
+      0.023055986072740287,
+      0.023155493529104287,
+      0.023232534642978253,
+      0.023250545527632838,
+      0.02326426038464391,
+      0.02328229196853815,
+      0.023287444712411065,
+      0.023293068003008788,
+      0.023367743141876396,
+      0.02344151057837618,
+      0.023586781732640172,
+      0.023796725023008558,
+      0.023931741850904298,
+      0.024237230078957395,
+      0.02425589358994018,
+      0.024344338004450905,
+      0.02457103837992125,
+      0.024604293272808664,
+      0.024771070478941115,
+      0.02490348439606027,
+      0.024922577472183183,
+      0.025013056567844805,
+      0.025244964846249718,
+      0.025278982801479,
+      0.025449583437823664,
+      0.025461157828017167,
+      0.025557693511733093,
+      0.026037965894470383,
+      0.02611874074580367,
+      0.026155431333510504,
+      0.026165621860468002,
+      0.026254164126499835,
+      0.02632191747627355,
+      0.02674533988630423,
+      0.026827944075702104,
+      0.026875886340334665,
+      0.0270357166041989,
+      0.027330514006547513,
+      0.0278384133411691,
+      0.027875327067356404,
+      0.027960831156501498,
+      0.028060436506942787,
+      0.02806700983175492,
+      0.028315701537655724,
+      0.02856029290901596,
+      0.028586265839136038,
+      0.02862400309087798,
+      0.02871141376431663,
+      0.028813238432850552,
+      0.029074182744546095,
+      0.02919498790798991,
+      0.02932420477643516,
+      0.029780403507104425,
+      0.029972941583327195,
+      0.030285159087172775,
+      0.03057124524367605,
+      0.031087065004688386,
+      0.031174211795106155,
+      0.031214761367709398,
+      0.031418085790653194,
+      0.03198817153031597,
+      0.03199549921416045,
+      0.032036929578887374,
+      0.03224466632506162,
+      0.032827086703627106,
+      0.033305929851859206,
+      0.03416541686847807,
+      0.03417315309572477,
+      0.03495706771320628,
+      0.034982366501302264,
+      0.035050953996914935,
+      0.03572570242135076,
+      0.035859371298757714,
+      0.03588520430168729,
+      0.036644193226326616,
+      0.03725103414994857,
+      0.037277684481004436,
+      0.037774874876713604,
+      0.038108393453101685,
+      0.038201386535736015,
+      0.03822859051013516,
+      0.038736090880795215,
+      0.039076505546617124,
+      0.040217857212056174,
+      0.04053579598450563,
+      0.04056434490890648,
+      0.04107519620032729,
+      0.041160749288664866,
+      0.04118965475350467,
+      0.041229223562313067,
+      0.041553628349511595,
+      0.04158275721041138,
+      0.04187949451517614,
+      0.04210396722531862,
+      0.0421912516766505,
+      0.04222074188845215,
+      0.04241604745702021,
+      0.0425367441715947,
+      0.042578309005726345,
+      0.042608017845201296,
+      0.04292450384713886,
+      0.04312193017541399,
+      0.04315194516303544,
+      0.04347184193432274,
+      0.04359495955721626,
+      0.04363735765020682,
+      0.04366766193113869,
+      0.04371178474541082,
+      0.0437789116674594,
+      0.04380929523299426,
+      0.04419185626879796,
+      0.044222470721014484,
+      0.0447934703295747,
+      0.04486193269240557,
+      0.04489292052810068,
+      0.045098137039403796,
+      0.045268622918467116,
+      0.045299836611860655,
+      0.045778410917007295,
+      0.04580633417284696,
+      0.045881991534420075,
+      0.04620728760658699,
+      0.04638113436880109,
+      0.04641296300495723,
+      0.046459304729869255,
+      0.046758431326994865,
+      0.046900950671237784,
+      0.046929422295939216,
+      0.04700656496868638,
+      0.04759518899945259,
+      0.04790016022229171,
+      0.0481702491979501,
+      0.04820305804198555,
+      0.04862915301140691,
+      0.0487378712257861,
+      0.04892700714628784,
+      0.049062382337535126,
+      0.04933941877240067,
+      0.04937286248979045,
+      0.049653998291177226,
+      0.049790976558958255,
+      0.049807191201606815,
+      0.04991800685289094,
+      0.050110788377048854,
+      0.05024877037579345,
+      0.05035134829530008,
+      0.050385337954454656,
+      0.05059421969795663,
+      0.050851753690357215,
+      0.05099135812080202,
+      0.05113877374747633,
+      0.05117318598521381,
+      0.051218590611542325,
+      0.051301314199604375,
+      0.05144189956834044,
+      0.05156245100901102,
+      0.05159708981426436,
+      0.05160457340926383,
+      0.05180995797365473,
+      0.05181487500720472,
+      0.05193243232806166,
+      0.0523648814108566,
+      0.05239994780450219,
+      0.052446215342135116,
+      0.05253051049134261,
+      0.05267376490716913,
+      0.05269471107842427,
+      0.05272503113370841,
+      0.05283952439462836,
+      0.053053810687202385,
+      0.05317359328657467,
+      0.05342576294027912,
+      0.05346139161802144,
+      0.053950264384668434,
+      0.05398115558169592,
+      0.054125718128807065,
+      0.05418083854476974,
+      0.05442141061106087,
+      0.054695059175618566,
+      0.054731356145658716,
+      0.05473919793625204,
+      0.05480317184626993,
+      0.05495955887120396,
+      0.05496911403783289,
+      0.05512380482048729,
+      0.05524390909685395,
+      0.055408118415398944,
+      0.055464268516114856,
+      0.055709330814026514,
+      0.0560330401061474,
+      0.056098204870122736,
+      0.05625750116030459,
+      0.05626723399746192,
+      0.0564247997838474,
+      0.05654713451184801,
+      0.0567542732149926,
+      0.05738011250514996,
+      0.057437831638763925,
+      0.05777778770295572,
+      0.05793222823364863,
+      0.05808541844126258,
+      0.05808944761828305,
+      0.05826317998509378,
+      0.058722757328418584,
+      0.058769565881289676,
+      0.058781535007075614,
+      0.05912771881679302,
+      0.05928498469286514,
+      0.05944507776939023,
+      0.05960987960933506,
+      0.05962198274072106,
+      0.060131672681076664,
+      0.060137598579274365,
+      0.06029498580586157,
+      0.060454678027870856,
+      0.060993172007509644,
+      0.061202582886392465,
+      0.06151200100489329,
+      0.06152440523194158,
+      0.06169066744823193,
+      0.06185324083602761,
+      0.061861873630476794,
+      0.06210444716932595,
+      0.06261460611951264,
+      0.06292957704337376,
+      0.06328571729085719,
+      0.0635326293568409,
+      0.06375954019761454,
+      0.06383518529260845,
+      0.06476707875737775,
+      0.06483052802181433,
+      0.06521717420078799,
+      0.06529415916464221,
+      0.06554669918436762,
+      0.06573760148892127,
+      0.06624251480615317,
+      0.06630708197082269,
+      0.06647689988542549,
+      0.06703584531195972,
+      0.06723009618073228,
+      0.06745596419206712,
+      0.06778966320745061,
+      0.06798233083265282,
+      0.06896489484333035,
+      0.06897845016011706,
+      0.06931794231404775,
+      0.07029381523542644,
+      0.0705134970028436,
+      0.07185126131398545,
+      0.07186525073692751,
+      0.07344926049133838,
+      0.07581500771582317,
+      0.07747968042076525,
+      0.07891694755543,
+      0.07922593197268246,
+      0.08063289166942034,
+      0.08094694074249698,
+      0.08358589865260968,
+      0.08537757237161003,
+      0.0897440379871306,
+      0.0909049432867357,
+      0.09163305605262795,
+      0.09281199986178446,
+      0.09339470179096498,
+      0.09352601598754173,
+      0.09452678399753589,
+      0.09534011987932578,
+      0.09547344514268952,
+      0.09573305858653958,
+      0.09648950011062718,
+      0.0977141080356847,
+      0.09845565773848253,
+      0.10047771803702843,
+      0.10371014738773088,
+      0.10525358485718872,
+      0.10580994728511417,
+      0.10655811064932119,
+      0.10737587502797741,
+      0.10869929003518153,
+      0.10902276177241688,
+      0.10950039165910086,
+      0.11119933290896522,
+      0.11168377711611432,
+      0.12089389635755943,
+      0.12323569627764963
+    ],
+    "method": "Bron-Kerbosch enumeration of all maximal independent sets from the conflict graph (edges = shared organisms). Stouffer's Z combination computed for each MIS with >=2 members.",
+    "interpretation": "Not robust: worst-case MIS p = 0.1232, median MIS p = 0.0458, 190/332 MIS significant at p<0.05."
+  },
+  "topology_breaking_subset": {
+    "method": "Topology-breaking subset of the tRNA-enrichment analysis. Restricts the 24-pairing all-pairings analysis to the 4 pairings whose underlying variant-code reassignment creates a new amino-acid disconnection in GF(2)^6 (yeast mito Thr, Scenedesmus mito Leu, Pachysolen Ala, Candida Ser); more direct test of the compensation-via-tRNA-duplication hypothesis.",
+    "n_pairings": 4,
+    "per_pairing": [
+      {
+        "disconnection_key": "scerevisiae_mito",
+        "control_key": "ylipolytica_mito",
+        "reassigned_aa": "Thr",
+        "table_id_lineage": "table_3_yeast_mito",
+        "table": [
+          [
+            2,
+            21
+          ],
+          [
+            1,
+            19
+          ]
+        ],
+        "odds_ratio": 1.8095238095238095,
+        "fisher_p": 0.5535207843772789
+      },
+      {
+        "disconnection_key": "sobliquus_mito",
+        "control_key": "creinhardtii_mito",
+        "reassigned_aa": "Leu",
+        "table_id_lineage": "table_22_scenedesmus_mito",
+        "table": [
+          [
+            2,
+            20
+          ],
+          [
+            1,
+            15
+          ]
+        ],
+        "odds_ratio": 1.5,
+        "fisher_p": 0.6206733048838312
+      },
+      {
+        "disconnection_key": "ptannophilus_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ala",
+        "table_id_lineage": "table_26_pachysolen_nuclear",
+        "table": [
+          [
+            14,
+            193
+          ],
+          [
+            11,
+            195
+          ]
+        ],
+        "odds_ratio": 1.2859161563824777,
+        "fisher_p": 0.3449437514865384
+      },
+      {
+        "disconnection_key": "calbicans_nuclear",
+        "control_key": "lthermotolerans_nuclear",
+        "reassigned_aa": "Ser",
+        "table_id_lineage": "table_12_candida_nuclear",
+        "table": [
+          [
+            16,
+            191
+          ],
+          [
+            13,
+            193
+          ]
+        ],
+        "odds_ratio": 1.243656866693516,
+        "fisher_p": 0.35544017723799487
+      }
+    ],
+    "stouffer_z_topology_breaking": 0.1639352220068547,
+    "stouffer_p_topology_breaking": 0.43489106951522516,
+    "caveat": "Sample size n=4 is small; this is a restricted subset analysis. Reported alongside the all-pairings result for transparency. Some pairings use literature/GtRNAdb counts rather than tRNAscan-SE-verified counts; see tRNARepertoire.source field."
+  }
+}

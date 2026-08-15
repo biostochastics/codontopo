@@ -1,0 +1,35 @@
+{
+  "syn57": {
+    "total_deviations": 727,
+    "genuine_deviations": 326,
+    "genes_removed": 401,
+    "n_better": 76,
+    "n_worse": 87,
+    "n_same": 163,
+    "proportion_better": 0.4663,
+    "ci_95_lo": 0.3998,
+    "ci_95_hi": 1.0,
+    "binomial_p": 0.8264,
+    "mean_delta_local": 1.98,
+    "median_delta_local": 0.0,
+    "mean_hamming": 1.21,
+    "n_reversions": 2
+  },
+  "ostrov": {
+    "n_segments": 87,
+    "n_with_fitness": 44,
+    "n_problem": 13,
+    "n_normal": 74,
+    "rho_essential_recoded_vs_dt": 0.3445,
+    "p_essential_recoded_vs_dt": 0.022,
+    "p_bonferroni_essential": 0.0661,
+    "rho_total_recoded_vs_dt": -0.097,
+    "p_total_recoded_vs_dt": 0.5311,
+    "p_bonferroni_total": 1.0,
+    "mw_essential_problem_mean": 73.5,
+    "mw_essential_normal_mean": 39.8,
+    "mw_p": 0.0864,
+    "mw_p_bonferroni": 0.2591,
+    "n_with_reversions": 17
+  }
+}

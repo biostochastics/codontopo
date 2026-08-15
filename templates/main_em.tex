@@ -1,0 +1,107 @@
+% Elsevier Editorial Manager (EM) build target -- pdflatex-compatible.
+%
+% EM runs TeX Live 2022 with pdflatex by default and often ignores the
+% `%!TEX TS-program = xelatex` directive, so this wrapper deliberately
+% avoids XeTeX-only packages (fontspec, unicode-math). Table column
+% widths use `calc` + `\linewidth` which are engine-agnostic. The
+% companion `main.tex` (in the same directory) uses XeLaTeX for the
+% local publication-quality build; both compile the same body.
+
+\documentclass[preprint,11pt,authoryear,a4paper]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}       % Latin Modern -- same metrics as Computer Modern
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage[capitalise,nameinlink]{cleveref}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{multirow}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\setlength{\parindent}{1.5em}
+
+% Map the handful of glyphs that survive postprocess_tex.py's
+% ensuremath step. Use \DeclareUnicodeCharacter (inputenc's native API)
+% rather than \newunicodechar so we don't emit "Redefining Unicode
+% character" warnings for §, –, †, ‡ that inputenc already handles.
+\DeclareUnicodeCharacter{25AB}{\ensuremath{\,\square\,}}  % ▫
+\DeclareUnicodeCharacter{03C1}{\ensuremath{\rho}}         % ρ
+\DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}       % Δ
+\DeclareUnicodeCharacter{00A7}{\S}                        % §
+\DeclareUnicodeCharacter{2013}{--}                        % –
+\DeclareUnicodeCharacter{2020}{\textsuperscript{\dag}}    % †
+\DeclareUnicodeCharacter{2021}{\textsuperscript{\ddag}}   % ‡
+
+% Pandoc compatibility shims.
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\providecommand{\textsubscript}[1]{\ensuremath{_{\text{#1}}}}
+\providecommand{\real}[1]{#1}
+
+% Editorial Manager only accepts TIFF for the "Figure" item type, but
+% pdflatex cannot embed TIFF via \includegraphics.  The typesetter
+% inserts the actual figure at production; here we render a placeholder
+% box that names the TIFF file, so reviewers know which upload belongs
+% at each position.
+\newcommand{\emfig}[1]{%
+  \fbox{\parbox[c][4.5cm][c]{0.75\linewidth}{%
+    \centering
+    \textit{Figure to be inserted at production:}\\[6pt]%
+    \texttt{#1.tif}%
+  }}%
+}
+
+\journal{BioSystems}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Robust error-minimization in the genetic code across physicochemical metrics and variant codes: a graph-theoretic analysis in $\mathrm{GF}(2)^6$}
+
+\author[lc]{Paul Clayworth\fnref{eq}}
+\author[bs]{Sergey Kornilov\corref{cor}\fnref{eq}}
+
+\affiliation[lc]{organization={Logocentricity Inc.}, addressline={Austin, TX}, country={USA}}
+\affiliation[bs]{organization={Biostochastics, LLC}, addressline={Seattle, WA}, country={USA}}
+
+\cortext[cor]{Corresponding author. \texttt{sergey@biostochastics.com}}
+\fntext[eq]{Equal contribution.}
+
+\begin{abstract}
+The standard genetic code reduces the impact of point mutations, but the robustness of this property across physicochemical metrics, naturally variant codes, and codon-reassignment mechanisms remains incompletely quantified. Embedding the 64 codons in $\mathrm{GF}(2)^6$ represents the hypercube $Q_6$ as a coordinate-dependent subgraph of the encoding-independent single-nucleotide mutation graph $H(3,4)$, and enables continuous $\rho$-interpolation between the two. Under a block-preserving null ($n = 10{,}000$), the standard code is significantly low-cost across four established, code-independent physicochemical distance metrics with partially overlapping content (Grantham $p = 0.006$; Miyata $p < 0.001$; Woese polar requirement $p = 0.003$; Kyte--Doolittle hydropathy $p = 0.001$), and the signal strengthens monotonically as $\rho$ moves $Q_6 \to H(3,4)$. A structure-aware sensitivity analysis under the alignment-derived ProtSub matrix (Jia \& Jernigan 2021) yields the most extreme percentile of any measure tested ($p = 0.0004$; all five p-values pass Bonferroni at $\alpha = 0.05$). Across the 27 NCBI translation tables, near-optimality is preserved: 11 of 12 informative-distance variants retain top-5\% placement after BH--FDR correction. Natural codon reassignments avoid disrupting codon-family connectivity: under $H(3,4)$, observed events are topology-breaking at relative risk $0.32$ versus the candidate landscape (permutation $p \leq 10^{-4}$), robust to alternative topology definitions and base-to-bit encodings. Event-level conditional-logit modelling shows that topology avoidance and local physicochemical cost provide complementary, only weakly correlated signal ($r_s = 0.15$), and that topology adds explanatory value beyond physicochemistry under both $Q_6$ and encoding-independent $H(3,4)$ adjacency. Retrospective reanalysis of nine genome-recoding datasets is consistent with codon-family topology operating as an evolutionary-trajectory constraint distinct from acute engineering fitness. The contribution is the second axis: code evolution is jointly constrained by physicochemical smoothness and codon-family topological integrity, and these two constraints are partly independent.
+\end{abstract}
+
+\begin{keyword}
+genetic code evolution \sep error minimization \sep $\mathrm{GF}(2)^6$ representation \sep codon reassignment \sep physicochemical distance \sep codon-family topology \sep conditional logit
+\end{keyword}
+
+\begin{highlights}
+\item Codon-space geometry links genetic-code robustness and reassignment paths
+\item Standard and variant codes preserve broad physicochemical error minimization
+\item Reassignments are depleted for codon-family topology-breaking moves
+\item Conditional-logit models separate topology from physicochemical similarity
+\item Synthetic recoding shows boundary conditions for natural-code constraints
+\end{highlights}
+
+\end{frontmatter}
+
+\input{manuscript_body_em.tex}
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{references}
+
+\end{document}

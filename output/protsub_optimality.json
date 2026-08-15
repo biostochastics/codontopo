@@ -1,0 +1,18 @@
+{
+  "metric": "protsub",
+  "null_type": "freeland_hurst",
+  "include_stops": true,
+  "observed_score": 1089.5,
+  "null_mean": 1180.1953,
+  "null_std": 29.721914425718154,
+  "null_min": 1075.5,
+  "null_max": 1288.5,
+  "quantile_of_observed": 0.04,
+  "n_beaten_observed": 4,
+  "n_samples": 10000,
+  "p_value_raw": 0.0004,
+  "p_value_conservative": 0.0004999500049995,
+  "p_value_lower_bound": 9.999000099990002e-05,
+  "effect_size_z": 3.0514622544475842,
+  "interpretation": "Strongly optimal (p < 0.0010, bounded by sample size)"
+}

@@ -1,0 +1,64 @@
+{
+  "metrics": [
+    "grantham",
+    "miyata",
+    "polar_requirement",
+    "kyte_doolittle",
+    "protsub"
+  ],
+  "n_null_codes": 2000,
+  "F_spearman_rho_matrix": {
+    "grantham": {
+      "grantham": 1.0,
+      "miyata": 0.8451,
+      "polar_requirement": 0.7501,
+      "kyte_doolittle": 0.7117,
+      "protsub": 0.8319
+    },
+    "miyata": {
+      "grantham": 0.8451,
+      "miyata": 1.0,
+      "polar_requirement": 0.8734,
+      "kyte_doolittle": 0.8903,
+      "protsub": 0.8183
+    },
+    "polar_requirement": {
+      "grantham": 0.7501,
+      "miyata": 0.8734,
+      "polar_requirement": 1.0,
+      "kyte_doolittle": 0.7772,
+      "protsub": 0.7358
+    },
+    "kyte_doolittle": {
+      "grantham": 0.7117,
+      "miyata": 0.8903,
+      "polar_requirement": 0.7772,
+      "kyte_doolittle": 1.0,
+      "protsub": 0.7937
+    },
+    "protsub": {
+      "grantham": 0.8319,
+      "miyata": 0.8183,
+      "polar_requirement": 0.7358,
+      "kyte_doolittle": 0.7937,
+      "protsub": 1.0
+    }
+  },
+  "F_offdiagonal_min": 0.7117,
+  "F_offdiagonal_median": 0.8183,
+  "F_offdiagonal_max": 0.8903,
+  "partial_spearman_rho": {
+    "grantham_vs_miyata": 0.4827,
+    "grantham_vs_polar_requirement": 0.0344,
+    "grantham_vs_kyte_doolittle": -0.3074,
+    "grantham_vs_protsub": 0.5391,
+    "miyata_vs_polar_requirement": 0.4975,
+    "miyata_vs_kyte_doolittle": 0.6251,
+    "miyata_vs_protsub": -0.0545,
+    "polar_requirement_vs_kyte_doolittle": 0.0103,
+    "polar_requirement_vs_protsub": 0.0755,
+    "kyte_doolittle_vs_protsub": 0.3885
+  },
+  "n_partials_independent": 4,
+  "n_partial_pairs_total": 10
+}

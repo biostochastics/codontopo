@@ -1,0 +1,7 @@
+aa,table_id,table_name,reconnect_eps,age_mya_low,age_mya_high,age_midpoint_mya,lineage
+Ser,1,Universal (all tables),4,3500.0,4000.0,3750.0,"Pre-LUCA, all domains of life"
+Thr,3,Yeast Mitochondrial,2,200.0,300.0,250.0,Saccharomycetales (budding yeasts)
+Leu,16,Chlorophycean Mito,2,500.0,700.0,600.0,Chlorophyceae (green algae)
+Leu,22,Scenedesmus obliquus Mito,2,500.0,700.0,600.0,Chlorophyceae (Scenedesmus)
+Ala,26,Pachysolen tannophilus Nuclear,3,100.0,200.0,150.0,CUG clade (Pachysolen)
+Ser,12,Alternative Yeast Nuclear,3,100.0,200.0,150.0,CUG clade (Candida)

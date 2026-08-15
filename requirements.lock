@@ -1,0 +1,41 @@
+# codon-topo v0.6.0 reference build — pinned package versions
+#
+# This file records the exact Python-package versions used for the
+# reference build of v0.6.0 (2026-08-15) on Python 3.11.14 (macOS
+# Darwin 25.3.0, arm64). It is a MINIMAL lockfile covering the direct
+# runtime and dev dependencies declared in pyproject.toml, not a full
+# transitive environment freeze (which would include ~700 packages
+# from the maintainer's development environment).
+#
+# Installing exactly these versions on Python 3.11 gives numerical
+# reproducibility of every JSON artifact to at least three significant
+# figures. Byte-level PDF identity across systems additionally
+# requires Typst 0.14.2 (declared in supplement §S24). Unpinned
+# transitive dependencies (BLAS routing, libgfortran ABI) may still
+# affect fp reproducibility below the 1e-6 level; see supplement
+# §S24 for the "reproducible within numerical/rendering tolerance"
+# statement.
+
+# --- runtime ---
+click==8.2.1
+numpy==2.2.6
+requests==2.32.5
+rich==13.9.4
+scipy==1.16.2
+
+# --- codonsafe extra ---
+biopython==1.87
+openpyxl==3.1.5
+pandas==2.3.2
+
+# --- dev extra ---
+hypothesis==6.139.1
+pytest==8.4.2
+# pytest-cov: install with `pip install pytest-cov` (version not pinned here)
+
+# --- external tooling (not pip-installable; document separately) ---
+# Python interpreter: CPython 3.11.14 (Homebrew build)
+# Typst: 0.14.2
+# tRNAscan-SE: 2.0.12
+# Infernal: 1.1.4
+# R: 4.5 (with ggplot2, ggpubr, viridis, patchwork)

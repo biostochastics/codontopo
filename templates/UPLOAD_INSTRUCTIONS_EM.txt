@@ -1,0 +1,106 @@
+EDITORIAL MANAGER UPLOAD CHECKLIST
+==================================
+
+Every file needs an "Item Type" dropdown selection in EM's upload UI.
+The item type is what tells EM whether a file gets deployed to the
+compile working directory. Files tagged as "LaTeX source files" are
+archived but NOT placed where pdflatex can see them.
+
+Your last EM build showed every citation as "(?, ?)" because
+manuscript.bbl was not in the compile working directory. That is fixed
+by tagging the .bbl as "Manuscript" (see checklist below), NOT as
+"LaTeX source files".
+
+-----------------------------------------------------------------------
+PER-FILE ITEM TYPE
+-----------------------------------------------------------------------
+
+  manuscript.tex          -> Manuscript (or Revised Manuscript)
+  manuscript.bbl          -> Manuscript          <-- CITATIONS FIX
+  supplement.tex          -> Supplementary Material  (or Manuscript
+                             if EM has no separate slot)
+  supplement.bbl          -> Supplementary Material  (or Manuscript)
+  references.bib          -> Manuscript
+  elsarticle.cls          -> Optional; only include if EM's log ever
+                             complains about elsarticle. Their system
+                             ships 2024/04/04 v3.4 which works with our
+                             source. If included, tag as Manuscript.
+
+  All figure files (*.tif from ../figures_tiff/):
+                          -> Figure  (one upload per file)
+
+  manuscript_reference.pdf -> DO NOT UPLOAD (local reference only)
+  supplement_reference.pdf -> DO NOT UPLOAD (local reference only)
+  UPLOAD_INSTRUCTIONS.txt  -> DO NOT UPLOAD (this file)
+
+-----------------------------------------------------------------------
+WHY THE .TEX DOES NOT \includegraphics{...} THE FIGURES
+-----------------------------------------------------------------------
+
+pdflatex (EM's default engine) cannot render TIFF via \includegraphics.
+Every Elsevier LaTeX guide confirms this: TIFFs are the required format
+for the Figure item type, but the .tex file must NOT reference them
+inside \includegraphics{...} because the compile will fail with
+"Unknown graphics extension: .tif".
+
+So instead, our .tex contains \emfig{Fig1\_core\_topology} calls that
+render a bordered placeholder box naming the TIFF file that belongs at
+each position. The typesetter reads those placeholders, matches them to
+your uploaded TIFFs (by filename), and inserts the actual figures at
+production. This is standard Elsevier practice.
+
+Reviewers see:
+    +--------------------------------------------+
+    |                                            |
+    |     Figure to be inserted at production:   |
+    |          Fig1_core_topology.tif            |
+    |                                            |
+    +--------------------------------------------+
+    Figure 1: [caption text]
+
+-----------------------------------------------------------------------
+WHAT NOT TO DO
+-----------------------------------------------------------------------
+
+  * Do NOT tag manuscript.bbl or references.bib as "LaTeX source
+    files".  That item type makes EM ignore the file at compile time
+    -- which is exactly why your last build showed every citation
+    as "(?, ?)".
+
+  * Do NOT upload a PDF version as revision -- the journal has stated
+    PDF is not accepted for revisions.
+
+  * Do NOT rename the TIFFs.  The placeholders in the .tex point to
+    specific filenames (Fig1_core_topology.tif, etc.); the typesetter
+    matches by filename.
+
+-----------------------------------------------------------------------
+DIAGNOSTIC: IF THE NEXT BUILD STILL SHOWS PROBLEMS
+-----------------------------------------------------------------------
+
+Open EM's built PDF and search (Ctrl-F) for:
+
+  "No file manuscript.bbl"   -> the .bbl is still not deployed.
+                                Delete + re-upload as Manuscript
+                                item type.
+
+  "Citation ... undefined"   -> the .bbl was found but empty. Verify
+                                the .bbl in your upload matches the
+                                one in this package.
+
+  "Undefined control sequence"  -> real TeX error. Send full log
+                                to the corresponding author.
+
+-----------------------------------------------------------------------
+WHAT SUCCESS LOOKS LIKE
+-----------------------------------------------------------------------
+
+A successful build produces a ~26-page manuscript PDF where:
+  - every (author, year) parenthetical is rendered (no "?" anywhere),
+  - every \Cref{...} resolves to "Section 3.2", "Table 4", etc.,
+  - all figure positions show a placeholder box naming the TIFF,
+  - the reference list at the end has 40+ entries.
+
+If you see all four of those, the submission is correct. The typesetter
+will replace the placeholder boxes with your uploaded TIFFs at
+production.

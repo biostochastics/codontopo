@@ -1,0 +1,14 @@
+{
+  "observed_S": 0.7514309076042518,
+  "n_null": 10000,
+  "null_mean": 0.23833720359771055,
+  "null_std": 0.016919007955990252,
+  "null_min": 0.2019623875715454,
+  "null_max": 0.3327882256745707,
+  "z_score": 30.32646508242099,
+  "fraction_null_at_or_above_observed": 0.0,
+  "p_value_upper_tail": 9.999000099990002e-05,
+  "p_value_lower_tail": 1.0,
+  "n_distinct_null_S_values": 15,
+  "interpretation": "Observed S anomalously high vs label-permutation null (z >> 0): the amino-acid labeling concentrates its Walsh-Fourier energy on the wobble-free frequency layer to a degree no random multiset-respecting permutation achieves. This probes the *coloring* of the wobble-box geometry, complementary to the geometry test in spectral_depth_null_test()."
+}

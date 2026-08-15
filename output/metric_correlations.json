@@ -1,0 +1,50 @@
+{
+  "metrics": [
+    "grantham",
+    "miyata",
+    "polar_requirement",
+    "kyte_doolittle",
+    "protsub"
+  ],
+  "n_pairs": 190,
+  "spearman_rho_matrix": {
+    "grantham": {
+      "grantham": 1.0,
+      "miyata": 0.7069,
+      "polar_requirement": 0.4725,
+      "kyte_doolittle": 0.3616,
+      "protsub": 0.6265
+    },
+    "miyata": {
+      "grantham": 0.7069,
+      "miyata": 1.0,
+      "polar_requirement": 0.7296,
+      "kyte_doolittle": 0.5415,
+      "protsub": 0.4908
+    },
+    "polar_requirement": {
+      "grantham": 0.4725,
+      "miyata": 0.7296,
+      "polar_requirement": 1.0,
+      "kyte_doolittle": 0.4395,
+      "protsub": 0.2571
+    },
+    "kyte_doolittle": {
+      "grantham": 0.3616,
+      "miyata": 0.5415,
+      "polar_requirement": 0.4395,
+      "kyte_doolittle": 1.0,
+      "protsub": 0.2284
+    },
+    "protsub": {
+      "grantham": 0.6265,
+      "miyata": 0.4908,
+      "polar_requirement": 0.2571,
+      "kyte_doolittle": 0.2284,
+      "protsub": 1.0
+    }
+  },
+  "offdiagonal_min": 0.2284,
+  "offdiagonal_median": 0.4908,
+  "offdiagonal_max": 0.7296
+}

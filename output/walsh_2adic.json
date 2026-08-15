@@ -1,0 +1,110 @@
+{
+  "seed": 135325,
+  "encoding_used_for_test2": {
+    "C": [
+      0,
+      0
+    ],
+    "U": [
+      0,
+      1
+    ],
+    "A": [
+      1,
+      0
+    ],
+    "G": [
+      1,
+      1
+    ]
+  },
+  "test1_property_spectra": [
+    {
+      "label": "hydropathy_x10",
+      "n_zero_coeffs": 0,
+      "v2_min": 0,
+      "v2_max": 0,
+      "v2_unique": [
+        0
+      ],
+      "corr_v2_vs_popcount": null,
+      "structured": false
+    },
+    {
+      "label": "molecular_weight",
+      "n_zero_coeffs": 0,
+      "v2_min": 1,
+      "v2_max": 1,
+      "v2_unique": [
+        1
+      ],
+      "corr_v2_vs_popcount": null,
+      "structured": false
+    },
+    {
+      "label": "hydrophobic_indicator",
+      "n_zero_coeffs": 32,
+      "v2_min": 1,
+      "v2_max": 1,
+      "v2_unique": [
+        1
+      ],
+      "corr_v2_vs_popcount": null,
+      "structured": false
+    },
+    {
+      "label": "degeneracy_class_size",
+      "n_zero_coeffs": 17,
+      "v2_min": 2,
+      "v2_max": 5,
+      "v2_unique": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "corr_v2_vs_popcount": -0.3050919994431762,
+      "structured": true
+    }
+  ],
+  "test2_block_size_null": {
+    "observed_depth": 544,
+    "n_null": 2000,
+    "null_mean": 689.26,
+    "null_std": 8.188552985723422,
+    "null_min": 648,
+    "null_max": 704,
+    "z_score": -17.739397944088275,
+    "fraction_null_at_or_below_observed": 0.0,
+    "interpretation": "negative z = standard code is anomalously 2-adically SHALLOW versus block-size-matched random partitions",
+    "wobble_caveat": "OPEN PROBLEM. The block-size-matched null in spectral_depth_null_test() does NOT control for the first-two-base ('wobble') box structure that synonymous codons share. The observed z << 0 may therefore reflect the known wobble constraint rather than any structure beyond it. The correct test fixes the 16 (base1, base2) boxes and their internal split shapes and randomises only the amino-acid label assignment. CAUTION: the spectral-depth statistic is invariant under coordinate permutations of GF(2)^6, so several 'natural' randomisations produce zero-variance nulls and must be avoided. Until a label-permutation null with genuine variance is computed, neither 'beyond wobble' nor 'just wobble' is established."
+  },
+  "test2b_label_permutation_null": {
+    "observed_depth": 544,
+    "n_null": 2000,
+    "null_mean": 544.0,
+    "null_std": 0.0,
+    "null_min": 544,
+    "null_max": 544,
+    "z_score": null,
+    "is_algebraic_invariant": true,
+    "fraction_null_at_or_below_observed": 1.0,
+    "interpretation": "WOBBLE-DETERMINED INVARIANCE: the spectral-depth statistic is mathematically constant under the wobble-box-preserving + AA-slot-multiset-preserving null. The standard code's depth = 544 is therefore an *algebraic invariant* of the (wobble box x slot multiset) structure, independent of which AA labels occupy which slots. Implication: the Walsh shallowness in spectral_depth_null_test is fully encoded in the wobble + degeneracy multiset; it does NOT provide a 'beyond wobble' test. The result is correctly read as a finite analogue of the Khrennikov-Kozyrev 2-adic codon algebra: the same hierarchical ultrametric structure that they model continuously on Z_2 appears as an invariant of the discrete partition geometry.",
+    "null_description": "Wobble-box-preserving label permutation: fixes the 16 (base1, base2) boxes and each box's internal partition pattern; randomises only which AA label is assigned to each box-slot, preserving each AA's multiset of slot sizes from STANDARD. Empirically, spectral_depth is INVARIANT under this null (the depth value is a function of the (box x slot multiset) structure only). This is consistent with the WOBBLE_CAVEAT prediction that 'natural' randomisations can produce zero-variance nulls."
+  },
+  "test3_encoding_invariance": {
+    "n_encodings": 24,
+    "n_null_per_encoding": 1500,
+    "observed_depths_unique": [
+      544
+    ],
+    "invariant": true,
+    "z_score_min": -18.895050696298608,
+    "z_score_max": -16.868289679980986,
+    "z_score_mean": -17.86924706184175,
+    "all_z_negative": true
+  },
+  "wobble_caveat_status": "RESOLVED via test2b (label-permutation null).",
+  "established_block_size_null": "Encoding-invariant, highly significant 2-adic-Walsh signature of the standard code's synonymous-block structure vs block-size matched random partitions (Test 2).",
+  "wobble_resolution": "WOBBLE-DETERMINED INVARIANCE: the spectral-depth statistic is mathematically constant under the wobble-box-preserving + AA-slot-multiset-preserving null. The standard code's depth = 544 is therefore an *algebraic invariant* of the (wobble box x slot multiset) structure, independent of which AA labels occupy which slots. Implication: the Walsh shallowness in spectral_depth_null_test is fully encoded in the wobble + degeneracy multiset; it does NOT provide a 'beyond wobble' test. The result is correctly read as a finite analogue of the Khrennikov-Kozyrev 2-adic codon algebra: the same hierarchical ultrametric structure that they model continuously on Z_2 appears as an invariant of the discrete partition geometry."
+}

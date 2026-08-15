@@ -1,0 +1,84 @@
+
+tRNAscan-SE v.2.0.12 (Nov 2022) scan results (on host Sergeys-MacBook-Pro.local)
+Started: Mon Apr 13 13:46:44 PDT 2026
+
+------------------------------------------------------------
+Sequence file(s) to search:        data/assemblies/e_weissei_data/ncbi_dataset/data/GCA_021440005.1/GCA_021440005.1_ASM2144000v1_genomic.fna
+Search Mode:                       Eukaryotic
+Results written to:                data/trnascan_results/e_weissei.out
+Output format:                     Tabular
+Searching with:                    Infernal First Pass->Infernal
+Isotype-specific model scan:       Yes
+Covariance model:                  /Users/biostochastics/.local/lib/tRNAscan-SE/models/TRNAinf-euk.cm
+                                   /Users/biostochastics/.local/lib/tRNAscan-SE/models/TRNAinf-euk-SeC.cm
+Infernal first pass cutoff score:  10
+
+Temporary directory:               /var/folders/1f/73w085tx1dx4dz6h971cm7qr0000gn/T/
+Search statistics saved in:        data/trnascan_results/e_weissei.stats
+------------------------------------------------------------
+
+First-pass Stats:
+---------------
+Sequences read:         86640
+Seqs w/at least 1 hit:  333
+Bases read:             82138524 (x2 for both strands)
+Bases in tRNAs:         43684
+tRNAs predicted:        544
+Av. tRNA length:        80
+Script CPU time:        41.81 s
+Scan CPU time:          874.42 s
+Scan speed:             187.9 Kbp/sec
+
+First pass search(es) ended: Mon Apr 13 14:27:13 PDT 2026
+
+Infernal Stats:
+-----------
+Candidate tRNAs read:     544
+Infernal-confirmed tRNAs:     495
+Bases scanned by Infernal:  54332
+% seq scanned by Infernal:  0.0 %
+Script CPU time:          1.64 s
+Infernal CPU time:            66.99 s
+Scan speed:               811.0 bp/sec
+
+Infernal analysis of tRNAs ended: Mon Apr 13 14:28:33 PDT 2026
+
+Overall scan speed: 166802.4 bp/sec
+
+tRNAs decoding Standard 20 AA:              390
+Selenocysteine tRNAs (TCA):                 0
+Possible suppressor tRNAs (CTA,TTA,TCA):    12
+tRNAs with undetermined/unknown isotypes:   14
+Predicted pseudogenes:                      79
+                                            -------
+Total tRNAs:                                495
+
+tRNAs with introns:     	33
+
+| Ala-AGC: 2 | Ala-GGC: 2 | Gly-TCC: 1 | Pro-GGG: 2 | Pro-TGG: 1 | Thr-AGT: 2 | Thr-CGT: 2 | Val-AAC: 1 | Ser-AGA: 2 | Ser-GCT: 2 | Arg-GCG: 1 | Leu-GAG: 1 | Leu-CAA: 1 | Leu-TAA: 1 | Asp-ATC: 1 | Asp-GTC: 1 | His-ATG: 1 | Met-CAT: 1 | Tyr-ATA: 2 | Tyr-GTA: 1 | Supres-TTA: 2 | Supres-TCA: 1 | Cys-GCA: 2 |
+
+Isotype / Anticodon Counts:
+
+Ala     : 14	  AGC: 2       GGC: 3       CGC:         TGC: 9     
+Gly     : 22	  ACC: 1       GCC: 7       CCC: 2       TCC: 12    
+Pro     : 23	  AGG:         GGG: 4       CGG:         TGG: 19    
+Thr     : 39	  AGT: 3       GGT: 8       CGT: 6       TGT: 22    
+Val     : 18	  AAC: 4       GAC: 1       CAC: 5       TAC: 8     
+Ser     : 27	  AGA: 3       GGA: 1       CGA: 1       TGA: 5       ACT: 1       GCT: 16    
+Arg     : 35	  ACG: 8       GCG: 2       CCG: 2       TCG: 3       CCT: 2       TCT: 18    
+Leu     : 42	  AAG: 1       GAG: 3       CAG: 3       TAG: 9       CAA: 7       TAA: 19    
+Phe     : 11	  AAA:         GAA: 11                              
+Asn     : 19	  ATT: 2       GTT: 17                              
+Lys     : 25	                            CTT: 9       TTT: 16    
+Asp     : 15	  ATC: 2       GTC: 13                              
+Glu     : 26	                            CTC: 4       TTC: 22    
+His     : 18	  ATG: 1       GTG: 17                              
+Gln     : 28	                            CTG: 11      TTG: 17    
+Ile     : 22	  AAT: 1       GAT: 12      CAT:         TAT: 9     
+Met     : 35	                            CAT: 35                 
+Tyr     : 10	  ATA: 2       GTA: 8                               
+Supres  : 13	               CTA: 5       TTA: 5       TCA: 3     
+Cys     : 17	  ACA:         GCA: 17                              
+Trp     : 14	                            CCA: 14                 
+SelCys  : 0	                                         TCA:       
+

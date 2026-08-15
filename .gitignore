@@ -1,0 +1,91 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.venv-tex/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# --- Working / scratch ---
+docs/plans/
+docs/governed_genomes_*
+docs/architecture-review-*
+output-tex/
+output/em_smoke/
+output/scratch/
+output/_local/
+output/hypercube_coloring.html
+output/*_test.pdf
+output/*-frozen.typ
+
+# --- Large intermediate artifacts ---
+data/trnascan_results/*.out
+data/trnascan_results/*.stats
+data/trnascan_results/*.iso
+data/trnascan_results/*.ss
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+credentials.json
+*.pem
+*.key
+
+# --- Repository-scope release artifacts (kept: publisher_deliverable, output/*.typ, output/*.pdf, output/*.json, output/tables/, output/figures/) ---
+
+# --- Hypothesis-driven test cache ---
+.hypothesis/
+
+# --- Unrelated / superseded subprojects and caches ---
+web/
+.playwright-mcp/
+output/release_v0.5/
+output/release_v0.5.zip
+output/biorxiv/
+output/em_bundle*/
+node_modules/
+
+# --- NCBI genome assembly downloads (retrievable via data/assembly_accessions.tsv) ---
+data/assemblies/
+data/tigress_dumps/
+data/*.zip
+
+# --- Reviewer-response PDFs / tex artifacts (regenerable) ---
+output/*_em.pdf
+output/main_em.pdf
+
+# --- Third-party study supplementary data (redownloadable from cited DOIs) ---
+data/codonsafe/ding2024/
+data/codonsafe/fredens2019/
+data/codonsafe/frumkin2018/
+data/codonsafe/lajoie2013/
+data/codonsafe/napolitano2016/
+data/codonsafe/robertson2025/
+data/codonsafe/ostrov2016/
+
+# --- More third-party study data (subdirs missed above) ---
+data/codonsafe/nyerges2024/
+data/codonsafe/robertson2025_syn57/
+data/codonsafe/*/Data_files/
+data/codonsafe/*/*.pdf
+data/codonsafe/*/*.xlsx
+data/codonsafe/*/*.docx
+data/codonsafe/*/*.gb

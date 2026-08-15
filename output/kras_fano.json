@@ -1,0 +1,47 @@
+{
+  "mode": "offline",
+  "predictions": {
+    "G12V": {
+      "wt_codon": "GGU",
+      "mutant_codon": "GUU",
+      "fano_partner_codon": "CAC",
+      "fano_partner_aa": "His",
+      "fano_partner_aa_1letter": "H"
+    },
+    "G12D": {
+      "wt_codon": "GGU",
+      "mutant_codon": "GAU",
+      "fano_partner_codon": "CUC",
+      "fano_partner_aa": "Leu",
+      "fano_partner_aa_1letter": "L"
+    },
+    "G12A": {
+      "wt_codon": "GGU",
+      "mutant_codon": "GCU",
+      "fano_partner_codon": "CGC",
+      "fano_partner_aa": "Arg",
+      "fano_partner_aa_1letter": "R"
+    },
+    "G12R": {
+      "wt_codon": "GGU",
+      "mutant_codon": "CGU",
+      "fano_partner_codon": "GCC",
+      "fano_partner_aa": "Ala",
+      "fano_partner_aa_1letter": "A"
+    },
+    "G12C": {
+      "wt_codon": "GGU",
+      "mutant_codon": "UGU",
+      "fano_partner_codon": "ACC",
+      "fano_partner_aa": "Thr",
+      "fano_partner_aa_1letter": "T"
+    },
+    "G12S": {
+      "wt_codon": "GGU",
+      "mutant_codon": "AGU",
+      "fano_partner_codon": "UCC",
+      "fano_partner_aa": "Ser",
+      "fano_partner_aa_1letter": "S"
+    }
+  }
+}

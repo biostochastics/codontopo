@@ -1,0 +1,24 @@
+# TopoSafe standalone repo .gitignore
+# (This directory can be extracted as an independent git repo)
+
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+.coverage
+.hypothesis/
+.pytest_cache/
+*.egg
+.DS_Store
+.venv/
+uv.lock
+
+# Raw supplementary data from external publications (103 MB)
+# Download via: bash scripts/download_data.sh
+data/codonsafe/*/
+
+# Generated outputs (reproducible via: bash scripts/run.sh)
+output/

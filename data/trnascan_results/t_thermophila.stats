@@ -1,0 +1,84 @@
+
+tRNAscan-SE v.2.0.12 (Nov 2022) scan results (on host Sergeys-MacBook-Pro.local)
+Started: Mon Apr 13 11:43:41 PDT 2026
+
+------------------------------------------------------------
+Sequence file(s) to search:        t_thermophila_data/ncbi_dataset/data/GCF_000189635.1/GCF_000189635.1_JCVI-TTA1-2.2_genomic.fna
+Search Mode:                       Eukaryotic
+Results written to:                /Users/biostochastics/clayworth/data/trnascan_results/t_thermophila.out
+Output format:                     Tabular
+Searching with:                    Infernal First Pass->Infernal
+Isotype-specific model scan:       Yes
+Covariance model:                  /Users/biostochastics/.local/lib/tRNAscan-SE/models/TRNAinf-euk.cm
+                                   /Users/biostochastics/.local/lib/tRNAscan-SE/models/TRNAinf-euk-SeC.cm
+Infernal first pass cutoff score:  10
+
+Temporary directory:               /var/folders/1f/73w085tx1dx4dz6h971cm7qr0000gn/T/
+Search statistics saved in:        /Users/biostochastics/clayworth/data/trnascan_results/t_thermophila.stats
+------------------------------------------------------------
+
+First-pass Stats:
+---------------
+Sequences read:         1158
+Seqs w/at least 1 hit:  157
+Bases read:             103014375 (x2 for both strands)
+Bases in tRNAs:         54076
+tRNAs predicted:        720
+Av. tRNA length:        75
+Script CPU time:        1.75 s
+Scan CPU time:          126.74 s
+Scan speed:             1625.6 Kbp/sec
+
+First pass search(es) ended: Mon Apr 13 11:45:03 PDT 2026
+
+Infernal Stats:
+-----------
+Candidate tRNAs read:     720
+Infernal-confirmed tRNAs:     718
+Bases scanned by Infernal:  68476
+% seq scanned by Infernal:  0.0 %
+Script CPU time:          1.09 s
+Infernal CPU time:            53.39 s
+Scan speed:               1282.6 bp/sec
+
+Infernal analysis of tRNAs ended: Mon Apr 13 11:45:50 PDT 2026
+
+Overall scan speed: 1126024.8 bp/sec
+
+tRNAs decoding Standard 20 AA:              672
+Selenocysteine tRNAs (TCA):                 1
+Possible suppressor tRNAs (CTA,TTA,TCA):    37
+tRNAs with undetermined/unknown isotypes:   4
+Predicted pseudogenes:                      4
+                                            -------
+Total tRNAs:                                718
+
+tRNAs with introns:     	22
+
+| Leu-TAA: 1 | Ile-TAT: 2 | Tyr-GTA: 19 |
+
+Isotype / Anticodon Counts:
+
+Ala     : 45	  AGC: 32      GGC:         CGC: 2       TGC: 11    
+Gly     : 44	  ACC:         GCC: 31      CCC: 1       TCC: 12    
+Pro     : 28	  AGG: 20      GGG:         CGG: 1       TGG: 7     
+Thr     : 30	  AGT: 23      GGT:         CGT: 1       TGT: 6     
+Val     : 30	  AAC: 21      GAC:         CAC: 3       TAC: 6     
+Ser     : 46	  AGA: 20      GGA:         CGA: 2       TGA: 9       ACT:         GCT: 15    
+Arg     : 37	  ACG: 8       GCG:         CCG: 1       TCG: 1       CCT: 2       TCT: 25    
+Leu     : 57	  AAG: 18      GAG:         CAG: 2       TAG: 3       CAA: 14      TAA: 20    
+Phe     : 24	  AAA:         GAA: 24                              
+Asn     : 31	  ATT:         GTT: 31                              
+Lys     : 62	                            CTT: 33      TTT: 29    
+Asp     : 31	  ATC:         GTC: 31                              
+Glu     : 44	                            CTC: 7       TTC: 37    
+His     : 16	  ATG:         GTG: 16                              
+Gln     : 15	                            CTG: 2       TTG: 13    
+Ile     : 42	  AAT: 29      GAT:         CAT:         TAT: 13    
+Met/iMet: 33	                            CAT: 33                 
+Tyr     : 19	  ATA:         GTA: 19                              
+Supres  : 39	               CTA: 9       TTA: 30      TCA:       
+Cys     : 18	  ACA:         GCA: 18                              
+Trp     : 21	                            CCA: 21                 
+SelCys  : 1	                                         TCA: 1     
+

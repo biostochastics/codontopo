@@ -1,0 +1,36 @@
+{
+  "n_high_confidence_saap_events": 5873,
+  "n_parseable_events": 5611,
+  "n_unique_observed_aas_pairs": 166,
+  "event_single_nt_count": 3649,
+  "event_single_nt_fraction": 0.6503,
+  "baseline_single_nt_fraction_all_380_pairs": 0.3947,
+  "event_enrichment_binomial_p_one_sided": 0.0,
+  "event_distance_distribution": {
+    "1": {"count": 3649, "fraction": 0.6503},
+    "2": {"count": 1062, "fraction": 0.1893},
+    "3": {"count": 900,  "fraction": 0.1604}
+  },
+  "baseline_distance_distribution": {
+    "1": {"count": 150, "fraction": 0.3947},
+    "2": {"count": 202, "fraction": 0.5316},
+    "3": {"count": 28,  "fraction": 0.0737}
+  },
+  "n_all_pairs_baseline": 380,
+  "unique_pairs_fisher_odds_ratio": 1.1680030546009927,
+  "unique_pairs_fisher_p_one_sided": 0.26445211082223896,
+  "mannwhitney_nt_observed_smaller": {
+    "U": 16894.0,
+    "p_one_sided": 0.17872168843211145,
+    "median_obs": 2.0,
+    "median_unobs": 2.0
+  },
+  "mannwhitney_bit_observed_smaller": {
+    "U": 16980.0,
+    "p_one_sided": 0.21985556730056555,
+    "median_obs": 2.0,
+    "median_unobs": 2.0
+  },
+  "data_source": "Tsour et al. 2026 Nature, Supplementary Data 8 (high-confidence SAAP, positional probability > 0.9). doi:10.1038/s41586-026-10678-2",
+  "methodology": "For each amino-acid substitution observed in the Tsour & Slavov 2026 proteomic dataset (5,873 high-confidence events, 178 unique AA->AA types), we compute the minimum nucleotide-Hamming distance between any source codon (in the standard genetic code) and any target codon. Enrichment tests: (1) event-weighted binomial against all-pair baseline; (2) Fisher exact on single-NT pairs unique observed vs unique unobserved; (3) Mann-Whitney U on NT and bit distances."
+}

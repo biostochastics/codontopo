@@ -1,0 +1,55 @@
+{
+  "method": "Classical Haig-Hurst 1991 / Freeland-Hurst 1998 AA-permutation null. Preserves stop positions and codon-family sizes; permutes the 20 AA labels uniformly across the 20 sense-codon families (20! ~ 2.4e18 possible codes). Reported as a sensitivity companion to the primary quartet-pattern shuffle null.",
+  "seed": 135325,
+  "n_samples": 10000,
+  "per_metric": {
+    "grantham": {
+      "observed_score": 13477.0,
+      "null_mean": 15607.8727,
+      "null_std": 773.2955457616573,
+      "null_min": 13018.0,
+      "null_max": 19017.0,
+      "z": 2.7555734824532028,
+      "quantile_of_observed": 0.2,
+      "n_beaten_observed": 20,
+      "p_value_raw": 0.002,
+      "p_value_conservative": 0.0020997900209979003
+    },
+    "miyata": {
+      "observed_score": 235.30000000000015,
+      "null_mean": 293.66284199999996,
+      "null_std": 14.142054610766332,
+      "null_min": 245.22,
+      "null_max": 359.8399999999999,
+      "z": 4.126899775621587,
+      "quantile_of_observed": 0.0,
+      "n_beaten_observed": 0,
+      "p_value_raw": 0.0,
+      "p_value_conservative": 9.999000099990002e-05
+    },
+    "polar_requirement": {
+      "observed_score": 347.29999999999984,
+      "null_mean": 470.84331999999984,
+      "null_std": 35.7984377618943,
+      "null_min": 348.8999999999996,
+      "null_max": 627.9999999999998,
+      "z": 3.451081324322646,
+      "quantile_of_observed": 0.0,
+      "n_beaten_observed": 0,
+      "p_value_raw": 0.0,
+      "p_value_conservative": 9.999000099990002e-05
+    },
+    "kyte_doolittle": {
+      "observed_score": 457.20000000000005,
+      "null_mean": 562.01559,
+      "null_std": 39.17121757592605,
+      "null_min": 420.5,
+      "null_max": 725.6999999999997,
+      "z": 2.6758318093338453,
+      "quantile_of_observed": 0.26,
+      "n_beaten_observed": 26,
+      "p_value_raw": 0.0026,
+      "p_value_conservative": 0.0026997300269973002
+    }
+  }
+}

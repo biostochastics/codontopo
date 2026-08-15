@@ -1,0 +1,2617 @@
+{
+  "_generated_by": "codon-topo all",
+  "_seed": 135325,
+  "_n_samples": 10000,
+  "_version": "0.4.0",
+  "coloring": {
+    "observed_score": 13477.0,
+    "per_table_proximity_audit": {
+      "method": "Per-table standard-code-proximity audit. For each NCBI translation table, computes the Hamming distance from the standard code (number of codons with different AA labels) for both the observed variant code and each block-preserving null draw, then reports the variant's null quantile both unconditionally and conditional on null draws within \u00b12 codons of the variant's dH. If the conditional quantile remains low (variant beats most null draws at the same dH), per-table optimality is independent of proximity to standard. If conditional and unconditional quantiles diverge sharply, the per-table test is largely a standard-code-proximity test.",
+      "n_tables": 27,
+      "per_table": [
+        {
+          "table_id": 1,
+          "n_reassignments_from_standard": 0,
+          "observed_score": 13477.0,
+          "quantile_unconditional": 0.6,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 36,
+          "null_dH_max": 56,
+          "null_dH_mean": 51.108,
+          "null_dH_median": 52,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 2,
+          "n_reassignments_from_standard": 4,
+          "observed_score": 14612.0,
+          "quantile_unconditional": 1.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 36,
+          "null_dH_max": 58,
+          "null_dH_mean": 53.606,
+          "null_dH_median": 54,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 3,
+          "n_reassignments_from_standard": 6,
+          "observed_score": 13448.0,
+          "quantile_unconditional": 7.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 37,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.328,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 4,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 13178.0,
+          "quantile_unconditional": 1.0,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 38,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.215,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 5,
+          "n_reassignments_from_standard": 4,
+          "observed_score": 13306.0,
+          "quantile_unconditional": 2.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 38,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.531,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 6,
+          "n_reassignments_from_standard": 2,
+          "observed_score": 12279.0,
+          "quantile_unconditional": 0.3,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 40,
+          "null_dH_max": 60,
+          "null_dH_mean": 54.904,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 9,
+          "n_reassignments_from_standard": 4,
+          "observed_score": 13210.0,
+          "quantile_unconditional": 1.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 36,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.465,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 10,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 13369.0,
+          "quantile_unconditional": 0.5,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 40,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.089,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 11,
+          "n_reassignments_from_standard": 0,
+          "observed_score": 13477.0,
+          "quantile_unconditional": 1.2,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 34,
+          "null_dH_max": 56,
+          "null_dH_mean": 50.982,
+          "null_dH_median": 52,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 12,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 14016.0,
+          "quantile_unconditional": 0.8,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 35,
+          "null_dH_max": 56,
+          "null_dH_mean": 51.098,
+          "null_dH_median": 52,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 13,
+          "n_reassignments_from_standard": 4,
+          "observed_score": 13332.0,
+          "quantile_unconditional": 2.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 32,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.443,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 14,
+          "n_reassignments_from_standard": 5,
+          "observed_score": 12752.0,
+          "quantile_unconditional": 2.2,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 38,
+          "null_dH_max": 61,
+          "null_dH_mean": 56.466,
+          "null_dH_median": 57,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 15,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 12943.0,
+          "quantile_unconditional": 0.3,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 35,
+          "null_dH_max": 57,
+          "null_dH_mean": 51.968,
+          "null_dH_median": 53,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 16,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 13110.0,
+          "quantile_unconditional": 1.9,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 33,
+          "null_dH_max": 57,
+          "null_dH_mean": 52.132,
+          "null_dH_median": 53,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 21,
+          "n_reassignments_from_standard": 5,
+          "observed_score": 13197.0,
+          "quantile_unconditional": 1.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 39,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.504,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 22,
+          "n_reassignments_from_standard": 2,
+          "observed_score": 13652.0,
+          "quantile_unconditional": 0.8,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 30,
+          "null_dH_max": 54,
+          "null_dH_mean": 49.21,
+          "null_dH_median": 50,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 23,
+          "n_reassignments_from_standard": 2,
+          "observed_score": 14208.0,
+          "quantile_unconditional": 0.8,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 35,
+          "null_dH_max": 57,
+          "null_dH_mean": 52.437,
+          "null_dH_median": 53,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 24,
+          "n_reassignments_from_standard": 3,
+          "observed_score": 13387.0,
+          "quantile_unconditional": 1.5,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 40,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.247,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 25,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 13223.0,
+          "quantile_unconditional": 1.1,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 36,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.05,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 26,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 13773.0,
+          "quantile_unconditional": 1.0,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 32,
+          "null_dH_max": 56,
+          "null_dH_mean": 51.15,
+          "null_dH_median": 52,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 27,
+          "n_reassignments_from_standard": 3,
+          "observed_score": 11680.0,
+          "quantile_unconditional": 0.2,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 37,
+          "null_dH_max": 64,
+          "null_dH_mean": 59.235,
+          "null_dH_median": 60,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 28,
+          "n_reassignments_from_standard": 3,
+          "observed_score": 11680.0,
+          "quantile_unconditional": 0.2,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 44,
+          "null_dH_max": 64,
+          "null_dH_mean": 59.376,
+          "null_dH_median": 60,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 29,
+          "n_reassignments_from_standard": 2,
+          "observed_score": 12524.0,
+          "quantile_unconditional": 2.4,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 38,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.32,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 30,
+          "n_reassignments_from_standard": 2,
+          "observed_score": 12371.0,
+          "quantile_unconditional": 0.0,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 38,
+          "null_dH_max": 60,
+          "null_dH_mean": 55.086,
+          "null_dH_median": 56,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 31,
+          "n_reassignments_from_standard": 3,
+          "observed_score": 11794.0,
+          "quantile_unconditional": 0.3,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 44,
+          "null_dH_max": 64,
+          "null_dH_mean": 59.18,
+          "null_dH_median": 60,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 32,
+          "n_reassignments_from_standard": 1,
+          "observed_score": 13113.0,
+          "quantile_unconditional": 1.5,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 35,
+          "null_dH_max": 57,
+          "null_dH_mean": 52.284,
+          "null_dH_median": 53,
+          "frac_null_dH_le_obs": 0.0
+        },
+        {
+          "table_id": 33,
+          "n_reassignments_from_standard": 4,
+          "observed_score": 12929.0,
+          "quantile_unconditional": 2.0,
+          "quantile_conditional_dH_within_2": null,
+          "n_null_in_dH_bucket": 0,
+          "null_dH_min": 41,
+          "null_dH_max": 61,
+          "null_dH_mean": 56.325,
+          "null_dH_median": 57,
+          "frac_null_dH_le_obs": 0.0
+        }
+      ]
+    },
+    "null_mean": 14954.4802,
+    "null_std": 628.0173120084972,
+    "quantile": 0.6,
+    "p_value": 0.006099390060993901,
+    "n_samples": 10000,
+    "haig_hurst_aa_null": {
+      "method": "Classical Haig-Hurst 1991 / Freeland-Hurst 1998 AA-permutation null. Preserves stop positions and codon-family sizes; permutes the 20 AA labels uniformly across the 20 sense-codon families (20! ~ 2.4e18 possible codes). Reported as a sensitivity companion to the primary quartet-pattern shuffle null.",
+      "seed": 135325,
+      "n_samples": 10000,
+      "per_metric": {
+        "grantham": {
+          "observed_score": 13477.0,
+          "null_mean": 15607.8727,
+          "null_std": 773.2955457616573,
+          "null_min": 13018.0,
+          "null_max": 19017.0,
+          "z": 2.7555734824532028,
+          "quantile_of_observed": 0.2,
+          "n_beaten_observed": 20,
+          "p_value_raw": 0.002,
+          "p_value_conservative": 0.0020997900209979003
+        },
+        "miyata": {
+          "observed_score": 235.30000000000015,
+          "null_mean": 293.66284199999996,
+          "null_std": 14.142054610766332,
+          "null_min": 245.22,
+          "null_max": 359.8399999999999,
+          "z": 4.126899775621587,
+          "quantile_of_observed": 0.0,
+          "n_beaten_observed": 0,
+          "p_value_raw": 0.0,
+          "p_value_conservative": 9.999000099990002e-05
+        },
+        "polar_requirement": {
+          "observed_score": 347.29999999999984,
+          "null_mean": 470.84331999999984,
+          "null_std": 35.7984377618943,
+          "null_min": 348.8999999999996,
+          "null_max": 627.9999999999998,
+          "z": 3.451081324322646,
+          "quantile_of_observed": 0.0,
+          "n_beaten_observed": 0,
+          "p_value_raw": 0.0,
+          "p_value_conservative": 9.999000099990002e-05
+        },
+        "kyte_doolittle": {
+          "observed_score": 457.20000000000005,
+          "null_mean": 562.01559,
+          "null_std": 39.17121757592605,
+          "null_min": 420.5,
+          "null_max": 725.6999999999997,
+          "z": 2.6758318093338453,
+          "quantile_of_observed": 0.26,
+          "n_beaten_observed": 26,
+          "p_value_raw": 0.0026,
+          "p_value_conservative": 0.0026997300269973002
+        }
+      }
+    },
+    "encoding_sensitivity": {
+      "n_encodings": 24,
+      "null_type": "freeland_hurst",
+      "quantile_min": 0.01,
+      "quantile_max": 2.77,
+      "mean_quantile": 1.09,
+      "all_significant_p05": true,
+      "p_max": 0.027797220277972202,
+      "p_min": 0.00019998000199980003
+    }
+  },
+  "metrics": {
+    "grantham": {
+      "observed": 13477.0,
+      "null_mean": 14954.4802,
+      "null_std": 628.0173120084972,
+      "z": 2.3526106235428257,
+      "p": 0.006099390060993901,
+      "quantile": 0.6,
+      "improvement_pct": 9.879849919491015
+    },
+    "miyata": {
+      "observed": 235.30000000000015,
+      "null_mean": 275.6736859999999,
+      "null_std": 12.87702362299389,
+      "z": 3.1353274779978184,
+      "p": 0.00039996000399960006,
+      "quantile": 0.03,
+      "improvement_pct": 14.645462389181308
+    },
+    "polar_requirement": {
+      "observed": 347.29999999999984,
+      "null_mean": 410.4517999999998,
+      "null_std": 23.11206636199266,
+      "z": 2.732416868785557,
+      "p": 0.0025997400259974,
+      "quantile": 0.25,
+      "improvement_pct": 15.385923511603558
+    },
+    "kyte_doolittle": {
+      "observed": 457.20000000000005,
+      "null_mean": 570.69364,
+      "null_std": 40.857084253330754,
+      "z": 2.777820348028082,
+      "p": 0.0013998600139986002,
+      "quantile": 0.13,
+      "improvement_pct": 19.88696422129392
+    }
+  },
+  "rho_sweep": {
+    "per_rho": [
+      {
+        "rho": 0.0,
+        "observed_score": 13477.0,
+        "null_mean": 14954.4802,
+        "null_std": 628.0173120084972,
+        "quantile": 0.6,
+        "p_value": 0.006099390060993901,
+        "effect_size_z": 2.3526106235428257
+      },
+      {
+        "rho": 0.25,
+        "observed_score": 15334.75,
+        "null_mean": 17019.740875,
+        "null_std": 608.9652948617179,
+        "quantile": 0.22,
+        "p_value": 0.0022997700229977,
+        "effect_size_z": 2.766973568473426
+      },
+      {
+        "rho": 0.5,
+        "observed_score": 17192.5,
+        "null_mean": 19085.00155,
+        "null_std": 612.8714901338938,
+        "quantile": 0.06,
+        "p_value": 0.0006999300069993001,
+        "effect_size_z": 3.087925577328694
+      },
+      {
+        "rho": 0.75,
+        "observed_score": 19050.25,
+        "null_mean": 21150.262225,
+        "null_std": 639.3152144295797,
+        "quantile": 0.02,
+        "p_value": 0.00029997000299970003,
+        "effect_size_z": 3.2847837461113856
+      },
+      {
+        "rho": 1.0,
+        "observed_score": 20908.0,
+        "null_mean": 23215.5229,
+        "null_std": 685.6939333934779,
+        "quantile": 0.02,
+        "p_value": 0.00029997000299970003,
+        "effect_size_z": 3.365237444321756
+      }
+    ],
+    "all_significant_p01": true
+  },
+  "per_table": {
+    "n_significant_bh": 26,
+    "n_tables": 27,
+    "mean_quantile": 1.3029629629629629,
+    "per_table": [
+      {
+        "table_id": 1,
+        "observed_score": 13477.0,
+        "quantile": 0.69,
+        "p_value": 0.006999300069993001,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 2,
+        "observed_score": 14612.0,
+        "quantile": 1.47,
+        "p_value": 0.014798520147985201,
+        "p_value_bh": 0.0221977802219778
+      },
+      {
+        "table_id": 3,
+        "observed_score": 13448.0,
+        "quantile": 7.2,
+        "p_value": 0.0720927907209279,
+        "p_value_bh": 0.0720927907209279
+      },
+      {
+        "table_id": 4,
+        "observed_score": 13178.0,
+        "quantile": 0.58,
+        "p_value": 0.0058994100589941,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 5,
+        "observed_score": 13306.0,
+        "quantile": 2.3,
+        "p_value": 0.0230976902309769,
+        "p_value_bh": 0.02398606293216832
+      },
+      {
+        "table_id": 6,
+        "observed_score": 12279.0,
+        "quantile": 0.34,
+        "p_value": 0.0034996500349965005,
+        "p_value_bh": 0.0161983801619838
+      },
+      {
+        "table_id": 9,
+        "observed_score": 13210.0,
+        "quantile": 1.79,
+        "p_value": 0.017998200179982,
+        "p_value_bh": 0.022785721427857217
+      },
+      {
+        "table_id": 10,
+        "observed_score": 13369.0,
+        "quantile": 0.56,
+        "p_value": 0.005699430056994301,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 11,
+        "observed_score": 13477.0,
+        "quantile": 0.79,
+        "p_value": 0.007999200079992,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 12,
+        "observed_score": 14016.0,
+        "quantile": 1.16,
+        "p_value": 0.011698830116988301,
+        "p_value_bh": 0.01974177582241776
+      },
+      {
+        "table_id": 13,
+        "observed_score": 13332.0,
+        "quantile": 1.87,
+        "p_value": 0.0187981201879812,
+        "p_value_bh": 0.022785721427857217
+      },
+      {
+        "table_id": 14,
+        "observed_score": 12752.0,
+        "quantile": 2.05,
+        "p_value": 0.020597940205979402,
+        "p_value_bh": 0.022785721427857217
+      },
+      {
+        "table_id": 15,
+        "observed_score": 12943.0,
+        "quantile": 0.33,
+        "p_value": 0.0033996600339966003,
+        "p_value_bh": 0.0161983801619838
+      },
+      {
+        "table_id": 16,
+        "observed_score": 13110.0,
+        "quantile": 1.96,
+        "p_value": 0.019698030196980302,
+        "p_value_bh": 0.022785721427857217
+      },
+      {
+        "table_id": 21,
+        "observed_score": 13197.0,
+        "quantile": 1.42,
+        "p_value": 0.014298570142985701,
+        "p_value_bh": 0.0221977802219778
+      },
+      {
+        "table_id": 22,
+        "observed_score": 13652.0,
+        "quantile": 0.79,
+        "p_value": 0.007999200079992,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 23,
+        "observed_score": 14208.0,
+        "quantile": 0.7,
+        "p_value": 0.007099290070992901,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 24,
+        "observed_score": 13387.0,
+        "quantile": 1.06,
+        "p_value": 0.010698930106989302,
+        "p_value_bh": 0.01961803819618038
+      },
+      {
+        "table_id": 25,
+        "observed_score": 13223.0,
+        "quantile": 0.64,
+        "p_value": 0.0064993500649935,
+        "p_value_bh": 0.01661372324306031
+      },
+      {
+        "table_id": 26,
+        "observed_score": 13773.0,
+        "quantile": 1.08,
+        "p_value": 0.0108989101089891,
+        "p_value_bh": 0.01961803819618038
+      },
+      {
+        "table_id": 27,
+        "observed_score": 11680.0,
+        "quantile": 0.35,
+        "p_value": 0.0035996400359964,
+        "p_value_bh": 0.0161983801619838
+      },
+      {
+        "table_id": 28,
+        "observed_score": 11680.0,
+        "quantile": 0.27,
+        "p_value": 0.0027997200279972004,
+        "p_value_bh": 0.0161983801619838
+      },
+      {
+        "table_id": 29,
+        "observed_score": 12524.0,
+        "quantile": 2.1,
+        "p_value": 0.021097890210978902,
+        "p_value_bh": 0.022785721427857217
+      },
+      {
+        "table_id": 30,
+        "observed_score": 12371.0,
+        "quantile": 0.15,
+        "p_value": 0.0015998400159984002,
+        "p_value_bh": 0.0161983801619838
+      },
+      {
+        "table_id": 31,
+        "observed_score": 11794.0,
+        "quantile": 0.18,
+        "p_value": 0.0018998100189981002,
+        "p_value_bh": 0.0161983801619838
+      },
+      {
+        "table_id": 32,
+        "observed_score": 13113.0,
+        "quantile": 1.56,
+        "p_value": 0.0156984301569843,
+        "p_value_bh": 0.02230829548624085
+      },
+      {
+        "table_id": 33,
+        "observed_score": 12929.0,
+        "quantile": 1.79,
+        "p_value": 0.017998200179982,
+        "p_value_bh": 0.022785721427857217
+      }
+    ],
+    "informative_significant": 11,
+    "informative_total": 12,
+    "near_standard_significant": 14,
+    "near_standard_total": 14,
+    "marginal_table": 3,
+    "marginal_p_bh": 0.072,
+    "marginal_quantile": 7.2
+  },
+  "decomposition": {
+    "position_fractions": {
+      "pos1": 0.3816131186465831,
+      "pos2": 0.4933590561697707,
+      "pos3_wobble": 0.12502782518364622
+    },
+    "total_score": 13477.0
+  },
+  "topology_avoidance_q6": {
+    "observed_breaks": 6,
+    "observed_total": 28,
+    "rate_observed": 0.21428571428571427,
+    "possible_breaks": 931,
+    "possible_total": 1280,
+    "rate_possible": 0.72734375,
+    "depletion_fold": 3.394270833333333,
+    "risk_ratio": 0.29461408623599816,
+    "risk_ratio_ci_95": [
+      0.14483594966274177,
+      0.5992811868240216
+    ],
+    "hypergeom_p": 1.5839628551544103e-08,
+    "permutation_p": 9.999000099990002e-05
+  },
+  "topology_avoidance_k43": {
+    "observed_breaks": 6,
+    "observed_total": 28,
+    "rate_observed": 0.21428571428571427,
+    "possible_breaks": 846,
+    "possible_total": 1280,
+    "rate_possible": 0.6609375,
+    "depletion_fold": 3.084375,
+    "risk_ratio": 0.3242147922998987,
+    "risk_ratio_ci_95": [
+      0.15934151071120597,
+      0.6596851697771311
+    ],
+    "hypergeom_p": 1.2798706572815002e-06,
+    "permutation_p": 9.999000099990002e-05
+  },
+  "topology_audit": {
+    "method": "Two-by-two audit of topology-breaking under (Q_6, K_4^3) x (new-disconnection-in-previously-connected-family, \u0394\u03b2\u2080>0). All four cells share the same denominators (1280 candidate moves; 28 de-duplicated observed events) but differ in how 'topology-breaking' is defined. The manuscript Methods text uses \u0394\u03b2\u2080>0 (matching the conditional-logit feature); the new-disconnection cells are reported alongside as a sensitivity column.",
+    "audit_rows": [
+      {
+        "cell": "q6_new_disc",
+        "adjacency": "Q_6",
+        "definition": "new_disconnection_in_previously_connected_family",
+        "possible_breaks": 931,
+        "possible_total": 1280,
+        "rate_possible": 0.72734375,
+        "observed_breaks": 6,
+        "observed_total": 28,
+        "rate_observed": 0.21428571428571427,
+        "depletion_fold": 3.394270833333333,
+        "risk_ratio": 0.29461408623599816,
+        "risk_ratio_ci_95": [
+          0.14483594966274177,
+          0.5992811868240216
+        ],
+        "hypergeom_p": 1.5839628551544103e-08
+      },
+      {
+        "cell": "q6_beta0",
+        "adjacency": "Q_6",
+        "definition": "increase_in_components_(\u0394\u03b2\u2080>0)",
+        "possible_breaks": 963,
+        "possible_total": 1280,
+        "rate_possible": 0.75234375,
+        "observed_breaks": 7,
+        "observed_total": 28,
+        "rate_observed": 0.25,
+        "depletion_fold": 3.009375,
+        "risk_ratio": 0.3322949117341641,
+        "risk_ratio_ci_95": [
+          0.17480879356434242,
+          0.6316610629989462
+        ],
+        "hypergeom_p": 2.2324418712445992e-08
+      },
+      {
+        "cell": "k43_new_disc",
+        "adjacency": "K_4^3",
+        "definition": "new_disconnection_in_previously_connected_family",
+        "possible_breaks": 822,
+        "possible_total": 1280,
+        "rate_possible": 0.6421875,
+        "observed_breaks": 5,
+        "observed_total": 28,
+        "rate_observed": 0.17857142857142858,
+        "depletion_fold": 3.59625,
+        "risk_ratio": 0.2780674313521029,
+        "risk_ratio_ci_95": [
+          0.12550947519538794,
+          0.6160610285270139
+        ],
+        "hypergeom_p": 4.946810351253738e-07
+      },
+      {
+        "cell": "k43_beta0",
+        "adjacency": "K_4^3",
+        "definition": "increase_in_components_(\u0394\u03b2\u2080>0)",
+        "possible_breaks": 846,
+        "possible_total": 1280,
+        "rate_possible": 0.6609375,
+        "observed_breaks": 6,
+        "observed_total": 28,
+        "rate_observed": 0.21428571428571427,
+        "depletion_fold": 3.084375,
+        "risk_ratio": 0.3242147922998987,
+        "risk_ratio_ci_95": [
+          0.15934151071120597,
+          0.6596851697771311
+        ],
+        "hypergeom_p": 1.2798706572815002e-06
+      }
+    ]
+  },
+  "topology_q6_encoding_sweep": {
+    "method": "Q_6 topology-avoidance recomputed under all 24 base-to-bit encodings (the K_4^3 result is encoding-independent and needs no sweep). Uses the new-disconnection definition. All 24 encodings share the same denominators (1280 candidate moves; 28 de-duplicated observed events). The default encoding (C=00, U=01, A=10, G=11) is encoding_index 0.",
+    "n_encodings": 24,
+    "rate_obs_min": 0.21428571428571427,
+    "rate_obs_median": 0.2857142857142857,
+    "rate_obs_max": 0.35714285714285715,
+    "rate_poss_min": 0.36015625,
+    "rate_poss_median": 0.69921875,
+    "rate_poss_max": 0.72734375,
+    "depletion_min": 1.0084375,
+    "depletion_median": 2.447265625,
+    "depletion_max": 3.394270833333333,
+    "p_max": 0.5723920329562266,
+    "p_median": 6.075397420243029e-06,
+    "p_min": 1.5839628551544103e-08,
+    "all_significant_at_0p01": false,
+    "all_significant_at_0p05": false,
+    "rows": [
+      {
+        "encoding_index": 0,
+        "encoding_label": "C=00U=01A=10G=11",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 1,
+        "encoding_label": "C=00U=01A=11G=10",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 2,
+        "encoding_label": "C=00U=10A=01G=11",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 3,
+        "encoding_label": "C=00U=10A=11G=01",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 4,
+        "encoding_label": "C=00U=11A=01G=10",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 5,
+        "encoding_label": "C=00U=11A=10G=01",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 6,
+        "encoding_label": "C=01U=00A=10G=11",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 7,
+        "encoding_label": "C=01U=00A=11G=10",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 8,
+        "encoding_label": "C=01U=10A=00G=11",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 9,
+        "encoding_label": "C=01U=10A=11G=00",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 10,
+        "encoding_label": "C=01U=11A=00G=10",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 11,
+        "encoding_label": "C=01U=11A=10G=00",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 12,
+        "encoding_label": "C=10U=00A=01G=11",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 13,
+        "encoding_label": "C=10U=00A=11G=01",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 14,
+        "encoding_label": "C=10U=01A=00G=11",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 15,
+        "encoding_label": "C=10U=01A=11G=00",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 16,
+        "encoding_label": "C=10U=11A=00G=01",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 17,
+        "encoding_label": "C=10U=11A=01G=00",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 18,
+        "encoding_label": "C=11U=00A=01G=10",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 19,
+        "encoding_label": "C=11U=00A=10G=01",
+        "rate_observed": 0.35714285714285715,
+        "rate_possible": 0.36015625,
+        "depletion_fold": 1.0084375,
+        "hypergeom_p": 0.5723920329562266,
+        "observed_breaks": 10,
+        "possible_breaks": 461
+      },
+      {
+        "encoding_index": 20,
+        "encoding_label": "C=11U=01A=00G=10",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 21,
+        "encoding_label": "C=11U=01A=10G=00",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      },
+      {
+        "encoding_index": 22,
+        "encoding_label": "C=11U=10A=00G=01",
+        "rate_observed": 0.2857142857142857,
+        "rate_possible": 0.69921875,
+        "depletion_fold": 2.447265625,
+        "hypergeom_p": 6.075397420243029e-06,
+        "observed_breaks": 8,
+        "possible_breaks": 895
+      },
+      {
+        "encoding_index": 23,
+        "encoding_label": "C=11U=10A=01G=00",
+        "rate_observed": 0.21428571428571427,
+        "rate_possible": 0.72734375,
+        "depletion_fold": 3.394270833333333,
+        "hypergeom_p": 1.5839628551544103e-08,
+        "observed_breaks": 6,
+        "possible_breaks": 931
+      }
+    ]
+  },
+  "condlogit": {
+    "n_tables": 25,
+    "total_events": 66,
+    "aicc_ranking": [
+      [
+        "M3_phys_topo",
+        721.4130148878896
+      ],
+      [
+        "M4_full",
+        723.4899398930863
+      ],
+      [
+        "M3_phys_topo_k43",
+        738.3612788435064
+      ],
+      [
+        "M2_topo",
+        810.4679320707115
+      ],
+      [
+        "M1_phys",
+        829.660811515126
+      ],
+      [
+        "M2_topo_k43",
+        833.5035139914029
+      ]
+    ],
+    "model_fits": {
+      "M1_phys": {
+        "model": "M1_phys",
+        "log_likelihood": -413.799155757563,
+        "n_params": 1,
+        "aic": 829.598311515126,
+        "aicc": 829.660811515126,
+        "converged": true,
+        "weights_raw": [
+          -0.004888022399449203
+        ],
+        "weights_normalized": [
+          -1.3293443756103531
+        ],
+        "feat_stds": [
+          271.95955070912675
+        ],
+        "weight_labels": [
+          "delta_phys"
+        ]
+      },
+      "M2_topo": {
+        "model": "M2_topo",
+        "log_likelihood": -404.20271603535576,
+        "n_params": 1,
+        "aic": 810.4054320707115,
+        "aicc": 810.4679320707115,
+        "converged": true,
+        "weights_raw": [
+          -3.5837637044599058
+        ],
+        "weights_normalized": [
+          -1.6697873229980487
+        ],
+        "feat_stds": [
+          0.465931199905853
+        ],
+        "weight_labels": [
+          "delta_topo"
+        ]
+      },
+      "M3_phys_topo": {
+        "model": "M3_phys_topo",
+        "log_likelihood": -358.61126934870674,
+        "n_params": 2,
+        "aic": 721.2225386974135,
+        "aicc": 721.4130148878896,
+        "converged": true,
+        "weights_raw": [
+          -0.004317389210753695,
+          -3.315800708651331
+        ],
+        "weights_normalized": [
+          -1.1741552299930063,
+          -1.5449350028305924
+        ],
+        "feat_stds": [
+          271.95955070912675,
+          0.465931199905853
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo"
+        ]
+      },
+      "M4_full": {
+        "model": "M4_full",
+        "log_likelihood": -358.5514215594464,
+        "n_params": 3,
+        "aic": 723.1028431188928,
+        "aicc": 723.4899398930863,
+        "converged": true,
+        "weights_raw": [
+          -0.00430380366776267,
+          -2.985532394290398,
+          -0.2033225825326316
+        ],
+        "weights_normalized": [
+          -1.1704605118250275,
+          -1.3910526908295195,
+          -0.20993187249067363
+        ],
+        "feat_stds": [
+          271.95955070912675,
+          0.465931199905853,
+          1.032506423416992
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo",
+          "delta_trna"
+        ]
+      },
+      "M2_topo_k43": {
+        "model": "M2_topo_k43",
+        "log_likelihood": -415.72050699570144,
+        "n_params": 1,
+        "aic": 833.4410139914029,
+        "aicc": 833.5035139914029,
+        "converged": true,
+        "weights_raw": [
+          -3.695719162956247
+        ],
+        "weights_normalized": [
+          -1.7925821533203141
+        ],
+        "feat_stds": [
+          0.48504284938317865
+        ],
+        "weight_labels": [
+          "delta_topo_k43"
+        ]
+      },
+      "M3_phys_topo_k43": {
+        "model": "M3_phys_topo_k43",
+        "log_likelihood": -367.0854013265151,
+        "n_params": 2,
+        "aic": 738.1708026530303,
+        "aicc": 738.3612788435064,
+        "converged": true,
+        "weights_raw": [
+          -0.004570054892275767,
+          -3.45200592205363
+        ],
+        "weights_normalized": [
+          -1.2428700752193642,
+          -1.6743707885204997
+        ],
+        "feat_stds": [
+          271.95955070912675,
+          0.48504284938317865
+        ],
+        "weight_labels": [
+          "delta_phys",
+          "delta_topo_k43"
+        ]
+      }
+    },
+    "lr_tests": {
+      "M1_vs_M3": {
+        "restricted_model": "M1_phys",
+        "full_model": "M3_phys_topo",
+        "lr_statistic": 110.37577281771257,
+        "df": 1,
+        "p_value": 0.0,
+        "significant_p05": "True"
+      },
+      "M2_vs_M3": {
+        "restricted_model": "M2_topo",
+        "full_model": "M3_phys_topo",
+        "lr_statistic": 91.18289337329804,
+        "df": 1,
+        "p_value": 0.0,
+        "significant_p05": "True"
+      },
+      "M3_vs_M4": {
+        "restricted_model": "M3_phys_topo",
+        "full_model": "M4_full",
+        "lr_statistic": 0.11969557852069102,
+        "df": 1,
+        "p_value": 0.7293648939389585,
+        "significant_p05": "False"
+      },
+      "M1_vs_M3_k43": {
+        "restricted_model": "M1_phys",
+        "full_model": "M3_phys_topo_k43",
+        "lr_statistic": 93.4275088620958,
+        "df": 1,
+        "p_value": 0.0,
+        "significant_p05": "True"
+      },
+      "M2_k43_vs_M3_k43": {
+        "restricted_model": "M2_topo_k43",
+        "full_model": "M3_phys_topo_k43",
+        "lr_statistic": 97.27021133837263,
+        "df": 1,
+        "p_value": 0.0,
+        "significant_p05": "True"
+      }
+    },
+    "encoding_robustness": {
+      "delta_aicc_M1_to_M3_q6": 108.24779662723643,
+      "delta_aicc_M1_to_M3_k43": 91.29953267161966,
+      "m3_q6_aicc": 721.4130148878896,
+      "m3_k43_aicc": 738.3612788435064,
+      "m3_q6_log_likelihood": -358.61126934870674,
+      "m3_k43_log_likelihood": -367.0854013265151,
+      "m3_q6_minus_m3_k43_aicc": -16.948263955616767,
+      "m3_k43_favored_over_m1": "True",
+      "m3_q6_favored_over_m1": "True",
+      "delta_aicc_M2q6_to_M3q6": 89.0549171828219,
+      "delta_aicc_M2k43_to_M3k43": 95.14223514789649,
+      "interpretation": "If delta_aicc_M1_to_M3_k43 > 10 (K_4^3 phys+topo decisively beats phys alone), M3 dominance is robust to the choice of topology encoding (Q_6 vs encoding-independent K_4^3 / H(3,4)). If delta_aicc_M1_to_M3_k43 << delta_aicc_M1_to_M3_q6, the headline topology effect is partly an artifact of the Q_6 encoding."
+    },
+    "clade_exclusion": {
+      "delta_M1_M3_min": 48.82051998658733,
+      "delta_M1_M3_median": 100.74054317657203,
+      "delta_M1_M3_max": 116.69564517491801,
+      "delta_M2_M3_min": 31.580706382606195,
+      "delta_M2_M3_median": 87.65375052655281,
+      "delta_M2_M3_max": 94.89828488440332,
+      "all_M3_favored_over_M1": true,
+      "all_M3_favored_over_M2": true,
+      "n_regimes": 7,
+      "rows": [
+        {
+          "excluded_clade": "all_ciliates",
+          "excluded_tables": [
+            6,
+            10,
+            15,
+            27,
+            28,
+            29,
+            30
+          ],
+          "n_tables_remaining": 18,
+          "n_events_remaining": 52,
+          "M1_aicc": 698.8096481958289,
+          "M2_aicc": 646.6714406386797,
+          "M3_aicc": 615.0907342560735,
+          "M4_aicc": 616.8733194703434,
+          "delta_aicc_M1_to_M3": 83.71891393975545,
+          "delta_aicc_M2_to_M3": 31.580706382606195,
+          "delta_aicc_M3_to_M4": 1.7825852142699432,
+          "topo_coef_raw_M3": [
+            -0.002902488452273611,
+            -3.1509332657273217
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        },
+        {
+          "excluded_clade": "all_yeast_mito",
+          "excluded_tables": [
+            3
+          ],
+          "n_tables_remaining": 24,
+          "n_events_remaining": 60,
+          "M1_aicc": 746.4943071874876,
+          "M2_aicc": 731.0121990544735,
+          "M3_aicc": 643.3584485279207,
+          "M4_aicc": 645.5619733790097,
+          "delta_aicc_M1_to_M3": 103.1358586595669,
+          "delta_aicc_M2_to_M3": 87.65375052655281,
+          "delta_aicc_M3_to_M4": 2.203524851089014,
+          "topo_coef_raw_M3": [
+            -0.004474097994685642,
+            -3.4529921246810136
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        },
+        {
+          "excluded_clade": "all_CUG_clade",
+          "excluded_tables": [
+            12,
+            26
+          ],
+          "n_tables_remaining": 23,
+          "n_events_remaining": 64,
+          "M1_aicc": 793.705572547776,
+          "M2_aicc": 771.9082122572613,
+          "M3_aicc": 677.009927372858,
+          "M4_aicc": 679.2006860377226,
+          "delta_aicc_M1_to_M3": 116.69564517491801,
+          "delta_aicc_M2_to_M3": 94.89828488440332,
+          "delta_aicc_M3_to_M4": 2.1907586648645747,
+          "topo_coef_raw_M3": [
+            -0.004531839194081987,
+            -3.8126098814266927
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        },
+        {
+          "excluded_clade": "all_metazoan_mito",
+          "excluded_tables": [
+            2,
+            5,
+            9,
+            13,
+            14,
+            21
+          ],
+          "n_tables_remaining": 19,
+          "n_events_remaining": 40,
+          "M1_aicc": 466.09699281978266,
+          "M2_aicc": 505.9100836220851,
+          "M3_aicc": 417.2764728331953,
+          "M4_aicc": 417.63361578633953,
+          "delta_aicc_M1_to_M3": 48.82051998658733,
+          "delta_aicc_M2_to_M3": 88.63361078888977,
+          "delta_aicc_M3_to_M4": 0.35714295314420497,
+          "topo_coef_raw_M3": [
+            -0.005680747216536278,
+            -2.679767573015585
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        },
+        {
+          "excluded_clade": "all_algal_mito",
+          "excluded_tables": [
+            16,
+            22
+          ],
+          "n_tables_remaining": 23,
+          "n_events_remaining": 63,
+          "M1_aicc": 790.0734327220168,
+          "M2_aicc": 760.3068178653259,
+          "M3_aicc": 674.6089902639804,
+          "M4_aicc": 676.5601392219204,
+          "delta_aicc_M1_to_M3": 115.46444245803639,
+          "delta_aicc_M2_to_M3": 85.69782760134547,
+          "delta_aicc_M3_to_M4": 1.9511489579399495,
+          "topo_coef_raw_M3": [
+            -0.004322118027324462,
+            -3.808598109224406
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        },
+        {
+          "excluded_clade": "all_protist_mito",
+          "excluded_tables": [
+            4,
+            23
+          ],
+          "n_tables_remaining": 23,
+          "n_events_remaining": 63,
+          "M1_aicc": 783.7766727898373,
+          "M2_aicc": 775.4344428384288,
+          "M3_aicc": 683.0361296132653,
+          "M4_aicc": 684.8911806904613,
+          "delta_aicc_M1_to_M3": 100.74054317657203,
+          "delta_aicc_M2_to_M3": 92.39831322516352,
+          "delta_aicc_M3_to_M4": 1.8550510771959807,
+          "topo_coef_raw_M3": [
+            -0.004506394397661218,
+            -3.2528170778999215
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        },
+        {
+          "excluded_clade": "all_hemichordate_mito",
+          "excluded_tables": [
+            24,
+            33
+          ],
+          "n_tables_remaining": 23,
+          "n_events_remaining": 59,
+          "M1_aicc": 737.6104566613038,
+          "M2_aicc": 728.8080351473851,
+          "M3_aicc": 645.3091773560394,
+          "M4_aicc": 647.4331314500531,
+          "delta_aicc_M1_to_M3": 92.30127930526442,
+          "delta_aicc_M2_to_M3": 83.4988577913457,
+          "delta_aicc_M3_to_M4": 2.1239540940136976,
+          "topo_coef_raw_M3": [
+            -0.004441141679641991,
+            -3.1849441747727565
+          ],
+          "topo_coef_labels_M3": [
+            "delta_phys",
+            "delta_topo"
+          ],
+          "M3_favored_over_M1": "True",
+          "M3_favored_over_M2": "True"
+        }
+      ]
+    },
+    "restricted_candidate": {
+      "_doc": "Restricted-candidate-set sensitivity for the conditional logit. Candidates are filtered by delta_trna (Hamming distance to nearest existing target-AA codon). Observed moves are always retained.",
+      "full_set_summary": {
+        "n_choice_sets": 66,
+        "candidates_min": 1280,
+        "candidates_max": 1280,
+        "candidates_mean": 1280.0,
+        "observed_in_filtered_set": 66,
+        "observed_total": 66
+      },
+      "by_max_trna": {
+        "1": {
+          "max_trna": 1,
+          "candidate_summary": {
+            "n_choice_sets": 66,
+            "candidates_min": 273,
+            "candidates_max": 279,
+            "candidates_mean": 274.6515151515151,
+            "observed_in_filtered_set": 66,
+            "observed_total": 66
+          },
+          "model_aicc": {
+            "M1_phys": 674.7794172444816,
+            "M2_topo": 734.1978096190711,
+            "M3_phys_topo": 660.9323879638754,
+            "M4_full": 565.5892487807813,
+            "M2_topo_k43": 731.9610589619033,
+            "M3_phys_topo_k43": 659.3320814620947
+          },
+          "model_log_likelihood": {
+            "M1_phys": -336.3584586222408,
+            "M2_topo": -366.06765480953555,
+            "M3_phys_topo": -328.3709558866996,
+            "M4_full": -279.6010760032939,
+            "M2_topo_k43": -364.94927948095165,
+            "M3_phys_topo_k43": -327.5708026358093
+          },
+          "delta_aicc": {
+            "M1_to_M3": 13.847029280606193,
+            "M2_to_M3": 73.26542165519572,
+            "M3_to_M4": 95.34313918309408,
+            "M1_to_M3_k43": 15.447335782386858,
+            "M2k43_to_M3k43": 72.62897749980857
+          },
+          "lr_tests": {
+            "M1_vs_M3": {
+              "restricted_model": "M1_phys",
+              "full_model": "M3_phys_topo",
+              "lr_statistic": 15.97500547108234,
+              "df": 1,
+              "p_value": 6.41843164022049e-05,
+              "significant_p05": "True"
+            },
+            "M2_vs_M3": {
+              "restricted_model": "M2_topo",
+              "full_model": "M3_phys_topo",
+              "lr_statistic": 75.39339784567187,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            },
+            "M3_vs_M4": {
+              "restricted_model": "M3_phys_topo",
+              "full_model": "M4_full",
+              "lr_statistic": 97.53975976681147,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            },
+            "M1_vs_M3_k43": {
+              "restricted_model": "M1_phys",
+              "full_model": "M3_phys_topo_k43",
+              "lr_statistic": 17.575311972863005,
+              "df": 1,
+              "p_value": 2.76150270508424e-05,
+              "significant_p05": "True"
+            },
+            "M2_k43_vs_M3_k43": {
+              "restricted_model": "M2_topo_k43",
+              "full_model": "M3_phys_topo_k43",
+              "lr_statistic": 74.75695369028472,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            }
+          }
+        },
+        "2": {
+          "max_trna": 2,
+          "candidate_summary": {
+            "n_choice_sets": 66,
+            "candidates_min": 718,
+            "candidates_max": 741,
+            "candidates_mean": 727.3333333333334,
+            "observed_in_filtered_set": 66,
+            "observed_total": 66
+          },
+          "model_aicc": {
+            "M1_phys": 773.8347413442463,
+            "M2_topo": 791.4857363646876,
+            "M3_phys_topo": 714.2062225856092,
+            "M4_full": 696.8995412927295,
+            "M2_topo_k43": 819.0878728569344,
+            "M3_phys_topo_k43": 733.0472633511198
+          },
+          "model_log_likelihood": {
+            "M1_phys": -385.8861206721231,
+            "M2_topo": -394.7116181823438,
+            "M3_phys_topo": -355.00787319756654,
+            "M4_full": -345.256222259268,
+            "M2_topo_k43": -408.5126864284672,
+            "M3_phys_topo_k43": -364.4283935803218
+          },
+          "delta_aicc": {
+            "M1_to_M3": 59.62851875863703,
+            "M2_to_M3": 77.27951377907834,
+            "M3_to_M4": 17.306681292879716,
+            "M1_to_M3_k43": 40.78747799312646,
+            "M2k43_to_M3k43": 86.04060950581459
+          },
+          "lr_tests": {
+            "M1_vs_M3": {
+              "restricted_model": "M1_phys",
+              "full_model": "M3_phys_topo",
+              "lr_statistic": 61.756494949113176,
+              "df": 1,
+              "p_value": 3.885780586188048e-15,
+              "significant_p05": "True"
+            },
+            "M2_vs_M3": {
+              "restricted_model": "M2_topo",
+              "full_model": "M3_phys_topo",
+              "lr_statistic": 79.40748996955449,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            },
+            "M3_vs_M4": {
+              "restricted_model": "M3_phys_topo",
+              "full_model": "M4_full",
+              "lr_statistic": 19.503301876597106,
+              "df": 1,
+              "p_value": 1.0042594024151086e-05,
+              "significant_p05": "True"
+            },
+            "M1_vs_M3_k43": {
+              "restricted_model": "M1_phys",
+              "full_model": "M3_phys_topo_k43",
+              "lr_statistic": 42.915454183602606,
+              "df": 1,
+              "p_value": 5.715738993217201e-11,
+              "significant_p05": "True"
+            },
+            "M2_k43_vs_M3_k43": {
+              "restricted_model": "M2_topo_k43",
+              "full_model": "M3_phys_topo_k43",
+              "lr_statistic": 88.16858569629073,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            }
+          }
+        },
+        "3": {
+          "max_trna": 3,
+          "candidate_summary": {
+            "n_choice_sets": 66,
+            "candidates_min": 1080,
+            "candidates_max": 1100,
+            "candidates_mean": 1087.7121212121212,
+            "observed_in_filtered_set": 66,
+            "observed_total": 66
+          },
+          "model_aicc": {
+            "M1_phys": 814.2609685550309,
+            "M2_topo": 804.8454610493633,
+            "M3_phys_topo": 719.61697361913,
+            "M4_full": 721.2223295660137,
+            "M2_topo_k43": 829.1170701654096,
+            "M3_phys_topo_k43": 737.0996316443217
+          },
+          "model_log_likelihood": {
+            "M1_phys": -406.09923427751545,
+            "M2_topo": -401.39148052468164,
+            "M3_phys_topo": -357.71324871432694,
+            "M4_full": -357.4176163959101,
+            "M2_topo_k43": -413.5272850827048,
+            "M3_phys_topo_k43": -366.45457772692276
+          },
+          "delta_aicc": {
+            "M1_to_M3": 94.64399493590088,
+            "M2_to_M3": 85.22848743023326,
+            "M3_to_M4": -1.6053559468837193,
+            "M1_to_M3_k43": 77.16133691070922,
+            "M2k43_to_M3k43": 92.01743852108791
+          },
+          "lr_tests": {
+            "M1_vs_M3": {
+              "restricted_model": "M1_phys",
+              "full_model": "M3_phys_topo",
+              "lr_statistic": 96.77197112637703,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            },
+            "M2_vs_M3": {
+              "restricted_model": "M2_topo",
+              "full_model": "M3_phys_topo",
+              "lr_statistic": 87.3564636207094,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            },
+            "M3_vs_M4": {
+              "restricted_model": "M3_phys_topo",
+              "full_model": "M4_full",
+              "lr_statistic": 0.5912646368336709,
+              "df": 1,
+              "p_value": 0.44193050775731135,
+              "significant_p05": "False"
+            },
+            "M1_vs_M3_k43": {
+              "restricted_model": "M1_phys",
+              "full_model": "M3_phys_topo_k43",
+              "lr_statistic": 79.28931310118537,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            },
+            "M2_k43_vs_M3_k43": {
+              "restricted_model": "M2_topo_k43",
+              "full_model": "M3_phys_topo_k43",
+              "lr_statistic": 94.14541471156406,
+              "df": 1,
+              "p_value": 0.0,
+              "significant_p05": "True"
+            }
+          }
+        }
+      }
+    },
+    "phys_topo_rho": 0.15068140420169496
+  },
+  "trna": {
+    "n_pairings": 24,
+    "stouffer_z": 5.098367014629634,
+    "stouffer_p": 1.7129804374960145e-07,
+    "mis_worst_p": 0.12323569627764963,
+    "mis_best_p": 0.016156701999232914,
+    "mis_median_p": 0.04580633417284696,
+    "n_mis": 332,
+    "n_mis_total": 332,
+    "mis_frac_significant_p05": 0.572289156626506,
+    "topology_breaking_p": 0.43489106951522516,
+    "topology_breaking_z": 0.1639352220068547,
+    "topology_breaking_n": 4,
+    "provenance_24row": [
+      {
+        "variant_key": "scerevisiae_mito",
+        "variant_organism": "Saccharomyces cerevisiae",
+        "variant_compartment": "mitochondrial",
+        "variant_table_id": 3,
+        "variant_source_class": "annotation",
+        "variant_accession": "",
+        "variant_verified": "no",
+        "control_key": "ylipolytica_mito",
+        "control_organism": "Yarrowia lipolytica",
+        "control_source_class": "annotation",
+        "control_verified": "no",
+        "reassigned_aa": "Thr",
+        "reassignment": "CUA: Leu\u2192Thr; CUC: Leu\u2192Thr; CUG: Leu\u2192Thr; CUU: Leu\u2192Thr",
+        "q6_creates_disconnection": true,
+        "h34_impact": "creates",
+        "focal_variant": 2,
+        "denom_variant": 23,
+        "focal_control": 1,
+        "denom_control": 20,
+        "odds_ratio": 1.8095238095238095,
+        "p_greater": 0.5535207843772789
+      },
+      {
+        "variant_key": "sobliquus_mito",
+        "variant_organism": "Scenedesmus obliquus",
+        "variant_compartment": "mitochondrial",
+        "variant_table_id": 22,
+        "variant_source_class": "literature",
+        "variant_accession": "",
+        "variant_verified": "no",
+        "control_key": "creinhardtii_mito",
+        "control_organism": "Chlamydomonas reinhardtii",
+        "control_source_class": "annotation",
+        "control_verified": "no",
+        "reassigned_aa": "Leu",
+        "reassignment": "UAG: Stop\u2192Leu",
+        "q6_creates_disconnection": true,
+        "h34_impact": "no-effect",
+        "focal_variant": 2,
+        "denom_variant": 22,
+        "focal_control": 1,
+        "denom_control": 16,
+        "odds_ratio": 1.5,
+        "p_greater": 0.6206733048838312
+      },
+      {
+        "variant_key": "ptannophilus_nuclear",
+        "variant_organism": "Pachysolen tannophilus",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 26,
+        "variant_source_class": "literature",
+        "variant_accession": "",
+        "variant_verified": "no",
+        "control_key": "lthermotolerans_nuclear",
+        "control_organism": "Lachancea thermotolerans",
+        "control_source_class": "GtRNAdb",
+        "control_verified": "no",
+        "reassigned_aa": "Ala",
+        "reassignment": "CUG: Leu\u2192Ala",
+        "q6_creates_disconnection": true,
+        "h34_impact": "creates",
+        "focal_variant": 14,
+        "denom_variant": 207,
+        "focal_control": 11,
+        "denom_control": 206,
+        "odds_ratio": 1.2859161563824777,
+        "p_greater": 0.3449437514865384
+      },
+      {
+        "variant_key": "calbicans_nuclear",
+        "variant_organism": "Candida albicans",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 12,
+        "variant_source_class": "annotation",
+        "variant_accession": "",
+        "variant_verified": "no",
+        "control_key": "lthermotolerans_nuclear",
+        "control_organism": "Lachancea thermotolerans",
+        "control_source_class": "GtRNAdb",
+        "control_verified": "no",
+        "reassigned_aa": "Ser",
+        "reassignment": "CUG: Leu\u2192Ser",
+        "q6_creates_disconnection": true,
+        "h34_impact": "extends",
+        "focal_variant": 16,
+        "denom_variant": 207,
+        "focal_control": 13,
+        "denom_control": 206,
+        "odds_ratio": 1.243656866693516,
+        "p_greater": 0.35544017723799487
+      },
+      {
+        "variant_key": "tthermophila_nuclear",
+        "variant_organism": "Tetrahymena thermophila",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCF_000189635.1",
+        "variant_verified": "yes",
+        "control_key": "imultifiliis_nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 54,
+        "denom_variant": 712,
+        "focal_control": 3,
+        "denom_control": 141,
+        "odds_ratio": 3.7750759878419453,
+        "p_greater": 0.008426349137653201
+      },
+      {
+        "variant_key": "ptetraurelia_nuclear",
+        "variant_organism": "Paramecium tetraurelia",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCF_000165425.1",
+        "variant_verified": "yes",
+        "control_key": "imultifiliis_nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 18,
+        "denom_variant": 215,
+        "focal_control": 3,
+        "denom_control": 141,
+        "odds_ratio": 4.2030456852791875,
+        "p_greater": 0.010197632403706027
+      },
+      {
+        "variant_key": "tthermophila_nuclear",
+        "variant_organism": "Tetrahymena thermophila",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCF_000189635.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 54,
+        "denom_variant": 712,
+        "focal_control": 11,
+        "denom_control": 267,
+        "odds_ratio": 1.909919867366676,
+        "p_greater": 0.03227019062953774
+      },
+      {
+        "variant_key": "ptetraurelia_nuclear",
+        "variant_organism": "Paramecium tetraurelia",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCF_000165425.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 18,
+        "denom_variant": 215,
+        "focal_control": 11,
+        "denom_control": 267,
+        "odds_ratio": 2.1264420858329487,
+        "p_greater": 0.039602389780460684
+      },
+      {
+        "variant_key": "oxytricha_nuclear",
+        "variant_organism": "Oxytricha trifallax",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_000295675.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 8,
+        "denom_variant": 90,
+        "focal_control": 11,
+        "denom_control": 267,
+        "odds_ratio": 2.270509977827051,
+        "p_greater": 0.07513717580400886
+      },
+      {
+        "variant_key": "eoctocarinatus_nuclear",
+        "variant_organism": "Euplotes octocarinatus",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "literature",
+        "variant_accession": "",
+        "variant_verified": "no",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 5,
+        "denom_variant": 114,
+        "focal_control": 7,
+        "denom_control": 267,
+        "odds_ratio": 1.7038007863695936,
+        "p_greater": 0.27175486262264137
+      },
+      {
+        "variant_key": "bjaponicum_nuclear",
+        "variant_organism": "Blepharisma japonicum",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 15,
+        "variant_source_class": "literature",
+        "variant_accession": "",
+        "variant_verified": "no",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Trp",
+        "reassignment": "(no direct reassignment for this AA)",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 5,
+        "denom_variant": 115,
+        "focal_control": 6,
+        "denom_control": 267,
+        "odds_ratio": 1.9772727272727273,
+        "p_greater": 0.20969042225429652
+      },
+      {
+        "variant_key": "eaediculatus_nuclear",
+        "variant_organism": "Euplotes aediculatus",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_030463445.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 4,
+        "denom_variant": 77,
+        "focal_control": 7,
+        "denom_control": 267,
+        "odds_ratio": 2.035225048923679,
+        "p_greater": 0.214754701213773
+      },
+      {
+        "variant_key": "eaediculatus_nuclear",
+        "variant_organism": "Euplotes aediculatus",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_030463445.1",
+        "variant_verified": "yes",
+        "control_key": "fsalina_nuclear",
+        "control_organism": "Fabrea salina",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 4,
+        "denom_variant": 77,
+        "focal_control": 1,
+        "denom_control": 86,
+        "odds_ratio": 4.657534246575342,
+        "p_greater": 0.15104963621947606
+      },
+      {
+        "variant_key": "eamieti_nuclear",
+        "variant_organism": "Euplotes amieti",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_048569255.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 8,
+        "denom_variant": 116,
+        "focal_control": 7,
+        "denom_control": 267,
+        "odds_ratio": 2.751322751322751,
+        "p_greater": 0.04923189241625568
+      },
+      {
+        "variant_key": "efocardii_nuclear",
+        "variant_organism": "Euplotes focardii",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_001880345.2",
+        "variant_verified": "yes",
+        "control_key": "fsalina_nuclear",
+        "control_organism": "Fabrea salina",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 3,
+        "denom_variant": 59,
+        "focal_control": 1,
+        "denom_control": 86,
+        "odds_ratio": 4.553571428571429,
+        "p_greater": 0.18401786007419813
+      },
+      {
+        "variant_key": "eparawoodruffi_nuclear",
+        "variant_organism": "Euplotes parawoodruffi",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_021440025.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 9,
+        "denom_variant": 145,
+        "focal_control": 7,
+        "denom_control": 267,
+        "odds_ratio": 2.457983193277311,
+        "p_greater": 0.06540870533267415
+      },
+      {
+        "variant_key": "eweissei_nuclear",
+        "variant_organism": "Euplotes weissei",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_021440005.1",
+        "variant_verified": "yes",
+        "control_key": "fsalina_nuclear",
+        "control_organism": "Fabrea salina",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 20,
+        "denom_variant": 463,
+        "focal_control": 1,
+        "denom_control": 86,
+        "odds_ratio": 3.8374717832957113,
+        "p_greater": 0.13183920360874837
+      },
+      {
+        "variant_key": "ewoodruffi_nuclear",
+        "variant_organism": "Euplotes woodruffi",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 10,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_027382605.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Cys",
+        "reassignment": "UGA: Stop\u2192Cys",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 4,
+        "denom_variant": 79,
+        "focal_control": 7,
+        "denom_control": 267,
+        "odds_ratio": 1.980952380952381,
+        "p_greater": 0.2262660941963295
+      },
+      {
+        "variant_key": "ppersalinus_nuclear",
+        "variant_organism": "Pseudocohnilembus persalinus",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_001447515.1",
+        "variant_verified": "yes",
+        "control_key": "imultifiliis_nuclear",
+        "control_organism": "Ichthyophthirius multifiliis",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 20,
+        "denom_variant": 260,
+        "focal_control": 3,
+        "denom_control": 141,
+        "odds_ratio": 3.8333333333333335,
+        "p_greater": 0.015039153027039866
+      },
+      {
+        "variant_key": "ppersalinus_nuclear",
+        "variant_organism": "Pseudocohnilembus persalinus",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_001447515.1",
+        "variant_verified": "yes",
+        "control_key": "fsalina_nuclear",
+        "control_organism": "Fabrea salina",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 20,
+        "denom_variant": 260,
+        "focal_control": 3,
+        "denom_control": 86,
+        "odds_ratio": 2.3055555555555554,
+        "p_greater": 0.13166784854230562
+      },
+      {
+        "variant_key": "hgrandinella_nuclear",
+        "variant_organism": "Halteria grandinella",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_006369765.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 9,
+        "denom_variant": 129,
+        "focal_control": 11,
+        "denom_control": 267,
+        "odds_ratio": 1.7454545454545454,
+        "p_greater": 0.16503463045029354
+      },
+      {
+        "variant_key": "hgrandinella_nuclear",
+        "variant_organism": "Halteria grandinella",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 6,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_006369765.1",
+        "variant_verified": "yes",
+        "control_key": "fsalina_nuclear",
+        "control_organism": "Fabrea salina",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Gln",
+        "reassignment": "UAA: Stop\u2192Gln; UAG: Stop\u2192Gln",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 9,
+        "denom_variant": 129,
+        "focal_control": 3,
+        "denom_control": 86,
+        "odds_ratio": 2.075,
+        "p_greater": 0.21819480924552223
+      },
+      {
+        "variant_key": "bstoltei_nuclear",
+        "variant_organism": "Blepharisma stoltei",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 15,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_965603825.1",
+        "variant_verified": "yes",
+        "control_key": "scoeruleus_nuclear",
+        "control_organism": "Stentor coeruleus",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Trp",
+        "reassignment": "(no direct reassignment for this AA)",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 6,
+        "denom_variant": 166,
+        "focal_control": 6,
+        "denom_control": 267,
+        "odds_ratio": 1.63125,
+        "p_greater": 0.2894176130312396
+      },
+      {
+        "variant_key": "bstoltei_nuclear",
+        "variant_organism": "Blepharisma stoltei",
+        "variant_compartment": "nuclear",
+        "variant_table_id": 15,
+        "variant_source_class": "tRNAscan-SE 2.0.12",
+        "variant_accession": "GCA_965603825.1",
+        "variant_verified": "yes",
+        "control_key": "fsalina_nuclear",
+        "control_organism": "Fabrea salina",
+        "control_source_class": "tRNAscan-SE 2.0.12",
+        "control_verified": "yes",
+        "reassigned_aa": "Trp",
+        "reassignment": "(no direct reassignment for this AA)",
+        "q6_creates_disconnection": false,
+        "h34_impact": "no-effect",
+        "focal_variant": 6,
+        "denom_variant": 166,
+        "focal_control": 2,
+        "denom_control": 86,
+        "odds_ratio": 1.575,
+        "p_greater": 0.4469256093780069
+      }
+    ],
+    "n_provenance_pairings": 24,
+    "n_verified_organisms": 15
+  },
+  "phylo": {
+    "all_significant": true,
+    "lineage_collapsed": {
+      "n_events": 28,
+      "creates_disc": 6,
+      "rate_observed": 0.21428571428571427,
+      "rate_possible": 0.72734375,
+      "depletion_fold": 3.394270833333333,
+      "hypergeom_p": 1.5839628551544103e-08
+    },
+    "clade_exclusion": [
+      {
+        "excluded_clade": "all_ciliates",
+        "excluded_tables": [
+          6,
+          10,
+          15,
+          27,
+          28,
+          29,
+          30
+        ],
+        "n_events_remaining": 24,
+        "creates_disc": 6,
+        "rate_observed": 0.25,
+        "hypergeom_p": 1.215429333210768e-06,
+        "significant_p05": true
+      },
+      {
+        "excluded_clade": "all_yeast_mito",
+        "excluded_tables": [
+          3
+        ],
+        "n_events_remaining": 24,
+        "creates_disc": 2,
+        "rate_observed": 0.08333333333333333,
+        "hypergeom_p": 3.642548162033467e-11,
+        "significant_p05": true
+      },
+      {
+        "excluded_clade": "all_CUG_clade",
+        "excluded_tables": [
+          12,
+          26
+        ],
+        "n_events_remaining": 26,
+        "creates_disc": 5,
+        "rate_observed": 0.19230769230769232,
+        "hypergeom_p": 1.4129117111334667e-08,
+        "significant_p05": true
+      },
+      {
+        "excluded_clade": "all_metazoan_mito",
+        "excluded_tables": [
+          2,
+          5,
+          9,
+          13,
+          14,
+          21
+        ],
+        "n_events_remaining": 22,
+        "creates_disc": 6,
+        "rate_observed": 0.2727272727272727,
+        "hypergeom_p": 9.782128236320826e-06,
+        "significant_p05": true
+      },
+      {
+        "excluded_clade": "all_algal_mito",
+        "excluded_tables": [
+          16,
+          22
+        ],
+        "n_events_remaining": 26,
+        "creates_disc": 5,
+        "rate_observed": 0.19230769230769232,
+        "hypergeom_p": 1.4129117111334667e-08,
+        "significant_p05": true
+      },
+      {
+        "excluded_clade": "all_protist_mito",
+        "excluded_tables": [
+          4,
+          23
+        ],
+        "n_events_remaining": 27,
+        "creates_disc": 6,
+        "rate_observed": 0.2222222222222222,
+        "hypergeom_p": 4.776789702630534e-08,
+        "significant_p05": true
+      },
+      {
+        "excluded_clade": "all_hemichordate_mito",
+        "excluded_tables": [
+          24,
+          33
+        ],
+        "n_events_remaining": 27,
+        "creates_disc": 6,
+        "rate_observed": 0.2222222222222222,
+        "hypergeom_p": 4.776789702630534e-08,
+        "significant_p05": true
+      }
+    ]
+  },
+  "reassignment": {
+    "n_events": 66,
+    "n_dedup": 28,
+    "per_table_counts": [
+      {
+        "table_id": 2,
+        "table_name": "Vertebrate Mitochondrial",
+        "n_events": 4
+      },
+      {
+        "table_id": 3,
+        "table_name": "Yeast Mitochondrial",
+        "n_events": 6
+      },
+      {
+        "table_id": 4,
+        "table_name": "Mold/Protozoan/Coelenterate Mito",
+        "n_events": 1
+      },
+      {
+        "table_id": 5,
+        "table_name": "Invertebrate Mitochondrial",
+        "n_events": 4
+      },
+      {
+        "table_id": 6,
+        "table_name": "Ciliate Nuclear",
+        "n_events": 2
+      },
+      {
+        "table_id": 9,
+        "table_name": "Echinoderm/Flatworm Mito",
+        "n_events": 4
+      },
+      {
+        "table_id": 10,
+        "table_name": "Euplotid Nuclear",
+        "n_events": 1
+      },
+      {
+        "table_id": 12,
+        "table_name": "Alternative Yeast Nuclear",
+        "n_events": 1
+      },
+      {
+        "table_id": 13,
+        "table_name": "Ascidian Mitochondrial",
+        "n_events": 4
+      },
+      {
+        "table_id": 14,
+        "table_name": "Alternative Flatworm Mito",
+        "n_events": 5
+      },
+      {
+        "table_id": 15,
+        "table_name": "Blepharisma Macronuclear",
+        "n_events": 1
+      },
+      {
+        "table_id": 16,
+        "table_name": "Chlorophycean Mito",
+        "n_events": 1
+      },
+      {
+        "table_id": 21,
+        "table_name": "Trematode Mitochondrial",
+        "n_events": 5
+      },
+      {
+        "table_id": 22,
+        "table_name": "Scenedesmus obliquus Mito",
+        "n_events": 2
+      },
+      {
+        "table_id": 23,
+        "table_name": "Thraustochytrium Mito",
+        "n_events": 2
+      },
+      {
+        "table_id": 24,
+        "table_name": "Rhabdopleuridae Mito",
+        "n_events": 3
+      },
+      {
+        "table_id": 25,
+        "table_name": "Candidate Division SR1 / Gracilibacteria",
+        "n_events": 1
+      },
+      {
+        "table_id": 26,
+        "table_name": "Pachysolen tannophilus Nuclear",
+        "n_events": 1
+      },
+      {
+        "table_id": 27,
+        "table_name": "Karyorelict Nuclear",
+        "n_events": 3
+      },
+      {
+        "table_id": 28,
+        "table_name": "Condylostoma Nuclear",
+        "n_events": 3
+      },
+      {
+        "table_id": 29,
+        "table_name": "Mesodinium Nuclear",
+        "n_events": 2
+      },
+      {
+        "table_id": 30,
+        "table_name": "Peritrich Nuclear",
+        "n_events": 2
+      },
+      {
+        "table_id": 31,
+        "table_name": "Blastocrithidia Nuclear",
+        "n_events": 3
+      },
+      {
+        "table_id": 32,
+        "table_name": "Balanophoraceae Plastid",
+        "n_events": 1
+      },
+      {
+        "table_id": 33,
+        "table_name": "Cephalodiscidae Mito",
+        "n_events": 4
+      }
+    ]
+  },
+  "protsub": {
+    "observed": 1089.5,
+    "null_mean": 1180.1953,
+    "null_std": 29.721914425718154,
+    "z": 3.0514622544475842,
+    "p": 0.0004999500049995,
+    "quantile": 0.04
+  },
+  "metric_correlations": {
+    "aa_pair_min": 0.2284,
+    "aa_pair_median": 0.4908,
+    "aa_pair_max": 0.7296,
+    "code_level_min": 0.7117,
+    "code_level_median": 0.8183,
+    "code_level_max": 0.8903,
+    "n_partials_independent": 4,
+    "n_partial_pairs_total": 10
+  },
+  "walsh": {
+    "spectral_depth": 544,
+    "block_size_z": -17.739397944088275,
+    "block_size_null_mean": 689.26,
+    "block_size_null_std": 8.188552985723422,
+    "label_perm_invariant": true,
+    "encoding_invariant": true,
+    "encoding_z_min": -18.895050696298608,
+    "encoding_z_max": -16.868289679980986,
+    "label_spectrum_S": 0.7514309076042518,
+    "label_spectrum_null_mean": 0.23833720359771055,
+    "label_spectrum_null_std": 0.016919007955990252,
+    "label_spectrum_z": 30.32646508242099,
+    "label_spectrum_n_distinct_null": 15
+  },
+  "pipeline": {
+    "n_claims": 15,
+    "n_supported": 4,
+    "n_tests": "dynamic"
+  }
+}

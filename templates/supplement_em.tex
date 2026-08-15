@@ -1,0 +1,77 @@
+% Editorial-Manager pdflatex-compatible supplement wrapper. See main_em.tex
+% for the rationale for avoiding fontspec.
+
+\documentclass[preprint,11pt,authoryear,a4paper]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage[capitalise,nameinlink]{cleveref}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{multirow}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\setlength{\parindent}{1.2em}
+
+% Use \DeclareUnicodeCharacter (inputenc-native) so we don't emit
+% "Redefining Unicode character" warnings for §, –, †, ‡ that inputenc
+% already handles.
+\DeclareUnicodeCharacter{25AB}{\ensuremath{\,\square\,}}
+\DeclareUnicodeCharacter{03C1}{\ensuremath{\rho}}
+\DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
+\DeclareUnicodeCharacter{00A7}{\S}
+\DeclareUnicodeCharacter{2013}{--}
+\DeclareUnicodeCharacter{2020}{\textsuperscript{\dag}}
+\DeclareUnicodeCharacter{2021}{\textsuperscript{\ddag}}
+
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\providecommand{\textsubscript}[1]{\ensuremath{_{\text{#1}}}}
+\providecommand{\real}[1]{#1}
+
+% TIFF placeholder (see main_em.tex for rationale).
+\newcommand{\emfig}[1]{%
+  \fbox{\parbox[c][4.5cm][c]{0.75\linewidth}{%
+    \centering
+    \textit{Figure to be inserted at production:}\\[6pt]%
+    \texttt{#1.tif}%
+  }}%
+}
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thesection}{S\arabic{section}}
+
+\journal{BioSystems}
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Supplementary material: Robust error-minimization in the genetic code in $\mathrm{GF}(2)^6$}
+\author[lc]{Paul Clayworth}
+\author[bs]{Sergey Kornilov}
+\affiliation[lc]{organization={Logocentricity Inc.}, addressline={Austin, TX}, country={USA}}
+\affiliation[bs]{organization={Biostochastics, LLC}, addressline={Seattle, WA}, country={USA}}
+\end{frontmatter}
+
+\input{supplement_body_em.tex}
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{references}
+
+\end{document}

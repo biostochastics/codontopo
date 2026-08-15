@@ -1,0 +1,11 @@
+Model,Feature,beta_raw,beta_normalized
+M1_phys,delta_phys,-0.00489,-1.3293
+M2_topo,delta_topo,-3.58376,-1.6698
+M3_phys_topo,delta_phys,-0.00432,-1.1742
+M3_phys_topo,delta_topo,-3.3158,-1.5449
+M4_full,delta_phys,-0.0043,-1.1705
+M4_full,delta_topo,-2.98553,-1.3911
+M4_full,delta_trna,-0.20332,-0.2099
+M2_topo_k43,delta_topo_k43,-3.69572,-1.7926
+M3_phys_topo_k43,delta_phys,-0.00457,-1.2429
+M3_phys_topo_k43,delta_topo_k43,-3.45201,-1.6744

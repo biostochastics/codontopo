@@ -1,0 +1,2 @@
+total_deviations,synonymous,nonsynonymous,reversions,mean_delta_local,median_delta_local,n_better,n_worse,n_same,binomial_p,wilcoxon_p,mean_hamming
+727,338,389,52,52.73590096286107,0.0,190,326,211,0.9999999993461696,0.9999999997350478,2.130674002751032
