@@ -153,9 +153,11 @@ def build_rows() -> list[dict]:
         q6_creates = (dis_key, ctl_key, aa) in _Q6_CREATES_KEYS
         h34 = _h34_impact(table_id, aa) if q6_creates else "no-effect"
         fisher = _fisher_row(dis_key, ctl_key, aa)
+        reass = _reassignment_string(table_id, aa)
         rows.append(
             {
                 "variant_key": dis_key,
+                "variant_short": dis_key.split("_")[0],
                 "variant_organism": dis.organism,
                 "variant_compartment": dis.compartment,
                 "variant_table_id": dis.ncbi_table_id,
@@ -163,12 +165,15 @@ def build_rows() -> list[dict]:
                 "variant_accession": _accession(dis.source),
                 "variant_verified": _verified(dis.source),
                 "control_key": ctl_key,
+                "control_short": ctl_key.split("_")[0],
                 "control_organism": ctl.organism,
                 "control_source_class": _source_class(ctl.source),
                 "control_verified": _verified(ctl.source),
                 "reassigned_aa": aa,
-                "reassignment": _reassignment_string(table_id, aa),
+                "reassignment": reass,
+                "reassignment_short": reass if len(reass) <= 30 else reass[:29] + "…",
                 "q6_creates_disconnection": q6_creates,
+                "q6_break_marker": "Y" if q6_creates else "n",
                 "h34_impact": h34,
                 **fisher,
             }

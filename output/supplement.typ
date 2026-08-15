@@ -194,13 +194,14 @@ The primary coloring-optimality tests throughout this paper use the *quartet-pat
 
 We reran the four physicochemical metrics under the classical Haig--Hurst AA-permutation null ($n = $10,000 draws, seed 135325) for direct comparison against the quartet-pattern shuffle values reported in main-text Table 2. Results are in @tbl:s-null-comparison.
 
-#let hh = stats.at("coloring", default: (:)).at("haig_hurst_aa_null", default: (:))
-#let hh_by = hh.at("per_metric", default: (:))
-#let qp = stats.at("metrics", default: (:))
-#let _q_p(m) = qp.at(m, default: (:)).at("p", default: 0)
-#let _q_z(m) = qp.at(m, default: (:)).at("z", default: 0)
-#let _h_p(m) = hh_by.at(m, default: (:)).at("p_value_conservative", default: 0)
-#let _h_z(m) = hh_by.at(m, default: (:)).at("z", default: 0)
+#let hh_gra = stats.coloring.haig_hurst_aa_null.per_metric.grantham
+#let hh_miy = stats.coloring.haig_hurst_aa_null.per_metric.miyata
+#let hh_pr  = stats.coloring.haig_hurst_aa_null.per_metric.polar_requirement
+#let hh_kd  = stats.coloring.haig_hurst_aa_null.per_metric.kyte_doolittle
+#let qp_gra = stats.metrics.grantham
+#let qp_miy = stats.metrics.miyata
+#let qp_pr  = stats.metrics.polar_requirement
+#let qp_kd  = stats.metrics.kyte_doolittle
 
 #figure(
   table(
@@ -217,21 +218,21 @@ We reran the four physicochemical metrics under the classical Haig--Hurst AA-per
       [*HH-AA $p$*],
       [*Δ (HH − QP)*],
     ),
-    [Grantham], [#str(calc.round(qp.grantham.observed, digits: 1))],
-      [#str(calc.round(_q_z("grantham"), digits: 2))], [#str(calc.round(_q_p("grantham"), digits: 4))],
-      [#str(calc.round(_h_z("grantham"), digits: 2))], [#str(calc.round(_h_p("grantham"), digits: 4))],
+    [Grantham], [#str(calc.round(qp_gra.observed, digits: 1))],
+      [#str(calc.round(qp_gra.z, digits: 2))], [#str(calc.round(qp_gra.p, digits: 4))],
+      [#str(calc.round(hh_gra.z, digits: 2))], [#str(calc.round(hh_gra.p_value_conservative, digits: 4))],
       [HH more extreme],
-    [Miyata], [#str(calc.round(qp.miyata.observed, digits: 1))],
-      [#str(calc.round(_q_z("miyata"), digits: 2))], [#str(calc.round(_q_p("miyata"), digits: 4))],
-      [#str(calc.round(_h_z("miyata"), digits: 2))], [#str(calc.round(_h_p("miyata"), digits: 4))],
+    [Miyata], [#str(calc.round(qp_miy.observed, digits: 1))],
+      [#str(calc.round(qp_miy.z, digits: 2))], [#str(calc.round(qp_miy.p, digits: 4))],
+      [#str(calc.round(hh_miy.z, digits: 2))], [#str(calc.round(hh_miy.p_value_conservative, digits: 4))],
       [HH more extreme],
-    [Polar requirement], [#str(calc.round(qp.polar_requirement.observed, digits: 1))],
-      [#str(calc.round(_q_z("polar_requirement"), digits: 2))], [#str(calc.round(_q_p("polar_requirement"), digits: 4))],
-      [#str(calc.round(_h_z("polar_requirement"), digits: 2))], [#str(calc.round(_h_p("polar_requirement"), digits: 4))],
+    [Polar requirement], [#str(calc.round(qp_pr.observed, digits: 1))],
+      [#str(calc.round(qp_pr.z, digits: 2))], [#str(calc.round(qp_pr.p, digits: 4))],
+      [#str(calc.round(hh_pr.z, digits: 2))], [#str(calc.round(hh_pr.p_value_conservative, digits: 4))],
       [HH more extreme],
-    [Kyte--Doolittle], [#str(calc.round(qp.kyte_doolittle.observed, digits: 1))],
-      [#str(calc.round(_q_z("kyte_doolittle"), digits: 2))], [#str(calc.round(_q_p("kyte_doolittle"), digits: 4))],
-      [#str(calc.round(_h_z("kyte_doolittle"), digits: 2))], [#str(calc.round(_h_p("kyte_doolittle"), digits: 4))],
+    [Kyte--Doolittle], [#str(calc.round(qp_kd.observed, digits: 1))],
+      [#str(calc.round(qp_kd.z, digits: 2))], [#str(calc.round(qp_kd.p, digits: 4))],
+      [#str(calc.round(hh_kd.z, digits: 2))], [#str(calc.round(hh_kd.p_value_conservative, digits: 4))],
       [QP more extreme],
   ),
   caption: [
@@ -627,7 +628,7 @@ The Fisher-exact denominator convention used throughout is the *by-amino-acid su
         [*Control*],
         [*AA*],
         [*Reassignment*],
-        [*Q₆ break?*],
+        [*$Q_6$ break?*],
         [*H(3,4)*],
         [*Var $a/N$*],
         [*Ctl $a/N$*],
@@ -635,11 +636,11 @@ The Fisher-exact denominator convention used throughout is the *by-amino-acid su
         [*Fisher $p$*],
       ),
       ..prov.map(r => (
-        [#r.variant_key.replace("_", " ").split(" ").at(0)],
-        [#r.control_key.replace("_", " ").split(" ").at(0)],
+        [#r.variant_short],
+        [#r.control_short],
         [#r.reassigned_aa],
-        [#text(size: 8pt)[#r.reassignment.slice(0, calc.min(30, r.reassignment.len()))]],
-        [#if r.q6_creates_disconnection [Y] else [n]],
+        [#text(size: 8pt)[#r.reassignment_short]],
+        [#r.q6_break_marker],
         [#r.h34_impact],
         [#r.focal_variant/#r.denom_variant],
         [#r.focal_control/#r.denom_control],
