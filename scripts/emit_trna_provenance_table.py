@@ -145,6 +145,20 @@ def _fisher_row(dis_key: str, ctl_key: str, aa: str) -> dict:
 
 
 def build_rows() -> list[dict]:
+    def _source_display(
+        key: str, source_class: str, source_full: str, accession: str
+    ) -> str:
+        """Precompute the accession-or-citation string for Table S11b so the
+        Typst side is a plain field lookup (no multi-branch #{ if...else }
+        block that freeze_typst.py's block-splice resolver cannot evaluate)."""
+        if accession:
+            return accession
+        if source_class == "literature" and key.startswith("scerevisiae"):
+            return "Bonitz et al. 1980"
+        if source_class == "literature" and key.startswith("ylipolytica"):
+            return "Kerscher et al. 2001"
+        return source_full
+
     rows: list[dict] = []
     for dis_key, ctl_key, aa in DISCONNECTION_PAIRINGS:
         dis = get_repertoire(dis_key)
@@ -164,15 +178,32 @@ def build_rows() -> list[dict]:
                 "variant_source_class": _source_class(dis.source),
                 "variant_accession": _accession(dis.source),
                 "variant_source_full": dis.source,
+                "variant_source_display": _source_display(
+                    dis_key,
+                    _source_class(dis.source),
+                    dis.source,
+                    _accession(dis.source),
+                ),
                 "variant_verified": _verified(dis.source),
                 "control_key": ctl_key,
                 "control_short": ctl_key.split("_")[0],
                 "control_organism": ctl.organism,
                 "control_compartment": ctl.compartment,
+                "compartment_marker": (
+                    dis.compartment[0].upper()
+                    if dis.compartment == ctl.compartment
+                    else f"{dis.compartment[0].upper()}/{ctl.compartment[0].upper()}"
+                ),
                 "control_table_id": ctl.ncbi_table_id,
                 "control_source_class": _source_class(ctl.source),
                 "control_accession": _accession(ctl.source),
                 "control_source_full": ctl.source,
+                "control_source_display": _source_display(
+                    ctl_key,
+                    _source_class(ctl.source),
+                    ctl.source,
+                    _accession(ctl.source),
+                ),
                 "control_verified": _verified(ctl.source),
                 "reassigned_aa": aa,
                 "reassignment": reass,

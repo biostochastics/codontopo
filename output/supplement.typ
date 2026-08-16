@@ -755,24 +755,10 @@ The Fisher-exact denominator convention used throughout is the *by-amino-acid su
       ..prov.map(r => (
         [#abbrev_species(r.variant_organism) $arrow.l$ #abbrev_species(r.control_organism)],
         [#r.reassigned_aa],
-        [#{
-          let v = upper(r.variant_compartment.at(0))
-          let cc = r.at("control_compartment", default: r.variant_compartment)
-          let c = upper(cc.at(0))
-          if v == c { v } else { v + "/" + c }
-        }],
+        [#r.compartment_marker],
         [#r.variant_table_id],
-        [#text(size: 8pt)[#r.variant_source_class; #{
-          if r.variant_accession != "" { r.variant_accession }
-          else if r.variant_source_class == "literature" and r.variant_short == "scerevisiae" { "Bonitz et al. 1980" }
-          else if r.variant_source_class == "literature" and r.variant_short == "ylipolytica" { "Kerscher et al. 2001" }
-          else { r.at("variant_source_full", default: "") }
-        }]],
-        [#text(size: 8pt)[#r.control_source_class; #{
-          if r.at("control_accession", default: "") != "" { r.control_accession }
-          else if r.control_source_class == "literature" and r.control_short == "ylipolytica" { "Kerscher et al. 2001" }
-          else { r.at("control_source_full", default: "") }
-        }]],
+        [#text(size: 8pt)[#r.variant_source_class; #r.variant_source_display]],
+        [#text(size: 8pt)[#r.control_source_class; #r.control_source_display]],
       )).flatten(),
     ),
     caption: [

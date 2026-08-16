@@ -1062,9 +1062,25 @@ def _phylo_label(s: str) -> str:
     return " ".join(parts[1:])
 
 
+def _abbrev_species(name: str) -> str:
+    """Python mirror of the Typst `abbrev_species()` helper: "Saccharomyces
+    cerevisiae" -> italicised "S. cerevisiae"; strips trailing "_mito" and
+    "_nuclear" suffixes; leaves single-word names in italics as-is."""
+    clean = name.replace("_mito", "").replace("_nuclear", "").strip()
+    parts = clean.split(" ")
+    if len(parts) >= 2 and parts[0]:
+        body = f"{parts[0][0]}. {' '.join(parts[1:])}"
+    else:
+        body = clean
+    # Typst emph in the pandoc conversion path -> LaTeX \emph{...}. We emit
+    # the Typst source form so the pandoc reader sees emph consistently.
+    return f"#emph[{body}]"
+
+
 _USER_HELPERS = {
     "_format_clade_label": _format_clade_label,
     "_phylo_label": _phylo_label,
+    "abbrev_species": _abbrev_species,
 }
 
 

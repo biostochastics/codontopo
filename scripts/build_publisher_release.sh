@@ -7,7 +7,8 @@
 # tag v0.6.1 (or head-of-main during development).
 #
 # Requires: Python 3.11 with the dev extra installed (pip install -e ".[dev]"),
-#           R 4.4 with ggplot2 + ggpubr + jsonlite, and Typst 0.14.2.
+#           R 4.4 with ggplot2 + ggpubr + jsonlite, Typst 0.14.2, and (for the
+#           Elsevier LaTeX bundle at the end) pandoc 3.1+ and TeX Live.
 #
 # Usage: bash scripts/build_publisher_release.sh
 #
@@ -20,28 +21,34 @@ set -euo pipefail
 # Repo root — the script assumes it is invoked from there.
 cd "$(dirname "$0")/.."
 
-echo "[1/8] codon-topo all: running analyses (seed 135325, n = 10000)…"
+echo "[1/9] codon-topo all: running analyses (seed 135325, n = 10000)…"
 codon-topo all --output-dir=./output --seed=135325 --n=10000
 
-echo "[2/8] patch_pt_keys.py: per-table + trna + condlogit key patches…"
+echo "[2/9] patch_pt_keys.py: per-table + trna + condlogit key patches…"
 python3.11 scripts/patch_pt_keys.py
 
-echo "[3/8] emit_trna_provenance_table.py: 24-row provenance table…"
+echo "[3/9] emit_trna_provenance_table.py: 24-row provenance table…"
 python3.11 scripts/emit_trna_provenance_table.py
 
-echo "[4/8] generate_tables.py: T-CSV table exports…"
+echo "[4/9] generate_tables.py: T-CSV table exports…"
 python3.11 scripts/generate_tables.py
 
-echo "[5/8] all_figures.R: regenerate main + supplement figures (PNG + PDF + TIFF)…"
+echo "[5/9] all_figures.R: regenerate main + supplement figures (PNG + PDF + TIFF)…"
 Rscript src/codon_topo/visualization/R/all_figures.R output output/figures
 
-echo "[6/8] strengthened_figures.R: regenerate strengthened panels…"
+echo "[6/9] strengthened_figures.R: regenerate strengthened panels…"
 Rscript src/codon_topo/visualization/R/strengthened_figures.R output/tables output/figures
 
-echo "[7/8] typst compile output/manuscript.typ…"
+echo "[7/9] typst compile output/manuscript.typ…"
 typst compile output/manuscript.typ output/manuscript.pdf
 
-echo "[8/8] typst compile output/supplement.typ…"
+echo "[8/9] typst compile output/supplement.typ…"
 typst compile output/supplement.typ output/supplement.pdf
 
-echo "done. Deliverables at output/manuscript.pdf and output/supplement.pdf."
+echo "[9/9] build Elsevier LaTeX bundle from current Typst source…"
+bash scripts/build_em_bundle.sh
+
+echo
+echo "done."
+echo "  Typst PDFs:     output/manuscript.pdf, output/supplement.pdf"
+echo "  Elsevier bundle: output/publisher_deliverable/submission_bundle.zip"
