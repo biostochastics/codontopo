@@ -94,14 +94,17 @@ data/codonsafe/*/*.gb
 *.bak
 output/ledger_body.typ
 output/*_frozen.typ
-output/*.aux
-output/*.log
-output/*.out
-output/*.fdb_latexmk
-output/*.fls
-output/*.spl
-output/*.blg
-output/*.toc
+
+# --- LaTeX build artifacts (any depth under output/) ---
+output/**/*.aux
+output/**/*.log
+output/**/*.out
+output/**/*.fdb_latexmk
+output/**/*.fls
+output/**/*.spl
+output/**/*.blg
+output/**/*.toc
+output/**/*.bbl
 
 # --- Older / interim publisher deliverable subfolders (only v0.6.1 is current) ---
 output/publisher_deliverable/submission_em_fixed/
