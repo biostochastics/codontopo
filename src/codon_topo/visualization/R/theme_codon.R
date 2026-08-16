@@ -138,11 +138,16 @@ label_sig <- function(p) {
 ANNOT_SIZE   <- 3.2
 ANNOT_SIZE_S <- 2.8
 
-# Save helper: always PNG + PDF
+# Save helper: PNG + PDF + TIFF. TIFF is the Elsevier-preferred format
+# for the "Figure" item type in Editorial Manager, so we always emit one
+# alongside the PNG (for web/preview) and PDF (for LaTeX \includegraphics).
+# LZW compression keeps TIFFs small without loss.
 save_figure <- function(p, path_stem, width = FIG_W, height = FIG_H) {
   ggsave(paste0(path_stem, ".png"), p, width = width, height = height,
          dpi = DPI, bg = "white")
   ggsave(paste0(path_stem, ".pdf"), p, width = width, height = height,
          bg = "white")
-  cat("  Saved:", paste0(path_stem, ".{png,pdf}"), "\n")
+  ggsave(paste0(path_stem, ".tiff"), p, width = width, height = height,
+         dpi = DPI, bg = "white", compression = "lzw")
+  cat("  Saved:", paste0(path_stem, ".{png,pdf,tiff}"), "\n")
 }

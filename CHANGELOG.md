@@ -2,178 +2,114 @@
 
 Release notes for the `codon-topo` pipeline and the accompanying
 manuscript **BIOSYS-D-26-00689** (Clayworth & Kornilov, *BioSystems*, in
-press). Semantic versioning; each release corresponds to a manuscript
-revision or a proofs-corrections pass.
+press). Each release corresponds to a manuscript revision or a
+proofs-corrections pass.
 
 ---
 
-## [v0.6.0] — 2026-08-15 — Second pre-production QA/QC pass
+## [v0.6.1] — 2026-08-15 — Pre-publication QA/QC of Figures, Tables, and Statistics
 
-Consolidated close-out of a second internal QA/QC read. All v0.5.1 corrections preserved. The four SUPPORTED claims (cross-metric coloring optimality, per-table preservation, ρ-robustness, topology-avoidance depletion) are unchanged; tRNA-enrichment remains EXPLORATORY. Substantive changes:
+Consolidated close-out of a pre-publication QA/QC audit of every figure, table, and inferential quantity across the manuscript and the supplement. **All scientific conclusions of the accepted manuscript are unchanged**: four SUPPORTED claims (cross-metric coloring optimality, per-table preservation, ρ-robustness, topology-avoidance depletion), one EXPLORATORY (tRNA enrichment), one FALSIFIED (KRAS–Fano), and the remaining REJECTED/TAUTOLOGICAL entries as reported in the accepted version. Two substantive computational corrections (the Bron–Kerbosch MIS pivot in the tRNA-enrichment robustness bound and the Monte Carlo tie-inclusion in the coloring-optimality null) shifted several displayed values — the largest shift is the tRNA reclassification from SUGGESTIVE to EXPLORATORY (median MIS Stouffer *p* moves 0.046 → 0.037, worst 0.123 → 0.104, fraction of MIS < 0.05 rises 190/332 → 264/332, topology-breaking subset *p* moves 0.43 → 0.387); the Grantham quartet-pattern shuffle *p* moves 0.006099 → 0.006199 (tie-inclusion). No claim crosses a decision threshold. Every before/after value is enumerated in `docs/publisher/2026-08-14-corrections-ledger.md`.
 
-- **Null-model naming.** Renamed implemented null everywhere as *quartet-pattern shuffle* (16 quartet AA-patterns permuted across quartet slots); it is not the classical Haig-Hurst 1991 / Freeland-Hurst 1998 AA-permutation null. Added the classical HH-AA null as sensitivity companion (n=10 000, all four metrics; Supplement §S3.1). All eight *p*-values (4 metrics × 2 nulls) pass Bonferroni at α=0.01.
-- **tRNA population.** Complete 24-row pairing/provenance table with exact 2×2 counts added as Supplement §S10.1; Fisher denominator stated as by-AA-sum over Std20. Wording corrected to "15 of 18 tRNAscan-SE-verified genomes populate the pairings; 3 (Blastocrithidia, Mycoplasmoides ×2) are mechanistic boundary cases discussed in §4.3".
-- **Decision rules and framing.** §2.6 tRNA gate restored to worst-case-MIS (failed at *p*=0.123); §4.3 retitled "Exploratory tRNA accommodation"; §2.5 replaced with the discrete 4-indicator structural-preservation index that Fig 5A actually uses; per-table optimality reframed as "relative to quartet-shuffle null"; encoding-sweep claim narrowed to the two analyses actually swept; IIA acknowledged as untested; §S18 Bonferroni statement corrected; ρ-sweep 5 vs 11 grid reconciled; parametric-predictive rate stated with exact numerator/denominator/adjacency (5/66 event-step, Q₆, Δβ₀>0).
-- **Data plumbing.** `manuscript_stats.condlogit.clade_exclusion` now populated (previously silently defaulted to 0, rendering "ΔAICc ≥ 0, median 0, max 0" in §3.5); "Static fallback table" branches deleted and replaced with `#assert` so future gaps error visibly at build.
-- **Bibliography and reproducibility.** Kosiol 2004 and second Yurova Axelsson-Khrennikov 2024 paper now cited; reproducibility statement downgraded to "within numerical/rendering tolerance"; `requirements.lock` and `Dockerfile` added.
-- **Rendering.** Typst source-escape defects fixed (`10^{-5}`, `1{,}280`, two `10{,}000`, `{≈}5×`, `{≈}100%`, `e.g._T. thermophila_`, `Table @tbl:s-claims` doubling, Chan & Lowe DOI); cross-reference sweep.
-- **Release engineering.** Version 0.5.1 → 0.6.0 propagated across `pyproject.toml`, `CITATION.cff`, `requirements.lock`, `Dockerfile`, `llms.txt`, manuscript and supplement reproducibility stamps. Ruff format + check clean. Full pipeline rerun at seed 135325. Tag `v0.6.0`; SHA-256 manifest.
+### Statistics — corrections to inferential quantities
 
-Reproduction identical to v0.5.1 (same three-command sequence), with `git checkout v0.6.0` in place of the v0.5.1 tag.
+- **Null-model description.** Supplement §S2.1 preservation-property table corrected. The quartet-pattern shuffle *does not* fix the codon-family partition (atomic 4-codon quartet patterns permute across quartet slots, so which specific codons decode as a named amino acid varies from draw to draw); it *does* fix each named amino acid's total codon count. The classical Haig–Hurst amino-acid-permutation null *does* fix the codon-family partition; it *does not* fix per-named-AA codon count. State-space count for the quartet-pattern shuffle corrected from $≈ 16!$ to $≈ 14! ≈ 8.7 × 10^{10}$ — only 14 non-stop quartets are mobile in the standard code (UA and UG contain stops and are held fixed). Main §2.3.1 rewritten to match; sensitivity comparison against the classical HH-AA null (four physicochemical metrics × two nulls; all eight *p*-values pass Bonferroni at $α = 0.05/8 = 0.00625$) reported in Supplement §S2.1.
 
----
+- **Monte Carlo tail convention.** The coloring-optimality Monte Carlo now counts null draws satisfying $f ≤ F_\text{obs}$ (standard lower-tail permutation-test convention, ties included) rather than strict $f < F_\text{obs}$. The Grantham null contains one draw exactly equal to $F_\text{obs} = 13\,477$; conservative $p_\text{cons}$ moves from $61/10\,001 = 0.006099$ to $62/10\,001 = 0.006199$. The four other code-independent metrics and ProtSub have no ties and are numerically unchanged. All five metrics continue to pass Bonferroni at $α = 0.05/5 = 0.01$; all eight quartet-pattern-shuffle + Haig–Hurst *p*-values pass at $α = 0.05/8 = 0.00625$.
 
-## [v0.5.1] — 2026-08-14 — First pre-production QA/QC pass
+- **tRNA reference vectors.** Two entries in the curated tRNA repertoire were reconciled with primary literature: *Saccharomyces cerevisiae* mitochondrion — Arg count corrected from 1 to 2 (tRNA-Arg1 for AGR + tRNA-Arg2 for CGN), reaching the Bonitz et al. 1980 (PMC349575) total of 24 tRNA genes; *Yarrowia lipolytica* mitochondrion — vector rewritten with the Kerscher et al. 2001 (PMC2447202, DOI 10.1002/cfg.72) 27-tRNA distribution under NCBI table 4 (mould mitochondrial code, not yeast mitochondrial) — Ile = 2, Leu = 3, Lys = 2, Met = 2, Ser = 2, Tyr = 2, others = 1; no CGN-Arg tRNA (a hallmark of this genome). The Fisher cell for the yeast-mitochondrial Thr pairing becomes (2/24) vs (1/27), one-sided *p* = 0.455 (was 0.554). Downstream MIS distribution: median Stouffer *p* ≈ 0.037 (was 0.046), worst *p* ≈ 0.104 (was 0.123), topology-breaking subset Stouffer *p* ≈ 0.387 (was 0.43); fraction of 332 MIS below 0.05 rises from 57.2 % to ≈ 79.5 %. The pre-specified worst-case-MIS decision gate remains failed; the tRNA-enrichment claim remains EXPLORATORY.
 
-Second audit ahead of publisher proofs. One computational correction,
-plus a broad presentation, cross-reference, and reproducibility sweep.
+- **Maximal-independent-set (MIS) enumeration.** The MIS enumeration used for the tRNA-enrichment robustness bound (Supplement §S10.2) was recomputed with a corrected Bron–Kerbosch traversal on the complement of the conflict graph, yielding 332 MIS of size 6 rather than 2. The full Stouffer-*p* distribution across all 332 MIS (median, best, worst, and topology-breaking-subset) is now reported. The all-pairings Fisher–Stouffer result (*p* ≈ 1.7 × 10⁻⁷) is unchanged; the tRNA-enrichment claim, previously SUGGESTIVE, is reclassified as EXPLORATORY on the basis that the median-independent-subset signal is present but the strict worst-case bound is not met and the topology-breaking-only subset is null. Claim hierarchy remains 15 entries: 4 SUPPORTED / 5 EXPLORATORY / 1 FALSIFIED / 3 REJECTED / 2 TAUTOLOGICAL.
 
-### Computational correction (disclosed)
+- **H(3,4) clade-exclusion sensitivity table.** The manuscript previously reported clade-exclusion robustness "in every regime" but only tabulated the $Q_6$ / new-disconnection seven-row table. The primary-cell $H(3,4)$ / $Δβ_0 > 0$ seven-row table is now generated and displayed alongside it in Supplement §S9. All seven exclusions are significant at *p* < 10⁻³; excluding yeast mitochondrial (which contributes 4 of the 6 lineage-collapsed *H(3,4)*-breakers) gives *p* ≈ 4.2 × 10⁻⁹, matching the direct calculation quoted in main §3.4.
 
-The maximal-independent-set (MIS) enumeration used for the tRNA-
-enrichment robustness bound in Supplement §S10.2 was applying
-Bron–Kerbosch clique-branching pivoting to a graph whose recursion was
-set up for independent-set search. Correcting the algorithm (standard
-Bron–Kerbosch on the complement of the conflict graph) changes the
-enumerated MIS count from 2 to 332 (all of size 6) and expands the
-reported distribution: median Stouffer p = 0.046, best 0.016, worst
-0.123; 190 of 332 sets fall below 0.05, 0 below 0.01. A pre-specified
-topology-breaking-only subset (n = 4 pairings) that was already computed
-in the repository is null (Stouffer p = 0.43).
+- **Conditional-logit clade-exclusion — data plumbing.** The main-text §3.5 clade-exclusion summary now reads its ΔAICc aggregate keys (min, median, max across the seven regimes) from a lifted `manuscript_stats.condlogit.clade_exclusion` block rather than silently defaulting to 0 (which previously rendered "min = median = max = 0"). Fallback branches that could mask future data-lift gaps replaced with build-time asserts.
 
-**Effect on scientific claims.** The all-pairings Fisher–Stouffer
-result (p = 1.7 × 10⁻⁷) and the four SUPPORTED claims (hypercube
-coloring optimality, per-table preservation, ρ robustness, topology-
-avoidance depletion) are unchanged. The tRNA-enrichment claim is
-reclassified from SUGGESTIVE to EXPLORATORY: the median-independent-
-subset signal is present but the strict worst-case bound is not met and
-the topology-breaking-only subset is null. The claim hierarchy now
-enumerates 4 SUPPORTED / 5 EXPLORATORY / 1 FALSIFIED / 3 REJECTED / 2
-TAUTOLOGICAL claims (unchanged total of 15).
+- **Cross-family multiple-comparison correction.** Supplement §S18 corrected: with eight analysis families, cross-family Bonferroni threshold is $α = 0.05/8 = 6.25 × 10⁻³$. The MIS median tRNA-enrichment $p = 0.037$ does **not** survive this threshold (nor does the worst-case $p = 0.104$), consistent with the EXPLORATORY classification. The four SUPPORTED claims all survive.
 
-### Manuscript, supplement, and README
+### Figures, tables, and prose — presentation and label corrections
 
-- Abstract, Introduction Test 3 criterion, §3.6, Table 7 & caption,
-  Discussion, Limitations, and Conclusion — tRNA text rewritten with
-  the corrected MIS distribution and the topology-breaking-subset
-  disclosure.
-- Table 1 (claim hierarchy) — tRNA row moved from SUGGESTIVE to
-  EXPLORATORY, p updated (MIS median 0.046). Shaded-rows caption
-  reworded so FALSIFIED / REJECTED / TAUTOLOGICAL rows are described as
-  non-inferential rather than "failed validation".
-- Cross-reference sweep — main-manuscript pointers to §S13 / §S15 /
-  §S16 / §S17 / §S18 updated to the current supplement numbering
-  (§S13 / §S14 / §S15 / §S16 / §S17 / §S18 / §S20 / §S21 / §S22 / §S23).
-- §5.10 H(3, 4) clade-exclusion paragraph — p-value now quoted from
-  the matching primary-cell calculation (H(3, 4), Δβ₀ > 0, N = 1280,
-  K = 846, n = 24, x = 2 → p ≈ 4.2 × 10⁻⁹), with the Q₆ /
-  new-disconnection sensitivity variant (≈ 3.6 × 10⁻¹¹) called out
-  separately.
-- Figure 4 caption — six *candidate* conditional-logit models (LR
-  tests applied only to nested pairs); AICc gaps itemised (M1 / M2
-  baselines 89.1–112.1 vs M3; H(3, 4) variant 16.9; M4 2.1).
-- §S12 — feasibility-score body corrected to describe the discrete
-  four-indicator implementation (S ∈ {0.55, 0.75, 0.80, 1.00}), and
-  the section renamed to "Structural-preservation index".
-- Table S8 caption — discloses the tRNAscan-SE two-pass distinction
-  (Infernal-filtered `Supp` column vs first-pass Isotype/Anticodon
-  totals in the Reassigned-AA parenthetical).
-- "posterior-predictive" renamed to "parametric predictive" throughout
-  (the estimation is MLE + AICc, not Bayesian).
-- PSL(2,7) rejection narrowed to "64-dimensional irreducible linear
-  representation"; holomorphic-embedding rejection grounded in the
-  character-identity failure rather than in an incorrect appeal to
-  domain type.
-- README — tRNA-enrichment section rewritten with the corrected
-  distribution.
+- **Main Table 1 (claim hierarchy).** tRNA row moved from SUGGESTIVE to EXPLORATORY with updated *p*. "FH per-table" and "FH weighted edges" replaced with explicit "Per-table quartet-pattern shuffle + BH–FDR" and "Quartet-pattern shuffle (weighted edges)". Shaded-row caption reworded so FALSIFIED / REJECTED / TAUTOLOGICAL are described as non-inferential rather than "failed validation".
 
-### Code
+- **Main Tables 2 and 3.** Captions: "block-preserving null" → "quartet-pattern shuffle null" throughout.
 
-- `src/codon_topo/analysis/trna_evidence.py::_bron_kerbosch` — pivoting
-  applied to the complement of the conflict graph via `non_conflicts`
-  adjacency; enumerates all 332 MIS of size 6.
-- `src/codon_topo/reports/claim_hierarchy.py` — tRNA-enrichment entry
-  restated with the new distribution and reclassified EXPLORATORY.
-- `src/codon_topo/cli.py`
-  - `manuscript_stats.json.trna` gains `mis_median_p`, `n_mis_total`,
-    `mis_frac_significant_p05`, `topology_breaking_p`,
-    `topology_breaking_z`, `topology_breaking_n`.
-  - `manuscript_stats.json.topology_avoidance_q6` gains
-    `depletion_fold`, `risk_ratio`, `risk_ratio_ci_95` (matching the
-    tk43 shape).
-  - `_write_json` now sanitises NaN / Inf to `null` before serialisation
-    and uses `allow_nan=False`, so every JSON parses under strict
-    readers (R jsonlite, Typst `json()`).
-- `scripts/generate_tables.py::T7` — summary CSV emits MIS-median,
-  MIS-worst-case, and topology-breaking-subset rows alongside the
-  existing Fisher and AA-label rows.
+- **Main Table 4.** *H(3,4)* topology-avoidance table now uses the primary-cell values (H(3,4), $Δβ_0 > 0$; N = 1,280, K = 846); the $2 × 2$ definition × adjacency audit reported inline with risk ratios 0.28–0.33 across all four cells.
 
-### Delivery
+- **Main Figure 3 (evolutionary evidence).** (A) bit-position bias distribution unchanged. (B) depth calibration — reproducible-seed jitter so coincident CUG-clade markers are visible; caption clarified: 6 calibration points spanning 4 amino acids (universal Serine baseline + Thr / Leu / Ala variant-code lineages; Serine and Leucine each contribute two points from different lineages). (C) topology avoidance shown for both $H(3,4)$ (primary, $Δβ_0 > 0$) and $Q_6$ (sensitivity, new-disconnection). (D) tRNA-rank panel now labels each bar with the control organism so all 24 pairings render distinctly.
 
-- Rebuilt manuscript.pdf, supplement.pdf, publisher_letter.pdf, and
-  the SHA-256 manifest under `output/publisher_deliverable/`.
-- Release tag: `v0.5.1-preproduction-2026-08-14`.
+- **Main Figure 4 (conditional logit).** Panel A shows six candidate conditional-logit models (M1–M4 under $Q_6$ + two $H(3,4)$-verification variants); likelihood-ratio tests applied only to nested pairs. AICc gaps itemised in the caption (M1 / M2 baselines 89.1–112.1 units above M3; $H(3,4)$ variant 16.9 units; M4 2.1 units). The main-text §2.3.5 description reframed as "four candidate models; likelihood-ratio tests only on nested pairs" (M1 and M2 are non-nested alternatives, both nested within M3; M3 nested within M4).
+
+- **Main Figure 5 catalogue panel.** Named-vector label mapping restored; KRAS bar labelled "Falsified" (was rendering "Pending").
+
+- **Supplement Figure S1 subtitle.** "Freeland–Hurst block-preserving random colorings" → "quartet-pattern shuffle random colorings".
+
+- **Supplement Figure S5 title and *x*-axis.** "Transversion weight $ρ$" → "Diagonal-edge weight $ρ$" (matches the main-text §2.1 caveat that $ρ$ is not a transition/transversion weight).
+
+- **Supplement Figure S7 label.** "disconnection × organism" → "variant-code × control".
+
+- **Supplement Table S6 caption.** "Full" row → "Unrestricted" (matches the row label).
+
+- **Supplement Table S8 caption.** Discloses the tRNAscan-SE two-pass distinction (Infernal-filtered `Supp` column versus first-pass Isotype/Anticodon totals in the Reassigned-AA parenthetical).
+
+- **Supplement Table S10.1 — 24-row tRNA analysis-input provenance table.** New: for each of the 24 pairings, records variant + control organism, compartment, assembly accession, reassignment string, $Q_6$ and $H(3,4)$ topology status, exact 2×2 Fisher counts, per-organism source class (tRNAscan-SE 2.0.12 / GtRNAdb / literature / annotation), and per-pair one-sided Fisher-exact *p*-value.
+
+- **Supplement §S12 — structural-preservation index.** Section renamed *Structural-preservation index (visualization-only)* and rewritten to describe the discrete four-indicator implementation actually used by Figure 5A ($S ∈ \{0.55, 0.75, 0.80, 1.00\}$). The "synthetic-biology feasibility" phrasing was dropped because no independently validated feasibility endpoint exists.
+
+- **Supplement Figure FigB — coloring-optimality per-table panel.** Table 32 (Balanophoraceae plastid) and Table 28 (Condylostoma nuclear) rows restored; CSV exporter no longer drops these two tables.
+
+- **Supplement §S21 (Walsh–Hadamard / 2-adic spectral panel) and §S22 (Slavov / Tsour SAAP grouped-bar figure).** New; provide descriptive bridges to the 2-adic-genetic-code and site-specific-amino-acid-polymorphism literatures respectively. Walsh conventions clarified (spectral depth definition; encoding invariance; block-size-null vs wobble-box-preserving-null distinction).
+
+- **Main §2.6 tRNA decision gate.** Restored to the originally specified worst-case-MIS criterion (not met at *p* = 0.104); median MIS *p* reported descriptively as a summary statistic, not as a re-specified criterion.
+
+- **Main §4.3 title.** *Exploratory tRNA accommodation across variant-code systems*; compensation-for-disconnection claims removed; the genome-size / mechanistic-repertoire correlation explicitly framed as a hypothesis motivated by three case examples (*Blastocrithidia nonstop* anticodon-stem shortening; *Mycoplasmoides* anticodon modification; ciliate tRNA duplication), not as a tested association.
+
+- **Main §3.3 per-table optimality.** Reframed as "significantly low-cost *relative to its own quartet-shuffle null*"; every variant has $d_H ≤ 6$ from the standard code while every null draw has $d_H ≥ 30$, so the per-table quantile cannot identify a boundary between proximity-driven and independently-optimised codes. Both registry-entry (11 of 12 informative-distance variants after BH–FDR) and distinct-coloring (10 of 11) counts reported.
+
+- **Main §2.3.5 conditional logit — restricted-candidate sensitivity.** No single *d* value designated the biological cut; three values ($d ∈ \{1, 2, 3\}$) reported as a bracket with $d = 1$ as the most defensible biological floor.
+
+- **Main §2.3.5 conditional logit — IIA discussion.** IIA acknowledged as an untested structural assumption of the estimator even for the explanatory reading; the restricted-candidate refits framed as sensitivity analyses against candidate-set composition rather than as evidence that IIA is harmless.
+
+- **Main §3.2 $ρ$-sweep.** Five pre-specified inferential grid points ($ρ ∈ \{0, 0.25, 0.5, 0.75, 1\}$) versus eleven plotted points (five inferential + six descriptive interpolation) explicitly distinguished.
+
+- **Main §3.5 parametric-predictive rate.** Reported with explicit numerator / denominator / adjacency / definition ($5/66$ event-steps under $Q_6$ / $Δβ_0 > 0$; parametric predictive $p = 0.60$) and clearly distinguished from the lineage-collapsed $6/28$ rate under $H(3,4)$ / $Δβ_0 > 0$ quoted in main §3.4.
+
+- **Supplement §S3 candidate-universe Table S3.** U3 no-op count corrected to 61 (only sense codons carry an AA identity); source-stop axis removed from the introductory framing.
+
+- **Main §2.3.4 encoding-sweep claim.** Narrowed from a blanket "all encoding-dependent results tested across 24 encodings" to the exact list — coloring optimality + $Q_6$ topology-avoidance landscape depletion. M3-$H(3,4)$ renamed a *topology-verification* variant (its local physicochemical feature is still $Q_6$-based).
+
+- **Supplement §S15 metric-correlation partials.** Descriptive language calibrated: four of ten metric-pair partial Spearman correlations are "approximately uncorrelated after adjustment" ($|ρ_\text{partial}| < 0.1$; a descriptive statement about point estimates, not a test of statistical independence). Main-text §3.1 count reconciled from "five" to "four" to match Table S19.
+
+- **PSL(2,7) rejection.** Narrowed to "no 64-dimensional irreducible linear representation" rather than a general symmetry-exclusion claim.
+
+- **Holomorphic-embedding rejection.** Grounded in the character-identity failure $χ(x + x) = χ(x)^2$ with $i^2 = -1 ≠ 1$, rather than in an appeal to domain type.
+
+### Bibliography and reproducibility
+
+- **Bibliography additions.** Kosiol 2004 (empirical codon-mutation matrix); Yurova Axelsson–Khrennikov 2024 (2-adic representation of the genetic code, second paper); Bonitz et al. 1980 (primary source for the *S. cerevisiae* mitochondrial tRNA vector, cited at §2.3.6); Kerscher et al. 2001 (primary source for the *Y. lipolytica* mitochondrial tRNA vector, cited at §2.3.6); Su et al. 2011; Atchley et al. 2005 in-text citation at the Serine / Factor 3 exploratory paragraph (§3.7).
+
+- **Classical code-optimization citations added at Introduction §1.1** alongside Woese 1965 and Freeland–Hurst 1998: Novozhilov, Wolf & Koonin 2007; Novozhilov & Koonin 2009; Sella & Ardell 2006; Vetsigian, Woese & Goldenfeld 2006; Di Giulio 2005 (this-journal review of competing origin-of-the-code frameworks).
+
+- **Bibliography validation pass.** Every entry in `references.bib` cross-checked for existence and metadata correctness against primary sources (DOI, journal, volume, pages, authors, diacritics): Kerscher 2001 `Br{\"a}ndt → Brandt` (spurious diacritic removed); Tsour 2026 gained volume 656, pages 506–515 (paper is no longer "in press"); Buschmann 2026 author capitalization `El-Hendi → el-Hendi` to match the primary source. All cited keys now resolve to bibliography entries and no orphan (uncited) entries remain in the .bib.
+
+- **Cross-reference sweep.** §2.1 §S3 → §S2 (encoding sweep target); §2.3.1 §S3.1 → §S2.1 (dual-null comparison target); §3.4 §S8 → §S9 (topology clade-exclusion target); §3.5 §S13 → §S19.5, Figure S8 panel C (predictive-diagnostic target); §5.10 *H(3,4)* clade-exclusion paragraph quotes the matching primary-cell calculation ($H(3,4)$, $Δβ_0 > 0$, $N = 1280$, $K = 846$, $n = 24$, $x = 2$ → $p ≈ 4.2 × 10⁻⁹$), with the $Q_6$ / new-disconnection sensitivity variant ($≈ 3.6 × 10⁻¹¹$) called out separately; supplement pointers to §S13 / §S15 / §S16 / §S17 / §S18 updated to the current supplement numbering.
+
+- **Reproducibility statement.** Downgraded from "bit-for-bit" to "within numerical / rendering tolerance"; transitive dependencies (BLAS routing, libgfortran ABI, Typst layout across versions) are not fully pinned.
+
+- **Rendering.** Every R visualization script now reads statistics from `manuscript_stats.json` / per-analysis JSONs / T-CSVs rather than embedding hard-coded literals; Typst source-escape defects fixed; every JSON artefact parses under strict readers (R jsonlite, Typst `json()`).
 
 ### Reproduction
 
 ```
-git checkout v0.5.1-preproduction-2026-08-14
+git clone https://github.com/biostochastics/codontopo && cd codontopo
+git checkout v0.6.1
 pip install -e ".[dev]"
-codon-topo all --output-dir=./output --seed=135325 --n=10000
-python3.11 scripts/generate_tables.py
-Rscript src/codon_topo/visualization/R/manuscript_figures.R
-Rscript src/codon_topo/visualization/R/strengthened_figures.R
-Rscript src/codon_topo/visualization/R/fig_encoding_sweep.R
-Rscript src/codon_topo/visualization/R/fig_condlogit_diagnostics.R
-Rscript src/codon_topo/visualization/R/fig_walsh_spectrum.R
-Rscript src/codon_topo/visualization/R/fig_slavov_saap.R
-typst compile output/manuscript.typ output/manuscript.pdf
-typst compile output/supplement.typ output/supplement.pdf
+bash scripts/build_publisher_release.sh
 ```
 
-Seed = 135325 across every Monte Carlo path.
-
----
-
-## [v0.5.0] — 2026-08-14 — Proofs-corrections pass
-
-First internal figure- and statistics-audit pass. Resolved ~41 first-
-round + ~30 second-round presentation and data-plumbing defects across
-the 16 figures, 25 tables, and body prose of the accepted manuscript
-and supplement. All corrections were presentation, plumbing, or
-reproducibility improvements (no scientific claim changed at v0.5.0;
-the tRNA-classification change was identified later and shipped as
-v0.5.1 above).
-
-Highlights:
-
-- CSV exporter for the disconnection catalogue no longer silently drops
-  NCBI translation tables 28 (Condylostoma nuclear) and 32
-  (Balanophoraceae plastid); Fig 1B and supplement FigB gain the two
-  missing rows.
-- Coloring-optimality per-table Monte Carlo and ρ-sweep reran at
-  n = 10,000 (the abstract / Methods / three figure captions had
-  claimed that count; the code had been at 1,000). The 26/27
-  significance count and the sole marginal (table 3 yeast mito at
-  p = 0.072) are unchanged.
-- `output/tables/T9_topology_avoidance.csv` now emits the primary
-  H(3, 4), Δβ₀ > 0 cell rather than the Q₆/new-disconnection cell.
-- Fig 3 depth-calibration panel — reproducible-seed jitter so
-  coincident CUG-clade markers are all visible.
-- Fig 3 tRNA-rank panel and supplement FigE — labels now include the
-  control organism so all 24 pairings render as 24 distinct bars.
-- Fig 4 catalogue panel — named-vector label mapping; KRAS bar now
-  correctly labelled "Falsified" (was showing "Pending").
-- Two new supplement figures: Walsh–Hadamard / 2-adic spectral panel
-  (§S21) and Slavov / Tsour SAAP grouped-bar figure (§S22).
-- Reproducibility: every R visualization script now reads statistics
-  from `manuscript_stats.json` / per-analysis JSONs / T-CSVs rather
-  than embedding hard-coded literals.
+`scripts/build_publisher_release.sh` runs the analysis pipeline (`codon-topo all --seed=135325 --n=10000`), the provenance-emit and table-generation scripts, both R figure scripts, and the two Typst PDF compilations. Seed = 135325 across every Monte Carlo path.
 
 ---
 
 ## [v0.4.x] — earlier — Additional bridging analyses
 
-Additional analyses: ProtSub sensitivity, Walsh–Hadamard §S21, non-power-
-representation discussion in §4.5, Slavov / Tsour SAAP §S22, metric
-correlation analysis §S20. See git log for per-commit detail.
+Additional analyses that landed before the pre-publication QA/QC pass: ProtSub sensitivity (Supplement §S20), Walsh–Hadamard 2-adic spectral panel (§S21), non-power-representation discussion in §4.5, Slavov / Tsour SAAP figure (§S22), metric correlation analysis (§S20). See git log for per-commit detail.

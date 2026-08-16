@@ -2,19 +2,19 @@
 
 > Computational pipeline validating the algebraic structure of genetic codes when encoded as 6-bit binary vectors in GF(2)^6, across all 27 NCBI translation tables. Accompanies Clayworth & Kornilov, *BioSystems* (in press).
 
-The paper's central claim is that the standard genetic code is unusually low-cost across four physicochemical distance metrics under a Freeland–Hurst block-preserving null, that natural codon reassignments are depleted for topology-breaking moves (moves that fragment an amino-acid codon family under H(3, 4) single-nucleotide adjacency), and that conditional-logit modelling of event-level reassignments shows physicochemical smoothness and codon-family topology contribute independently. Five secondary results (tRNA-gene enrichment, bit-position bias, mechanism boundary cases, Atchley F3/Serine convergence, and a disconnection catalogue) are reported as exploratory. Four algebraic conjectures previously associated with this project (Serine min-distance-4 invariant, PSL(2,7) as a symmetry group, a holomorphic GF(2)^6 → C^3 embedding, and a KRAS–Fano clinical prediction) were tested and are recorded as rejected or falsified.
+The paper's central claim is that the standard genetic code is unusually low-cost across four physicochemical distance metrics under a quartet-pattern shuffle null (see §NULL of the corrections ledger for the naming history and the classical Haig–Hurst amino-acid-permutation companion), that natural codon reassignments are depleted for topology-breaking moves (moves that fragment an amino-acid codon family under H(3, 4) single-nucleotide adjacency), and that conditional-logit modelling of event-level reassignments shows physicochemical smoothness and codon-family topology contribute independently. Five secondary results (tRNA-gene enrichment, bit-position bias, mechanism boundary cases, Atchley F3/Serine convergence, and a disconnection catalogue) are reported as exploratory. Four algebraic conjectures previously associated with this project (Serine min-distance-4 invariant, PSL(2,7) as a symmetry group, a holomorphic GF(2)^6 → C^3 embedding, and a KRAS–Fano clinical prediction) were tested and are recorded as rejected or falsified.
 
 ## Getting started
 
 - [README](README.md) — install, headline results, one-command reproduction
-- [CHANGELOG](CHANGELOG.md) — release notes; v0.6.0 records the pre-production audit pass
+- [CHANGELOG](CHANGELOG.md) — release notes; v0.6.1 is the consolidated pre-publication QA/QC release (null-model description math, MC tail convention, tRNA-vector reconciliation against primary literature, and H(3,4) clade-exclusion table)
 - [CITATION.cff](CITATION.cff) — machine-readable citation, cite the paper and this repository together
-- [CLAUDE.md](CLAUDE.md) — repository conventions and constraints (R + ggplot2 for figures, 27 NCBI translation tables, block-preserving null at n = 10,000, etc.)
+- [CLAUDE.md](CLAUDE.md) — repository conventions and constraints (R + ggplot2 for figures, 27 NCBI translation tables, quartet-pattern shuffle null at n = 10,000, etc.)
 
 ## Source layout
 
 - [Core computation](src/codon_topo/core/) — GF(2)^6 encoding, 27 NCBI translation tables, filtration primitives, persistent-homology on codon graphs, XOR-triple (Fano) computation, coordinate-wise root-of-unity embedding
-- [Analysis modules](src/codon_topo/analysis/) — Freeland–Hurst null models, reassignment database, depth calibration, hypercube coloring optimality, tRNA repertoire evidence (Fisher–Stouffer + Bron–Kerbosch MIS enumeration + topology-breaking subset), synthetic-biology structural-preservation index, conditional-logit models
+- [Analysis modules](src/codon_topo/analysis/) — quartet-pattern shuffle + classical Haig–Hurst AA-permutation nulls, reassignment database, depth calibration, hypercube coloring optimality, tRNA repertoire evidence (Fisher–Stouffer + Bron–Kerbosch MIS enumeration + topology-breaking subset), synthetic-biology structural-preservation index, conditional-logit models
 - [Reports](src/codon_topo/reports/claim_hierarchy.py) — the single source of truth for the paper's 15 claims and their status (Supported / Exploratory / Rejected / Falsified / Tautological)
 - [Visualization](src/codon_topo/visualization/R/) — R + ggplot2 scripts that regenerate every published figure from the pipeline JSONs
 - [Command-line interface](src/codon_topo/cli.py) — `codon-topo all --output-dir=./output --seed=135325 --n=10000` regenerates every published statistic and writes a consolidated `manuscript_stats.json` for the Typst manuscript

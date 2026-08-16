@@ -55,14 +55,21 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
         organism="Saccharomyces cerevisiae",
         compartment="mitochondrial",
         ncbi_table_id=3,
-        # Saccharomyces mito genome encodes 24 tRNA genes total.
-        # Notably 2 Thr tRNAs exist where standard code has 1:
-        #   - Ancestral tRNA-Thr (anticodon UGU, reads ACN standard codons)
-        #   - Novel tRNA-Thr (anticodon UAG, reads CUN reassigned codons)
-        # The novel one was derived from tRNA-His (Su et al. 2011).
+        # Saccharomyces mito genome (NC_001224) encodes 24 tRNA genes total
+        # (Bonitz et al. 1980 PNAS 77:3167-3170; RefSeq NC_001224.1
+        # annotation). Two Thr tRNAs are present where standard code has one:
+        #   - Ancestral tRNA-Thr1 (anticodon UGU, reads ACN)
+        #   - Novel tRNA-Thr2 (anticodon UAG, reads CUN — reassigned)
+        # The novel one was derived from tRNA-His via anticodon mutation
+        # (Su et al. 2011 PMC3113583). Arg has 2 tRNAs: tRNA-Arg1 (anticodon
+        # UCU, reads AGR) and tRNA-Arg2 (anticodon ACG, reads CGN — rare).
+        # Met has 2 tRNAs: elongator + initiator (fMet).
+        # Ser has 2 tRNAs: tRNA-Ser1 (AGY) + tRNA-Ser2 (UCN).
+        # All other AAs have exactly 1 tRNA gene each.
+        # Vector sum = 1x16 + 2x4 = 24, matching Bonitz 1980 total.
         by_amino_acid={
             "Ala": 1,
-            "Arg": 1,
+            "Arg": 2,  # tRNA-Arg1 (AGR reader) + tRNA-Arg2 (CGN reader)
             "Asn": 1,
             "Asp": 1,
             "Cys": 1,
@@ -71,21 +78,30 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
             "Gly": 1,
             "His": 1,
             "Ile": 1,
-            "Leu": 1,
+            "Leu": 1,  # reads UUR only; CUN reassigned to Thr
             "Lys": 1,
             "Met": 2,  # initiator + elongator
             "Phe": 1,
             "Pro": 1,
-            "Ser": 2,  # 2 Ser isoacceptors
+            "Ser": 2,  # 2 Ser isoacceptors (AGY + UCN)
             "Thr": 2,  # <-- DUPLICATED, confirming H-tRNA-1 for this organism
-            "Trp": 1,
+            "Trp": 1,  # single tRNA-Trp reads both UGG and UGA (reassigned)
             "Tyr": 1,
             "Val": 1,
         },
         has_disconnection=True,
         reassigned_aa="Thr",
-        source="PMC3113583 (Su et al. 2011 PNAS); yeast mito genome annotation",
-        notes="tRNA-Thr2 derived from ancestral tRNA-His via anticodon mutation",
+        source=(
+            "Bonitz et al. 1980 PNAS 77:3167-3170 (PMC349575); "
+            "Su et al. 2011 PMC3113583; "
+            "RefSeq NC_001224.1 (S. cerevisiae S288C mitochondrion)"
+        ),
+        notes=(
+            "24 tRNAs total (Bonitz 1980). tRNA-Thr2 derived from ancestral "
+            "tRNA-His via anticodon mutation (Su et al. 2011). Distribution "
+            "reconciled against the Bonitz 1980 total and the RefSeq "
+            "NC_001224.1 annotation during pre-publication QA/QC."
+        ),
     ),
     "sobliquus_mito": TRNARepertoire(
         organism="Scenedesmus obliquus",
@@ -284,43 +300,64 @@ CURATED_REPERTOIRES: dict[str, TRNARepertoire] = {
     "ylipolytica_mito": TRNARepertoire(
         organism="Yarrowia lipolytica",
         compartment="mitochondrial",
-        ncbi_table_id=3,  # Yeast mito code (inherited), but WITHOUT Thr duplication
-        # Yarrowia lipolytica belongs to Saccharomycotina (same subphylum as
-        # S. cerevisiae) but to a basal branch (Dipodascaceae) that lacks the
-        # novel tRNA^Thr^CUN innovation. Proper phylogenetic sister for the
-        # Thr reassignment comparison.
-        #
-        # Counts below are from NCBI RefSeq mitochondrial annotation
-        # (GenBank NC_002659). Before publication: refresh counts against
-        # current mitotRNAdb / tRNAscan-SE of the current mito assembly.
+        # NCBI table 4 (mould mitochondrial, UGA=Trp); NOT table 3 (yeast
+        # mito). Y. lipolytica retains the ancestral mould mito code and
+        # lacks the CUN->Thr reassignment specific to Saccharomyces mito.
+        # Confirmed by Kerscher et al. 2001 (DOI: 10.1002/cfg.72):
+        # "The usual mould mt genetic code is used."
+        ncbi_table_id=4,
+        # 27 functional tRNAs total (Kerscher et al. 2001 Comp Funct Genom
+        # 2:80-90, DOI: 10.1002/cfg.72, EMBL Accession AJ307410; strain W29).
+        # "Twenty-seven tRNA genes could be detected in the mt genome of
+        # Y. lipolytica." Distribution derived from the tRNA identification
+        # narrative in the paper's Results (§ rRNAs and tRNAs):
+        #   - 2 Met tRNAs (M1 initiator, M2 elongator)
+        #   - 3 Leu tRNAs (Leu1, Leu2, Leu3; Leu2 functionally uncertain but
+        #     counted in the 27-tRNA total)
+        #   - 2 Ile tRNAs (I1 for AUY, I2 with UAU anticodon for AUA)
+        #   - 2 Lys tRNAs (K1, K2 differing at wobble)
+        #   - 2 Tyr tRNAs (Y1, Y2 differing at wobble)
+        #   - 2 Ser tRNAs (S1, S2; the pseudogene ySer3 in COB-I3 is NOT
+        #     counted in the 27 functional total)
+        #   - 1 Arg tRNA (AGR reader only; NO CGN-Arg tRNA — a hallmark
+        #     of this genome, per Kerscher et al. abstract)
+        #   - all other AAs have exactly 1 tRNA gene each
+        # Vector sum = 1x14 + 2x5 + 3x1 = 14 + 10 + 3 = 27, matching the
+        # Kerscher et al. total.
         by_amino_acid={
             "Ala": 1,
-            "Arg": 1,
+            "Arg": 1,  # AGR reader only; no CGN-Arg tRNA (Kerscher 2001)
             "Asn": 1,
             "Asp": 1,
-            "Cys": 1,
+            "Cys": 1,  # abnormal cloverleaf (Kerscher 2001)
             "Gln": 1,
             "Glu": 1,
             "Gly": 1,
             "His": 1,
-            "Ile": 1,
-            "Leu": 1,
-            "Lys": 1,
-            "Met": 1,
+            "Ile": 2,  # I1 (AUY) + I2 (AUA, UAU anticodon)
+            "Leu": 3,  # Leu1 + Leu2 + Leu3 (identical Leu2/Leu3 anticodons)
+            "Lys": 2,  # K1 + K2 (different wobble)
+            "Met": 2,  # initiator (M1) + elongator (M2)
             "Phe": 1,
             "Pro": 1,
-            "Ser": 1,
-            "Thr": 1,
-            "Trp": 1,
-            "Tyr": 1,
+            "Ser": 2,  # S1 + S2 (ySer3 pseudogene not counted)
+            "Thr": 1,  # ancestral ACN reader only; no CUN reassignment
+            "Trp": 1,  # reads UGA (mould reassignment) + UGG
+            "Tyr": 2,  # Y1 + Y2 (different wobble)
             "Val": 1,
         },
         has_disconnection=False,
-        source="NCBI RefSeq NC_002659 (Yarrowia lipolytica mito)",
+        source=(
+            "Kerscher et al. 2001 Comp Funct Genom 2:80-90 (DOI: 10.1002/"
+            "cfg.72, PMC2447202); EMBL AJ307410 (Y. lipolytica strain W29 "
+            "mitochondrion)"
+        ),
         notes=(
-            "Fungal Saccharomycotina mito control, basal to the Thr "
-            "reassignment event. Replaces the earlier Chlamydomonas "
-            "chlorophyte pairing (phylogenetically too distant)."
+            "27 functional tRNAs, mould mt code (NCBI table 4). Fungal "
+            "Saccharomycotina mito control, basal to the Saccharomyces-mito "
+            "Thr reassignment event. Table ID and per-AA vector reconciled "
+            "against the Kerscher 2001 primary counts during pre-publication "
+            "QA/QC."
         ),
     ),
     # === CILIATE NUCLEAR CODE ORGANISMS (tRNAscan-SE verified) ===

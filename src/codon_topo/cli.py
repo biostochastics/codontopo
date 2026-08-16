@@ -431,7 +431,7 @@ def topology_avoidance(as_json: bool) -> None:
 @click.option("--seed", default=135325, help="Random seed.")
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON.")
 def rho_sweep(n_samples: int, seed: int, as_json: bool) -> None:
-    """Sweep transversion weight rho to test optimality robustness."""
+    """Sweep the diagonal-edge weight rho to test optimality robustness."""
     from codon_topo.analysis.coloring_optimality import rho_robustness_sweep
 
     result = rho_robustness_sweep(n_samples=n_samples, seed=seed)
@@ -679,6 +679,60 @@ def condlogit_restricted(
             click.echo(f"    ΔAICc(M1→M3 H(3,4)) = {d['M1_to_M3_k43']:.1f}")
 
 
+@main.command("condlogit-heavy")
+@click.option(
+    "--output-dir",
+    required=True,
+    help="Directory to write condlogit_clade_sensitivity.json + "
+    "condlogit_restricted_candidate.json.",
+)
+@click.option(
+    "--max-orderings", default=720, help="Max orderings per table for order-averaging."
+)
+def condlogit_heavy(output_dir: str, max_orderings: int) -> None:
+    """Run the two memory-heavy conditional-logit sensitivity analyses in a
+    fresh Python process and write their JSON artefacts to ``--output-dir``.
+
+    This subcommand is invoked by ``codon-topo all`` via ``subprocess.run``
+    so that the ~750 MB feature-bundle allocations do not inherit the
+    ~2.5 GB accumulated resident set of the main pipeline process. On
+    macOS the inherited-VM fork of joblib Pool workers by the main
+    pipeline triggers jetsam SIGKILL under memory pressure; running these
+    two steps in a fresh interpreter drops the baseline from ~2.5 GB to
+    ~50 MB and keeps the workers under the jetsam threshold.
+
+    Writes:
+      - ``condlogit_clade_sensitivity.json`` (7 clade-exclusion regimes)
+      - ``condlogit_restricted_candidate.json`` (three delta_trna cuts)
+    """
+    from pathlib import Path as _Path
+
+    from codon_topo.analysis.evolutionary_simulation import (
+        run_clade_exclusion_sensitivity,
+        run_restricted_candidate_sensitivity,
+    )
+
+    out = _Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+
+    click.echo("[condlogit-heavy] Running clade-exclusion sensitivity (7 regimes)...")
+    clade_result = run_clade_exclusion_sensitivity(
+        max_orderings_per_table=max_orderings,
+    )
+    _write_json(out / "condlogit_clade_sensitivity.json", clade_result)
+    click.echo(f"[condlogit-heavy] Wrote {out / 'condlogit_clade_sensitivity.json'}")
+
+    click.echo(
+        "[condlogit-heavy] Running restricted-candidate sensitivity "
+        "(delta_trna<=1,2,3)..."
+    )
+    restricted_result = run_restricted_candidate_sensitivity(
+        max_orderings_per_table=max_orderings,
+    )
+    _write_json(out / "condlogit_restricted_candidate.json", restricted_result)
+    click.echo(f"[condlogit-heavy] Wrote {out / 'condlogit_restricted_candidate.json'}")
+
+
 @main.command("topology-avoidance-k43")
 @click.option("--seed", default=DEFAULT_SEED, help="Random seed.")
 @click.option("--json", "as_json", is_flag=True, help="Output as JSON.")
@@ -904,6 +958,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     from codon_topo.analysis.synbio_feasibility import (
         topology_avoidance_test as _topo_avoidance,
         topology_avoidance_k43,
+        topology_avoidance_k43_phylogenetic_sensitivity,
         topology_avoidance_phylogenetic_sensitivity,
     )
     from codon_topo.analysis.cosmic_query import fano_predictions_for_kras
@@ -965,10 +1020,13 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
     hh_aa_null = {
         "method": (
             "Classical Haig-Hurst 1991 / Freeland-Hurst 1998 AA-permutation "
-            "null. Preserves stop positions and codon-family sizes; permutes "
-            "the 20 AA labels uniformly across the 20 sense-codon families "
-            "(20! ~ 2.4e18 possible codes). Reported as a sensitivity "
-            "companion to the primary quartet-pattern shuffle null."
+            "null. Preserves stop positions and the unlabeled codon-family "
+            "partition (which codons decode together); permutes the 20 AA "
+            "labels uniformly across the 20 sense-codon families (20! ~ "
+            "2.4e18 possible codes). Per-named-AA codon count is NOT "
+            "preserved: e.g., Trp's 1-codon family can become a 6-codon "
+            "family if its label is swapped with Leu's. Reported as a "
+            "sensitivity companion to the primary quartet-pattern shuffle."
         ),
         "seed": seed,
         "n_samples": min(n_samples, 10_000),
@@ -1125,33 +1183,47 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         },
     )
 
-    # 10. Phylogenetic sensitivity
-    _step("Phylogenetic sensitivity...")
+    # 10. Phylogenetic sensitivity (Q_6 / new-disconnection + H(3,4) / Delta beta_0)
+    _step("Phylogenetic sensitivity (Q_6 + H(3,4))...")
     phylo_result = topology_avoidance_phylogenetic_sensitivity()
     _write_json(out / "phylogenetic_sensitivity.json", phylo_result)
+    phylo_k43 = topology_avoidance_k43_phylogenetic_sensitivity(seed=seed)
+    _write_json(out / "phylogenetic_sensitivity_k43.json", phylo_k43)
 
     # 11. Evolutionary simulation (conditional logit)
     _step("Conditional logit models (M1-M4)...")
     from codon_topo.analysis.evolutionary_simulation import (
-        run_clade_exclusion_sensitivity,
         run_evolutionary_simulation_analysis,
-        run_restricted_candidate_sensitivity,
     )
 
     evosim_result = run_evolutionary_simulation_analysis(seed=seed)
     _write_json(out / "evolutionary_simulation.json", evosim_result)
 
-    # 11b. Conditional-logit clade-exclusion sensitivity
-    _step("Conditional logit clade-exclusion sensitivity (7 regimes)...")
-    condlogit_clade = run_clade_exclusion_sensitivity()
-    _write_json(out / "condlogit_clade_sensitivity.json", condlogit_clade)
-
-    # 11c. Restricted-candidate-set sensitivity
-    _step("Conditional logit restricted-candidate sensitivity (delta_trna<=1,2,3)...")
-    condlogit_restricted_result = run_restricted_candidate_sensitivity()
-    _write_json(
-        out / "condlogit_restricted_candidate.json", condlogit_restricted_result
+    # 11b+c. Conditional-logit clade-exclusion + restricted-candidate
+    # sensitivities.
+    #
+    # These two analyses call fit_all_models() 7 and 3 times respectively
+    # (~750 MB feature bundle each) and are the two heaviest steps in the
+    # pipeline. Running them inline in the main pipeline process — which by
+    # this point has accumulated ~2.5 GB resident from steps 1-20 — causes
+    # macOS jetsam to SIGKILL the joblib Pool worker children under memory
+    # pressure. We therefore invoke them as a fresh subprocess so they
+    # start from a ~50 MB Python baseline; peak in-subprocess RAM is
+    # ~800 MB, well under the jetsam threshold.
+    _step(
+        "Conditional logit sensitivity (clade-exclusion + restricted-candidate) "
+        "in fresh subprocess..."
     )
+    import subprocess as _sp
+
+    _sp.run(
+        ["codon-topo", "condlogit-heavy", "--output-dir", str(out)],
+        check=True,
+    )
+    with open(out / "condlogit_clade_sensitivity.json") as _fh:
+        condlogit_clade = json.load(_fh)
+    with open(out / "condlogit_restricted_candidate.json") as _fh:
+        condlogit_restricted_result = json.load(_fh)
 
     # 12. Depth calibration
     _step("Depth calibration...")
@@ -1230,7 +1302,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
         "_generated_by": "codon-topo all",
         "_seed": seed,
         "_n_samples": n_samples,
-        "_version": "0.4.0",
+        "_version": "0.6.1",
         # Section 3.1: Cross-metric coloring optimality
         "coloring": {
             "observed_score": coloring_result["observed_score"],
@@ -1240,7 +1312,7 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "quantile": coloring_result["quantile_of_observed"],
             "p_value": coloring_result["p_value_conservative"],
             "n_samples": n_samples,
-            # Classical Haig-Hurst AA-permutation null (Supplement §S3.1
+            # Classical Haig-Hurst AA-permutation null (Supplement §S2.1
             # sensitivity companion to the primary quartet-pattern shuffle).
             "haig_hurst_aa_null": hh_aa_null,
             # 24-encoding sensitivity summary (Supplement §S2)
@@ -1393,10 +1465,20 @@ def run_all(output_dir: str, seed: int, n_samples: int) -> None:
             "topology_breaking_n": trna_topo_subset.get("n_pairings"),
         },
         # Phylogenetic sensitivity (Supplement §S9)
+        # Two cells reported: Q_6 / new-disconnection (legacy `phylo` key,
+        # matches existing prose/tables) and H(3,4) / Delta beta_0 (`phylo_k43`,
+        # the primary-cell H(3,4) companion added in R3-B3).
         "phylo": {
             "all_significant": phylo_result["all_clade_exclusions_significant"],
             "lineage_collapsed": phylo_result["lineage_collapsed"],
             "clade_exclusion": phylo_result["clade_exclusion"],
+        },
+        "phylo_k43": {
+            "adjacency": phylo_k43["adjacency"],
+            "definition": phylo_k43["definition"],
+            "all_significant": phylo_k43["all_clade_exclusions_significant"],
+            "lineage_collapsed": phylo_k43["lineage_collapsed"],
+            "clade_exclusion": phylo_k43["clade_exclusion"],
         },
         # Reassignment DB (Supplement §S11)
         "reassignment": {

@@ -1,8 +1,8 @@
 test,n_pairings,statistic,p_value
 Sign test,24,17/24,0.031957
-Fisher+Stouffer (all),24,Z=5.098,0.0
-Fisher+Stouffer (independent),6,Z=2.131,0.016526
-AA-label exact+Stouffer,24,Z=6.668,0.0
-MIS enumeration (median),24,332 MIS of size 6,0.045806
-MIS enumeration (worst-case),24,190/332 MIS at p<0.05,0.123236
-Topology-breaking subset,4,Z=0.164,0.434891
+Fisher+Stouffer (all),24,Z=5.149,0.0
+Fisher+Stouffer (independent),6,Z=2.233,0.012791
+AA-label exact+Stouffer,24,Z=6.718,0.0
+MIS enumeration (median),24,332 MIS of size 6,0.036888
+MIS enumeration (worst-case),24,264/332 MIS at p<0.05,0.103832
+Topology-breaking subset,4,Z=0.288,0.386789

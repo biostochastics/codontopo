@@ -71,7 +71,7 @@ pA <- ggplot(df_null, aes(x = score)) +
   labs(
     title = "Hypercube Coloring Optimality",
     subtitle = paste0("Standard code vs ", format(mc$n_samples, big.mark = ","),
-                      " Freeland-Hurst block-preserving random colorings"),
+                      " quartet-pattern shuffle random colorings"),
     x = expression("Grantham edge-mismatch score " * italic(F) * "(code)"),
     y = "Number of null codes"
   ) +
@@ -112,7 +112,7 @@ pB <- ggplot(pt, aes(x = reorder(factor(table_id), quantile_pct),
   labs(
     title = "Coloring Optimality Preserved Across Variant Codes",
     subtitle = bquote(
-      "Each NCBI table tested against its own block-preserving null (" *
+      "Each NCBI table tested against its own quartet-pattern shuffle null (" *
       italic(n) == .(format(n_per_table, big.mark = ",")) * ")"
     ),
     x = "NCBI translation table",
@@ -184,13 +184,13 @@ pC <- ggplot(rho, aes(x = rho, y = z)) +
   scale_y_continuous(limits = c(min(Z_P01, z_min) - y_pad, z_max + y_pad),
                      expand = expansion(mult = c(0.02, 0.05))) +
   labs(
-    title = expression("Optimality Robust Across Transversion Weight " * rho),
+    title = expression("Optimality Robust Across Diagonal-Edge Weight " * rho),
     subtitle = bquote(
       italic(F)[rho] == italic(F)[H[1]] + rho %.% italic(F)[H[2]] * ";" ~~
       rho == 0 * ":" ~ Q[6] * ";" ~~ rho == 1 * ":" ~ H(3,4) * ";" ~~
       italic(n) == .(format(n_mc, big.mark = ","))
     ),
-    x = expression("Transversion weight " * rho),
+    x = expression("Diagonal-edge weight " * rho),
     y = expression("Effect size " * italic(z) *
                    " (standardised distance below null mean)")
   ) +

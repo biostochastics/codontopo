@@ -8,14 +8,17 @@
     "null_std": 628.0173120084972,
     "null_min": 12781.0,
     "null_max": 17283.0,
-    "quantile_of_observed": 0.6,
-    "n_beaten_observed": 60,
+    "quantile_of_observed": 0.61,
+    "n_beaten_observed": 61,
+    "n_at_or_below_observed": 61,
+    "n_strictly_below_observed": 60,
+    "n_ties_at_observed": 1,
     "n_samples": 10000,
-    "p_value_raw": 0.006,
-    "p_value_conservative": 0.006099390060993901,
+    "p_value_raw": 0.0061,
+    "p_value_conservative": 0.006199380061993801,
     "p_value_lower_bound": 9.999000099990002e-05,
     "effect_size_z": 2.3526106235428257,
-    "interpretation": "Strongly optimal (p = 0.0060)",
+    "interpretation": "Strongly optimal (p = 0.0061)",
     "null_samples": [
       15216.0,
       14484.0,
@@ -10878,8 +10881,8 @@
         "observed_score": 13477.0,
         "null_mean": 14954.4802,
         "null_std": 628.0173120084972,
-        "quantile": 0.6,
-        "p_value_conservative": 0.006099390060993901,
+        "quantile": 0.61,
+        "p_value_conservative": 0.006199380061993801,
         "effect_size_z": 2.3526106235428257,
         "n_samples": 10000
       },
@@ -10933,8 +10936,8 @@
         "observed_score": 13477.0,
         "null_mean": 14954.4802,
         "null_std": 628.0173120084972,
-        "quantile": 0.6,
-        "p_value": 0.006099390060993901,
+        "quantile": 0.61,
+        "p_value": 0.006199380061993801,
         "effect_size_z": 2.3526106235428257
       },
       {
@@ -10984,7 +10987,7 @@
         "observed_score": 13477.0,
         "quantile": 0.69,
         "p_value": 0.006999300069993001,
-        "p_value_bh": 0.01661372324306031
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 2,
@@ -10996,23 +10999,23 @@
       {
         "table_id": 3,
         "observed_score": 13448.0,
-        "quantile": 7.2,
-        "p_value": 0.0720927907209279,
-        "p_value_bh": 0.0720927907209279
+        "quantile": 7.27,
+        "p_value": 0.07279272072792721,
+        "p_value_bh": 0.07279272072792721
       },
       {
         "table_id": 4,
         "observed_score": 13178.0,
-        "quantile": 0.58,
-        "p_value": 0.0058994100589941,
-        "p_value_bh": 0.01661372324306031
+        "quantile": 0.59,
+        "p_value": 0.0059994000599940004,
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 5,
         "observed_score": 13306.0,
-        "quantile": 2.3,
-        "p_value": 0.0230976902309769,
-        "p_value_bh": 0.02398606293216832
+        "quantile": 2.32,
+        "p_value": 0.023297670232976703,
+        "p_value_bh": 0.024193734472706577
       },
       {
         "table_id": 6,
@@ -11024,23 +11027,23 @@
       {
         "table_id": 9,
         "observed_score": 13210.0,
-        "quantile": 1.79,
-        "p_value": 0.017998200179982,
-        "p_value_bh": 0.022785721427857217
+        "quantile": 1.8,
+        "p_value": 0.018098190180981903,
+        "p_value_bh": 0.023001699830016997
       },
       {
         "table_id": 10,
         "observed_score": 13369.0,
         "quantile": 0.56,
         "p_value": 0.005699430056994301,
-        "p_value_bh": 0.01661372324306031
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 11,
         "observed_score": 13477.0,
         "quantile": 0.79,
         "p_value": 0.007999200079992,
-        "p_value_bh": 0.01661372324306031
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 12,
@@ -11052,16 +11055,16 @@
       {
         "table_id": 13,
         "observed_score": 13332.0,
-        "quantile": 1.87,
-        "p_value": 0.0187981201879812,
-        "p_value_bh": 0.022785721427857217
+        "quantile": 1.88,
+        "p_value": 0.0188981101889811,
+        "p_value_bh": 0.023001699830016997
       },
       {
         "table_id": 14,
         "observed_score": 12752.0,
         "quantile": 2.05,
         "p_value": 0.020597940205979402,
-        "p_value_bh": 0.022785721427857217
+        "p_value_bh": 0.023001699830016997
       },
       {
         "table_id": 15,
@@ -11075,28 +11078,28 @@
         "observed_score": 13110.0,
         "quantile": 1.96,
         "p_value": 0.019698030196980302,
-        "p_value_bh": 0.022785721427857217
+        "p_value_bh": 0.023001699830016997
       },
       {
         "table_id": 21,
         "observed_score": 13197.0,
-        "quantile": 1.42,
-        "p_value": 0.014298570142985701,
+        "quantile": 1.43,
+        "p_value": 0.0143985601439856,
         "p_value_bh": 0.0221977802219778
       },
       {
         "table_id": 22,
         "observed_score": 13652.0,
-        "quantile": 0.79,
-        "p_value": 0.007999200079992,
-        "p_value_bh": 0.01661372324306031
+        "quantile": 0.8,
+        "p_value": 0.008099190080991902,
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 23,
         "observed_score": 14208.0,
         "quantile": 0.7,
         "p_value": 0.007099290070992901,
-        "p_value_bh": 0.01661372324306031
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 24,
@@ -11110,7 +11113,7 @@
         "observed_score": 13223.0,
         "quantile": 0.64,
         "p_value": 0.0064993500649935,
-        "p_value_bh": 0.01661372324306031
+        "p_value_bh": 0.016821394783598564
       },
       {
         "table_id": 26,
@@ -11136,9 +11139,9 @@
       {
         "table_id": 29,
         "observed_score": 12524.0,
-        "quantile": 2.1,
-        "p_value": 0.021097890210978902,
-        "p_value_bh": 0.022785721427857217
+        "quantile": 2.12,
+        "p_value": 0.0212978702129787,
+        "p_value_bh": 0.023001699830016997
       },
       {
         "table_id": 30,
@@ -11164,16 +11167,16 @@
       {
         "table_id": 33,
         "observed_score": 12929.0,
-        "quantile": 1.79,
-        "p_value": 0.017998200179982,
-        "p_value_bh": 0.022785721427857217
+        "quantile": 1.8,
+        "p_value": 0.018098190180981903,
+        "p_value_bh": 0.023001699830016997
       }
     ],
     "n_tables": 27,
     "n_significant_p05_raw": 26,
     "n_significant_p05_bh": 26,
-    "mean_quantile": 1.3029629629629629,
-    "max_quantile": 7.2,
+    "mean_quantile": 1.3092592592592593,
+    "max_quantile": 7.27,
     "all_below_5pct": false,
     "hypothesis": "Most variant genetic codes remain in the top 5% of their own block-preserving null for Grantham edge-mismatch"
   },
@@ -11560,9 +11563,9 @@
         },
         "observed_score": 13477.0,
         "null_mean": 14954.4802,
-        "quantile": 0.6,
-        "p_value_raw": 0.006,
-        "p_value_conservative": 0.006099390060993901
+        "quantile": 0.61,
+        "p_value_raw": 0.0061,
+        "p_value_conservative": 0.006199380061993801
       },
       {
         "encoding_index": 1,
@@ -11690,9 +11693,9 @@
         },
         "observed_score": 15340.0,
         "null_mean": 16521.6007,
-        "quantile": 2.53,
-        "p_value_raw": 0.0253,
-        "p_value_conservative": 0.025397460253974602
+        "quantile": 2.55,
+        "p_value_raw": 0.0255,
+        "p_value_conservative": 0.025597440255974404
       },
       {
         "encoding_index": 6,
@@ -11794,9 +11797,9 @@
         },
         "observed_score": 15340.0,
         "null_mean": 16514.2186,
-        "quantile": 2.34,
-        "p_value_raw": 0.0234,
-        "p_value_conservative": 0.023497650234976502
+        "quantile": 2.35,
+        "p_value_raw": 0.0235,
+        "p_value_conservative": 0.0235976402359764
       },
       {
         "encoding_index": 10,
@@ -11976,9 +11979,9 @@
         },
         "observed_score": 13477.0,
         "null_mean": 14943.8741,
-        "quantile": 0.78,
-        "p_value_raw": 0.0078,
-        "p_value_conservative": 0.007899210078992101
+        "quantile": 0.79,
+        "p_value_raw": 0.0079,
+        "p_value_conservative": 0.007999200079992
       },
       {
         "encoding_index": 17,
@@ -12054,9 +12057,9 @@
         },
         "observed_score": 15340.0,
         "null_mean": 16517.977,
-        "quantile": 2.41,
-        "p_value_raw": 0.0241,
-        "p_value_conservative": 0.024197580241975804
+        "quantile": 2.43,
+        "p_value_raw": 0.0243,
+        "p_value_conservative": 0.024397560243975602
       },
       {
         "encoding_index": 20,
@@ -12167,7 +12170,7 @@
       0.01,
       2.77
     ],
-    "mean_quantile": 1.09,
+    "mean_quantile": 1.0929166666666668,
     "all_encodings_significant_p05": true
   },
   "decomposition": {
@@ -12277,32 +12280,32 @@
         "stop_penalty": 0.0,
         "include_stops": false,
         "observed_score": 10467.0,
-        "quantile": 0.2,
-        "p_value_conservative": 0.002997002997002997,
+        "quantile": 0.3,
+        "p_value_conservative": 0.003996003996003996,
         "effect_size_z": 2.4836068503136763
       },
       {
         "stop_penalty": 150.0,
         "include_stops": true,
         "observed_score": 12567.0,
-        "quantile": 0.2,
-        "p_value_conservative": 0.002997002997002997,
+        "quantile": 0.3,
+        "p_value_conservative": 0.003996003996003996,
         "effect_size_z": 2.4836068503136763
       },
       {
         "stop_penalty": 215.0,
         "include_stops": true,
         "observed_score": 13477.0,
-        "quantile": 0.2,
-        "p_value_conservative": 0.002997002997002997,
+        "quantile": 0.3,
+        "p_value_conservative": 0.003996003996003996,
         "effect_size_z": 2.4836068503136763
       },
       {
         "stop_penalty": 300.0,
         "include_stops": true,
         "observed_score": 14667.0,
-        "quantile": 0.2,
-        "p_value_conservative": 0.002997002997002997,
+        "quantile": 0.3,
+        "p_value_conservative": 0.003996003996003996,
         "effect_size_z": 2.4836068503136763
       }
     ],

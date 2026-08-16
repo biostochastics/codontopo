@@ -175,6 +175,25 @@ save_figure(p3, file.path(output_dir, "fig3_bit_position_bias"))
 cat("  [4/7] Depth calibration scatter\n")
 depth <- read.csv(file.path(input_dir, "depth_calibration.csv"))
 
+# Pre-jitter coincident (age, epsilon) rows deterministically so that all
+# six calibration points render as distinct markers in both raster (PNG,
+# TIFF) and vector (PDF) outputs. Without this, the two Chlorophyceae Leu
+# rows (both at age=600, eps=2) and the two CUG-clade rows (Ala + Ser at
+# age=150, eps=3) collapse to one visible marker each and only 4 of 6
+# points are visible. Deterministic small offsets keep the plot
+# reproducible bit-for-bit across renders (no random seed involved).
+depth$dup_key <- paste(depth$age_midpoint_mya, depth$reconnect_eps, sep = "|")
+dup_counts <- table(depth$dup_key)
+dup_offsets <- c(0.16, -0.16, 0.32, -0.32)  # epsilon-axis nudge amounts
+depth$dup_rank <- ave(seq_len(nrow(depth)), depth$dup_key,
+                      FUN = function(idx) seq_along(idx))
+depth$needs_jitter <- as.logical(dup_counts[depth$dup_key] > 1)
+depth$reconnect_eps_display <- ifelse(
+  depth$needs_jitter,
+  depth$reconnect_eps + dup_offsets[depth$dup_rank],
+  depth$reconnect_eps
+)
+
 # Round-2 audit fix (T17): read Spearman ρ from JSON and derive the three
 # lineage annotation labels + placements from depth_calibration.csv rather
 # than hard-coding. Prior literals ("Spearman ρ = 0.0", ages 3750/135/550)
@@ -211,7 +230,7 @@ annot_df <- data.frame(
   stringsAsFactors = FALSE
 )
 
-p4 <- ggplot(depth, aes(x = age_midpoint_mya, y = reconnect_eps,
+p4 <- ggplot(depth, aes(x = age_midpoint_mya, y = reconnect_eps_display,
                           color = aa, shape = aa)) +
   geom_errorbar(aes(xmin = age_mya_low, xmax = age_mya_high),
                 width = 0.12, linewidth = 0.7, alpha = 0.7,
@@ -328,7 +347,7 @@ p6 <- ggplot(synbio_agg, aes(x = score, y = count, fill = filtration)) +
     title = "Feasibility Landscape of Single-Codon Reassignments",
     subtitle = paste0("All ", format(n_total, big.mark = ","),
                       " variants; filtration-preserving variants concentrated at highest scores"),
-    x = "Feasibility score (composite: filtration + disconnection criteria)",
+    x = "Structural-preservation index S (visualization-only composite: filtration + disconnection criteria)",
     y = "Number of variants"
   ) +
   theme_codon_pub()
@@ -377,7 +396,7 @@ cat_data$workstream <- factor(cat_data$workstream,
 p7a <- ggplot(cat_data, aes(x = workstream, fill = status)) +
   geom_bar(width = 0.6, color = "grey30", linewidth = 0.3) +
   scale_fill_manual(values = PAL_STATUS,
-                    labels = c("Verified", "Tested", "Pending", "Null")) +
+                    labels = c("Supported", "Rejected", "Pending", "Falsified")) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.08)), breaks = seq(0, 10, 2)) +
   labs(title = "A. Predictions by workstream", x = NULL, y = "Count",
        fill = "Status") +

@@ -89,3 +89,20 @@ data/codonsafe/*/*.pdf
 data/codonsafe/*/*.xlsx
 data/codonsafe/*/*.docx
 data/codonsafe/*/*.gb
+
+# --- Sed backup files and pandoc-generated typst fragments ---
+*.bak
+output/ledger_body.typ
+output/*_frozen.typ
+output/*.aux
+output/*.log
+output/*.out
+output/*.fdb_latexmk
+output/*.fls
+output/*.spl
+output/*.blg
+output/*.toc
+
+# --- Older / interim publisher deliverable subfolders (only v0.6.1 is current) ---
+output/publisher_deliverable/submission_em_fixed/
+output/publisher_deliverable/submission_em_pdflatex/

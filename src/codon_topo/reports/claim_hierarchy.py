@@ -17,7 +17,7 @@ from enum import Enum
 class ClaimStatus(Enum):
     """Status of a scientific claim."""
 
-    SUPPORTED = "supported"  # Passes rigorous null; cite as finding
+    SUPPORTED = "supported"  # Meets its prespecified claim-specific decision rule under the stated null or model and multiplicity control
     SUGGESTIVE = "suggestive"  # Trend-level; cite as supporting evidence
     EXPLORATORY = "exploratory"  # Borderline; hypothesis-generating
     REJECTED = "rejected"  # Falsified or pre-rejected in literature
@@ -57,20 +57,21 @@ CLAIM_HIERARCHY: list[Claim] = [
         statement=(
             "The standard genetic code is significantly error-minimizing "
             "under four independent physicochemical distance metrics: "
-            "Grantham (p=0.006), Miyata (p<0.001), Woese polar requirement "
+            "Grantham (p=0.0062), Miyata (p<0.001), Woese polar requirement "
             "(p=0.003), and Kyte-Doolittle hydropathy (p=0.001)"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=0.006,  # max p across all 4 metrics
-        null_model="freeland_hurst_block_preserving_x4_metrics",
+        evidence_p_value=0.0062,  # max p across all 4 metrics; Grantham with tie included
+        null_model="quartet_pattern_shuffle_x4_metrics",
         sample_size=10_000,
         justification=(
-            "Cross-metric sensitivity analysis under block-preserving null. "
+            "Cross-metric sensitivity analysis under quartet-pattern shuffle null. "
             "Freeland & Hurst (1998) used polar requirement only; we confirm "
             "optimality holds across 4 independent metrics (Grantham, Miyata, "
-            "polar requirement, Kyte-Doolittle). Stop penalty sensitivity "
-            "tested (0/150/215/300): immaterial. Establishes code error-"
-            "minimization as a general structural property."
+            "polar requirement, Kyte-Doolittle). Decision rule: all four metrics "
+            "below within-family Bonferroni alpha/4 = 0.0125. Stop penalty "
+            "sensitivity tested (0/150/215/300): immaterial. Establishes code "
+            "error-minimization as a general structural property."
         ),
         citation_key="FreelandHurst1998",
     ),
@@ -78,16 +79,16 @@ CLAIM_HIERARCHY: list[Claim] = [
         id="per_table_optimality_preservation",
         statement=(
             "26 of 27 NCBI translation tables remain in the top 5% of "
-            "their own block-preserving null for Grantham edge-mismatch "
+            "their own quartet-pattern shuffle null for Grantham edge-mismatch "
             "(BH-FDR corrected); only translation table 3 (yeast mito) "
             "exceeds the threshold"
         ),
         status=ClaimStatus.SUPPORTED,
         evidence_p_value=None,  # Aggregate: count from manuscript_stats.json per_table.n_significant_bh
-        null_model="freeland_hurst_block_preserving_per_table",
+        null_model="quartet_pattern_shuffle_per_table",
         sample_size=10_000,
         justification=(
-            "Each variant code tested against its own block-preserving null "
+            "Each variant code tested against its own quartet-pattern shuffle null "
             "(n=10,000 per table, common-seed design, BH-FDR corrected). "
             "Across 27 NCBI tables (codes 1-6, 9-16, 21-33; codes 7, 8, "
             "17-20 deprecated): 26 significant at adjusted p<0.05. Mean "
@@ -110,16 +111,17 @@ CLAIM_HIERARCHY: list[Claim] = [
             "at all rho values)"
         ),
         status=ClaimStatus.SUPPORTED,
-        evidence_p_value=0.0061,  # max p across all rho values (rho=0)
-        null_model="freeland_hurst_weighted_edges",
+        evidence_p_value=0.0062,  # max p across all rho values (rho=0, tie included)
+        null_model="quartet_pattern_shuffle_weighted_edges",
         sample_size=10_000,
         justification=(
             "Adding within-nucleotide distance-2 'diagonal' edges (completing "
             "H(3,4) from Q_6) preserves and strengthens optimality. At rho=1 "
             "(all 288 single-nucleotide edges equally weighted), p=3e-4. "
-            "Common-seed design with n=10,000 block-preserving null samples "
-            "per rho value. Exact p-values: rho=0 p=0.0061, rho=0.25 "
-            "p=0.0023, rho=0.5 p=0.0007, rho=0.75 p=0.0003, rho=1 p=0.0003. "
+            "Common-seed design with n=10,000 quartet-pattern shuffle null "
+            "samples per rho value. Exact p-values (ties at F_obs included): "
+            "rho=0 p=0.0062 (k=61, 60 strict + 1 tie), rho=0.25 p=0.0023, "
+            "rho=0.5 p=0.0007, rho=0.75 p=0.0003, rho=1 p=0.0003. "
             "Confirms the optimality is not an artifact of the Q_6 subgraph "
             "omitting the 96 within-nucleotide diagonal edges (~1/3 of "
             "single-nucleotide mutations). The rho parameter is a "
@@ -173,27 +175,29 @@ CLAIM_HIERARCHY: list[Claim] = [
             "and the topology-breaking-only subset is null"
         ),
         status=ClaimStatus.EXPLORATORY,
-        evidence_p_value=0.046,  # median Stouffer over all 332 MIS
+        evidence_p_value=0.037,  # median Stouffer over all 332 MIS (post-Bonitz/Kerscher reconciliation)
         null_model="fisher_exact_stouffer_MIS_distribution",
         sample_size=6,
         justification=(
             "Enumerating all maximal independent sets from the conflict "
             "graph (edges = shared organisms) via Bron-Kerbosch on the "
             "complement yields 332 MIS of size 6. Across the 332 sets the "
-            "Stouffer combined p-value has median 0.046, best 0.016, worst "
-            "0.123; 190/332 (57.2%) sets fall below the 0.05 threshold and "
-            "0/332 fall below 0.01. The all-pairings (n=24) Stouffer "
-            "p=1.7e-7 is the point estimate but is not adjusted for shared "
-            "organisms. A pre-specified topology-breaking subset (n=4: "
-            "yeast mito Thr, Scenedesmus mito Leu, Pachysolen Ala, Candida "
-            "Ser) is null (Stouffer p=0.43), so the mechanistic tRNA-"
-            "duplication interpretation is not directly supported by the "
-            "topology-breaking subset in isolation. Classified EXPLORATORY: "
-            "the median-independent-subset signal is present but does not "
-            "meet the strict worst-case threshold, and the narrower "
-            "mechanistic subset does not attain significance."
+            "Stouffer combined p-value has median 0.037, best 0.012, worst "
+            "0.104; 264/332 (79.5%) sets fall below the 0.05 threshold. "
+            "The all-pairings (n=24) Stouffer p=1.7e-7 is the point estimate "
+            "but is not adjusted for shared organisms. A pre-specified "
+            "topology-breaking subset (n=4: yeast mito Thr, Scenedesmus mito "
+            "Leu, Pachysolen Ala, Candida Ser) is null (Stouffer p=0.387), "
+            "so the mechanistic tRNA-duplication interpretation is not "
+            "directly supported by the topology-breaking subset in "
+            "isolation. tRNA vectors for S. cerevisiae and Y. lipolytica "
+            "mitochondrial repertoires reconciled against primary sources "
+            "(Bonitz et al. 1980 and Kerscher et al. 2001 respectively). "
+            "Classified EXPLORATORY: the median-independent-subset signal "
+            "is present but does not meet the strict worst-case threshold, "
+            "and the narrower mechanistic subset is null."
         ),
-        citation_key="Su2011PMC3113583",
+        citation_key="Bonitz1980",
     ),
     Claim(
         id="bit_position_bias_weighted",

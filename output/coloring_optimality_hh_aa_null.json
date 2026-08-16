@@ -1,5 +1,5 @@
 {
-  "method": "Classical Haig-Hurst 1991 / Freeland-Hurst 1998 AA-permutation null. Preserves stop positions and codon-family sizes; permutes the 20 AA labels uniformly across the 20 sense-codon families (20! ~ 2.4e18 possible codes). Reported as a sensitivity companion to the primary quartet-pattern shuffle null.",
+  "method": "Classical Haig-Hurst 1991 / Freeland-Hurst 1998 AA-permutation null. Preserves stop positions and the unlabeled codon-family partition (which codons decode together); permutes the 20 AA labels uniformly across the 20 sense-codon families (20! ~ 2.4e18 possible codes). Per-named-AA codon count is NOT preserved: e.g., Trp's 1-codon family can become a 6-codon family if its label is swapped with Leu's. Reported as a sensitivity companion to the primary quartet-pattern shuffle.",
   "seed": 135325,
   "n_samples": 10000,
   "per_metric": {

@@ -1,0 +1,109 @@
+{
+  "adjacency": "K4^3 = H(3,4) (nucleotide-level, encoding-independent)",
+  "definition": "Delta beta_0 > 0 (increase-in-components)",
+  "lineage_collapsed": {
+    "n_events": 28,
+    "creates_disc": 6,
+    "rate_observed": 0.21428571428571427,
+    "rate_possible": 0.6609375,
+    "depletion_fold": 3.084375,
+    "hypergeom_p": 1.2798706572815002e-06
+  },
+  "clade_exclusion": [
+    {
+      "excluded_clade": "all_ciliates",
+      "excluded_tables": [
+        6,
+        10,
+        15,
+        27,
+        28,
+        29,
+        30
+      ],
+      "n_events_remaining": 24,
+      "creates_disc": 6,
+      "rate_observed": 0.25,
+      "hypergeom_p": 3.955926177430318e-05,
+      "significant_p05": true
+    },
+    {
+      "excluded_clade": "all_yeast_mito",
+      "excluded_tables": [
+        3
+      ],
+      "n_events_remaining": 24,
+      "creates_disc": 2,
+      "rate_observed": 0.08333333333333333,
+      "hypergeom_p": 4.211276090271846e-09,
+      "significant_p05": true
+    },
+    {
+      "excluded_clade": "all_CUG_clade",
+      "excluded_tables": [
+        12,
+        26
+      ],
+      "n_events_remaining": 26,
+      "creates_disc": 4,
+      "rate_observed": 0.15384615384615385,
+      "hypergeom_p": 1.0761368482311057e-07,
+      "significant_p05": true
+    },
+    {
+      "excluded_clade": "all_metazoan_mito",
+      "excluded_tables": [
+        2,
+        5,
+        9,
+        13,
+        14,
+        21
+      ],
+      "n_events_remaining": 22,
+      "creates_disc": 6,
+      "rate_observed": 0.2727272727272727,
+      "hypergeom_p": 0.0002031489941125841,
+      "significant_p05": true
+    },
+    {
+      "excluded_clade": "all_algal_mito",
+      "excluded_tables": [
+        16,
+        22
+      ],
+      "n_events_remaining": 26,
+      "creates_disc": 6,
+      "rate_observed": 0.23076923076923078,
+      "hypergeom_p": 7.287573299465757e-06,
+      "significant_p05": true
+    },
+    {
+      "excluded_clade": "all_protist_mito",
+      "excluded_tables": [
+        4,
+        23
+      ],
+      "n_events_remaining": 27,
+      "creates_disc": 6,
+      "rate_observed": 0.2222222222222222,
+      "hypergeom_p": 3.071076550278102e-06,
+      "significant_p05": true
+    },
+    {
+      "excluded_clade": "all_hemichordate_mito",
+      "excluded_tables": [
+        24,
+        33
+      ],
+      "n_events_remaining": 27,
+      "creates_disc": 6,
+      "rate_observed": 0.2222222222222222,
+      "hypergeom_p": 3.071076550278102e-06,
+      "significant_p05": true
+    }
+  ],
+  "all_clade_exclusions_significant": true,
+  "seed": 135325,
+  "method": "H(3,4) phylogenetic sensitivity per Sengupta et al. 2007 (J Mol Evol 64:662-688). Uses the primary-cell adjacency (nucleotide-level K4^3 = H(3,4)) and the increase-in-components (Delta beta_0 > 0) topology-breaking definition. Companion H(3,4) table to the Q_6 / new-disconnection clade-exclusion table."
+}

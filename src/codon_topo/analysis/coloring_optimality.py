@@ -463,16 +463,19 @@ def rho_robustness_sweep(
         observed_f = weighted_mismatch_score(ref, rho=rho, metric=metric)
 
         null_scores = []
-        n_below = 0
+        n_at_or_below = 0
         for _ in range(n_samples):
             rc = _generate_random_code_freeland_hurst(ref, rng)
             f = weighted_mismatch_score(rc, rho=rho, metric=metric)
             null_scores.append(f)
-            if f < observed_f:
-                n_below += 1
+            # Lower-tail permutation-test convention: count draws AS EXTREME AS
+            # OR MORE EXTREME THAN observed (f <= observed_f). Anti-conservative
+            # if strict `<` is used and null contains ties at observed_f.
+            if f <= observed_f:
+                n_at_or_below += 1
 
-        quantile = 100.0 * n_below / n_samples
-        p_cons = (n_below + 1) / (n_samples + 1)
+        quantile = 100.0 * n_at_or_below / n_samples
+        p_cons = (n_at_or_below + 1) / (n_samples + 1)
         null_mean_val = mean(null_scores)
         null_std_val = stdev(null_scores) if len(null_scores) > 1 else 0.0
 
@@ -688,7 +691,9 @@ def monte_carlo_null(
     )
 
     null_scores: list[float] = []
-    n_below_observed = 0
+    n_at_or_below_observed = 0
+    n_strictly_below_observed = 0
+    n_ties_at_observed = 0
     for _ in range(n_samples):
         if null_type == "freeland_hurst":
             random_code = _generate_random_code_freeland_hurst(ref, rng)
@@ -700,16 +705,25 @@ def monte_carlo_null(
             random_code, include_stops=include_stops, distance_func=dist_fn
         )
         null_scores.append(f)
+        # Lower-tail permutation-test convention: count draws AS EXTREME AS
+        # OR MORE EXTREME THAN observed (f <= observed_f). Anti-conservative
+        # if strict `<` is used and null contains ties at observed_f.
+        if f <= observed_f:
+            n_at_or_below_observed += 1
         if f < observed_f:
-            n_below_observed += 1
+            n_strictly_below_observed += 1
+        if f == observed_f:
+            n_ties_at_observed += 1
 
     null_mean = mean(null_scores)
     null_std = stdev(null_scores) if len(null_scores) > 1 else 0.0
-    quantile = 100.0 * n_below_observed / n_samples
+    quantile = 100.0 * n_at_or_below_observed / n_samples
 
-    # Conservative p-value: (k + 1) / (n + 1). Avoids reporting p = 0 exactly.
-    p_value_conservative = (n_below_observed + 1) / (n_samples + 1)
-    p_value_raw = n_below_observed / n_samples
+    # Conservative p-value: (k + 1) / (n + 1) with k counting draws
+    # `f <= F_obs` per the standard lower-tail permutation-test convention.
+    # Avoids reporting p = 0 exactly.
+    p_value_conservative = (n_at_or_below_observed + 1) / (n_samples + 1)
+    p_value_raw = n_at_or_below_observed / n_samples
     p_bound = 1.0 / (n_samples + 1)  # minimum resolvable p-value
 
     # Effect size: how many null SDs above the observed is the null mean
@@ -738,7 +752,14 @@ def monte_carlo_null(
         "null_min": min(null_scores),
         "null_max": max(null_scores),
         "quantile_of_observed": quantile,
-        "n_beaten_observed": n_below_observed,
+        # k = number of draws with f <= F_obs (lower-tail permutation-test
+        # convention, ties included). Legacy key `n_beaten_observed` is
+        # retained under its historical name but now counts f <= observed;
+        # the strict-below and tie counts are exposed separately below.
+        "n_beaten_observed": n_at_or_below_observed,
+        "n_at_or_below_observed": n_at_or_below_observed,
+        "n_strictly_below_observed": n_strictly_below_observed,
+        "n_ties_at_observed": n_ties_at_observed,
         "n_samples": n_samples,
         "p_value_raw": p_value_raw,
         "p_value_conservative": p_value_conservative,  # (k+1)/(n+1)
@@ -817,7 +838,7 @@ def encoding_sensitivity_of_optimality(
         # (rather than identical draws that only differ by the scoring map).
         rng = random.Random((seed or 0) + enc_idx)
 
-        n_below = 0
+        n_at_or_below = 0
         enc_scores: list[float] = []
         for _ in range(n_samples):
             if null_type == "freeland_hurst":
@@ -826,12 +847,13 @@ def encoding_sensitivity_of_optimality(
                 rc = _generate_random_code_class_size_preserving(STANDARD, rng)
             f = hypercube_edge_mismatch_score(rc, encoding=enc)
             enc_scores.append(f)
-            if f < observed_f:
-                n_below += 1
+            # Lower-tail permutation-test convention: count f <= F_obs.
+            if f <= observed_f:
+                n_at_or_below += 1
 
-        p_raw = n_below / n_samples
-        p_cons = (n_below + 1) / (n_samples + 1)
-        q = 100.0 * n_below / n_samples
+        p_raw = n_at_or_below / n_samples
+        p_cons = (n_at_or_below + 1) / (n_samples + 1)
+        q = 100.0 * n_at_or_below / n_samples
         quantiles.append(q)
         p_values.append(p_raw)
         per_encoding_results.append(
@@ -979,19 +1001,19 @@ def per_table_proximity_audit(
             null_scores.append(f)
             null_dHs.append(_code_distance_to_standard(random_code))
 
-        # Unconditional quantile
-        n_below = sum(1 for s in null_scores if s < observed_score)
-        quantile_unconditional = 100.0 * n_below / max(n_samples, 1)
+        # Unconditional quantile (lower-tail convention: count f <= F_obs).
+        n_at_or_below = sum(1 for s in null_scores if s <= observed_score)
+        quantile_unconditional = 100.0 * n_at_or_below / max(n_samples, 1)
 
         # Conditional: within ±2 codons of observed dH
         same_bucket_idx = [
             i for i in range(n_samples) if abs(null_dHs[i] - dH_obs) <= 2
         ]
         if len(same_bucket_idx) >= 10:
-            cond_below = sum(
-                1 for i in same_bucket_idx if null_scores[i] < observed_score
+            cond_at_or_below = sum(
+                1 for i in same_bucket_idx if null_scores[i] <= observed_score
             )
-            quantile_conditional = 100.0 * cond_below / len(same_bucket_idx)
+            quantile_conditional = 100.0 * cond_at_or_below / len(same_bucket_idx)
             cond_n = len(same_bucket_idx)
         else:
             quantile_conditional = float("nan")

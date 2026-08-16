@@ -1,0 +1,3276 @@
+% Editorial-Manager pdflatex-compatible supplement wrapper. See main_em.tex
+% for the rationale for avoiding fontspec.
+
+\documentclass[preprint,11pt,authoryear,a4paper]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage[capitalise,nameinlink]{cleveref}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{multirow}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\setlength{\parindent}{1.2em}
+
+% Use \DeclareUnicodeCharacter (inputenc-native) so we don't emit
+% "Redefining Unicode character" warnings for §, –, †, ‡ that inputenc
+% already handles.
+\DeclareUnicodeCharacter{25AB}{\ensuremath{\,\square\,}}
+\DeclareUnicodeCharacter{03C1}{\ensuremath{\rho}}
+\DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
+\DeclareUnicodeCharacter{00A7}{\S}
+\DeclareUnicodeCharacter{2013}{--}
+\DeclareUnicodeCharacter{2020}{\textsuperscript{\dag}}
+\DeclareUnicodeCharacter{2021}{\textsuperscript{\ddag}}
+
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\providecommand{\textsubscript}[1]{\ensuremath{_{\text{#1}}}}
+\providecommand{\real}[1]{#1}
+
+% Corrected 2026-08-15: embed the PNG directly instead of rendering a
+% TIFF placeholder box (see manuscript.tex for rationale).
+\newcommand{\emfig}[1]{%
+  \includegraphics[width=0.92\linewidth]{#1.png}%
+}
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thesection}{S\arabic{section}}
+
+\journal{BioSystems}
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Supplementary material: Robust error-minimization in the genetic code in $\mathrm{GF}(2)^6$}
+\author[lc]{Paul Clayworth}
+\author[bs]{Sergey Kornilov}
+\affiliation[lc]{organization={Logocentricity Inc.}, addressline={Austin, TX}, country={USA}}
+\affiliation[bs]{organization={Biostochastics, LLC}, addressline={Seattle, WA}, country={USA}}
+\end{frontmatter}
+
+\section{Claim hierarchy with full justifications}\label{sec:s-claims}
+
+The 15 evaluated claims are organised into five evidentiary tiers
+(Supported / Exploratory / Falsified / Rejected / Tautological) and
+listed with full justifications in \Cref{tbl:s-claims}. The hierarchy
+is registered in code
+(\texttt{src/codon\_topo/reports/claim\_hierarchy.py} in
+\url{https://github.com/biostochastics/codontopo}) so that every
+analysis run produces a verifiable status report
+(\texttt{codon-topo\ claims}) rather than the status table being
+maintained as prose. The ``Falsified'' and ``Rejected'' rows record
+claims this paper or earlier work has tested and found to be wrong; we
+list them so that the framework's negative scope is visible alongside
+its positive results.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.50}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.10}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.40}}@{}}
+\caption{Complete claim hierarchy with full claim statements and
+justifications.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Claim ID and statement}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Status}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Justification}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Claim ID and statement}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Status}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Justification}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{hypercube\_coloring\_optimality}\\
+The standard genetic code is significantly error-minimizing under four
+established, code-independent physicochemical distance measures with
+partially overlapping content: Grantham (\(p = 0.006\)), Miyata
+(\(p < 0.001\)), Woese polar requirement (\(p = 0.003\)), and
+Kyte--Doolittle hydropathy (\(p = 0.001\)).\strut
+\end{minipage} & Supported & Cross-metric sensitivity: Grantham
+\(p = 0.006\), Miyata \(p < 0.001\), polar requirement \(p = 0.003\),
+Kyte--Doolittle \(p = 0.001\) (quartet-pattern shuffle null,
+\(n =\)10,000). Stop penalty sensitivity (0/150/215/300): immaterial. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{per\_table\_optimality\_preservation}\\
+26 of 27 NCBI translation tables remain in the top 5\% of their own
+quartet-pattern shuffle null for Grantham edge-mismatch (BH--FDR
+corrected); only translation table 3 (yeast mito) exceeds the
+threshold.\strut
+\end{minipage} & Supported & Per-table quartet-pattern shuffle null
+applied to all 27 NCBI tables; significant fraction (BH--FDR
+\(p < 0.05\)) and per-table quantiles are reported in the main text and
+the per-table CSV \texttt{output/tables/T4\_per\_table\_optimality.csv}
+(released in the \texttt{codontopo} repository). Translation table 3
+(yeast mito) is the marginal exception. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{optimality\_rho\_robustness}\\
+Coloring optimality is robust across all diagonal-edge weights
+\(\rho \in \lbrack 0,1\rbrack\), including the full Hamming graph
+\(H(3,4) = K_{4}\square K_{4}\square K_{4}\) of single-nucleotide
+substitutions (\(p < 0.01\) at all \(\rho\) values).\strut
+\end{minipage} & Supported & \(\rho\)-sweep at \(n =\)10,000:
+\(p \leq 0.006\) at all \(\rho\) values; effect-size \(z\) increases
+monotonically from \(\rho = 0\) to \(\rho = 1\). \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{topology\_avoidance\_depletion}\\
+Natural codon reassignments are depleted for topology-breaking changes
+(moves that fragment an amino acid's codon family) at approximately 21\%
+of observed events vs 66--73\% of the candidate landscape, robust to
+adjacency definition (\(Q_{6}\) vs the full Hamming graph \(H(3,4)\))
+and clade exclusion.\strut
+\end{minipage} & Supported & Permutation \(p \leq 10^{- 4}\) under both
+\(Q_{6}\) and \(H(3,4)\); hypergeometric \(p = 1.6 \times 10^{- 8}\)
+(\(Q_{6}\), new disconnection) and \(p = 1.3 \times 10^{- 6}\)
+(\(H(3,4)\), \(\Delta\beta_{0} > 0\)). 5--7 of 28 de-duplicated events
+are topology-breaking versus \(\approx 64\)--\(75\)\% of the candidate
+landscape (\(\approx 3.0\)--\(3.4\)-fold depletion). \(Q_{6}\) is
+encoding-dependent (8 of 24 bijections give no depletion); \(H(3,4)\) is
+encoding-independent and is the primary test. Clade-exclusion
+sensitivity (7 regimes): all \(p < 10^{- 5}\). \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{trna\_enrichment\_reassigned\_aa}\\
+Organisms with variant genetic codes tend to show elevated tRNA gene
+copy numbers for the reassigned amino acid, but the enrichment does not
+attain a strict worst-case-subset threshold and the
+topology-breaking-only subset is null.\strut
+\end{minipage} & Exploratory & 332 maximal independent sets of size 6
+(Bron--Kerbosch on the complement of the conflict graph): median
+Stouffer \(p = 0.037\), best \(p = 0.012\), worst \(p = 0.104\); 264/332
+(79.5\%) sets fall below 0.05. Topology-breaking subset (\(n = 4\))
+Stouffer \(p = 0.387\) (null). 18 tRNAscan-SE-verified assemblies (15
+variant + 3 standard controls), 24 pairings across 5 variant codes. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{bit\_position\_bias\_weighted}\\
+Codon reassignment bit-flip distribution shows positional skew in
+\({\text{GF}(2)}^{6}\) coordinates under a uniform null, but the signal
+does not survive nulls that respect the source-codon non-independence of
+recurrent reassignments. Reported as exploratory/null rather than a
+positive finding.\strut
+\end{minipage} & Exploratory & Uniform null \(p = 0.006\) but inflated
+by recurrent-reassignment non-independence (e.g., the recurrent
+UGA\(\rightarrow\)Trp event contributes the same source codon across
+many lineages). De-duplicating to unique (codon, target) pairs gives
+\(p = 0.075\). The codon-preserving null (which permutes target amino
+acids while holding the source codon fixed and is the appropriate
+non-independence-respecting null for this question) absorbs the apparent
+bias entirely. We retain the row in the registry as a cautionary record
+of how the choice of null can flip a putative positive into a null
+finding, and we treat the bit-position-bias claim as not supported. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{mechanism\_boundary\_conditions}\\
+tRNA gene duplication accompanies codon reassignment in large nuclear
+genomes (ciliates, yeasts) but not in streamlined genomes
+(\emph{Blastocrithidia}: anticodon stem shortening;
+\emph{Mycoplasmoides}: anticodon modification).\strut
+\end{minipage} & Exploratory & Three-tier pattern: duplication / stem
+shortening / modification. Descriptive. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{atchley\_f3\_serine\_convergence}\\
+Serine's extreme Atchley Factor 3 score (\(F_{3} = - 4.760\), most
+extreme of 20 amino acids, 2.24 SD below mean) converges with the
+\({\text{GF}(2)}^{6}\) topological disconnection: \(F_{3}\) captures the
+mismatch between Serine's small physicochemical footprint and its
+disproportionate codon diversity, which the geometric framework
+identifies as maximal inter-family Hamming distance among 6-codon amino
+acids (4 vs 1 for Leu and Arg).\strut
+\end{minipage} & Exploratory & Serine \(F_{3} = - 4.760\), 2.24 SD below
+mean. Complementary, not independent. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{variant\_code\_disconnection\_catalogue}\\
+Systematic survey of Hamming-graph connectivity across 27 NCBI
+translation tables identifies 4 lineage-collapsed variant-code
+amino-acid disconnections at \(\varepsilon = 1\) under the default
+encoding: Thr in yeast mitochondrial code (table 3), Leu in
+chlorophycean mitochondrial codes (tables 16 and 22, collapsed to a
+single algal-mito event), Ala in \emph{Pachysolen tannophilus} nuclear
+code (table 26), and tripartite Ser in \emph{Candida}-clade alternative
+yeast nuclear code (table 12).\strut
+\end{minipage} & Exploratory & 4 variant-code cases at
+\(\varepsilon = 1\) in \(Q_{6}\) (default encoding): Thr (Table 3, yeast
+mito), Leu (Tables 16/22, chlorophycean and \emph{S. obliquus} mito;
+collapsed to one algal-mito event), Ala (Table 26, \emph{Pachysolen}),
+Ser (Table 12, \emph{Candida}). Separately, Table 32 (Balanophoraceae
+plastid, UAG\ensuremath{\to}{}Trp) creates a 2-fold Trp pair (UGG, UAG) that remains
+connected at \(\varepsilon\)=1 but breaks the bit-5 two-fold filtration (a filtration
+finding, not a disconnection). \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{kras\_fano\_clinical\_prediction}\\
+XOR ``Fano'' relationships in \({\text{GF}(2)}^{6}\) predict enrichment
+of specific amino acids at KRAS G12 co-mutation sites.\strut
+\end{minipage} & Falsified & \(p = 1.0\) across all 6 G12 variants.
+\(n =\)1,670 MSK-IMPACT mutations. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{serine\_min\_distance\_4\_invariant}\\
+Serine's minimum UCN--AGY Hamming distance \(= 4\) holds invariantly
+across all 24 base-to-bit encodings.\strut
+\end{minipage} & Rejected & 16/24 encodings give distance 2. Only 8/24
+give distance 4. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{psl\_2\_7\_symmetry}\\
+\(\text{PSL}(2,7)\) is the fundamental symmetry group of the genetic
+code.\strut
+\end{minipage} & Rejected & No 64-dim irrep. \citep{antoneli2011}. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{holomorphic\_embedding}\\
+The coordinate-wise map
+\({\text{GF}(2)}^{6} \rightarrow {\mathbb{C}}^{3}\) sending base-pairs
+to fourth roots of unity is a holomorphic embedding extending a
+character of \({\text{GF}(8)}^{\ast}\).\strut
+\end{minipage} & Rejected & Domain is finite discrete. Character
+identity fails: \(i^{2} = - 1 \neq 1\). \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{two\_fold\_bit\_5\_filtration}\\
+All 2-fold synonymous codon pairs in the standard code differ at exactly
+bit position 5 under the default encoding.\strut
+\end{minipage} & Tautological & Forced by encoding choice. Holds in
+16/24 encodings. \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\textbf{four\_fold\_prefix\_filtration}\\
+All 4-fold synonymous codon groups share a 4-bit prefix with 2-bit
+suffixes exhausting \({\text{GF}(2)}^{2}\).\strut
+\end{minipage} & Tautological & Trivial under any bijection from 4 bases
+to \({\text{GF}(2)}^{2}\). \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-claims}{}
+
+\section{Encoding sensitivity analysis (coloring
+optimality)}\label{sec:s-encoding}
+
+There are \(4! = 24\) distinct bijections from
+\(\left\{ C,U,A,G \right\}\) to \({\text{GF}(2)}^{2}\) (24 ways to
+assign the four nucleotide letters to the four 2-bit binary patterns
+00/01/10/11). The default encoding used in the main text is
+\(C \mapsto 00\), \(U \mapsto 01\), \(A \mapsto 10\), \(G \mapsto 11\)
+(rationale stated in main-text §2.1). To check that the
+coloring-optimality result is not specific to that choice, we re-ran the
+Grantham quartet-pattern shuffle null analysis under each of the 23
+alternative encodings, holding everything else fixed (per-encoding
+\(n =\)10,000 null draws, seed 135325). All \{'n\_encodings': 24,
+`null\_type': `freeland\_hurst', `quantile\_min': 0.01, `quantile\_max':
+2.77, `mean\_quantile': 1.0929166666666668, `all\_significant\_p05':
+True, `p\_max': 0.027797220277972202, `p\_min':
+0.00019998000199980003\}.at(``n\_encodings'', default: 24) encodings
+yield significant optimality (\(p < 0.05\) under the quartet-pattern
+shuffle null), with all per-encoding conservative \(p\)-values bracketed
+by \(0.0002\) (best) and \(0.0278\) (worst). The mean per-encoding
+quantile is 1.09\% (range 0.01\%--2.77\%), confirming that the result is
+not an artifact of the default encoding.
+
+Properties that are encoding-invariant:
+
+\begin{itemize}
+\item
+  Serine disconnection at \(\varepsilon = 1\) (holds under all 24
+  encodings)
+\item
+  Coloring optimality significance (all 24 significant)
+\item
+  Four-fold prefix filtration (tautological under any bijection)
+\item
+  \(H(3,4)\) adjacency graph (encoding-independent by construction)
+\end{itemize}
+
+Properties that are encoding-dependent:
+
+\begin{itemize}
+\item
+  Serine inter-family minimum Hamming distance (4 in 8/24 encodings, 2
+  in 16/24)
+\item
+  Two-fold bit-5 filtration (holds in 16/24 encodings)
+\item
+  \(Q_{6}\) (Hamming-1) adjacency partition of \(H(3,4)\), and the
+  topology-avoidance signal computed under \(Q_{6}\) adjacency (see §S4)
+\item
+  Specific score values and rank orderings
+\end{itemize}
+
+Full per-encoding results are written to
+\texttt{output/coloring\_optimality.json} (block
+\texttt{encoding\_sensitivity}) by the standard \texttt{codon-topo\ all}
+invocation, and reproducible from the \texttt{codontopo} repository.
+
+\begin{figure}
+\centering
+\emfig{FigA\_coloring\_null}
+\caption{Hypercube coloring null distribution (extended). Histogram of
+Grantham edge-mismatch scores \(F\) across the quartet-pattern shuffle
+null draws under the default encoding (C=00, U=01, A=10, G=11); the
+observed standard-code score is marked and its quantile shown. Companion
+to main-text Figure 2A, retained here at higher resolution together with
+the per-encoding sweep and per-table breakdown below.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-coloring-null}{}
+
+\begin{figure}
+\centering
+\emfig{FigD\_score\_decomposition}
+\caption{Grantham mismatch score decomposition by nucleotide position.
+Contribution of each codon position (1, 2, 3) to the total Grantham
+edge-mismatch score \(F\) under the default encoding. Position 2
+dominates, consistent with the biochemical hierarchy of mutational
+impact. This is a descriptive breakdown of the summed score, not an
+inferential test.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-score-decomposition}{}
+
+\subsection{Null-model choice: quartet-pattern vs classical Haig-Hurst
+AA-permutation}\label{sec:s-null-hh-aa}
+
+The primary coloring-optimality tests throughout this paper use the
+\textbf{quartet-pattern shuffle} null (main-text §2.3.1: the 64 codons
+are grouped into 16 first-two-base quartets, and the amino-acid pattern
+at each quartet is held as an atomic labeled 4-tuple; the two
+stop-containing quartets in the standard code (UA and UG) are held fixed
+and the remaining 14 patterns are permuted uniformly at random among the
+14 non-stop quartet slots). This is distinct from the classical
+Haig--Hurst 1991 / Freeland--Hurst 1998 null commonly cited in the
+code-optimization literature, which fixes the standard code's 20
+sense-codon families (the unlabeled partition of the 61 sense codons
+into synonymous groups) and permutes the 20 amino-acid labels uniformly
+across those families with stop positions held fixed. The two ensembles
+preserve different structural properties
+(\Cref{tbl:s-null-preservation}) and admit different numbers of
+alternative codes (\(\approx 14!\) for the quartet-pattern shuffle
+versus \(\approx 20!\) for the AA-permutation null). The
+quartet-pattern-shuffle count is \(14!\) rather than \(16!\) because in
+the standard code both stop-containing quartets (UA and UG) are held
+fixed, leaving \(14\) mobile quartet slots.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4444}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2778}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2778}}@{}}
+\caption{\textbf{Preservation properties of the two null ensembles.} The
+two nulls preserve non-nested structural properties. The quartet-pattern
+shuffle preserves each named amino acid's total codon count (because the
+atomic 4-tuples that move carry their internal AA composition with them)
+but permutes which specific codons decode to a given amino acid; the
+classical Haig--Hurst AA-permutation preserves which codons decode
+together (the family partition) but allows a named amino acid's codon
+count to change (Trp's single-codon family may become a 6-codon family
+if its label is swapped with Leu's). Neither ensemble is uniformly
+``more stringent.'' The quartet-pattern-shuffle state space is \(14!\)
+rather than \(16!\) because in the standard code both stop-containing
+quartets (UA, containing UAA/UAG, and UG, containing UGA) are held
+fixed, leaving 14 mobile quartet slots.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Property}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Quartet-pattern shuffle}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Classical Haig--Hurst AA-permutation}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Property}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Quartet-pattern shuffle}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Classical Haig--Hurst AA-permutation}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Stop-codon positions & fixed & fixed \\
+Codon-family partition (which codons decode to a common amino acid, as
+an unlabeled clustering) & permuted & fixed \\
+Per-named-amino-acid codon count (e.g., Leu's total codon count) & fixed
+& permuted \\
+Sorted degeneracy multiset (\((6,6,6,4,4,\ldots,1)\)) & fixed & fixed \\
+Quartet-slot AA-pattern shape at each first-two-base slot & permuted
+(atomic 4-tuples redistribute across slots) & fixed (labels within each
+slot swap only) \\
+Approx. number of possible codes & \(14! \approx 8.7 \times 10^{10}\) &
+\(20! \approx 2.4 \times 10^{18}\) \\
+Historical reference & not standard; introduced here &
+\citep{haig1991, freeland1998} \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-null-preservation}{}
+
+We reran the four physicochemical metrics under the classical
+Haig--Hurst AA-permutation null (\(n =\)10,000 draws, seed 135325) for
+direct comparison against the quartet-pattern shuffle values reported in
+main-text Table 2. Results are in \Cref{tbl:s-null-comparison}.
+
+\begin{longtable}[]{@{}lrrrrrr@{}}
+\caption{\textbf{Coloring-optimality \(p\)-values under the
+quartet-pattern shuffle (QP, primary) vs the classical Haig--Hurst
+AA-permutation null (HH-AA, sensitivity).} Both use \(n =\)10,000 draws,
+seed 135325. Conservative \(p\)-values are \((k + 1)/(n + 1)\) with the
+tail convention \(f \leq F_{\text{obs}}\) (draws as extreme as or more
+extreme than the observed score). Treating the eight reported
+\(p\)-values as one test family, all eight pass Bonferroni at
+\(\alpha = 0.05/8 = 0.00625\). For three of the four code-independent
+metrics the classical HH-AA null gives a \textbf{more} extreme \(p\):
+because the HH-AA ensemble admits a wider space of alternative codes
+(\(20!\) vs \(14!\)), the standard code sits further into its low-cost
+tail. Kyte--Doolittle inverts: hydropathy is unusually well-aligned with
+the wobble-quartet structure that QP preserves, so the QP null contains
+many low-hydropathy-mismatch alternatives that the HH-AA null (which
+breaks that alignment) does not, and the observed code's percentile is
+deeper against QP than against HH-AA. The conclusion --- that the
+standard code is significantly error-minimizing across all four
+code-independent physicochemical metrics --- is robust to the choice of
+null.}\tabularnewline
+\toprule\noalign{}
+\textbf{Metric} & \textbf{Observed \(F\)} & \textbf{QP null \(z\)} &
+\textbf{QP \(p\)} & \textbf{HH-AA null \(z\)} & \textbf{HH-AA \(p\)} &
+\textbf{Δ (HH \ensuremath{-} QP)} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Metric} & \textbf{Observed \(F\)} & \textbf{QP null \(z\)} &
+\textbf{QP \(p\)} & \textbf{HH-AA null \(z\)} & \textbf{HH-AA \(p\)} &
+\textbf{Δ (HH \ensuremath{-} QP)} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Grantham & 13477 & 2.35 & 0.0062 & 2.76 & 0.0021 & HH more extreme \\
+Miyata & 235.3 & 3.14 & 0.0004 & 4.13 & 0.0001 & HH more extreme \\
+Polar requirement & 347.3 & 2.73 & 0.0026 & 3.45 & 0.0001 & HH more
+extreme \\
+Kyte--Doolittle & 457.2 & 2.78 & 0.0014 & 2.68 & 0.0027 & QP more
+extreme \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-null-comparison}{}
+
+\textbf{Why we do not describe either null as ``more stringent'' than
+the other.} The two ensembles preserve non-nested structural properties
+(\Cref{tbl:s-null-preservation}), and empirical tail behaviour
+(\Cref{tbl:s-null-comparison}) shows the metric-specific direction of
+the \(p\)-value shift is not monotone across the four metrics. We
+therefore report both, note the null under which each headline
+\(p\)-value was computed (the QP shuffle), and treat the HH-AA null as a
+same-direction sensitivity check rather than as a validation or a
+refutation of the QP tail.
+
+\section{Topology-breaking definitions: 2 \ensuremath{\times} 2
+audit}\label{sec:s-topology-defs}
+
+The topology-avoidance result depends on two independent definitional
+choices: (i) which adjacency graph defines codon-family connectivity
+(\(Q_{6}\) Hamming-1 in the default \({\text{GF}(2)}^{6}\) encoding, vs
+the encoding-independent \(H(3,4)\) single-nucleotide graph), and (ii)
+what counts as a ``topology-breaking'' candidate move (a candidate move
+creates a \textbf{new} disconnection in a previously connected family,
+vs the candidate move strictly increases \(\beta_{0}\) summed across
+families). To prevent silent dependence on either choice, we report all
+four combinations.
+
+We define two notions of ``topology-breaking'' candidate move:
+
+\begin{enumerate}
+\item
+  \textbf{New disconnection in a previously connected family}: a
+  candidate move makes some amino acid disconnected at
+  \(\varepsilon = 1\) that was connected in the standard code (i.e., the
+  amino acid was not previously in the disconnection catalogue but is
+  after the move).
+\item
+  \textbf{Increase in components} (\(\Delta\beta_{0} > 0\), the
+  conditional-logit feature): the total number of connected components,
+  summed across amino-acid codon graphs, strictly increases:
+  \[\Delta_{\text{topo }} = \sum_{a}\beta_{0}\left( G_{a}^{\text{after}} \right) - \sum_{a}\beta_{0}\left( G_{a}^{\text{before}} \right) > 0.\]
+\end{enumerate}
+
+Both definitions are reported under both \(Q_{6}\) adjacency (Hamming-1
+in the default \({\text{GF}(2)}^{6}\) encoding) and \(H(3,4)\) adjacency
+(full single-nucleotide adjacency, encoding-independent), giving four
+cells. All four share the same denominators (1,280 candidate moves, 28
+de-duplicated observed events). The full \(2 \times 2\) result is shown
+in \Cref{tbl:s-topo-audit}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{\textbf{Topology-avoidance \(2 \times 2\) definition \(\times\)
+adjacency audit.} All four cells share the same denominators (1,280
+candidate moves, 28 de-duplicated observed events) and differ only in
+(i) which adjacency graph defines codon-family connectivity (\(Q_{6}\)
+Hamming-1 vs encoding-independent \(H(3,4)\)) and (ii) what counts as a
+topology-breaking move (\(\Delta\beta_{0} > 0\) summed over amino acids
+vs creation of a \textbf{new} disconnection in a previously connected
+family). \(K/N\) = topology-breaking candidates among all candidates;
+\(x/n\) = topology-breaking observed events among all observed events.
+All four cells yield depletion in the same direction with comparable
+risk ratios (0.28--0.33) and hypergeometric \(p < 10^{- 5}\). The main
+text uses the \(H(3,4)\), \(\Delta\beta_{0} > 0\) cell as primary
+(encoding-independent adjacency, definition matched to the
+conditional-logit feature).}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Adjacency}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Topology-breaking definition}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(K/N\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(x/n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Hyper. \(p\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{RR (95\% CI)}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Adjacency}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Topology-breaking definition}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(K/N\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(x/n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Hyper. \(p\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{RR (95\% CI)}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(H(3,4)\) (primary) & \(\Delta\beta_{0} > 0\) (increase in components)
+& 846 / 1,280 & 6 / 28 & \(1.3 \times 10^{- 6}\) & 0.32 (0.16--0.66) \\
+\(H(3,4)\) & new disconnection in connected family & 822 / 1,280 & 5 /
+28 & \(5.0 \times 10^{- 7}\) & 0.28 (0.13--0.62) \\
+\(Q_{6}\) & \(\Delta\beta_{0} > 0\) (increase in components) & 963 /
+1,280 & 7 / 28 & \(2.2 \times 10^{- 8}\) & 0.33 (0.17--0.63) \\
+\(Q_{6}\) & new disconnection in connected family & 931 / 1,280 & 6 / 28
+& \(1.6 \times 10^{- 8}\) & 0.29 (0.14--0.60) \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-topo-audit}{}
+
+The full machine-readable audit is released as part of the
+\texttt{codontopo} repository's \texttt{output/} artifacts (the
+\texttt{definitions\_audit} block in the topology-avoidance results
+file).
+
+\begin{figure}
+\centering
+\emfig{FigF\_topology\_avoidance}
+\caption{Topology-avoidance depletion under the primary \(H(3,4)\)
+adjacency, \(\Delta\beta_{0} > 0\) definition (row 1 of
+\Cref{tbl:s-topo-audit}). Observed rate of topology-breaking events
+(bar with permutation \(p\)-value annotation) contrasted with the
+candidate-landscape rate (dashed reference line). All four cells of the
+\(2 \times 2\) audit above give qualitatively equivalent depletion (RR
+0.28--0.33, hypergeometric \(p < 10^{- 5}\)); this figure visualises the
+primary cell.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-topology-avoidance}{}
+
+\section{\texorpdfstring{Topology avoidance: \(Q_{6}\) encoding-sweep
+sensitivity}{Topology avoidance: Q\_\{6\} encoding-sweep sensitivity}}\label{sec:s-encoding-sweep}
+
+This section documents what motivated the demotion of \(Q_{6}\) from
+primary to secondary topology adjacency in the manuscript.
+
+The \(H(3,4)\) Hamming graph is encoding-independent: every two-bit
+bijection from \(\left\{ A,C,G,U \right\}\) to
+\(\left\{ 0,1 \right\}^{2}\) produces the same nucleotide-level
+adjacency, because \(H(3,4)\) depends only on which nucleotide letters
+differ between two codons, not on their binary encoding. The \(Q_{6}\)
+subgraph, however, depends on the encoding because the partition into
+Hamming-1 (single-bit-change) edges versus Hamming-2 (within-nucleotide
+diagonal) edges is bijection-specific: under one encoding two codons
+that differ at exactly one nucleotide may project to a Hamming-1 edge of
+\(Q_{6}\), and under another encoding they may project to a Hamming-2
+edge. To test whether the \(Q_{6}\) topology-avoidance result survives
+this representation choice, we recomputed the \(Q_{6}\)
+candidate-landscape rate, observed rate, depletion fold, and
+hypergeometric \(p\)-value under all 24 base-to-bit bijections, holding
+the same 1,280 candidate moves and 28 observed events.
+
+Across all 24 encodings:
+
+\begin{itemize}
+\item
+  candidate-landscape rate: min 36\%, median 69.9\%, max 72.7\%
+\item
+  observed rate: min 21.4\%, median 28.6\%, max 35.7\%
+\item
+  depletion fold: min 1.01, median 2.45, max 3.39
+\item
+  hypergeometric \(p\): min \(1.58 \times 10^{- 8}\), median
+  \(6.08 \times 10^{- 6}\), max 0.572
+\end{itemize}
+
+The default encoding (C=00, U=01, A=10, G=11) gives the largest
+depletion and the smallest \(p\). Eight of 24 encodings give a
+candidate-landscape rate of approximately 36\%, under which the observed
+rate of 21--36\% does not significantly differ from candidate
+(\(p > 0.5\)). The \(Q_{6}\) result is therefore not encoding-invariant.
+We accordingly present the encoding-independent \(H(3,4)\) result as the
+primary topology-avoidance test, with \(Q_{6}\) reported as a
+representation-specific decomposition for continuity with the broader
+\({\text{GF}(2)}^{6}\) framework. The default encoding was adopted in
+companion methodological work (\citep{clayworth2026}) prior to the
+present encoding sweep, on the grounds of visualization clarity (it
+places the standard code's nine 2-fold-degenerate amino acids on bit-5
+differences). We make no claim that this encoding is biologically
+privileged. The full per-encoding sweep is released as part of the
+\texttt{codontopo} repository's \texttt{output/} artifacts (the
+\texttt{Q6\_encoding\_sweep} block in the topology-avoidance results
+file); \Cref{fig:s-encoding-sweep} visualizes the per-encoding
+depletion fold and hypergeometric \(p\).
+
+\begin{figure}
+\centering
+\emfig{FigS\_encoding\_sweep}
+\caption{Per-encoding \(Q_{6}\) topology-avoidance depletion across all
+24 base-to-bit bijections. Bars are sorted by depletion fold; the dashed
+line at \(1.0\) marks no-depletion. Bars highlighted in blue are
+statistically significant (\(p < 0.05\)); grey bars are not. Eight of 24
+encodings (depletion fold \(\approx 1.0\), \(p > 0.5\)) place the
+\(Q_{6}\) candidate-landscape rate at \(\approx 36\)\% rather than 73\%,
+eliminating the depletion signal. The default encoding (C=00, U=01,
+A=10, G=11) yields the largest depletion (3.4-fold). The
+encoding-independent \(H(3,4)\) result is constant across all 24
+bijections and is the primary topology-avoidance test in this work.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-encoding-sweep}{}
+
+\begin{figure}
+\centering
+\emfig{FigC\_rho\_robustness}
+\caption{Coloring optimality across the \(\rho\)-interpolation between
+\(Q_{6}\) (Hamming-1 only, \(\rho = 0\)) and \(H(3,4)\) (full
+single-nucleotide mutation graph, \(\rho = 1\)).
+\(F_{\rho} = F_{H_{1}} + \rho \cdot F_{H_{2}}\) is the
+diagonal-edge-weighted mismatch score; a lower \(F_{\rho}\)-percentile
+indicates stronger optimality. The standard code retains top-percentile
+placement across the full \(\rho \in \lbrack 0,1\rbrack\) range under
+the default encoding, so the coloring-optimality result is not a
+knife-edge property of a specific weighting of the two edge classes.
+Companion to main-text §3.2.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-rho-robustness}{}
+
+\section{Reassignment candidate-universe denominator
+sensitivity}\label{sec:s-denominator}
+
+The hypergeometric and permutation tests of topology avoidance, and the
+conditional-logit denominator, both depend on a definition of the
+candidate-move universe \(\mathcal{M}(C)\) from the standard code \(C\).
+Two definitional choices interact: whether stop-codon \textbf{targets}
+are admitted (\(y \in \mathcal{A}_{20}\) vs
+\(y \in \mathcal{A}_{20} \cup \left\{ \text{Stop} \right\}\)), and
+whether identity moves (\(y = C(x)\)) are excluded. The four
+combinations give the variants below; we adopt U1 as primary throughout
+and report U2 and U4 as sensitivity universes. All four universes admit
+stop \textbf{sources} (i.e. \(x \in \mathcal{C}\) for all 64 codons);
+the earlier framing that referred to a source-stop axis was inaccurate
+and has been removed.
+
+Formally, the primary candidate-universe is
+\(\mathcal{M}(C) = \left\{ (x,y):x \in \mathcal{C},y \in \mathcal{A}_{20} \cup \left\{ \text{Stop} \right\},y \neq C(x) \right\}\)
+with \(\left| {\mathcal{M}(C)} \right| = 64 \times 20 =\)1,280. The four
+definitional variants and their sizes are listed in
+\Cref{tbl:s-denominators}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{\textbf{Candidate-universe denominator definitions for the
+topology-avoidance test.} The four variants (U1--U4) interact along
+three definitional axes: whether stop-codon targets are admitted
+(\(\mathcal{A}_{20} \cup \left\{ \text{Stop} \right\}\) vs
+\(\mathcal{A}_{20}\)), whether identity moves \(y = C(x)\) are excluded,
+and whether the source codon may itself be a stop codon. We adopt U1 as
+the primary universe because it (i) has a uniform alternative count per
+codon, (ii) cleanly excludes identity moves which contribute no signal,
+and (iii) admits stop-codon reassignment, which is biologically
+attested.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Universe}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\left| \mathcal{M} \right|\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Definition}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Universe}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\left| \mathcal{M} \right|\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Definition}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+U1: 21-label, no identity (primary) & 1,280 &
+\(y \in \mathcal{A}_{20} \cup \left\{ \text{Stop} \right\}\),
+\(y \neq C(x)\); each codon has exactly 20 alternative labels \\
+U2: AA-only, no identity & 1,219 & \(y \in \mathcal{A}_{20}\),
+\(y \neq C(x)\); 61 sense codons get 19 AA alternatives, 3 stop codons
+get 20 AA alternatives \\
+U3: AA, with no-ops & 1,280 & \(y \in \mathcal{A}_{20}\), no identity
+restriction; each of 64 codons gets 20 AA candidates. Because
+\(y \in \mathcal{A}_{20}\) excludes Stop, the 3 stop codons have no AA
+identity to match, so only the 61 sense codons contribute an AA no-op
+(\(y = C(x)\)); the row total 1,280 = 61 no-ops + 1,219 changes. \\
+U4: stop-inclusive with no-ops & 1,344 &
+\(y \in \mathcal{A}_{20} \cup \left\{ \text{Stop} \right\}\), no
+identity restriction; 64 no-ops included \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-denominators}{}
+
+Topology-avoidance results under U2 and U4 are qualitatively identical
+(depletion remains \(p < 10^{- 5}\)); the per-cell counts differ only by
+the constant rescaling
+\(K_{2} = K_{1} - \text{(stop-target candidates)}\) for U2.
+\textbf{Observed sense-to-Stop events under U2:} the observed
+reassignment corpus contains several sense-to-Stop events (e.g. NCBI
+translation table 22 UCA\(\rightarrow\)Stop in \emph{Scenedesmus
+obliquus} mitochondrial). Because U2 excludes Stop targets, these events
+are \textbf{not eligible} under U2 and are dropped from both the
+observed numerator and the candidate denominator of the U2
+hypergeometric; the U2 test therefore evaluates whether the
+sense-to-sense subset of natural reassignments is topology-depleted
+against the sense-to-sense candidate landscape. Sense-to-Stop events
+remain in U1 and U4. Detailed per-universe numbers, including the exact
+observed counts kept or dropped under each variant, are released as part
+of the \texttt{codontopo} repository's \texttt{output/} artifacts (the
+\texttt{denominator\_sensitivity} block in the topology-avoidance
+results file).
+
+\section{Conditional logit: IIA assumption and explanatory
+framing}\label{sec:s-iia}
+
+The conditional-logit framework assumes Independence of Irrelevant
+Alternatives (IIA): for any two candidate moves \(m_{1}\) and \(m_{2}\)
+in a choice set \(\mathcal{N}\), the relative probability
+\(P\left( m_{1} \right)/P\left( m_{2} \right)\) is the same regardless
+of which other candidates are in \(\mathcal{N}\). In the reassignment
+context, candidate moves are not exchangeable: a move that targets an
+amino acid already serviced by many codons is plausibly more
+substitutable with similar moves than the IIA structure allows.
+
+We adopt IIA here because the goal is \emph{explanatory} rather than
+\emph{predictive}: the test asks whether topology adds explanatory value
+beyond physicochemical cost (LR test, \(\Delta\)AICc) within the same
+candidate set, not whether the model accurately predicts which specific
+reassignment will occur next. IIA remains an \textbf{untested structural
+assumption} of the estimator, however, even for the explanatory reading:
+every candidate contributes to the choice-set denominator, so the
+composition and similarity of the non-observed alternatives affect the
+fitted likelihood, coefficients, and LR statistics. The
+restricted-candidate refits in \Cref{sec:s-iia-restricted} (and the
+alternative-specification fits reported alongside them) are best read as
+\textbf{sensitivity analyses} against candidate-set composition, not as
+evidence that IIA is harmless. A mixed logit relaxing IIA would be more
+appropriate for both explanatory calibration and prediction; future work
+could pursue this once a larger event set permits identification of
+mixed-logit covariance parameters. The parametric predictive simulation
+reported in the main text (§3.5) provides a calibration check on the
+model's marginal feature distribution rather than just in-sample AICc:
+the event-step topology-breaking rate under \(Q_{6}\) adjacency with the
+\textbf{increase-in-components} (\(\Delta\beta_{0} > 0\)) definition,
+observed at 5/66 = 0.076, is reproduced by the M3 simulation at mean
+\(0.077 \pm 0.033\) (\(n =\)10,000 draws; parametric predictive
+\(p = 0.60\)). This is the event-step / \(Q_{6}\) /
+\(\Delta\beta_{0} > 0\) rate; the lineage-collapsed / \(H(3,4)\) /
+new-disconnection rate quoted for the primary topology-avoidance test in
+§3.4 (6/28 = 0.21) is a different quantity and is not directly
+comparable.
+
+A second, structurally distinct concern about the candidate set is its
+\textbf{composition}: whether the universe of \(\approx\) 1,280 moves
+contains so many biologically implausible alternatives that the fitted
+topology coefficient is partly identifying their absence rather than a
+topology-specific avoidance effect. We address this concern in
+\Cref{sec:s-iia-restricted} by refitting M1--M4 on candidate sets that
+have been pruned to biologically plausible alternatives only.
+
+\subsection{Candidate-set composition: restricted-candidate
+sensitivity}\label{sec:s-iia-restricted}
+
+A separate concern about the candidate set is that the universe of
+\(\approx\)1,280 single-codon moves admits biologically catastrophic
+alternatives (reassigning AUG-Met, simultaneous multi-codon changes
+implicit in the single-step framing, reassignments to stop in essential
+codons) that natural selection has already removed from the option set.
+Models with strongly negative coefficients on \(\Delta_{\text{topo}}\)
+and \(\Delta_{\text{phys}}\) may therefore be partly rediscovering that
+natural reassignments are not biologically catastrophic, inflating ΔAICc
+magnitudes beyond what the explanatory thesis (topology adds value
+beyond physicochemistry) strictly requires. The qualitative claim is
+unaffected by this concern, but the magnitudes need calibration.
+
+We address this by refitting M1--M4 (and the \(H(3,4)\) verification
+variants) on a \textbf{restricted candidate set}: at each event-step we
+retain only candidates whose target amino acid is already serviced by a
+codon at Hamming distance \(\leq d\) from the reassigned codon (i.e.,
+\(\Delta_{\text{tRNA }} \leq d\)), with
+\(d \in \left\{ 1,2,3 \right\}\). The observed move is always retained
+regardless of its \(\Delta_{\text{tRNA}}\) so the likelihood remains
+well-defined. We report all three filters as a \textbf{bracketing}
+sensitivity rather than designating any single \(d\) as the calibrated
+biological cut, because the relevant decoding literature does not pin a
+single distance. The strictest cut, \(d = 1\), is the closest match to
+canonical wobble-position mismatch tolerance \citep{crick1966} and is
+the most defensible biological-plausibility floor; \(d = 3\) permits
+near-cognate routes and is included as a loose upper bound. We had
+previously labelled the intermediate \(d = 2\) filter as ``primary'' in
+earlier drafts; in the present version we report it as the midpoint of
+the bracket, since the qualitative reading of the table does not depend
+on that label and the reviewers correctly noted that designating
+\(d = 2\) ``primary'' without an independent biological anchor risks
+reporting the most interpretable effect size rather than the most
+defensible one. \Cref{tbl:s-condlogit-restricted} reports the resulting
+\(\Delta\)AICc gaps under all four candidate sets.
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\caption{Restricted-candidate sensitivity for the conditional-logit
+comparison. Each row refits M1, M2, M3, M4 (and the \(H(3,4)\) topology
+variants) on a candidate set filtered to
+\(\Delta_{\text{tRNA }} \leq d\), where \(\Delta_{\text{tRNA}}\) is the
+Hamming distance from the reassigned codon to the nearest existing codon
+for the target amino acid. Observed moves are always retained so
+likelihoods remain comparable. The ``Unrestricted'' row reproduces the
+unrestricted main-text numbers. ΔAICc gaps shrink as the candidate set
+is restricted. This is expected: removing biologically implausible
+candidates removes contrasts the model otherwise exploits, so the table
+should be read as a \textbf{bracket}: the strictest
+biological-plausibility floor at \(d = 1\) (~275 candidates) gives
+ΔAICc(M1\(\rightarrow\)M3) \(\approx 14\), just above the conventional
+Burnham--Anderson reference, while the looser \(d = 2\) filter (~727
+candidates) gives \(\approx 60\) and the looser \(d = 3\) filter
+\(\approx 95\). ΔAICc(M2\(\rightarrow\)M3) stays large at every
+threshold. The qualitative claim ``topology adds explanatory value
+beyond physicochemistry'' is therefore robust to candidate-set
+composition; the \textbf{magnitude} of the topology--physicochemistry
+separation is best characterised by the \(d = 1\) floor rather than by
+the unrestricted \(\approx 110\) figure. The ΔAICc(M3\(\rightarrow\)M4)
+column under the restricted filters is \textbf{not} interpretable,
+because the filter is defined on \(\Delta_{\text{tRNA}}\) so the M4
+tRNA-feature distribution shifts mechanically with the filter; the
+unrestricted-set ΔAICc(M3\(\rightarrow\)M4) of ~2 is the calibrated
+reading and shows the heuristic tRNA proxy is
+uninformative.}\tabularnewline
+\toprule\noalign{}
+\textbf{Filter} & \textbf{Mean cand.} & \textbf{Obs. kept} &
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M1\(\rightarrow\)M3}}}
+&
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M2\(\rightarrow\)M3}}}
+&
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M3\(\rightarrow\)M4}}}
+&
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M1\(\rightarrow\)M3\textsubscript{\(H(3,4)\)}}}} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Filter} & \textbf{Mean cand.} & \textbf{Obs. kept} &
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M1\(\rightarrow\)M3}}}
+&
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M2\(\rightarrow\)M3}}}
+&
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M3\(\rightarrow\)M4}}}
+&
+\textbf{\vtop{\hbox{\strut \(\Delta\)AICc}\hbox{\strut M1\(\rightarrow\)M3\textsubscript{\(H(3,4)\)}}}} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Unrestricted & 1280 & --- & 108 & 89 & -2.1 & 91 \\
+\(\Delta_{\text{tRNA }} \leq 3\) & 1088 & 66 / 66 & 95 & 85 & -1.6 &
+77 \\
+\(\Delta_{\text{tRNA }} \leq 2\) & 727 & 66 / 66 & 60 & 77 & 17.3 &
+41 \\
+\(\Delta_{\text{tRNA }} \leq 1\) & 275 & 66 / 66 & 14 & 73 & 95.3 &
+15 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-condlogit-restricted}{}
+
+Two structural points are worth flagging beyond the table itself. First,
+the ΔAICc(M1\(\rightarrow\)M3) gap is exactly the quantity sensitive to
+candidate-set composition: physicochemistry alone (M1) is a flat
+baseline that benefits most from the implausible-candidate filler being
+present, so removing it shrinks the M1\(\rightarrow\)M3 distance more
+than the M2\(\rightarrow\)M3 distance. Second,
+ΔAICc(M2\(\rightarrow\)M3) is robust across all three thresholds
+(\ensuremath{\approx}73--85), reflecting that physicochemistry contributes the same
+incremental signal regardless of which candidates surround the observed
+events. The overall reading is therefore conservative: the
+unrestricted-set ΔAICc(M1\(\rightarrow\)M3) \ensuremath{\approx} 110 over-states the
+\textbf{magnitude} of the topology--physicochemistry separation but does
+not over-state its existence, and the \(d = 1\) floor (\(\approx 14\))
+provides the most defensible biological-plausibility-bounded effect size
+and shows the qualitative claim survives even under the strictest cut.
+
+\section{Conditional logit: clade-exclusion
+sensitivity}\label{sec:s-condlogit-clade}
+
+The conditional-logit framework can confound a single clade's
+reassignment events with a global topology-avoidance signal if that
+clade is unusually extensive (or unusually idiosyncratic). To bound this
+concern, we refit M1--M4 under each of seven clade-exclusion regimes
+(\Cref{tbl:s-condlogit-clade}), removing the indicated NCBI translation
+tables from the event-step list and re-running the full
+conditional-logit pipeline end-to-end (build candidate sets
+\(\rightarrow\) enumerate event orderings up to \(k!\) for \(k \leq 6\)
+\(\rightarrow\) vectorised maximum-likelihood fit \(\rightarrow\) ΔAICc
+against M1 and M2). The seven exclusion regimes match those applied to
+the hypergeometric topology-avoidance test (\Cref{sec:s-clade}), which
+themselves follow the phylogenetic-distribution analysis in
+\citep{sengupta2007}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{\textbf{Per-regime conditional-logit clade-exclusion
+sensitivity (7 regimes).} Each row refits M1--M4 with the indicated NCBI
+translation tables removed; \(n\) = remaining event-steps. M3
+(physicochemistry + \(Q_{6}\) topology) remains favored over both M1
+(physicochemistry only) and M2 (topology only) in every regime. The
+minimum \(\Delta\)AICc(M1\(\rightarrow\)M3) across all seven regimes is
+49; the maximum is 117. The conventional Burnham--Anderson reference of
+\(\Delta\)AICc\(> 10\) was calibrated on linear-regression contexts, so
+we use it as a reference threshold rather than a formally calibrated
+cut-off in this conditional-logit setting; the parametric predictive
+simulation reported in main-text §3.5 (event-step topology-breaking rate
+under \(Q_{6}\) / \(\Delta\beta_{0} > 0\): observed 5/66 = 0.076 vs
+simulated 0.077, \(p = 0.60\)) is the more directly interpretable
+calibration check. \(\Delta\)AICc(M3\(\rightarrow\)M4) values near 2
+indicate that adding the heuristic tRNA-distance proxy provides no
+incremental fit.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Excluded clade}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tables out}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\Delta\)AICc\\
+M1\(\rightarrow\)M3}\strut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\Delta\)AICc\\
+M2\(\rightarrow\)M3}\strut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\Delta\)AICc\\
+M3\(\rightarrow\)M4}\strut
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Excluded clade}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tables out}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\Delta\)AICc\\
+M1\(\rightarrow\)M3}\strut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\Delta\)AICc\\
+M2\(\rightarrow\)M3}\strut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{\(\Delta\)AICc\\
+M3\(\rightarrow\)M4}\strut
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ciliates & 6, 10, 15, 27, 28, 29, 30 & 52 & 83.7 & 31.6 & 1.8 \\
+yeast mito & 3 & 60 & 103.1 & 87.7 & 2.2 \\
+CUG clade & 12, 26 & 64 & 116.7 & 94.9 & 2.2 \\
+metazoan mito & 2, 5, 9, 13, 14, 21 & 40 & 48.8 & 88.6 & 0.4 \\
+algal mito & 16, 22 & 63 & 115.5 & 85.7 & 2 \\
+protist mito & 4, 23 & 63 & 100.7 & 92.4 & 1.9 \\
+hemichordate mito & 24, 33 & 59 & 92.3 & 83.5 & 2.1 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-condlogit-clade}{}
+
+\section{Per-table optimality: standard-code-proximity
+audit}\label{sec:s-proximity}
+
+This audit grounds the disaggregation reported in main-text §3.3, where
+we separated the per-table BH-FDR result into ``informative-distance''
+tables (\(\geq 3\) reassignments from standard) and ``near-standard''
+tables (\(\leq 2\) reassignments).
+
+The methodological concern: a variant code that differs from the
+standard by only a few reassignments has a per-table quartet-pattern
+shuffle null distribution dominated by permutations very close to the
+standard code, simply because few permutations of the variant's block
+structure yield codes that are far from standard. In that limit, ``table
+\(X\) falls in the bottom 5\% of permutations preserving \(X\)`s block
+structure'' partly tests whether \(X\) is close to the standard code
+(which it is, by construction), not whether \(X\) is independently
+optimal.
+
+For each NCBI translation table we computed three quantities alongside
+the unconditional per-table quantile: (i) the Hamming distance \(d_{H}\)
+from the standard code (number of codons with a different AA label) for
+both the observed variant code and each quartet-pattern shuffle null
+draw, (ii) the variant's null quantile \textbf{conditional} on null
+draws within \(\pm 2\) codons of the variant's \(d_{H}\), and (iii) the
+fraction of null draws whose \(d_{H}\) is at most the variant's
+\(d_{H}\) (a complementary ``proximity rank'' of the variant against the
+null). The motivation for the conditional quantile was to ask whether
+variants with low unconditional \(p\)-values would still appear
+unusually low-cost when restricted to null draws of equivalent
+\(d_{H}\). As \Cref{tbl:s-proximity} shows, the conditional bucket
+turns out to be empty for every variant: under block-preserving
+permutation, every null draw has \(d_{H} \geq 30\) from the standard
+code (the lowest observed \(d_{H}\) in the null distribution across all
+27 tables is 30, while the highest variant \(d_{H}\) in the registry is
+6), so no null draws fall within \(\pm 2\) codons of any variant's
+\(d_{H}\). The conditional quantile is therefore \textbf{not
+informative} about whether a variant's optimality is intrinsic versus
+standard-code-proximity-driven.
+
+The proximity-rank diagnostic in the rightmost column is informative:
+every variant in the registry has \(d_{H}\) smaller than every null
+draw, so all variants sit at the extreme low-\(d_{H}\) tail of the
+quartet-pattern shuffle null distribution. This means each variant's
+per-table \(p\)-value is, structurally, partly a
+proximity-to-standard-code measurement, and the ``informative-distance''
+vs ``near-standard'' disaggregation in main-text §3.3 is therefore based
+on absolute \(d_{H}\) thresholds (3 reassignments) rather than on this
+audit's conditional quantile.
+
+\begin{longtable}[]{@{}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.08}}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.12}}>{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.15}}>{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.15}}>{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.14}}>{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.36}}@{}}
+\caption{\textbf{Per-table standard-code-proximity audit.} For each NCBI
+translation table other than the standard code (table 1), \(d_{H}\) is
+the number of codons with a different AA label from the standard code.
+\textbf{Null \(d_{H}\) range} is the (min, max) of \(d_{H}\) across the
+10,000 quartet-pattern shuffle null draws for that table.
+\textbf{Quantile (uncond.)} is the variant's per-table
+block-preserving-null quantile from main-text §3.3 (lower = more
+error-minimising). \textbf{\(n\) in \(d_{H} \pm 2\) bucket} counts null
+draws with \(d_{H}\) within \(\pm 2\) of the variant's \(d_{H}\) (would
+have been the conditional-quantile denominator); this is zero for every
+table because every quartet-pattern shuffle null draw has
+\(d_{H} \geq 30\) while every variant has \(d_{H} \leq 6\).
+\textbf{Frac. null \(d_{H} \leq d_{H}^{\text{obs}}\)} is the fraction of
+null draws closer to (or as close as) the variant in \(d_{H}\); this is
+uniformly \(0\)\%, confirming that every variant sits at the extreme
+low-\(d_{H}\) tail of its quartet-pattern shuffle null. The
+conditional-quantile diagnostic is therefore not informative on this
+data, and the disaggregation in main-text §3.3 rests on the absolute
+\(d_{H} \geq 3\) threshold rather than on this conditional
+analysis.}\tabularnewline
+\toprule\noalign{}
+\textbf{Table} & \textbf{\(d_{H}\) (variant)} & \textbf{Null \(d_{H}\)
+range} & \textbf{Quantile (uncond.)} & \textbf{\(n\) in \(d_{H} \pm 2\)
+bucket} & \textbf{Frac. null \(d_{H} \leq d_{H}^{\text{obs}}\)} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Table} & \textbf{\(d_{H}\) (variant)} & \textbf{Null \(d_{H}\)
+range} & \textbf{Quantile (uncond.)} & \textbf{\(n\) in \(d_{H} \pm 2\)
+bucket} & \textbf{Frac. null \(d_{H} \leq d_{H}^{\text{obs}}\)} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\multicolumn{6}{@{}l@{}}{%
+\textbf{Informative-distance tables (\(d_{H} \geq 3\) codon
+reassignments from standard).}} \\
+3 & 6 & 37--60 & 7.4\% & 0 & 0.0\% \\
+21 & 5 & 39--60 & 1.4\% & 0 & 0.0\% \\
+14 & 5 & 38--61 & 2.2\% & 0 & 0.0\% \\
+33 & 4 & 41--61 & 2.0\% & 0 & 0.0\% \\
+13 & 4 & 32--60 & 2.4\% & 0 & 0.0\% \\
+9 & 4 & 36--60 & 1.4\% & 0 & 0.0\% \\
+5 & 4 & 38--60 & 2.4\% & 0 & 0.0\% \\
+2 & 4 & 36--58 & 1.4\% & 0 & 0.0\% \\
+31 & 3 & 44--64 & 0.3\% & 0 & 0.0\% \\
+28 & 3 & 44--64 & 0.2\% & 0 & 0.0\% \\
+27 & 3 & 37--64 & 0.2\% & 0 & 0.0\% \\
+24 & 3 & 40--60 & 1.5\% & 0 & 0.0\% \\
+\multicolumn{6}{@{}l@{}}{%
+\textbf{Near-standard tables (\(d_{H} \leq 2\) codon reassignments from
+standard).}} \\
+30 & 2 & 38--60 & 0.0\% & 0 & 0.0\% \\
+29 & 2 & 38--60 & 2.4\% & 0 & 0.0\% \\
+23 & 2 & 35--57 & 0.8\% & 0 & 0.0\% \\
+22 & 2 & 30--54 & 0.8\% & 0 & 0.0\% \\
+6 & 2 & 40--60 & 0.3\% & 0 & 0.0\% \\
+32 & 1 & 35--57 & 1.5\% & 0 & 0.0\% \\
+26 & 1 & 32--56 & 1.0\% & 0 & 0.0\% \\
+25 & 1 & 36--60 & 1.1\% & 0 & 0.0\% \\
+16 & 1 & 33--57 & 1.9\% & 0 & 0.0\% \\
+15 & 1 & 35--57 & 0.3\% & 0 & 0.0\% \\
+12 & 1 & 35--56 & 0.8\% & 0 & 0.0\% \\
+10 & 1 & 40--60 & 0.5\% & 0 & 0.0\% \\
+4 & 1 & 38--60 & 1.0\% & 0 & 0.0\% \\
+11 & 0 & 34--56 & 1.2\% & 0 & 0.0\% \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-proximity}{}
+
+The full per-table audit, including \(d_{H}\) summary statistics for the
+null distribution and the per-table observed score, is released in
+\texttt{output/coloring\_optimality.json} under the
+\texttt{per\_table\_proximity\_audit} key.
+
+\begin{figure}
+\centering
+\emfig{FigB\_per\_table\_optimality}
+\caption{Coloring optimality preserved across variant codes. Per-table
+Grantham quartet-pattern shuffle null quantile for each of the 27 NCBI
+translation tables, tested against its own quartet-pattern shuffle null
+(\(n =\)10,000 per table). Bars sorted by quantile; the dashed reference
+line marks the 5\% threshold. Companion to main-text §3.3 and Figure 2C;
+the ``informative-distance'' vs ``near-standard'' disaggregation of §3.3
+is not visible in this plot because it is a proximity-audit output
+rather than a null-quantile statistic (see \Cref{tbl:s-proximity}).}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-per-table}{}
+
+\section{Topology avoidance: clade-exclusion sensitivity
+(hypergeometric/permutation)}\label{sec:s-clade}
+
+This section provides the hypergeometric/permutation counterpart to the
+conditional-logit clade-exclusion analysis in
+\Cref{sec:s-condlogit-clade}. The two tests probe related but distinct
+quantities: \Cref{sec:s-condlogit-clade} tests whether the
+\(\Delta_{\text{topo}}\) regression coefficient survives clade
+exclusion; this section tests whether the global landscape-vs-observed
+depletion ratio survives clade exclusion. Following the
+phylogenetic-distribution analysis of mitochondrial reassignment events
+by \citep{sengupta2007}, we iteratively excluded each of seven major
+taxonomic groups (\Cref{tbl:s-phylo-clade}) and re-ran the \(Q_{6}\)
+topology-avoidance hypergeometric on the reduced event set, holding the
+1,280-move candidate landscape fixed.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{\textbf{Hypergeometric clade-exclusion sensitivity for the
+\(Q_{6}\) topology-avoidance test.} Each row removes the indicated NCBI
+translation tables (matching the clade definitions of
+\citep{sengupta2007}) from the de-duplicated event list and re-runs the
+hypergeometric depletion test against the same 1,280-move candidate
+landscape. \textbf{Breakers} = topology-breaking events (new
+disconnection, \(Q_{6}\) adjacency); \textbf{Rate} = observed breaker
+rate (vs candidate-landscape rate of 72.7\% under the default encoding).
+All seven exclusions yield \(p < 10^{- 5}\). Excluding yeast
+mitochondrial (NCBI translation table 3) \textbf{strengthens} the
+depletion to \(p \approx 3.6 \times 10^{- 11}\) because that table
+contributes 4 of the 6 lineage-collapsed topology-breakers; this is the
+denominator-effect noted in main-text §3.4.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Excluded clade}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tables out}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Breakers}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Rate (\%)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Hyper. \(p\)}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Excluded clade}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tables out}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Breakers}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Rate (\%)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Hyper. \(p\)}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ciliates & 6, 10, 15, 27, 28, 29, 30 & 24 & 6 & 25 &
+\(1.22 \times 10^{- 6}\) \\
+yeast mito & 3 & 24 & 2 & 8.3 & \(3.64 \times 10^{- 11}\) \\
+CUG clade & 12, 26 & 26 & 5 & 19.2 & \(1.41 \times 10^{- 8}\) \\
+metazoan mito & 2, 5, 9, 13, 14, 21 & 22 & 6 & 27.3 &
+\(9.78 \times 10^{- 6}\) \\
+algal mito & 16, 22 & 26 & 5 & 19.2 & \(1.41 \times 10^{- 8}\) \\
+protist mito & 4, 23 & 27 & 6 & 22.2 & \(4.78 \times 10^{- 8}\) \\
+hemichordate mito & 24, 33 & 27 & 6 & 22.2 & \(4.78 \times 10^{- 8}\) \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-phylo-clade}{}
+
+In every exclusion, the \(Q_{6}\) depletion remains highly significant
+(\(p < 10^{- 5}\)), confirming that the \(\approx 3.4\)-fold depletion
+of topology-breaking changes is a pan-taxonomic pattern, not an artifact
+of any single lineage.
+
+The primary-cell \(H(3,4)\) / \(\Delta\beta_{0} > 0\) analogue of the
+same seven-row exclusion is \Cref{tbl:s-phylo-clade-k43}. It uses the
+encoding-independent nucleotide-adjacency graph and the
+increase-in-components definition matched to the conditional-logit
+feature (main-text §3.5), and confirms that the \(\approx 3.1\)-fold
+\(H(3,4)\) depletion is also robust to clade exclusion.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{\textbf{Hypergeometric clade-exclusion sensitivity for the
+primary \(H(3,4)\) topology-avoidance test.} Each row removes the
+indicated NCBI translation tables (matching the clade definitions of
+\citep{sengupta2007}) from the de-duplicated event list and re-runs the
+hypergeometric depletion test under the encoding-independent
+\(H(3,4) = K_{4}^{3}\) adjacency with the increase-in-components
+(\(\Delta\beta_{0} > 0\)) topology-breaking definition (candidate
+landscape: 846 breakers of 1,280 moves = 66.1\%). \textbf{Breakers} =
+topology-breaking events by \(\Delta\beta_{0} > 0\); \textbf{Rate} =
+observed breaker rate. All seven exclusions yield \(p < 10^{- 3}\).
+Excluding yeast mitochondrial (NCBI translation table 3) strengthens the
+depletion to \(p \approx 4.2 \times 10^{- 9}\) because that table
+contributes 4 of the 6 lineage-collapsed \(H(3,4)\)-breakers --- the
+direct calculation quoted in main-text §3.4 for the yeast-mito-excluded
+regime.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Excluded clade}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tables out}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Breakers}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Rate (\%)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Hyper. \(p\)}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Excluded clade}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tables out}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(n\)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Breakers}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Rate (\%)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Hyper. \(p\)}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ciliates & 6, 10, 15, 27, 28, 29, 30 & 24 & 6 & 25 &
+\(3.96 \times 10^{- 5}\) \\
+yeast mito & 3 & 24 & 2 & 8.3 & \(4.21 \times 10^{- 9}\) \\
+CUG clade & 12, 26 & 26 & 4 & 15.4 & \(1.08 \times 10^{- 7}\) \\
+metazoan mito & 2, 5, 9, 13, 14, 21 & 22 & 6 & 27.3 &
+\(2.03 \times 10^{- 4}\) \\
+algal mito & 16, 22 & 26 & 6 & 23.1 & \(7.29 \times 10^{- 6}\) \\
+protist mito & 4, 23 & 27 & 6 & 22.2 & \(3.07 \times 10^{- 6}\) \\
+hemichordate mito & 24, 33 & 27 & 6 & 22.2 & \(3.07 \times 10^{- 6}\) \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-phylo-clade-k43}{}
+
+The clade-exclusion robustness is a denominator effect (removing clades
+that contributed zero or one topology-breaking event each leaves the
+breakage rate essentially unchanged) rather than a numerator effect; the
+\textbf{avoidance} of topology-breaking moves is what propagates across
+many lineages, while the \textbf{attempts} to break topology are
+concentrated in yeast mitochondrial. Detailed per-clade counts are
+released as \texttt{output/phylogenetic\_sensitivity.json} (the
+\(Q_{6}\) / new-disconnection cell) and
+\texttt{output/phylogenetic\_sensitivity\_k43.json} (the \(H(3,4)\) /
+\(\Delta\beta_{0} > 0\) cell).
+
+\section{Complete tRNA gene count data}\label{sec:s-trna}
+
+This section documents the empirical foundation for the tRNA enrichment
+analysis in main-text §3.6. We ran tRNAscan-SE 2.0.12 on 18 NCBI genome
+assemblies; 15 of these 18 organisms enter the 24-pairing
+Fisher--Stouffer enrichment analysis as either variant-code or
+standard-code-control repertoires (\Cref{tbl:s-trna-provenance} below).
+The remaining 3 (\emph{Blastocrithidia nonstop} P57;
+\emph{Mycoplasmoides genitalium} G37; \emph{Mycoplasmoides pneumoniae}
+M129) are used only as \textbf{mechanistic boundary cases} in main-text
+§4.3: their reassignment routes (anticodon stem shortening and anticodon
+modification respectively) act on a single tRNA gene without changing
+the gene-count distribution, so a Fisher-count enrichment test would
+report ``no enrichment'' and misinterpret the mechanism as an
+absence-of-response. Adding literature/database counts for a small
+number of legacy repertoires (see \Cref{tbl:s-trna-provenance}
+``source-class'' column: annotation, GtRNAdb, literature) brings the
+total pairing set to 24 pairings across 24 organisms with mixed
+provenance.
+
+The Fisher-exact denominator convention used throughout is the
+\textbf{by-amino-acid sum}: for a focal amino acid \(a\) in variant
+genome \(V\) the \(2 \times 2\) table is
+\(\left\lbrack \left\lbrack a_{V},\left( \sum_{a' \neq a}a'_{V} \right) \right\rbrack,\left\lbrack a_{C},\left( \sum_{a' \neq a}a'_{C} \right) \right\rbrack \right\rbrack\),
+where the by-amino-acid sum is over the \textbf{Std20} column of
+\Cref{tbl:s-trna}. This excludes SeC, undetermined-isotype, suppressor,
+and pseudogene rows so that the ratio \(\frac{a}{\sum_{a'}}a'\) has a
+consistent interpretation across genomes (fractional tRNA-repertoire
+share for the focal AA). The 24 exact \(2 \times 2\) tables and
+per-pairing Fisher \(p\)-values are printed in
+\Cref{tbl:s-trna-provenance} and the machine-readable CSV
+\texttt{output/tables/T-trna-24row-provenance.csv}. The first-pass
+Isotype/Anticodon totals reported parenthetically in the Reassigned-AA
+column of \Cref{tbl:s-trna} below are provided so the reader can see
+the per-anticodon breakdown; they are \textbf{not} the Fisher
+denominators.
+
+\subsection{\texorpdfstring{24-pairing input table with provenance and
+Fisher \(2 \times 2\)
+counts}{24-pairing input table with provenance and Fisher 2 \textbackslash times 2 counts}}\label{sec:s-trna-provenance}
+
+\begin{longtable}[]{@{}llclccrrrr@{}}
+\caption{\textbf{Complete 24-pairing tRNA-enrichment input table.} For
+each pairing: variant and control organism (short key; full organism
+name in \Cref{tbl:s-trna}), reassigned amino acid, brief reassignment
+description, whether the reassignment creates a new \(Q_{6}\) AA-family
+disconnection at \(\varepsilon = 1\) (Y/n), and the \(H(3,4)\) impact
+(creates / extends / no-effect / n/a for pairings without a \(Q_{6}\)
+disconnection). \textbf{Var \(\frac{a}{N}\)}, \textbf{Ctl
+\(\frac{a}{N}\)}: focal AA count over the by-amino-acid-sum denominator.
+\textbf{OR}: Fisher-exact odds ratio (variant vs control).
+\textbf{Fisher \(p\)}: one-sided upper-tail \(p\)-value. Source-class
+breakdown across the 48 organism-slots (24 variant + 24 control):
+tRNAscan-SE 2.0.12 = 38, literature = 4, annotation = 4, GtRNAdb = 2.
+Unique organisms: 24; unique organisms with tRNAscan-SE-verified counts:
+15. Machine-readable CSV:
+\texttt{output/tables/T-trna-24row-provenance.csv}.}\tabularnewline
+\toprule\noalign{}
+\textbf{Variant} & \textbf{Control} & \textbf{AA} &
+\textbf{Reassignment} & \textbf{\(Q_{6}\) break?} & \textbf{H(3,4)} &
+\textbf{Var \(\frac{a}{N}\)} & \textbf{Ctl \(\frac{a}{N}\)} &
+\textbf{OR} & \textbf{Fisher \(p\)} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Variant} & \textbf{Control} & \textbf{AA} &
+\textbf{Reassignment} & \textbf{\(Q_{6}\) break?} & \textbf{H(3,4)} &
+\textbf{Var \(\frac{a}{N}\)} & \textbf{Ctl \(\frac{a}{N}\)} &
+\textbf{OR} & \textbf{Fisher \(p\)} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+scerevisiae & ylipolytica & Thr & CUA: Leu\ensuremath{\to}{}Thr; CUC: Leu\ensuremath{\to}{}Thr; C\ldots{}
+& Y & creates & 2/24 & 1/27 & 2.36 & 0.455 \\
+sobliquus & creinhardtii & Leu & UAG: Stop\ensuremath{\to}{}Leu & Y & no-effect & 2/22 &
+1/16 & 1.5 & 0.621 \\
+ptannophilus & lthermotolerans & Ala & CUG: Leu\ensuremath{\to}{}Ala & Y & creates &
+14/207 & 11/206 & 1.29 & 0.345 \\
+calbicans & lthermotolerans & Ser & CUG: Leu\ensuremath{\to}{}Ser & Y & extends & 16/207
+& 13/206 & 1.24 & 0.355 \\
+tthermophila & imultifiliis & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 54/712 & 3/141 & 3.78 & 0.008 \\
+ptetraurelia & imultifiliis & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 18/215 & 3/141 & 4.2 & 0.01 \\
+tthermophila & scoeruleus & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 54/712 & 11/267 & 1.91 & 0.032 \\
+ptetraurelia & scoeruleus & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 18/215 & 11/267 & 2.13 & 0.04 \\
+oxytricha & scoeruleus & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 8/90 & 11/267 & 2.27 & 0.075 \\
+eoctocarinatus & scoeruleus & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect &
+5/114 & 7/267 & 1.7 & 0.272 \\
+bjaponicum & scoeruleus & Trp & (no direct reassignment for t\ldots{} &
+n & no-effect & 5/115 & 6/267 & 1.98 & 0.21 \\
+eaediculatus & scoeruleus & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect & 4/77 &
+7/267 & 2.04 & 0.215 \\
+eaediculatus & fsalina & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect & 4/77 &
+1/86 & 4.66 & 0.151 \\
+eamieti & scoeruleus & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect & 8/116 &
+7/267 & 2.75 & 0.049 \\
+efocardii & fsalina & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect & 3/59 & 1/86
+& 4.55 & 0.184 \\
+eparawoodruffi & scoeruleus & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect &
+9/145 & 7/267 & 2.46 & 0.065 \\
+eweissei & fsalina & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect & 20/463 & 1/86
+& 3.84 & 0.132 \\
+ewoodruffi & scoeruleus & Cys & UGA: Stop\ensuremath{\to}{}Cys & n & no-effect & 4/79 &
+7/267 & 1.98 & 0.226 \\
+ppersalinus & imultifiliis & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 20/260 & 3/141 & 3.83 & 0.015 \\
+ppersalinus & fsalina & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 20/260 & 3/86 & 2.31 & 0.132 \\
+hgrandinella & scoeruleus & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 9/129 & 11/267 & 1.75 & 0.165 \\
+hgrandinella & fsalina & Gln & UAA: Stop\ensuremath{\to}{}Gln; UAG: Stop\ensuremath{\to}{}Gln & n &
+no-effect & 9/129 & 3/86 & 2.08 & 0.218 \\
+bstoltei & scoeruleus & Trp & (no direct reassignment for t\ldots{} & n
+& no-effect & 6/166 & 6/267 & 1.63 & 0.289 \\
+bstoltei & fsalina & Trp & (no direct reassignment for t\ldots{} & n &
+no-effect & 6/166 & 2/86 & 1.57 & 0.447 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-trna-provenance}{}
+
+\subsection{tRNAscan-SE verified organisms}
+
+All tRNA gene counts were obtained by running tRNAscan-SE 2.0.12
+\citep{chan2019} with Infernal 1.1.4 on NCBI genome assemblies.
+Eukaryotic organisms were scanned in \texttt{-E} mode;
+\emph{Mycoplasmoides} species in \texttt{-B} (bacterial) mode. Total
+counts are Infernal-confirmed (the more conservative count after the
+second-pass filter) and match the Total column of \Cref{tbl:s-trna}
+below; the summary that underlies the main-text Fisher--Stouffer
+combination is reported as main-text Table 7. The five-column breakdown
+in \Cref{tbl:s-trna} sums exactly to Total: Std20 (decoding the
+standard 20 amino acids) + SeC (selenocysteine, anticodon UCA, scanned
+via the dedicated \texttt{TRNAinf-euk-SeC.cm} model) + Supp (possible
+suppressor tRNAs with CTA/TTA/UCA anticodons) + Undet (predicted tRNAs
+whose isotype could not be determined) + Pseudo (predicted pseudogenes
+filtered by the Infernal second-pass isotype validation).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1200}}
+  >{\centering\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0400}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.2000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0600}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0600}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0500}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0600}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0600}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0700}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.2800}}@{}}
+\caption{Complete tRNAscan-SE 2.0.12 results. The \textbf{Supp} column
+and the \textbf{Std20/SeC/Undet/Pseudo} columns are Infernal-confirmed
+second-pass counts and sum exactly to \textbf{Total}: \textbf{Std20} =
+standard 20-AA tRNAs; \textbf{SeC} = selenocysteine (anticodon UCA);
+\textbf{Supp} = possible suppressor tRNAs (CTA/TTA/UCA anticodons that
+could read stop codons) \textbf{after} Infernal's isotype-validation
+filter; \textbf{Undet} = predicted tRNAs whose isotype could not be
+determined; \textbf{Pseudo} = predicted pseudogenes filtered by the
+second-pass validation. The Reassigned-AA breakdown, in contrast, uses
+tRNAscan-SE's \textbf{first-pass} Isotype/Anticodon counts, which are
+the per-anticodon totals reported directly by the covariance-model scan
+before the Infernal second-pass reclassification. Consequently the
+first-pass suppressor total in the Reassigned-AA parenthetical can
+exceed the second-pass \textbf{Supp} column when Infernal reclassifies
+borderline hits into \textbf{Std20} or \textbf{Pseudo}; the differences
+here are 0--2 tRNAs per organism (e.g. \emph{T. thermophila}: 37
+second-pass suppressors versus 39 first-pass = 9 CTA + 30 TTA; \emph{E.
+parawoodruffi}: 3 versus 5 = 0 CTA + 1 TTA + 4 UCA). All Fisher-exact
+tests in Table 7 and §S10 use the first-pass per-amino-acid totals shown
+in the Reassigned-AA column, which are the biologically interpretable
+per-anticodon counts. \textsuperscript{§}\emph{Blepharisma stoltei} is
+indexed as NCBI translation table 15 (Blepharisma Nuclear Code, defined
+as UAG\(\rightarrow\)Gln) by virtue of its genus assignment, but the
+strain-specific MAC genome reads UGA\(\rightarrow\)Trp via a dedicated
+suppressor tRNA-Trp(UCA) \citep{singh2023}. The analysis here tests
+Trp-tRNA enrichment on that empirical reading rather than the legacy
+table-15 nominal code. \textsuperscript{*}Anticodon stem shortening
+(4-bp stem rather than canonical 5-bp).
+\textsuperscript{†}Post-transcriptional modification (a single
+tRNA-Trp(CCA) reads both UGG and UGA after base
+modification).}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Organism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Tbl}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Assembly}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Total}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Std20}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{SeC}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Supp}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Undet}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Pseudo}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Reassigned AA}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Organism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Tbl}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Assembly}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Total}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Std20}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{SeC}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Supp}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Undet}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\textbf{Pseudo}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Reassigned AA}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\emph{T. thermophila} & 6 & GCF\_000189635.1 & 718 & 672 & 1 & 37 & 4 &
+4 & Gln: 54 (15+39) \\
+\emph{P. tetraurelia} & 6 & GCF\_000165425.1 & 216 & 202 & 1 & 11 & 0 &
+2 & Gln: 18 (7+11) \\
+\emph{O. trifallax} & 6 & GCA\_000295675.1 & 94 & 83 & 2 & 6 & 2 & 1 &
+Gln: 8 (2+6) \\
+\emph{P. persalinus} & 6 & GCA\_001447515.1 & 262 & 228 & 1 & 15 & 0 &
+18 & Gln: 20 (5+15) \\
+\emph{H. grandinella} & 6 & GCA\_006369765.1 & 130 & 121 & 1 & 3 & 0 & 5
+& Gln: 9 (6+3) \\
+\emph{E. aediculatus} & 10 & GCA\_030463445.1 & 80 & 76 & 1 & 2 & 1 & 0
+& Cys: 4 (3+1 UCA) \\
+\emph{E. amieti} & 10 & GCA\_048569255.1 & 120 & 103 & 1 & 6 & 1 & 9 &
+Cys: 8 (4+4 UCA) \\
+\emph{E. focardii} & 10 & GCA\_001880345.2 & 62 & 56 & 1 & 3 & 0 & 2 &
+Cys: 3 (1+2 UCA) \\
+\emph{E. parawoodruffi} & 10 & GCA\_021440025.1 & 149 & 128 & 0 & 3 & 3
+& 15 & Cys: 9 (5+4 UCA) \\
+\emph{E. weissei} & 10 & GCA\_021440005.1 & 495 & 390 & 0 & 12 & 14 & 79
+& Cys: 20 (17+3 UCA) \\
+\emph{E. woodruffi} & 10 & GCA\_027382605.1 & 83 & 74 & 1 & 3 & 1 & 4 &
+Cys: 4 (2+2 UCA) \\
+\emph{B. stoltei}\textsuperscript{§} & 15 & GCA\_965603825.1 & 169 & 165
+& 1 & 0 & 1 & 2 & Trp: 6 \\
+\emph{B. nonstop} P57 & 31 & GCA\_028554745.1 & 68 & 65 & 1 & 2 & 0 & 0
+& Trp: 2\textsuperscript{*} \\
+\emph{M. genitalium} & 4 & GCA\_000027325.1 & 36 & 35 & 0 & 1 & 0 & 0 &
+Trp: 1\textsuperscript{†} \\
+\emph{M. pneumoniae} & 4 & GCF\_910574535.1 & 37 & 36 & 0 & 1 & 0 & 0 &
+Trp: 1\textsuperscript{†} \\
+\emph{S. coeruleus} & 1 & GCA\_001970955.1 & 272 & 265 & 1 & 1 & 3 & 2 &
+--- \\
+\emph{I. multifiliis} & 1 & GCF\_000220395.1 & 150 & 141 & 1 & 8 & 0 & 0
+& --- \\
+\emph{F. salina} & 1 & GCA\_022984795.1 & 89 & 85 & 1 & 1 & 1 & 1 &
+--- \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-trna}{}
+
+\subsection{MIS (maximal independent set) analysis}
+
+To address non-independence from shared control organisms, we
+constructed a conflict graph in which edges connect pairings sharing an
+organism. Enumerating all maximal independent sets (MIS) is equivalent
+to enumerating all maximal cliques of the complement graph, which we
+perform via the Bron--Kerbosch algorithm applied to the complement (with
+pivoting). Each MIS represents a set of pairings where no two share an
+organism and no additional pairing can be added without creating a
+conflict.
+
+The 24-pairing conflict graph admits \textbf{332} MIS, all of size 6.
+Across these 332 sets the Stouffer combined \(p\)-value distribution is
+as follows: median \(p = 0.037\), best \(p = 0.012\), worst
+\(p = 0.104\); 264 of 332 (79.5\%) fall below the 0.05 threshold and 0
+of 332 below 0.01. The extreme cases:
+
+\begin{itemize}
+\item
+  \textbf{Best-case MIS} (\(p = 0.012\)): \emph{S. cerevisiae} mito/Thr,
+  \emph{S. obliquus} mito/Leu, \emph{P. tannophilus}/Ala, \emph{P.
+  tetraurelia}/Gln, \emph{T. thermophila}/Gln, \emph{P. persalinus}/Gln.
+\item
+  \textbf{Worst-case MIS} (\(p = 0.104\)): \emph{S. cerevisiae}
+  mito/Thr, \emph{S. obliquus} mito/Leu, \emph{C. albicans}/Ser,
+  \emph{E. octocarinatus}/Cys, \emph{P. persalinus}/Gln, \emph{B.
+  stoltei}/Trp.
+\end{itemize}
+
+Because the median just clears the 0.05 threshold while the worst case
+does not, the tRNA enrichment result is treated as \textbf{exploratory}
+in the claim hierarchy (\Cref{tbl:s-claims}): the signal is present in
+the median-independent-subset sense but is not robust to worst-case
+subset choice.
+
+\textbf{Independence-graph caveat.} The conflict graph encodes shared
+\textbf{organisms}, not phylogenetic distance. Two ciliates from
+different orders are treated as independent in this construction even
+though they may share more evolutionary signal than two arbitrary
+eukaryotes; at the same time, every MIS retains the \emph{S. cerevisiae}
+mito/Thr pairing whose tRNA counts come from GtRNAdb rather than from a
+tRNAscan-SE 2.0.12 run on the assembly (see §S10.3). A
+phylogenetic-distance--based independence criterion would yield a
+smaller effective \(n\) (the same 4--6 phylogenetically independent
+origins discussed in main-text Limitations); the MIS analysis should be
+read as bounding subset variability under the
+organism-shared-by-pairings criterion, not as a phylogeny-aware test.
+
+\textbf{Topology-breaking subset.} As a pre-specified mechanistic
+complement to the all-pairings analysis, we restrict the
+Fisher--Stouffer combination to the four pairings whose underlying
+reassignment creates a new amino-acid disconnection under \(Q_{6}\):
+\emph{S. cerevisiae} mito/Thr (table 3), \emph{S. obliquus} mito/Leu
+(table 22, equivalent to chlorophycean mito table 16), \emph{P.
+tannophilus}/Ala (table 26), and \emph{C. albicans}/Ser (table 12). This
+subset combination yields Stouffer \(p = 0.387\), i.e. null. The
+all-pairings signal is therefore driven largely by topology-preserving
+stop-to-sense reassignment systems (UAR\(\rightarrow\)Gln in ciliates,
+UGA\(\rightarrow\)Cys in \emph{Euplotes}, UGA\(\rightarrow\)Trp in
+\emph{Blepharisma}), and the tRNA-duplication mechanism is not evidenced
+by the topology-breaking cases in isolation. This is why the claim
+hierarchy treats the tRNA result as exploratory-decoding-accommodation
+rather than as evidence of compensation-for-disconnection.
+
+\subsection{\texorpdfstring{\emph{Saccharomyces cerevisiae}
+literature-derived
+control}{Saccharomyces cerevisiae literature-derived control}}
+
+The \emph{Saccharomyces cerevisiae} tRNA gene counts used in the
+yeast-mito Thr disconnection pairing come from GtRNAdb \citep{chan2016}
+rather than tRNAscan-SE 2.0.12 in this work. We retain them to keep the
+well-characterized yeast-mito Thr case in the pairing set and flag the
+difference in source explicitly.
+
+\begin{figure}
+\centering
+\emfig{FigE\_trna\_aa\_rank}
+\caption{Rank of the reassigned amino acid among all tRNA gene counts,
+per variant-code \(\times\) control pairing. Rank 1 = most enriched
+amino acid in the variant-code-vs-control comparison. (Most of the
+pairings here are topology-preserving stop-to-sense reassignments ---
+UAR\(\rightarrow\)Gln, UGA\(\rightarrow\)Cys, UGA\(\rightarrow\)Trp ---
+rather than topology-breaking; the ``disconnection'' framing that
+appears in earlier drafts is inaccurate for the majority of pairings.)
+The distribution is left-heavy toward rank 1--3 across pairings,
+consistent with heterogeneous accommodation-of-decoding across
+variant-code lineages. The associated statistical summary (main-text
+§3.6, Table 7): 332 MIS of size 6, median Stouffer \(p = 0.037\), worst
+\(p = 0.104\); topology-breaking-only subset (\(n = 4\)) is null
+(Stouffer \(p = 0.387\)).}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-trna-aa-rank}{}
+
+\section{Complete reassignment database}\label{sec:s-reassignment}
+
+The reassignment database underpins both the topology-avoidance test
+(main-text §3.4) and the conditional-logit fits (main-text §3.5). It
+comprises every codon reassignment event across the 27 NCBI translation
+tables, relative to the standard code (table 1). Each event records the
+codon, source amino acid, target amino acid, and Hamming distance to the
+nearest codon already encoding the target amino acid in the standard
+code. De-duplication to unique (codon, target amino acid) pairs yields
+the event set used in the topology-avoidance hypergeometric and
+table-preserving permutation tests. The conditional-logit model operates
+on the full per-table event-step list, which preserves recurrent
+reassignments across independent lineages. Exact counts depend on the
+most recent NCBI gc.prt revision (currently v4.6 retrieved 2026-04-25);
+a current pipeline run yields 66 raw events de-duplicating to 28 unique
+(codon, target-AA) pairs.
+
+\textbf{Why two counts (\(n =\)28 hypergeometric vs \(n =\)66
+conditional-logit).} The hypergeometric topology-avoidance test
+(main-text §3.4) uses the de-duplicated \(n =\)28 unique (codon,
+target-AA) pairs, since the test is a sample-from-a-finite-landscape
+contrast that should not double-count the same move. The
+conditional-logit comparison (main-text §3.5) uses the full per-table
+\(n =\)66 event-step list because each event-step is a \textbf{separate
+choice}: a recurrent reassignment such as UGA\(\rightarrow\)Trp seen
+across many independent mitochondrial lineages contributes one
+independent choice per lineage to the conditional likelihood, since each
+lineage's reassignment is a distinct evolutionary event conditional on
+that lineage's candidate set. The conditional-logit clade-exclusion
+sensitivity (\Cref{sec:s-condlogit-clade}) inherits this convention:
+removing a clade removes all of its event-steps from the per-table list,
+including recurrent UGA\(\rightarrow\)Trp instances within that clade,
+so the ΔAICc magnitudes report the \textbf{clade-removed-as-event-steps}
+sensitivity. We did not additionally re-weight by recurrence (e.g., one
+event per (codon, target) pair rather than per lineage); that
+alternative weighting would correspond more closely to the de-duplicated
+hypergeometric framing and would shrink ΔAICc magnitudes toward the
+restricted-candidate \(d = 1\) floor reported in
+\Cref{sec:s-iia-restricted}, but does not change the qualitative
+ranking M3 \(>\) M1, M2.
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{\textbf{Per-table reassignment-event counts (raw, before
+de-duplication).} The 25 NCBI translation tables that differ from the
+standard code account for 66 raw codon-reassignment events. Tables 1
+(Standard) and 11 (Bacterial / Archaeal / Plant Plastid) share identical
+sense-codon mappings and contribute zero reassignment events. Tables 27
+(Karyorelict Nuclear) and 28 (Condylostoma Nuclear) likewise share
+identical sense-codon mappings and are listed separately to match NCBI
+numbering. The 25-table counts sum to the all-events total, which
+de-duplicates to 28 unique (codon, target-AA) pairs across the registry.
+The complete event-level database (with codon, source-AA, target-AA,
+Hamming-to-nearest-target columns) is released as
+\texttt{output/tables/T10\_reassignment\_db.csv} in the
+\texttt{codontopo} repository.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+\textbf{Table}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{NCBI translation table}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Events}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+\textbf{Table}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{NCBI translation table}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{Events}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2 & Vertebrate Mitochondrial & 4 \\
+3 & Yeast Mitochondrial & 6 \\
+4 & Mold/Protozoan/Coelenterate Mito & 1 \\
+5 & Invertebrate Mitochondrial & 4 \\
+6 & Ciliate Nuclear & 2 \\
+9 & Echinoderm/Flatworm Mito & 4 \\
+10 & Euplotid Nuclear & 1 \\
+12 & Alternative Yeast Nuclear & 1 \\
+13 & Ascidian Mitochondrial & 4 \\
+14 & Alternative Flatworm Mito & 5 \\
+15 & Blepharisma Macronuclear & 1 \\
+16 & Chlorophycean Mito & 1 \\
+21 & Trematode Mitochondrial & 5 \\
+22 & Scenedesmus obliquus Mito & 2 \\
+23 & Thraustochytrium Mito & 2 \\
+24 & Rhabdopleuridae Mito & 3 \\
+25 & Candidate Division SR1 / Gracilibacteria & 1 \\
+26 & Pachysolen tannophilus Nuclear & 1 \\
+27 & Karyorelict Nuclear & 3 \\
+28 & Condylostoma Nuclear & 3 \\
+29 & Mesodinium Nuclear & 2 \\
+30 & Peritrich Nuclear & 2 \\
+31 & Blastocrithidia Nuclear & 3 \\
+32 & Balanophoraceae Plastid & 1 \\
+33 & Cephalodiscidae Mito & 4 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-reassignment}{}
+
+\section{Structural-preservation index
+(visualization-only)}\label{sec:s-feasibility}
+
+For Figure 5A of the main text we use a heuristic
+\textbf{structural-preservation index} \(S(m) \in \lbrack 0,1\rbrack\)
+for each candidate single-codon reassignment \(m\) from the standard
+code. The index is \textbf{not} used in any inferential test in the
+manuscript; it is a visualization aid for delineating high- versus
+low-structure-preserving regions of the 1,280-move candidate landscape.
+We report the exact implementation here for completeness.
+
+The index is a weighted sum of four discrete indicators. Given the
+reassignment \(m\), let
+\(I_{\text{tw}(m)},I_{\text{ff}(m)} \in \left\{ 0,1 \right\}\) record
+whether the post-reassignment code preserves the two-fold bit-5
+filtration and the four-fold prefix filtration described in main-text
+§2.2; let \(I_{\text{ser}(m)} \in \left\{ 0,1 \right\}\) record whether
+Serine remains disconnected at \(\varepsilon = 1\); and let
+\(n_{\text{disc}(m)}\) denote the number of amino acids disconnected at
+\(\varepsilon = 1\) under \(m\). Then
+
+\[S(m) = 0.25 \cdot I_{\text{tw}(m)} + 0.25 \cdot I_{\text{ff}(m)} + 0.30 \cdot I_{\text{ser}(m)} + w\left( n_{\text{disc}(m)} \right),\]
+
+where \(w(1) = 0.20\) (a single disconnected amino acid, as in the
+standard code), \(w(0) = 0.10\) (partial credit for a fully connected
+variant), and \(w(n) = 0.00\) for \(n \geq 2\). Because every component
+is discrete, \(S(m)\) can take only a small number of values across the
+1,280-move candidate universe; the four bars visible in Figure 5A
+(\(S = 0.55,0.75,0.80,1.00\); 193/27/738/322 events) enumerate the
+values actually realised. The weights are a hand-tuned prioritisation of
+the four structural features and are not derived from any calibration;
+the index is descriptive, not inferential. Exact implementation:
+\texttt{src/codon\_topo/analysis/synbio\_feasibility.py} in the
+\texttt{codontopo} repository.
+
+\section{KRAS--Fano clinical prediction: detailed
+results}\label{sec:s-kras}
+
+The KRAS--Fano clinical prediction is the most concrete biomedical
+extrapolation considered for the \({\text{GF}(2)}^{6}\) framework, and
+we tested it directly to delimit scope. The conjecture: XOR (``Fano'')
+relationships in \({\text{GF}(2)}^{6}\) predict enrichment of specific
+amino acids at KRAS G12 co-mutation sites. For each of the six common
+somatic KRAS G12 variants, we computed the predicted Fano partner codon
+as \(GGU \oplus m_{i} = \text{ partner}_{i}\) where \(m_{i}\) is the
+mutant codon for that variant and \(\oplus\) is bitwise XOR in
+\({\text{GF}(2)}^{6}\) (\Cref{tbl:s-kras}). We then tested for
+co-mutation enrichment of the predicted partner amino acid against 1,670
+KRAS-mutant samples from the MSK-IMPACT pan-cancer dataset
+\citep{zehir2017} using Fisher's exact test with Bonferroni correction
+across the six variants.
+
+\begin{longtable}[]{@{}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.10}}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.10}}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.14}}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.22}}>{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.22}}>{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.22}}@{}}
+\caption{\textbf{KRAS--Fano clinical prediction tested against
+MSK-IMPACT.} For each KRAS G12 variant, the Fano partner codon is
+computed as the bitwise XOR (in \({\text{GF}(2)}^{6}\)) of the wild-type
+and mutant codons against a fixed reference; the predicted partner amino
+acid is the standard-code translation of that codon. Fisher's exact test
+for co-mutation enrichment of the predicted partner amino acid in
+MSK-IMPACT samples bearing each KRAS G12 variant (\(n =\)1,670
+KRAS-mutant tumours; \citep{zehir2017}) yields \(p = 1.0\) for all six
+variants after Bonferroni correction across the six tests. Odds ratios
+are near 1.0 throughout. The conjecture is cleanly
+falsified.}\tabularnewline
+\toprule\noalign{}
+\textbf{Variant} & \textbf{WT codon} & \textbf{Mutant codon} &
+\textbf{Fano partner codon} & \textbf{Predicted partner AA} &
+\textbf{Fisher \(p\) (Bonf.)} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Variant} & \textbf{WT codon} & \textbf{Mutant codon} &
+\textbf{Fano partner codon} & \textbf{Predicted partner AA} &
+\textbf{Fisher \(p\) (Bonf.)} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+G12V & GGU & GUU & CAC & His (H) & 1.0 \\
+G12D & GGU & GAU & CUC & Leu (L) & 1.0 \\
+G12A & GGU & GCU & CGC & Arg (R) & 1.0 \\
+G12R & GGU & CGU & GCC & Ala (A) & 1.0 \\
+G12C & GGU & UGU & ACC & Thr (T) & 1.0 \\
+G12S & GGU & AGU & UCC & Ser (S) & 1.0 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-kras}{}
+
+This result cleanly separates code-level error-minimization, which
+operates on the amino acid assignment structure, from mutation-level
+algebraic predictions, which would require DNA polymerase errors to
+respect the binary encoding, which is a biologically implausible
+mechanism. The Fano-line construction was a meaningful test of whether
+the binary representation has predictive power at the \textbf{mutation}
+level (in addition to the \textbf{assignment} level where it does carry
+signal); the answer is no, and we record this falsification explicitly
+in \Cref{tbl:s-claims}.
+
+\section{Serine minimum inter-family distance across
+encodings}\label{sec:s-serine-dist}
+
+The claim that Serine's minimum inter-family Hamming distance (UCN--AGY)
+equals 4 under all 24 base-to-bit encodings is false. Of the 24
+encodings, 16 yield minimum distance 2 and only 8 yield distance 4. The
+distance-4 result obtains only when both nucleotide pairs distinguishing
+UCN from AGY (\(U \sim A\) and \(C \sim G\) in the first two positions)
+are encoded at maximal Hamming distance. The correct encoding-invariant
+statement is: Serine is disconnected at \(\varepsilon = 1\) under every
+encoding, and its inter-family distance (\(\geq 2\)) is the largest
+among the three 6-codon amino acids (Leucine and Arginine both have
+inter-family distance 1). The rejection of the distance-4 invariant is
+the reason the manuscript now presents \(H(3,4)\) rather than \(Q_{6}\)
+as the primary adjacency for encoding-independent claims.
+
+\section{PSL(2,7) symmetry: pre-rejection by irrep
+dimensions}\label{sec:s-psl}
+
+The claim that PSL(2,7) is the fundamental symmetry group of the genetic
+code was pre-rejected by \citep{antoneli2011}, who showed that PSL(2,7)
+has no 64-dimensional irreducible representation (its irreducible
+representations have dimensions 1, 3, 6, 7, and 8). A group acting on
+the 64-codon set must therefore decompose that action into
+representations that sum to 64. Any PSL(2,7)-based decomposition of the
+codon space is a composite of the available irreps rather than a
+canonical single-irrep symmetry, so PSL(2,7) does not act on the codon
+set as a single symmetry group in the sense of the original claim. We
+record this pre-rejection to explicitly distinguish the surviving
+graph-theoretic and hypercube-coloring analyses from the falsified
+algebraic-symmetry claim.
+
+\section{Holomorphic embedding: character-identity
+failure}\label{sec:s-holo}
+
+The claim that the coordinate-wise map
+\({\text{GF}(2)}^{6} \rightarrow {\mathbb{C}}^{3}\) sending base pairs
+to fourth roots of unity is a holomorphic embedding extending a
+character of \({\text{GF}(8)}^{\ast}\) is incorrect on two counts.
+First, the domain is a finite discrete set (64 points), not a complex
+manifold, so ``holomorphic'' is not defined in the standard analytic
+sense. Second, treating the map \(\chi\) as a group character requires
+\(\chi(x + x) = {\chi(x)}^{2}\); the map fails this since
+\(i^{2} = - 1 \neq 1 = \chi(0)\). The map is a bijective coordinate
+labelling but not a character or holomorphic embedding, and cannot
+support the analytic properties the original claim required.
+
+\section{Source-neighborhood burden: null result}\label{sec:s-infoneg}
+
+The source-neighborhood burden test asks whether reassigned codons sit
+in worse Hamming neighborhoods with higher Grantham distance to their
+neighbors. Mann--Whitney comparison of Grantham-neighborhood sums for
+reassigned versus non-reassigned codons yields \(U = 301\),
+\(p = 0.70\). Reassignment is therefore not driven by local escape from
+costly source neighborhoods. This null does not conflict with the
+conditional-logit finding that natural events favor candidate moves with
+lower \(\Delta_{\text{local}}\) (\(\beta_{\text{phys }} = - 0.004\) in
+the main-text M3 fit): the two tests probe different quantities.
+\(\Delta_{\text{local}}\) is the change in mismatch cost induced by a
+candidate move (a destination-quality measure); the source-neighborhood
+burden test asks about the absolute pre-move source-neighborhood cost.
+Variant codes need not originate from unusually costly source
+neighborhoods (no absolute source burden), yet still favor candidate
+moves that lower local mismatch when a reassignment is triggered
+(opportunistic destination selection). This indicates that the
+topology-avoidance constraint operates at the global graph-connectivity
+level, not at the local per-codon level.
+
+\section{Cross-family multiple-comparison
+correction}\label{sec:s-multicomp}
+
+Correction was applied within analysis families (metric, \(\rho\)-sweep,
+per-table, topology-avoidance, synthetic-recoding) rather than across
+all descriptive, exploratory, and confirmatory quantities. The family
+structure was the natural organisation for these analyses; we did not
+file an external pre-registration. The eight test families address
+conceptually distinct questions (cross-metric robustness;
+\(\rho\)-interpolation between \(Q_{6}\) and \(H(3,4)\); per-NCBI-table
+preservation; the \(2 \times 2\) topology-avoidance audit;
+clade-exclusion sensitivity following \citep{sengupta2007} the M1--M4
+discrete-choice comparison including \(H(3,4)\) variants; the 24-pairing
+tRNA-enrichment Stouffer combination with MIS robustness; and the
+cross-study recoding reanalysis); their test statistics are non-nested.
+For transparency: under cross-family Bonferroni at
+\(\alpha = \frac{0.05}{8} = 6.25 \times 10^{- 3}\), the headline
+\(H(3,4)\) topology depletion (\(p = 1.3 \times 10^{- 6}\)), the
+cross-metric coloring optimality (\(p \leq 0.006\) across four metrics,
+already at threshold), the \(\rho\)-sweep (\(p \leq 0.006\) across five
+\(\rho\)), the conditional-logit ΔAICc gap of 108 (M1\(\rightarrow\)M3,
+well above any threshold), and the per-table BH--FDR result all survive.
+The MIS median tRNA enrichment (\(p = 0.046\)) does \textbf{not} survive
+the cross-family Bonferroni threshold (\(\alpha = 0.00625\);
+\(p = 0.046\) exceeds it by more than a factor of 7), and neither does
+the worst-case MIS (\(p = 0.123\)). Consistent with these outcomes, the
+tRNA enrichment is classified as \textbf{exploratory} rather than
+confirmatory. Note that the cross-family Bonferroni threshold applies to
+a coherent set of family-level \(p\)-values; we compare the raw MIS
+\(p\)-values to it as a common reference, not because the raw \(p\)s,
+the within-family adjusted BH results, and the AICc gaps in this list
+are exchangeable family-level statistics. A stricter hierarchical scheme
+(e.g. Bonferroni across per-family summary \(p\)s, with BH within
+family) would yield the same qualitative conclusions. Within-family
+corrections also hold: four-metric family \(\alpha = 0.0125\),
+\(\rho\)-sweep family \(\alpha = 0.01\), topology-avoidance
+\(2 \times 2\) family \(\alpha = 0.0125\), Ostrov segment tests
+\(\alpha = 0.0167\); the per-table tests use BH--FDR (26 of 27
+significant). Exploratory analyses are labeled as such throughout the
+manuscript.
+
+\section{Event-level conditional logit model: full
+details}\label{sec:s-condlogit}
+
+This section gives the implementation-level detail for the
+discrete-choice analysis reported in main-text §3.5: the candidate
+universe, the three feature definitions, the optimisation routine, the
+order-averaging procedure for unknown event sequences, the fitted raw
+and normalised coefficients, the likelihood-ratio tests, the
+predictor-confounding diagnostic, and the per-event observed-move ranks.
+The complete fitted JSON output is also released as
+\texttt{output/evolutionary\_simulation.json} in the public repository.
+
+\subsection{Model specification and candidate universe}
+
+The conditional logit model treats each observed reassignment as a
+discrete choice from the set of all single-codon reassignments available
+at the current code state. For a code with 64 codons and 21 possible
+amino acid/stop labels, the candidate set \(\mathcal{N}(C)\) contains
+exactly 1,280 moves (universe U1 in §S5: 64 codons \(\times\) 20
+alternative labels, excluding identity assignments). All 1,280
+candidates are evaluated at each step regardless of biological
+plausibility; the model's purpose is to test whether the observed moves
+are statistically distinguishable from uniform sampling given the three
+feature classes. As a conditional logit, the model implies an
+independence of irrelevant alternatives (IIA) structure within each
+choice set; the explanatory--rather--than--predictive framing (§S6)
+makes IIA tolerable for our purposes.
+
+\subsection{Feature definitions}
+
+\textbf{Local physicochemical mismatch change
+(\(\Delta_{\text{phys}}\))}: For a reassignment of codon \(c\) from
+amino acid \(a\) to \(a'\), this is the change in the sum of
+\citep{grantham1974} distances across all Hamming-1 edges incident to
+\(c\):
+
+\[\Delta_{\text{phys }} = \sum_{\left\{ c,c' \right\}:d(c,c') = 1}\left\lbrack \Delta(a',\text{ code}(c')) - \Delta(a,\text{ code}(c')) \right\rbrack\]
+
+This captures the local impact on error-minimization at the reassigned
+position. When a neighboring codon is assigned Stop, we set
+\(\Delta(a,\text{ Stop})\) equal to the maximum Grantham distance (215),
+consistent with the stop-penalty convention used in the coloring
+objective (Methods §2.2 of the main manuscript).
+
+\textbf{Topology disruption (\(\Delta_{topo,Q\_ 6}\))}: The total
+increase in connected components (at \(\varepsilon = 1\)) summed across
+all amino acid codon graphs under \(Q_{6}\) adjacency. Stop codons are
+excluded from the topology sum; \(\Delta_{\text{topo}}\) counts
+connected-component changes only for amino acid codon families. A move
+that splits one amino acid's codon family into two components
+contributes \(+ 1\); a move that fragments two families contributes
+\(+ 2\); topology-preserving moves contribute \(0\). The default
+\(\Delta_{topo,Q\_ 6}\) uses \(Q_{6}\) adjacency (Hamming-1 in the
+default \({\text{GF}(2)}^{6}\) encoding \(C \rightarrow 00\),
+\(U \rightarrow 01\), \(A \rightarrow 10\), \(G \rightarrow 11\)).
+Because \(Q_{6}\) adjacency is encoding-dependent (8 of 24 base-to-bit
+bijections give no \(Q_{6}\) topology depletion at the
+candidate-landscape level; \Cref{sec:s-encoding-sweep}), we also
+compute \(\Delta_{topo,H(3,4)}\) using the encoding-independent
+\(H(3,4)\) adjacency (two codons are neighbors iff they differ at
+exactly one nucleotide position) and refit two model variants:
+M2\textsubscript{\(H(3,4)\)} (topology-only with
+\(\Delta_{topo,H(3,4)}\)) and M3\textsubscript{\(H(3,4)\)}
+(physicochemistry + \(\Delta_{topo,H(3,4)}\)). The encoding-robustness
+comparison \(\Delta\)AICc(M1 \(\rightarrow\)
+M3\textsubscript{\(H(3,4)\)}) vs \(\Delta\)AICc(M1 \(\rightarrow\) M3)
+is reported in the next subsection.
+
+\textbf{tRNA complexity proxy (\(\Delta_{\text{tRNA}}\))}: The Hamming
+distance from the reassigned codon to the nearest codon already encoding
+the target amino acid in the current code. This serves as a heuristic
+for the tRNA repertoire change required to service the reassigned codon,
+with larger distances implying more novel tRNA machinery needed.
+
+\subsection{Fitted coefficients}
+
+\Cref{tbl:s-condlogit-coefs} reports the maximum-likelihood coefficient
+estimates for all six model variants (M1, M2, M3, M4 under \(Q_{6}\)
+topology, plus M2\textsubscript{\(H(3,4)\)} and
+M3\textsubscript{\(H(3,4)\)} under encoding-independent \(H(3,4)\)
+topology).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{Conditional logit coefficient estimates from the 27-table
+re-fit. Raw coefficients are on the original feature scale; normalized
+coefficients are on \(z\)-scored features (multiplying raw
+\(\hat{\beta}\) by the global feature standard deviation). All
+\(\hat{\beta}\) values are negative, indicating that observed
+reassignment histories preferentially populate moves that reduce
+physicochemical mismatch, avoid topology disruption, and (weakly) prefer
+target amino acids already serviced by nearby codons. The tRNA proxy
+coefficient is small and non-significant (LR \(= 0.12\), \(p = 0.73\)).
+The \(H(3,4)\) verification variants (M2\textsubscript{H(3,4)},
+M3\textsubscript{H(3,4)}) replace the encoding-dependent
+\(\Delta_{topo,Q\_ 6}\) feature with the encoding-independent
+\(\Delta_{topo,H(3,4)}\). Their fitted ΔAICc values match the main-text
+encoding-robustness numbers.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Feature}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(\hat{\beta}\) (raw)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(\hat{\beta}\) (normalized)}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Feature}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(\hat{\beta}\) (raw)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(\hat{\beta}\) (normalized)}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+M1 & \(\Delta_{\text{phys}}\) & -4.9e-3 & -1.33 \\
+M2 (\(Q_{6}\)) & \(\Delta_{topo,Q\_ 6}\) & -3.5838 & -1.67 \\
+M3 (\(Q_{6}\)) & \(\Delta_{\text{phys}}\) & -4.3e-3 & -1.17 \\
+M3 (\(Q_{6}\)) & \(\Delta_{topo,Q\_ 6}\) & -3.3158 & -1.54 \\
+M4 & \(\Delta_{\text{phys}}\) & -4.3e-3 & -1.17 \\
+M4 & \(\Delta_{topo,Q\_ 6}\) & -2.9855 & -1.39 \\
+M4 & \(\Delta_{\text{tRNA}}\) & -0.2033 & -0.21 \\
+M2 (\(H(3,4)\)) & \(\Delta_{topo,H(3,4)}\) & -3.6957 & -1.79 \\
+M3 (\(H(3,4)\)) & \(\Delta_{\text{phys}}\) & -4.6e-3 & -1.24 \\
+M3 (\(H(3,4)\)) & \(\Delta_{topo,H(3,4)}\) & -3.452 & -1.67 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-condlogit-coefs}{}
+
+\subsection{Likelihood ratio tests}
+
+\Cref{tbl:s-condlogit-lrt} reports nested-model likelihood-ratio
+statistics under both \(Q_{6}\) and \(H(3,4)\) topology variants.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\caption{Likelihood-ratio tests for nested conditional logit models,
+including both \(Q_{6}\) topology variants (legacy primary) and
+\(H(3,4)\) topology verification variants. Both topology features (Q\_6
+added to M1, H(3,4) added to M1) and physicochemistry (added to M2 /
+M2\textsubscript{H(3,4)}) provide highly significant improvements. The
+tRNA-complexity proxy does not improve on the phys+topo
+model.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Restricted}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Full}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{LR}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{df}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(p\)}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Restricted}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Full}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{LR}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{df}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\(p\)}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+M1 (phys) & M3 (phys+topo, \(Q_{6}\)) & 110.4 & 1 & \(\ll 10^{- 10}\) \\
+M2 (topo, \(Q_{6}\)) & M3 (phys+topo, \(Q_{6}\)) & 91.2 & 1 &
+\(\ll 10^{- 10}\) \\
+M3 (phys+topo, \(Q_{6}\)) & M4 (full) & 0.1 & 1 & \(0.73\) \\
+M1 (phys) & M3\textsubscript{\(H(3,4)\)} (phys+topo, \(H(3,4)\)) & 93.4
+& 1 & \(\ll 10^{- 10}\) \\
+M2\textsubscript{\(H(3,4)\)} (topo, \(H(3,4)\)) &
+M3\textsubscript{\(H(3,4)\)} (phys+topo, \(H(3,4)\)) & 97.3 & 1 &
+\(\ll 10^{- 10}\) \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-condlogit-lrt}{}
+
+\subsection{Confounding diagnostic}
+
+Across \(\approx\)84,000 candidate moves pooled from all choice sets,
+the Spearman correlation between \(\Delta_{\text{phys}}\) and
+\(\Delta_{topo,Q\_ 6}\) is \(\rho = 0.15\)
+(\Cref{fig:s-condlogit-diagnostics}, panel A), indicating that the two
+predictors carry largely independent information. Moves that reduce
+physicochemical mismatch are only slightly more likely to also preserve
+topology, and the conditional logit framework accounts for any residual
+collinearity through simultaneous estimation. Coefficient estimates with
+95\% CIs (panel B) and parametric predictive replication of the observed
+topology-breaking rate (panel C) complete the diagnostic set.
+
+\begin{figure}
+\centering
+\emfig{FigG\_condlogit\_diagnostics}
+\caption{Conditional-logit model diagnostics. Fit quality and
+confounding diagnostics for the six candidate models M1--M4 +
+\(H(3,4)\)-verification variants (likelihood-ratio tests were applied
+only to nested pairs): joint distribution of \(\Delta_{\text{phys}}\) vs
+\(\Delta_{\text{topo}}\) across the candidate landscape (weakly
+correlated, \(\rho = 0.15\)), coefficient estimates with 95\% confidence
+intervals, and parametric predictive replication of the observed
+topology-breaking rate under M3. Companion to main-text Figure 4 (which
+reports the AICc comparison and observed-move percentile-rank
+distribution).}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-condlogit-diagnostics}{}
+
+\subsection{Observed move percentile ranks}
+
+Under the best model (M3), observed natural reassignments rank at the
+89.5th percentile on average (mean rank 134 out of 1,280 candidates).
+Notable individual events: UGA\(\rightarrow\)Trp ranks consistently
+above the 98th percentile across all tables where it occurs, indicating
+that this reassignment is the highest-ranked under the combined
+phys+topo score. The one clear outlier is the yeast mitochondrial
+CUU\(\rightarrow\)Thr reassignment (30th percentile), consistent with
+NCBI translation table 3's status as the sole marginal exception in the
+per-table optimality analysis.
+
+\subsection{Order-averaging implementation}
+
+For tables with \(k > 1\) reassignment events, the temporal ordering is
+unknown. We marginalized the conditional logit likelihood over all
+\(k!\) orderings, computing
+\(L_{\text{table }} = (1/k!)\sum_{\sigma}\prod_{s}P\left( m_{\sigma(s)}^{\ast}~|~\mathcal{N}(C_{\sigma,s}) \right)\)
+using log-sum-exp for numerical stability. For all tables with
+\(k \leq 6\) events (which covers every table in the dataset, including
+the largest, yeast mitochondrial, \(k = 6\), \(6! = 720\) orderings), we
+enumerate all orderings exactly. The implementation precomputes feature
+matrices once per (table, ordering, step) into stacked numpy arrays,
+after which each Nelder--Mead / L-BFGS-B function evaluation reduces to
+a small batch of matrix multiplies and \texttt{scipy.special.logsumexp}
+calls; the four nested models are fit concurrently on a single shared
+bundle via \texttt{joblib} threads to avoid memory duplication.
+
+\section{ProtSub matrix and metric correlation
+analysis}\label{sec:s-protsub}
+
+This section evaluates whether the standard-code optimality result is
+confined to a single amino-acid distance scale. We quantify metric
+overlap across amino-acid pairs and null-code scores, and report a
+structure-aware ProtSub sensitivity analysis with the caveat that
+ProtSub is alignment-derived and therefore code-dependent in the sense
+of the \citep{digiulio2001} critique. The analyses motivate the
+treatment in Methods §2.2 and Results §3.1 of the main text.
+
+\subsection{ProtSub as a code-dependent robustness check}
+
+ProtSub is derived from co-evolving residue pairs in 2,320 Pfam
+multiple-sequence alignments of proteins encoded under the standard
+genetic code; it is therefore a code-dependent (MSA-derived)
+substitution matrix in the sense of \citep{digiulio2001}. We converted
+the EMBOSS log-odds form to a positive distance via the standard
+diagonal-anchored relation
+\(d(i,j) = \left( s(i,i) + s(j,j) \right)/2 - s(i,j)\), which guarantees
+\(d(i,i) = 0\) and yields strictly positive off-diagonal entries (range
+1.0 to 15.0). Sanity values: \(d(I,L) = 2.0\), \(d(K,R) = 4.0\),
+\(d(F,Y) = 4.0\), \(d(D,E) = 3.5\), \(d(C,W) = 14.5\).
+
+Under the same quartet-pattern shuffle null used for the four primary
+metrics (\(n =\)10,000, seed 135325), the standard code achieves
+\(F = 1089.5\) against null mean \(1180.2 \pm 29.7\) (\(z = 3.05\),
+quantile \(0.04\%\), \(p =\)4 times 10\^{}(-4)\(\)). This is the most
+extreme percentile of any metric in the panel. \citep{buschmann2026}
+report that BLOSUM62, an AlphaFold-derived substitution matrix (AFSM),
+and 16 other matrix families perform similarly across multiple
+sequence-alignment tasks, with the interpretation that substitution
+matrices implicitly encode physicochemical reality; their result bounds
+the \citep{digiulio2001} tautology rather than eliminating it. We
+therefore treat ProtSub as a robustness check rather than as a primary
+test.
+
+\subsection{Metric correlation matrices}
+
+For each pair of metrics, we computed Spearman correlations at two
+levels: (i) across the 190 unordered amino-acid pairs of the 20 standard
+amino acids; and (ii) across 2,000 random codes drawn from the same
+quartet-pattern shuffle null used for the optimality tests. The
+AA-pair-level correlations bound how similar two metrics''
+\textbf{distance scales} are; the code-level correlations bound how
+similarly they \textbf{rank} codes.
+
+\begin{longtable}[]{@{}lrrrrr@{}}
+\caption{Pairwise Spearman correlations of amino-acid distance values
+across the 190 unordered AA pairs (20 standard amino acids). PR = Woese
+polar requirement. KD = Kyte--Doolittle hydropathy. Median off-diagonal
+\(\rho = 0.49\); minimum 0.23 (KD vs ProtSub).}\tabularnewline
+\toprule\noalign{}
+& \textbf{Grantham} & \textbf{Miyata} & \textbf{PR} & \textbf{KD} &
+\textbf{ProtSub} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& \textbf{Grantham} & \textbf{Miyata} & \textbf{PR} & \textbf{KD} &
+\textbf{ProtSub} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Grantham & 1.00 & 0.71 & 0.47 & 0.36 & 0.63 \\
+Miyata & 0.71 & 1.00 & 0.73 & 0.54 & 0.49 \\
+PR & 0.47 & 0.73 & 1.00 & 0.44 & 0.26 \\
+KD & 0.36 & 0.54 & 0.44 & 1.00 & 0.23 \\
+ProtSub & 0.63 & 0.49 & 0.26 & 0.23 & 1.00 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-metric-corr-pairs}{}
+
+\begin{longtable}[]{@{}lrrrrr@{}}
+\caption{Pairwise Spearman correlations of \(F\)-scores across 2,000
+random codes drawn from the quartet-pattern shuffle null. Higher than
+the AA-pair-level correlations (\Cref{tbl:s-metric-corr-pairs}), as
+expected when distances are summed over the 192 \(Q_{6}\) edges. Median
+off-diagonal \(\rho = 0.82\).}\tabularnewline
+\toprule\noalign{}
+& \textbf{Grantham} & \textbf{Miyata} & \textbf{PR} & \textbf{KD} &
+\textbf{ProtSub} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& \textbf{Grantham} & \textbf{Miyata} & \textbf{PR} & \textbf{KD} &
+\textbf{ProtSub} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Grantham & 1.00 & 0.85 & 0.75 & 0.71 & 0.83 \\
+Miyata & 0.85 & 1.00 & 0.87 & 0.89 & 0.82 \\
+PR & 0.75 & 0.87 & 1.00 & 0.78 & 0.74 \\
+KD & 0.71 & 0.89 & 0.78 & 1.00 & 0.79 \\
+ProtSub & 0.83 & 0.82 & 0.74 & 0.79 & 1.00 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-metric-corr-codes}{}
+
+\begin{longtable}[]{@{}lr@{}}
+\caption{Partial Spearman correlations of code-level \(F\)-scores (2,000
+null codes), with each pair's relationship controlled for all three
+other metrics simultaneously. Five of ten pairs become approximately
+uncorrelated after adjustment
+(\(\left| \rho_{\text{partial}} \right| < 0.1\); no formal confidence
+intervals or \(p\)-values are reported here, and ``approximately
+uncorrelated'' is a descriptive statement about the point estimate
+rather than a test of statistical independence), consistent with each
+metric contributing unique variance not fully explained by the other
+four. The high pairwise correlations in \Cref{tbl:s-metric-corr-codes}
+reflect a shared physicochemical signal; the partial correlations
+isolate the residual unique contribution of each metric.}\tabularnewline
+\toprule\noalign{}
+\textbf{Metric pair} & \textbf{Partial Spearman \(\rho\)} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Metric pair} & \textbf{Partial Spearman \(\rho\)} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Grantham \(\sim\) Miyata & +0.48 \\
+Grantham \(\sim\) polar requirement & +0.03 \\
+Grantham \(\sim\) Kyte--Doolittle & \ensuremath{-}0.31 \\
+Grantham \(\sim\) ProtSub & +0.54 \\
+Miyata \(\sim\) polar requirement & +0.50 \\
+Miyata \(\sim\) Kyte--Doolittle & +0.62 \\
+Miyata \(\sim\) ProtSub & \ensuremath{-}0.06 \\
+Polar requirement \(\sim\) Kyte--Doolittle & +0.01 \\
+Polar requirement \(\sim\) ProtSub & +0.08 \\
+Kyte--Doolittle \(\sim\) ProtSub & +0.39 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-metric-partial}{}
+
+The picture from \Cref{tbl:s-metric-corr-pairs},
+\Cref{tbl:s-metric-corr-codes}, and \Cref{tbl:s-metric-partial} is
+consistent with our framing: the metrics share substantial common
+variance (median pairwise \(\rho \approx 0.82\) at the code level), but
+each contributes unique signal not captured by any combination of the
+others. The five-metric convergence is convergent operationalisation,
+not redundant replication.
+
+\section{Walsh--Hadamard / 2-adic spectral probe}\label{sec:s-walsh}
+
+This section establishes a finite, computable bridge between our
+discrete \({\text{GF}(2)}^{6}\) hypercube framework and the 2-adic codon
+algebra developed in the BioSystems literature by
+\citep{khrennikov2007}, \citep{dragovich2019}, and
+\citep{axelsson2024a}. Reproducible via \texttt{codon-topo} (module
+\texttt{src/codon\_topo/analysis/walsh\_2adic.py}; tests
+\texttt{tests/test\_walsh\_2adic.py}, 17/17 passing).
+
+For each amino-acid block we form the 0/1 indicator function on the
+64-codon space (indexed under the default \(C \rightarrow 00\),
+\(U \rightarrow 01\), \(A \rightarrow 10\), \(G \rightarrow 11\)
+encoding), compute its Walsh--Hadamard transform (the Fourier transform
+on the group \({\text{GF}(2)}^{6}\)), take the 2-adic valuation
+\(v_{2}\) of each integer Walsh coefficient, and sum across the spectrum
+and across all blocks. We call this aggregate the \textbf{Walsh spectral
+depth} of a code.
+
+\subsection{Block-size null}
+
+Under a block-size-matched null (\(n =\)2,000 random partitions with the
+same multiset of block sizes as the standard code), the standard code's
+spectral depth is anomalously low (\Cref{tbl:s-walsh}). The depth value
+is \textbf{mathematically invariant} across all 24 base-to-bit
+bijections (the statistic depends only on the underlying partition
+geometry, not on the encoding).
+
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.45}}>{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.10}}>{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.16}}>{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.10}}>{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.19}}@{}}
+\caption{Walsh spectral depth of the standard code under three null
+models. The block-size matched null gives strong shallowness
+(\(z = - 17.74\)), but the stricter wobble-box-preserving label
+permutation reveals that the depth is mathematically constant under this
+null: an algebraic invariant of the (wobble box \(\times\) AA slot
+multiset) structure. The Walsh signature of the standard code is fully
+encoded in the hierarchical wobble-box decomposition of synonymous
+codons.}\tabularnewline
+\toprule\noalign{}
+\textbf{Null model} & \textbf{Observed} & \textbf{Null mean \(\pm\) SD}
+& \textbf{\emph{z}} & \textbf{Frac. \(\leq\) obs.} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Null model} & \textbf{Observed} & \textbf{Null mean \(\pm\) SD}
+& \textbf{\emph{z}} & \textbf{Frac. \(\leq\) obs.} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Block-size matched (\(n =\)2,000) & 544 & 689.3 \(\pm\) 8.2 & \ensuremath{-}17.74 &
+0.0000 \\
+Wobble-box-preserving label permutation (\(n =\)2,000) & 544 & 544.0
+\(\pm\) 0.0 & n/a (invariant) & 1.0000 \\
+Encoding sweep (24 encodings \(\times\) 1,500 nulls each) & 544 & n/a
+per encoding & {[}\ensuremath{-}18.9, \ensuremath{-}16.9{]} & 0.0000 \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-walsh}{}
+
+\begin{figure}
+\centering
+\emfig{FigW\_walsh\_spectrum}
+\caption{2-adic Walsh spectral-depth signature of the standard code (R1
+response, engagement with the Khrennikov/Dragovich/Axelsson 2-adic codon
+framework). \textbf{Panel A:} block-size-matched null distribution of
+the Walsh spectral depth (\(n =\)2,000 random partitions with the same
+multiset of block sizes as the standard code). Because per-draw null
+samples are not persisted to \texttt{output/walsh\_2adic.json}, the null
+is shown as a normal approximation with mean \(= 689.3\) and SD
+\(= 8.2\); the standard code's observed depth \(= 544\) (red) sits
+\(z = - 17.74\) standard deviations below the null mean (empirical
+fraction of null \(\leq\) observed \(= 0\)). \textbf{Panel B:}
+encoding-invariance sweep across all \(24\) base-to-bit bijections. Each
+encoding is evaluated against its own independent block-size null
+(\(n =\)1,500 per encoding, deterministic seed); z-scores fall in the
+tight range \(\lbrack - 18.90, - 16.87\rbrack\) (mean \(- 17.87\)), all
+\(\approx 5\) times the magnitude of the two-sided \(p = 0.001\)
+threshold (\(|z| = 3.29\), dashed red line; note that the
+\(z\)-magnitude ratio is not a significance comparison and is quoted
+only as a descriptive scale). The observed spectral depth itself equals
+\(544\) under every encoding (mathematically invariant; see §S21.3).
+Together the two panels quantify the descriptive bridge to the 2-adic
+literature that R1 requested: the standard code's Walsh signature is
+anomalously shallow versus a block-size-matched null and is a property
+of the code, not of any particular base-to-bit bijection.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-walsh-spectrum}{}
+
+\subsection{Wobble-box-preserving label-permutation null}
+
+The block-size-matched null does not control for the first-two-base
+wobble box structure that synonymous codons share. We additionally
+constructed a stricter null that fixes the 16 first-two-base boxes and
+each box's internal partition shape, randomising only the AA labels
+assigned to box-slots and preserving each AA's multiset of slot sizes
+from the standard code. Under this null the spectral depth statistic is
+mathematically constant at 544 (\Cref{tbl:s-walsh}, row 2). This is
+consistent with the cautionary remark anticipated in the module's
+docstring (\texttt{WOBBLE\_CAVEAT}): the spectral-depth statistic is
+invariant under several ``natural'' randomisations of the wobble
+structure, and the present null is one of them.
+
+We do \textbf{not} interpret this as evidence of beyond-wobble
+optimisation. The honest reading is that the standard code's 2-adic
+Walsh signature is an algebraic invariant of the wobble-box
+decomposition, which is itself the hierarchical structure that
+\citep{khrennikov2007} and follow-up work in the BioSystems literature
+model continuously on \(\mathbb{Z}_{2}\). The Walsh--Hadamard / 2-adic
+probe is therefore a methodological bridge between the discrete
+(hypercube) and continuous (p-adic) descriptions of codon space, not a
+separate optimality test.
+
+\subsection{Encoding invariance}
+
+Across all 24 base-to-bit bijections, the standard code's spectral depth
+equals 544 (mathematically invariant). The \(z\)-score against the
+block-size matched null also remains in the range
+\(\lbrack - 18.9, - 16.9\rbrack\), mean \(- 17.9\), across all encodings
+(each evaluated with its own independent null draw from a deterministic
+seed). \Cref{fig:s-walsh-spectrum} visualises both the block-size null
+density (panel A) and the encoding-invariance sweep (panel B).
+
+\subsection{A second Walsh invariant: the wobble-free label spectrum}
+
+The block-indicator spectral depth (§S21.1--§S21.2) characterises the
+\textbf{geometry} of the synonymous partition. A complementary Walsh
+statistic characterises the \textbf{amino-acid labeling} attached to
+that geometry. For each sense amino acid \(a\) let
+\(f_{a} \in \left\{ 0,1 \right\}^{64}\) be its indicator vector and
+\(F_{a}\) its Walsh--Hadamard transform; partition the \(63\) non-DC
+Walsh frequencies \(y \in \lbrack 1,64)\) into a \textbf{wobble-free}
+layer (frequencies with zero support on the two position-3 wobble bits;
+\(15\) frequencies) and a \textbf{wobble-active} layer (the remaining
+\(48\)). The label-spectrum fraction is
+
+\[S = \frac{\sum_{a \in \mathcal{A}\backslash\left\{ \text{Stop} \right\}}\sum_{y\text{ wobble-free},y \neq 0}\left| {F_{a}(y)} \right|^{2}}{\sum_{a \in \mathcal{A}\backslash\left\{ \text{Stop} \right\}}\sum_{y \neq 0}\left| {F_{a}(y)} \right|^{2}}\]
+\protect\phantomsection\label{eq:S_label}{}
+
+For the standard code, \(S = 0.7514309076\), mathematically invariant
+across all \(24\) base-to-bit bijections
+(\texttt{output/walsh\_label\_spectrum.json}).
+
+\textbf{Two nulls, two distinct findings.} Under the \textbf{free}
+label-permutation null preserving only the amino-acid count multiset
+(stops fixed; \(n =\)10,000, seed \(135325\)): null mean \(= 0.2383\),
+sd \(= 0.0169\), range \(\lbrack 0.2020,0.3328\rbrack\),
+\(z = + 30.33\), \(0\) of 10,000 draws reach the observed value
+(empirical \(p < \frac{1}{n + 1} \approx 10^{- 4}\)). Under the stricter
+\textbf{wobble-box-preserving} label-permutation null (the same null
+used for \texttt{spectral\_depth} in §S21.2: fixes the \(16\)
+first-two-base boxes and each box's internal partition shape, randomises
+only which amino-acid label is assigned to each box-slot, preserves each
+AA's slot multiset): \(S = 0.7514309076\) in every draw --
+mathematically invariant.
+
+\textbf{Honest interpretation.} The free-permutation null shatters the
+wobble-box structure of \(4\)-fold-degenerate amino acids, scattering
+their Walsh energy into wobble-active frequencies; the box-preserving
+null does not. The extreme \(z = + 30\) against the free null therefore
+reflects \textbf{exactly} the wobble-box alignment property of the
+standard code, not a separate optimisation layer. We do not claim
+``beyond wobble'' optimisation. Rather, \(S\) provides an exact
+algebraic signature of the wobble phenomenon in the Walsh basis:
+biological wobble degeneracy maps directly to spectral concentration on
+the wobble-free layer. The free-null calibration measures spectral
+concentration against a structurally naive baseline; it is not a test of
+selection beyond wobble.
+
+\textbf{Coset quantisation of the null distribution.} The free
+label-permutation null is highly quantised: in 10,000 draws it produced
+only \(15\) distinct values of \(S\). This reflects the coarse
+interaction between the AA degeneracy classes (\(1\), \(2\), \(3\),
+\(4\), \(6\)) and the wobble-coset partition of the Walsh frequency
+domain: \(S\) depends only on how those classes intersect the wobble
+cosets, not on the within-class label assignment. The observed
+\(S = 0.7514\) lay above all sampled null values, so the empirical
+upper-tail probability is bounded by the Monte Carlo resolution
+(\(p \leq 1/(n + 1) \approx 10^{- 4}\)).
+
+\textbf{Mechanistic decomposition.} Each \(4\)-fold-degenerate amino
+acid that occupies a complete wobble box (Pro, Ala, Thr, Val, Gly, plus
+the CUx, CGx, UCx cores of Leu, Arg, Ser) contributes \(\approx 100\)\%
+of its Walsh energy to the wobble-free layer: its indicator function is
+constant on a wobble coset, so its Walsh transform is supported
+exclusively on frequencies with zero support on the two position-3
+wobble bits. Singleton amino acids (Met, Trp) contribute the baseline
+\(15/63 \approx 0.238\); a single \(\delta\)-function has uniformly
+distributed Walsh energy. The intermediate \((2,2)\)-split and
+\((4,2)\)-split blocks contribute mixed weights. The aggregate
+\(S = 0.7514\) is therefore in effect a ``weighted box-faithfulness of
+the labeling.''
+
+\textbf{Final framing for the bridge to the \(2\)-adic literature.} The
+standard genetic code has two encoding-invariant Walsh signatures of
+wobble structure: spectral depth \(= 544\) captures the synonymous-block
+geometry (§S21.1), and \(S = 0.7514\) captures the amino-acid labeling's
+concentration on wobble-free frequency layers. Both support the
+descriptive bridge to \(2\)-adic descriptions of the genetic code
+\citep{khrennikov2007, axelsson2024a} neither is evidence of selection
+beyond wobble.
+
+\section{Slavov (Tsour et al. 2026) SAAP
+cross-analysis}\label{sec:s-slavov}
+
+\citep{tsour2026} published an LC-MS proteomic survey identifying 8,746
+unique amino-acid substitutions across 1,767 genes in human and mouse
+tissues arising from alternate RNA decoding. Their high-confidence
+subset (Supplementary Data 8 of \citep{tsour2026} positional probability
+\(> 0.9\)) contains 5,873 events spanning 178 unique amino-acid
+substitution types. We tested whether the observed substitution events
+are enriched for low-codon-Hamming-distance pairs, as predicted by the
+codon--anticodon mismatch mechanism that underlies our
+\({\text{GF}(2)}^{6}\) adjacency framework.
+
+For each event we computed the minimum nucleotide-Hamming distance
+between any source codon (in the standard code) and any target codon.
+Filtering to unambiguous 20-AA pairs left 5,611 events and 166 unique
+observed substitution types. \Cref{tbl:s-slavov} tabulates the
+distance-1/2/3 event counts and baseline fractions;
+\Cref{fig:s-slavov-saap} plots the same distribution as grouped bars
+for visual comparison.
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Distribution of minimum nucleotide-Hamming distance between
+source and target codons for the 5,611 high-confidence
+alternate-translation events of \citep{tsour2026} (Supplementary Data
+8). Single-nucleotide-distance substitutions are dramatically
+over-represented relative to the all-380-pair baseline (binomial test,
+\(p < 10^{- 100}\)). This is the empirical signature of codon--anticodon
+mismatch decoding (Hamming-1) on top of lower-rate mechanisms (RNA
+modifications, near-cognate decoding) that produce higher-distance
+substitutions.}\tabularnewline
+\toprule\noalign{}
+\textbf{Min codon NT distance} & \textbf{Events} & \textbf{Event \%} &
+\textbf{Baseline (380 pairs) \%} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\textbf{Min codon NT distance} & \textbf{Events} & \textbf{Event \%} &
+\textbf{Baseline (380 pairs) \%} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 3,649 & 65.0\% & 39.5\% \\
+2 & 1,062 & 18.9\% & 53.2\% \\
+3 & 900 & 16.0\% & 7.4\% \\
+\end{longtable}
+
+\protect\phantomsection\label{tbl:s-slavov}{}
+
+\begin{figure}
+\centering
+\emfig{FigSl\_slavov\_saap}
+\caption{Visual companion to \Cref{tbl:s-slavov} (added in response to
+R3, who noted that a three-row table understates the effect). Grouped
+bars compare the observed nucleotide-Hamming-distance distribution of
+Tsour et al.'s 5,611 high-confidence sense-codon recoding events (blue)
+against the null distribution across all 380 amino-acid-to-amino-acid
+pairs in the standard code (grey). At distance 1 the observed events are
+65.0\% vs a 39.5\% baseline (event-weighted binomial \(p < 10^{- 100}\);
+\citep{tsour2026}); at distance 2 the observed events are
+\textbf{depleted} (18.9\% vs 53.2\%); at distance 3 they are moderately
+enriched (16.0\% vs 7.4\%). The Hamming-1 concentration is the empirical
+signature of codon--anticodon mismatch decoding operating on top of
+lower-rate mechanisms (RNA modifications, near-cognate decoding) that
+produce higher-distance substitutions. Figure and table are rendered
+from the same \texttt{output/slavov\_saap\_codon\_distances.json} (event
+and baseline distance distributions), so they cannot drift.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-slavov-saap}{}
+
+At the level of substitution \textbf{types} (unique amino-acid pairs
+rather than events), the enrichment is modest (41.6\% of observed types
+are at min-NT-1 vs 39.5\% baseline; Fisher exact OR = 1.17,
+\(p = 0.26\); Mann--Whitney U on NT distances, observed vs unobserved
+AAS types: \(p = 0.18\)). This indicates that essentially every
+amino-acid substitution type can occur in the Tsour et al. dataset: it
+is the \textbf{frequency} of each type that is biased toward
+single-nucleotide-distance pairs. The observation matches the
+mechanistic inventory reported by \citep{tsour2026}: codon--anticodon
+mismatch is the dominant high-frequency mechanism, with RNA
+modifications and near-cognate decoding contributing lower-frequency
+events at higher codon-Hamming distance. The Hamming-1 enrichment is
+independent of which amino-acid distance metric is used and is an
+external empirical test of the codon-adjacency assumption underlying the
+main-text edge-mismatch objective (equation 1).
+
+\section{Exploratory observations: full detail}\label{sec:s-exploratory}
+
+The main text (§3.7) summarises three exploratory observations without
+inferential weight; this section records the underlying detail for each.
+
+\subsection{Bit-position bias in codon
+reassignments}\label{sec:s-bitbias}
+
+The distribution of bit-flips across the 6 coordinates of
+\({\text{GF}(2)}^{6}\) in natural codon reassignments shows apparent
+positional skew under a uniform null (\(\chi^{2} = 16.26\),
+\(p = 0.006\), \(\text{df } = 5\)). However, this signal is
+substantially attenuated after de-duplication to 20 unique (codon,
+target amino acid) pairs (\(p = 0.075\)) and vanishes entirely under a
+codon-preserving permutation null (\(p = 1.0\)). The apparent bias is
+therefore explained by which codons are recurrently reassigned across
+lineages, not by a genuine positional preference in
+\({\text{GF}(2)}^{6}\). This is an example of a signal that survives one
+null model (uniform) but fails another (codon-preserving), and is
+retained in the record only to document the diagnostic sequence.
+
+\begin{figure}
+\centering
+\emfig{FigG\_bit\_position\_bias}
+\caption{Bit-position bias in codon-reassignment events. Observed
+bit-flip counts at each of the 6 coordinates of \({\text{GF}(2)}^{6}\),
+overlaid on the uniform-null expectation and the codon-preserving
+permutation null. The apparent uniform-null skew (\(p = 0.006\)) is
+fully explained by the codon-preserving null (\(p = 1.0\)), consistent
+with a recurrent-codon effect rather than a genuine positional
+preference. Retained as a null-model-diagnostic example.}
+\end{figure}
+
+\protect\phantomsection\label{fig:s-bit-position-bias}{}
+
+\subsection{Variant-code disconnection catalogue}\label{sec:s-catalogue}
+
+A systematic survey across all 27 NCBI translation tables identifies
+four lineage-collapsed variant-code amino-acid disconnections at
+\(\varepsilon = 1\) in \({\text{GF}(2)}^{6}\) under the default
+encoding: threonine in the yeast mitochondrial code (translation table
+3, CUN\(\rightarrow\)Thr); leucine in the chlorophycean mitochondrial
+codes (translation tables 16 and 22, both with UAG\(\rightarrow\)Leu;
+table 16 is the chlorophycean mitochondrial code \citep{hayashi1996} and
+table 22 is the closely related \emph{Scenedesmus obliquus}
+mitochondrial code, which additionally reassigns UCA
+Ser\(\rightarrow\)Stop, and both produce equivalent \(\varepsilon = 2\)
+Leu reconnection profiles so they collapse to a single
+algal-mitochondrial event); alanine in \emph{Pachysolen tannophilus}
+nuclear code (translation table 26, CUG\(\rightarrow\)Ala); and a
+tripartite serine in the \emph{Candida}-clade alternative yeast nuclear
+code (translation table 12, CUG\(\rightarrow\)Ser; \citep{santos1999}).
+These cases, combined with the universal serine disconnection, make up
+the complete inventory of amino-acid graph disconnections at unit
+Hamming distance under the default encoding.
+
+A separate and weaker geometric exception (specific to filtration rather
+than to disconnection) arises in translation table 32 (Balanophoraceae
+plastid; UAG\(\rightarrow\)Trp). Trp is 1-fold (UGG only) under the
+standard code; in table 32 it becomes 2-fold (UGG, UAG). The pair
+differs in the second nucleotide (G\(\leftrightarrow\)A), i.e. at bit
+position 3 in our 0-based 6-bit indexing (the second bit of the second
+nucleotide), not at the wobble bit (position 5) where every
+standard-code 2-fold pair sits. Hamming distance 1, so the pair is
+connected at \(\varepsilon = 1\) and adds no new entry to the
+disconnection catalogue. An empirical scan over every 2-fold amino-acid
+pair in all 27 NCBI tables confirms that this is the unique deviation
+from the bit-5 two-fold filtration: the standard code's nine 2-fold
+amino acids and every analogous pair introduced by the other 26 tables
+differ at bit 5.
+
+\subsection{Atchley Factor 3 and Serine
+convergence}\label{sec:s-atchley}
+
+Serine has the most extreme Atchley Factor 3 score among the 20 amino
+acids (\(F_{3} = - 4.760\), 2.24 SD below the mean;
+\citep{atchley2005}), and it is the only amino acid disconnected at
+\(\varepsilon = 1\) under every base-to-bit encoding. This convergence
+is unsurprising: Atchley \(F_{3}\) is a composite of molecular size and
+codon diversity that partly captures codon-family structure, so the
+\({\text{GF}(2)}^{6}\) topology and \(F_{3}\) are not fully independent
+views of Serine's anomaly. Both reflect Serine's disproportionate codon
+diversity (6 codons in two disconnected families) relative to its small
+physicochemical footprint; the \({\text{GF}(2)}^{6}\) framework provides
+a complementary structural account rather than independent
+corroboration.
+
+\subsection{Three-tier tRNA mechanistic landscape (from main-text §3.6)}
+
+The manuscript §3.6 summarises the tRNA enrichment result; the
+mechanistic detail moved from that section is recorded here for
+completeness. The largest observed case is \emph{Tetrahymena
+thermophila} (NCBI translation table 6, UAA/UAG reassigned to Gln;
+\citep{hanyu1986}), which carries 54 glutamine tRNA genes (including 39
+suppressor tRNAs reading the reassigned stop codons), compared to 3 Gln
+tRNAs in the standard-code ciliate \emph{Ichthyophthirius multifiliis}
+(assembly GCF\_000220395.1), 11 in \emph{Stentor coeruleus} (assembly
+GCA\_001970955.1), and 3 in \emph{Fabrea salina} (assembly
+GCA\_022984795.1 from \citep{zhang2022}). All four counts were generated
+in this work by running tRNAscan-SE 2.0.12 on the listed assemblies. The
+pattern extends across reassignment types. Among Gln-reassignment
+ciliates, \emph{Pseudocohnilembus persalinus} (20 Gln tRNAs including 15
+suppressors) and \emph{Halteria grandinella} (9 Gln tRNAs including 3
+suppressors; \citep{zheng2021}) represent independent lineages within
+Oligohymenophorea and Spirotrichea respectively. Among Cys-reassignment
+ciliates (NCBI translation table 10, UGA\(\rightarrow\)Cys), six
+tRNAscan-SE--verified \emph{Euplotes} species all carry tRNA-Cys genes
+with the non-canonical TCA anticodon (reading UGA), with 1--4 such genes
+per species alongside standard GCA-anticodon Cys tRNAs.
+
+However, the pattern is not universal. \emph{Blastocrithidia nonstop}
+(NCBI translation table 31) reassigned all three stop codons (as did
+\emph{Condylostoma magnum}, where stop-codon function is
+context-dependent; \citep{heaphy2016}) but achieved
+UGA\(\rightarrow\)Trp via anticodon stem shortening (5 bp
+\(\rightarrow\) 4 bp) of tRNA-Trp(CCA), combined with an eRF1 Ser74Gly
+mutation, rather than gene duplication \citep{kachale2023}. Similarly,
+\emph{Mycoplasmoides} species with UGA\(\rightarrow\)Trp use a single
+tRNA-Trp with anticodon modification. These boundary cases define a
+three-tier mechanistic landscape: (i) tRNA gene duplication in large
+nuclear genomes, (ii) anticodon structural modification in streamlined
+genomes, and (iii) anticodon base modification in minimal genomes.
+
+\section{Software and reproducibility}\label{sec:s-software}
+
+This section provides the metadata needed to reproduce every number in
+the manuscript and supplement \textbf{within numerical and rendering
+tolerance} from the public repository. Every figure, table, and inline
+statistic is rendered by the Typst sources \texttt{manuscript.typ} and
+\texttt{supplement.typ} (also in the repository) from the JSON outputs
+of a single \texttt{codon-topo\ all} invocation, so the manuscript and
+supplement cannot drift from each other within a single pipeline run. We
+do not claim bit-for-bit reproducibility: the pinned software floor
+below fixes randomness (seeded RNG) and language versions, but does not
+pin every transitive dependency, every optimizer default, or every
+renderer version, so exact byte-level identity of PDFs, PNG rasters, and
+floating-point outputs across systems is not guaranteed. Numerical
+values in the JSON artifacts, quantile ranks, and permutation-test
+\(p\)-values should reproduce to at least three significant figures;
+rendered PDFs may differ in font subsetting, image compression, and
+Typst layout across Typst versions.
+
+All analyses were performed using the \texttt{codon-topo} Python package
+(version 0.6.1, tag \texttt{v0.6.1}). The code is publicly released at
+\url{https://github.com/biostochastics/codontopo.} Dependencies and
+runtime requirements:
+
+\begin{itemize}
+\item
+  Python 3.11 (tested on 3.11.14), NumPy 1.24+, SciPy 1.10+
+\item
+  R 4.5, ggplot2, ggpubr, viridis, patchwork (for figures)
+\item
+  tRNAscan-SE 2.0.12 with Infernal 1.1.4
+\item
+  Typst 0.14.2 (for manuscript and supplement PDFs)
+\item
+  Random seed: 135325 (all Monte Carlo analyses)
+\item
+  Exact package versions used in the reference build are listed in
+  \texttt{requirements.lock} (Python) and \texttt{renv.lock} (R) in the
+  release tag; a \texttt{Dockerfile} is provided for a containerized
+  rebuild. Users who install unpinned dependencies should expect
+  reproducibility only within numerical/rendering tolerance rather than
+  bit-for-bit.
+\end{itemize}
+
+Analyses are fully reproducible via:
+
+\begin{verbatim}
+git clone https://github.com/biostochastics/codontopo.git
+cd codontopo
+pip install -e ".[all]"
+codon-topo all --output-dir=./output --seed=135325
+python scripts/finalize_manuscript_stats.py
+python scripts/generate_tables.py
+Rscript src/codon_topo/visualization/R/strengthened_figures.R
+\end{verbatim}
+
+The \texttt{{[}all{]}} extra installs every dependency required to
+reproduce the analyses; the \texttt{{[}dev{]}} extra also installs the
+test toolchain. The complete test suite (432 tests) is then runnable
+with \texttt{python3.11\ -m\ pytest\ tests/\ -m\ "not\ slow"} after
+\texttt{pip\ install\ -e\ ".{[}dev{]}"}.
+
+
+% Corrected 2026-08-15: bibliography inlined directly (see
+% manuscript.tex for rationale).
+\begin{thebibliography}{25}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Antoneli and Forger(2011)}]{antoneli2011}
+\bibinfo{author}{Antoneli, F.}, \bibinfo{author}{Forger, M.},
+  \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{Symmetry breaking in the genetic code: finite
+  groups}.
+\newblock \bibinfo{journal}{Mathematical and Computer Modelling}
+  \bibinfo{volume}{53}, \bibinfo{pages}{1469--1488}.
+\newblock \DOIprefix\doi{10.1016/j.mcm.2010.03.050}.
+%Type = Article
+\bibitem[{Atchley et~al.(2005)Atchley, Zhao, Fernandes and
+  Dr{\"u}ke}]{atchley2005}
+\bibinfo{author}{Atchley, W.R.}, \bibinfo{author}{Zhao, J.},
+  \bibinfo{author}{Fernandes, A.D.}, \bibinfo{author}{Dr{\"u}ke, T.},
+  \bibinfo{year}{2005}.
+\newblock \bibinfo{title}{Solving the protein sequence metric problem}.
+\newblock \bibinfo{journal}{Proceedings of the National Academy of Sciences}
+  \bibinfo{volume}{102}, \bibinfo{pages}{6395--6400}.
+\newblock \DOIprefix\doi{10.1073/pnas.0408677102}.
+%Type = Article
+\bibitem[{Buschmann et~al.(2026)Buschmann, Bolz, El-Hendi, Malekian and
+  Schroeder}]{buschmann2026}
+\bibinfo{author}{Buschmann, L.}, \bibinfo{author}{Bolz, S.N.},
+  \bibinfo{author}{El-Hendi, F.}, \bibinfo{author}{Malekian, N.},
+  \bibinfo{author}{Schroeder, M.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Much ado about nothing: modeling amino acid
+  replacement with predicted protein structures}.
+\newblock \bibinfo{journal}{Bioinformatics} \bibinfo{volume}{42},
+  \bibinfo{pages}{btag188}.
+\newblock \DOIprefix\doi{10.1093/bioinformatics/btag188}.
+%Type = Article
+\bibitem[{Chan and Lowe(2016)}]{chan2016}
+\bibinfo{author}{Chan, P.P.}, \bibinfo{author}{Lowe, T.M.},
+  \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{{GtRNAdb} 2.0: an expanded database of transfer {RNA}
+  genes identified in complete and draft genomes}.
+\newblock \bibinfo{journal}{Nucleic Acids Research} \bibinfo{volume}{44},
+  \bibinfo{pages}{D184--D189}.
+\newblock \DOIprefix\doi{10.1093/nar/gkv1309}.
+%Type = Article
+\bibitem[{Chan and Lowe(2019)}]{chan2019}
+\bibinfo{author}{Chan, P.P.}, \bibinfo{author}{Lowe, T.M.},
+  \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{{tRNAscan-SE}: searching for {tRNA} genes in genomic
+  sequences}.
+\newblock \bibinfo{journal}{Methods in Molecular Biology}
+  \bibinfo{volume}{1962}, \bibinfo{pages}{1--14}.
+\newblock \DOIprefix\doi{10.1007/978-1-4939-9173-0_1}.
+%Type = Unpublished
+\bibitem[{Clayworth(2026)}]{clayworth2026}
+\bibinfo{author}{Clayworth, P.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Algebraic structure of the genetic code: a technical
+  note}.
+\newblock \bibinfo{note}{Companion methodological note. Source code and full
+  claim hierarchy are released alongside the present manuscript at
+  https://github.com/biostochastics/codontopo; the published manuscript
+  supersedes the technical note in scope and statistical detail.}
+%Type = Article
+\bibitem[{Crick(1966)}]{crick1966}
+\bibinfo{author}{Crick, F.H.C.}, \bibinfo{year}{1966}.
+\newblock \bibinfo{title}{Codon--anticodon pairing: the wobble hypothesis}.
+\newblock \bibinfo{journal}{Journal of Molecular Biology} \bibinfo{volume}{19},
+  \bibinfo{pages}{548--555}.
+\newblock \DOIprefix\doi{10.1016/S0022-2836(66)80022-0}.
+%Type = Article
+\bibitem[{Di~Giulio(2001)}]{digiulio2001}
+\bibinfo{author}{Di~Giulio, M.}, \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{The origin of the genetic code cannot be studied
+  using measurements based on the {PAM} matrix because this matrix reflects the
+  code itself, making any such analyses tautologous}.
+\newblock \bibinfo{journal}{Journal of Theoretical Biology}
+  \bibinfo{volume}{208}, \bibinfo{pages}{141--144}.
+\newblock \DOIprefix\doi{10.1006/jtbi.2000.2206}.
+%Type = Article
+\bibitem[{Dragovich and Mi{\v s}i{\'c}(2019)}]{dragovich2019}
+\bibinfo{author}{Dragovich, B.}, \bibinfo{author}{Mi{\v s}i{\'c}, N.{\v Z}.},
+  \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{p-{A}dic hierarchical properties of the genetic
+  code}.
+\newblock \bibinfo{journal}{BioSystems} \bibinfo{volume}{185},
+  \bibinfo{pages}{104017}.
+\newblock \DOIprefix\doi{10.1016/j.biosystems.2019.104017}.
+%Type = Article
+\bibitem[{Freeland and Hurst(1998)}]{freeland1998}
+\bibinfo{author}{Freeland, S.J.}, \bibinfo{author}{Hurst, L.D.},
+  \bibinfo{year}{1998}.
+\newblock \bibinfo{title}{The genetic code is one in a million}.
+\newblock \bibinfo{journal}{Journal of Molecular Evolution}
+  \bibinfo{volume}{47}, \bibinfo{pages}{238--248}.
+\newblock \DOIprefix\doi{10.1007/PL00006381}.
+%Type = Article
+\bibitem[{Grantham(1974)}]{grantham1974}
+\bibinfo{author}{Grantham, R.}, \bibinfo{year}{1974}.
+\newblock \bibinfo{title}{Amino acid difference formula to help explain protein
+  evolution}.
+\newblock \bibinfo{journal}{Science} \bibinfo{volume}{185},
+  \bibinfo{pages}{862--864}.
+\newblock \DOIprefix\doi{10.1126/science.185.4154.862}.
+%Type = Article
+\bibitem[{Haig and Hurst(1991)}]{haig1991}
+\bibinfo{author}{Haig, D.}, \bibinfo{author}{Hurst, L.D.},
+  \bibinfo{year}{1991}.
+\newblock \bibinfo{title}{A quantitative measure of error minimization in the
+  genetic code}.
+\newblock \bibinfo{journal}{Journal of Molecular Evolution}
+  \bibinfo{volume}{33}, \bibinfo{pages}{412--417}.
+\newblock \DOIprefix\doi{10.1007/BF02103132}.
+%Type = Article
+\bibitem[{Hanyu et~al.(1986)Hanyu, Kuchino, Nishimura and Beier}]{hanyu1986}
+\bibinfo{author}{Hanyu, N.}, \bibinfo{author}{Kuchino, Y.},
+  \bibinfo{author}{Nishimura, S.}, \bibinfo{author}{Beier, H.},
+  \bibinfo{year}{1986}.
+\newblock \bibinfo{title}{Dramatic events in ciliate evolution: alteration of
+  {UAA} and {UAG} termination codons to glutamine codons due to anticodon
+  mutations in two {Tetrahymena} trnas-gln}.
+\newblock \bibinfo{journal}{The EMBO Journal} \bibinfo{volume}{5},
+  \bibinfo{pages}{1307--1311}.
+\newblock \DOIprefix\doi{10.1002/j.1460-2075.1986.tb04360.x}.
+%Type = Article
+\bibitem[{Hayashi-Ishimaru et~al.(1996)Hayashi-Ishimaru, Ohama, Kawatsu,
+  Nakamura and Osawa}]{hayashi1996}
+\bibinfo{author}{Hayashi-Ishimaru, Y.}, \bibinfo{author}{Ohama, T.},
+  \bibinfo{author}{Kawatsu, Y.}, \bibinfo{author}{Nakamura, K.},
+  \bibinfo{author}{Osawa, S.}, \bibinfo{year}{1996}.
+\newblock \bibinfo{title}{{UAG} is a sense codon in several chlorophycean
+  mitochondria}.
+\newblock \bibinfo{journal}{Current Genetics} \bibinfo{volume}{30},
+  \bibinfo{pages}{29--33}.
+\newblock \DOIprefix\doi{10.1007/s002940050096}. \bibinfo{note}{nCBI
+  translation table 16 (chlorophycean mitochondrial); UAG $\to$ Leu
+  reassignment in green-algal mitochondria}.
+%Type = Article
+\bibitem[{Heaphy et~al.(2016)Heaphy, Mariotti, Gladyshev, Atkins and
+  Baranov}]{heaphy2016}
+\bibinfo{author}{Heaphy, S.M.}, \bibinfo{author}{Mariotti, M.},
+  \bibinfo{author}{Gladyshev, V.N.}, \bibinfo{author}{Atkins, J.F.},
+  \bibinfo{author}{Baranov, P.V.}, \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Novel ciliate genetic code variants including the
+  reassignment of all three stop codons to sense codons in {Condylostoma
+  magnum}}.
+\newblock \bibinfo{journal}{Molecular Biology and Evolution}
+  \bibinfo{volume}{33}, \bibinfo{pages}{2885--2889}.
+\newblock \DOIprefix\doi{10.1093/molbev/msw166}.
+%Type = Article
+\bibitem[{Kachale et~al.(2023)Kachale, Pavl{\'\i}kov{\'a}, Nenarokova,
+  Roithov{\'a}, Durante, Milet{\'\i}nov{\'a}, Z{\'a}honov{\'a}, Nenarokov,
+  Vot{\'y}pka, Hor{\'a}kov{\'a}, Ross, Yurchenko, Beznoskov{\'a}, Paris,
+  Val{\'a}{\v s}ek and Luke{\v s}}]{kachale2023}
+\bibinfo{author}{Kachale, A.}, \bibinfo{author}{Pavl{\'\i}kov{\'a}, Z.},
+  \bibinfo{author}{Nenarokova, A.}, \bibinfo{author}{Roithov{\'a}, A.},
+  \bibinfo{author}{Durante, I.M.}, \bibinfo{author}{Milet{\'\i}nov{\'a}, P.},
+  \bibinfo{author}{Z{\'a}honov{\'a}, K.}, \bibinfo{author}{Nenarokov, S.},
+  \bibinfo{author}{Vot{\'y}pka, J.}, \bibinfo{author}{Hor{\'a}kov{\'a}, E.},
+  \bibinfo{author}{Ross, R.L.}, \bibinfo{author}{Yurchenko, V.},
+  \bibinfo{author}{Beznoskov{\'a}, P.}, \bibinfo{author}{Paris, Z.},
+  \bibinfo{author}{Val{\'a}{\v s}ek, L.S.}, \bibinfo{author}{Luke{\v s}, J.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Short {tRNA} anticodon stem and mutant {eRF1} allow
+  stop codon reassignment}.
+\newblock \bibinfo{journal}{Nature} \bibinfo{volume}{613},
+  \bibinfo{pages}{751--758}.
+\newblock \DOIprefix\doi{10.1038/s41586-022-05584-2}.
+%Type = Article
+\bibitem[{Khrennikov and Kozyrev(2007)}]{khrennikov2007}
+\bibinfo{author}{Khrennikov, A.Y.}, \bibinfo{author}{Kozyrev, S.V.},
+  \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{Genetic code on the diadic plane}.
+\newblock \bibinfo{journal}{Physica A: Statistical Mechanics and its
+  Applications} \bibinfo{volume}{381}, \bibinfo{pages}{265--272}.
+\newblock \DOIprefix\doi{10.1016/j.physa.2007.03.018}.
+%Type = Article
+\bibitem[{Santos et~al.(1999)Santos, Cheesman, Costa, Moradas-Ferreira and
+  Tuite}]{santos1999}
+\bibinfo{author}{Santos, M.A.S.}, \bibinfo{author}{Cheesman, C.},
+  \bibinfo{author}{Costa, V.}, \bibinfo{author}{Moradas-Ferreira, P.},
+  \bibinfo{author}{Tuite, M.F.}, \bibinfo{year}{1999}.
+\newblock \bibinfo{title}{Selective advantages created by codon ambiguity
+  allowed for the evolution of an alternative genetic code in {Candida} spp.}
+\newblock \bibinfo{journal}{Molecular Microbiology} \bibinfo{volume}{31},
+  \bibinfo{pages}{937--947}.
+\newblock \DOIprefix\doi{10.1046/j.1365-2958.1999.01233.x}.
+%Type = Article
+\bibitem[{Sengupta et~al.(2007)Sengupta, Yang and Higgs}]{sengupta2007}
+\bibinfo{author}{Sengupta, S.}, \bibinfo{author}{Yang, X.},
+  \bibinfo{author}{Higgs, P.G.}, \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{The mechanisms of codon reassignments in
+  mitochondrial genetic codes}.
+\newblock \bibinfo{journal}{Journal of Molecular Evolution}
+  \bibinfo{volume}{64}, \bibinfo{pages}{662--688}.
+\newblock \DOIprefix\doi{10.1007/s00239-006-0284-7}.
+%Type = Article
+\bibitem[{Singh et~al.(2023)Singh, Seah, Emmerich, Singh, Woehle, Huettel,
+  Byerly, Stover, Sugiura, Harumoto and Swart}]{singh2023}
+\bibinfo{author}{Singh, M.}, \bibinfo{author}{Seah, B.K.B.},
+  \bibinfo{author}{Emmerich, C.}, \bibinfo{author}{Singh, A.},
+  \bibinfo{author}{Woehle, C.}, \bibinfo{author}{Huettel, B.},
+  \bibinfo{author}{Byerly, A.}, \bibinfo{author}{Stover, N.A.},
+  \bibinfo{author}{Sugiura, M.}, \bibinfo{author}{Harumoto, T.},
+  \bibinfo{author}{Swart, E.C.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Origins of genome-editing excisases as illuminated by
+  the somatic genome of the ciliate {Blepharisma}}.
+\newblock \bibinfo{journal}{Proceedings of the National Academy of Sciences}
+  \bibinfo{volume}{120}, \bibinfo{pages}{e2213887120}.
+\newblock \DOIprefix\doi{10.1073/pnas.2213887120}. \bibinfo{note}{reports the
+  \emph{B.~stoltei} ATCC 30299 MAC genome assembly (GCA\_965603825.1; ENA
+  Bstoltei\_ATCC30299\_MAC\_1.00) and documents that this strain uses an
+  alternative nuclear genetic code with UGA codons reassigned from stops to
+  tryptophan (main text and SI Appendix Fig.~S2B), in addition to the canonical
+  NCBI table-15 UAG $\rightarrow$ Gln assignment.}
+%Type = Article
+\bibitem[{Tsour et~al.(2026)Tsour, Machn{\'e}, Leduc, Widmer, Koo, Guez,
+  Karczewski and Slavov}]{tsour2026}
+\bibinfo{author}{Tsour, S.}, \bibinfo{author}{Machn{\'e}, R.},
+  \bibinfo{author}{Leduc, A.}, \bibinfo{author}{Widmer, S.},
+  \bibinfo{author}{Koo, E.}, \bibinfo{author}{Guez, J.},
+  \bibinfo{author}{Karczewski, K.J.}, \bibinfo{author}{Slavov, N.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Alternate {RNA} decoding results in stable and
+  abundant proteins in mammals}.
+\newblock \bibinfo{journal}{Nature} \DOIprefix\doi{10.1038/s41586-026-10678-2}.
+%Type = Article
+\bibitem[{Yurova~Axelsson and Khrennikov(2024)}]{axelsson2024a}
+\bibinfo{author}{Yurova~Axelsson, E.}, \bibinfo{author}{Khrennikov, A.Y.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Generation of genetic codes with 2-adic codon algebra
+  and adaptive dynamics}.
+\newblock \bibinfo{journal}{BioSystems} \bibinfo{volume}{240},
+  \bibinfo{pages}{105230}.
+\newblock \DOIprefix\doi{10.1016/j.biosystems.2024.105230}.
+%Type = Article
+\bibitem[{Zehir et~al.(2017)Zehir, Benayed, Shah, Syed, Middha, Kim,
+  Srinivasan, Gao, Chakravarty, Devlin, Hellmann, Barron, Schram, Hameed,
+  Dogan, Ross, Hechtman, DeLair, Yao, Mandelker, Cheng, Chandramohan, Mohanty,
+  Ptashkin, Jayakumaran, Prasad, Syed, Rema, Liu, Nafa, Borsu, Sadowska,
+  Casanova, Bacares, Kiecka, Razumova, Son, Stewart, Baldi, Mullaney,
+  Al-Ahmadie, Vakiani, Abeshouse, Penson, Jonsson, Camacho, Chang, Won, Gross,
+  Kundra, Heins, Chen, Phillips, Zhang, Wang, Ochoa, Wills, Eubank, Thomas,
+  Gardos, Reales, Galle, Durany, Cambria, Abida, Cercek, Feldman, Gounder,
+  Hakimi, Harding, Iyer, Janjigian, Jordan, Kelly, Lowery, Morris, Omuro, Raj,
+  Razavi, Shoushtari, Shukla, Soumerai, Varghese, Yaeger, Coleman, Bochner,
+  Riely, Saltz, Scher, Sabbatini, Robson, Klimstra, Taylor, Baselga, Schultz,
+  Hyman, Arcila, Solit, Ladanyi and Berger}]{zehir2017}
+\bibinfo{author}{Zehir, A.}, \bibinfo{author}{Benayed, R.},
+  \bibinfo{author}{Shah, R.H.}, \bibinfo{author}{Syed, A.},
+  \bibinfo{author}{Middha, S.}, \bibinfo{author}{Kim, H.R.},
+  \bibinfo{author}{Srinivasan, P.}, \bibinfo{author}{Gao, J.},
+  \bibinfo{author}{Chakravarty, D.}, \bibinfo{author}{Devlin, S.M.},
+  \bibinfo{author}{Hellmann, M.D.}, \bibinfo{author}{Barron, D.A.},
+  \bibinfo{author}{Schram, A.M.}, \bibinfo{author}{Hameed, M.},
+  \bibinfo{author}{Dogan, S.}, \bibinfo{author}{Ross, D.S.},
+  \bibinfo{author}{Hechtman, J.F.}, \bibinfo{author}{DeLair, D.F.},
+  \bibinfo{author}{Yao, J.}, \bibinfo{author}{Mandelker, D.L.},
+  \bibinfo{author}{Cheng, D.T.}, \bibinfo{author}{Chandramohan, R.},
+  \bibinfo{author}{Mohanty, A.S.}, \bibinfo{author}{Ptashkin, R.N.},
+  \bibinfo{author}{Jayakumaran, G.}, \bibinfo{author}{Prasad, M.},
+  \bibinfo{author}{Syed, M.H.}, \bibinfo{author}{Rema, A.B.},
+  \bibinfo{author}{Liu, Z.Y.}, \bibinfo{author}{Nafa, K.},
+  \bibinfo{author}{Borsu, L.}, \bibinfo{author}{Sadowska, J.},
+  \bibinfo{author}{Casanova, J.}, \bibinfo{author}{Bacares, R.},
+  \bibinfo{author}{Kiecka, I.J.}, \bibinfo{author}{Razumova, A.},
+  \bibinfo{author}{Son, J.B.}, \bibinfo{author}{Stewart, L.},
+  \bibinfo{author}{Baldi, T.}, \bibinfo{author}{Mullaney, K.A.},
+  \bibinfo{author}{Al-Ahmadie, H.}, \bibinfo{author}{Vakiani, E.},
+  \bibinfo{author}{Abeshouse, A.A.}, \bibinfo{author}{Penson, A.V.},
+  \bibinfo{author}{Jonsson, P.}, \bibinfo{author}{Camacho, N.},
+  \bibinfo{author}{Chang, M.T.}, \bibinfo{author}{Won, H.H.},
+  \bibinfo{author}{Gross, B.E.}, \bibinfo{author}{Kundra, R.},
+  \bibinfo{author}{Heins, Z.J.}, \bibinfo{author}{Chen, H.W.},
+  \bibinfo{author}{Phillips, S.}, \bibinfo{author}{Zhang, H.},
+  \bibinfo{author}{Wang, J.}, \bibinfo{author}{Ochoa, A.},
+  \bibinfo{author}{Wills, J.}, \bibinfo{author}{Eubank, M.},
+  \bibinfo{author}{Thomas, S.B.}, \bibinfo{author}{Gardos, S.M.},
+  \bibinfo{author}{Reales, D.N.}, \bibinfo{author}{Galle, J.},
+  \bibinfo{author}{Durany, R.}, \bibinfo{author}{Cambria, R.},
+  \bibinfo{author}{Abida, W.}, \bibinfo{author}{Cercek, A.},
+  \bibinfo{author}{Feldman, D.R.}, \bibinfo{author}{Gounder, M.M.},
+  \bibinfo{author}{Hakimi, A.A.}, \bibinfo{author}{Harding, J.J.},
+  \bibinfo{author}{Iyer, G.}, \bibinfo{author}{Janjigian, Y.Y.},
+  \bibinfo{author}{Jordan, E.J.}, \bibinfo{author}{Kelly, C.M.},
+  \bibinfo{author}{Lowery, M.A.}, \bibinfo{author}{Morris, L.G.T.},
+  \bibinfo{author}{Omuro, A.M.}, \bibinfo{author}{Raj, N.},
+  \bibinfo{author}{Razavi, P.}, \bibinfo{author}{Shoushtari, A.N.},
+  \bibinfo{author}{Shukla, N.}, \bibinfo{author}{Soumerai, T.E.},
+  \bibinfo{author}{Varghese, A.M.}, \bibinfo{author}{Yaeger, R.},
+  \bibinfo{author}{Coleman, J.}, \bibinfo{author}{Bochner, B.},
+  \bibinfo{author}{Riely, G.J.}, \bibinfo{author}{Saltz, L.B.},
+  \bibinfo{author}{Scher, H.I.}, \bibinfo{author}{Sabbatini, P.J.},
+  \bibinfo{author}{Robson, M.E.}, \bibinfo{author}{Klimstra, D.S.},
+  \bibinfo{author}{Taylor, B.S.}, \bibinfo{author}{Baselga, J.},
+  \bibinfo{author}{Schultz, N.}, \bibinfo{author}{Hyman, D.M.},
+  \bibinfo{author}{Arcila, M.E.}, \bibinfo{author}{Solit, D.B.},
+  \bibinfo{author}{Ladanyi, M.}, \bibinfo{author}{Berger, M.F.},
+  \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Mutational landscape of metastatic cancer revealed
+  from prospective clinical sequencing of 10,000 patients}.
+\newblock \bibinfo{journal}{Nature Medicine} \bibinfo{volume}{23},
+  \bibinfo{pages}{703--713}.
+\newblock \DOIprefix\doi{10.1038/nm.4333}.
+%Type = Article
+\bibitem[{Zhang et~al.(2022)Zhang, Hou, Qi, Hou, Zhang, Zhao and
+  Miao}]{zhang2022}
+\bibinfo{author}{Zhang, B.}, \bibinfo{author}{Hou, L.}, \bibinfo{author}{Qi,
+  H.}, \bibinfo{author}{Hou, L.}, \bibinfo{author}{Zhang, T.},
+  \bibinfo{author}{Zhao, F.}, \bibinfo{author}{Miao, M.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{An extremely streamlined macronuclear genome in the
+  free-living protozoan {Fabrea salina}}.
+\newblock \bibinfo{journal}{Molecular Biology and Evolution}
+  \bibinfo{volume}{39}, \bibinfo{pages}{msac062}.
+\newblock \DOIprefix\doi{10.1093/molbev/msac062}.
+%Type = Article
+\bibitem[{Zheng et~al.(2021)Zheng, Wang, Lynch and Gao}]{zheng2021}
+\bibinfo{author}{Zheng, W.}, \bibinfo{author}{Wang, C.},
+  \bibinfo{author}{Lynch, M.}, \bibinfo{author}{Gao, S.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{The compact macronuclear genome of the ciliate
+  {Halteria grandinella}: a transcriptome-like genome with 23,000
+  nanochromosomes}.
+\newblock \bibinfo{journal}{mBio} \bibinfo{volume}{12},
+  \bibinfo{pages}{e01964--20}.
+\newblock \DOIprefix\doi{10.1128/mBio.01964-20}.
+
+\end{thebibliography}
+
+
+\end{document}

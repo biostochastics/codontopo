@@ -601,6 +601,173 @@ def topology_avoidance_phylogenetic_sensitivity() -> dict:
     }
 
 
+def topology_avoidance_k43_phylogenetic_sensitivity(
+    seed: int = 135325,
+) -> dict:
+    """Phylogenetic sensitivity for the *primary* topology-avoidance cell.
+
+    Uses the encoding-independent K4^3 = H(3,4) adjacency and the
+    increase-in-components (Delta beta_0 > 0) topology-breaking definition
+    that matches the conditional-logit feature and main-text Table 4.
+    This is the H(3,4) analogue of `topology_avoidance_phylogenetic_sensitivity`
+    (which uses the Q_6 / new-disconnection cell).
+
+    Analyses reported:
+      1. Lineage-collapsed: one event per (lineage, codon, target_aa),
+         hypergeometric p-value against the full 1,280-candidate landscape.
+      2. Clade-exclusion: iteratively drop each of the 7 clade groups and
+         recompute the observed break rate + hypergeometric p-value.
+
+    Reference: Sengupta, Yang & Higgs (2007) J Mol Evol 64:662-688.
+    """
+    from scipy.stats import hypergeom
+
+    from codon_topo.analysis.reassignment_db import build_reassignment_db
+    from codon_topo.core.encoding import ALL_CODONS, nucleotide_distance
+
+    def _k43_components(code: dict[str, str]) -> dict[str, int]:
+        """Count connected components per AA under K4^3 adjacency."""
+        from collections import defaultdict
+
+        aa_codons: dict[str, list[str]] = defaultdict(list)
+        for c, aa in code.items():
+            if aa != "Stop":
+                aa_codons[aa].append(c)
+
+        result = {}
+        for aa, codons in aa_codons.items():
+            if len(codons) < 2:
+                result[aa] = 1 if codons else 0
+                continue
+            parent = list(range(len(codons)))
+
+            def find(x: int) -> int:
+                while parent[x] != x:
+                    parent[x] = parent[parent[x]]
+                    x = parent[x]
+                return x
+
+            def union(x: int, y: int) -> None:
+                px, py = find(x), find(y)
+                if px != py:
+                    parent[px] = py
+
+            for i in range(len(codons)):
+                for j in range(i + 1, len(codons)):
+                    if nucleotide_distance(codons[i], codons[j]) == 1:
+                        union(i, j)
+            result[aa] = len(set(find(i) for i in range(len(codons))))
+        return result
+
+    standard_comps = _k43_components(STANDARD)
+
+    def _breaks_topology(codon: str, new_aa: str) -> bool:
+        """Delta beta_0 > 0 check for a single (codon, target_aa) move."""
+        variant = dict(STANDARD)
+        variant[codon] = new_aa
+        var_comps = _k43_components(variant)
+        aas = set(var_comps) | set(standard_comps)
+        return any(var_comps.get(aa, 0) > standard_comps.get(aa, 0) for aa in aas)
+
+    # --- Full landscape: one row per (codon, new_aa) valid single-move ---
+    all_aas = sorted(set(STANDARD.values()))
+    possible_breaks = 0
+    possible_total = 0
+    for codon in ALL_CODONS:
+        orig = STANDARD[codon]
+        for new_aa in all_aas:
+            if new_aa == orig:
+                continue
+            if _breaks_topology(codon, new_aa):
+                possible_breaks += 1
+            possible_total += 1
+
+    rate_possible = possible_breaks / max(possible_total, 1)
+
+    def _count_break_events(events: list) -> tuple[int, int]:
+        """Count (breaks, non-breaks) deduplicating by (codon, target_aa)."""
+        breaks = 0
+        non_breaks = 0
+        seen: set[tuple[str, str]] = set()
+        for e in events:
+            key = (e.codon, e.target_aa)
+            if key in seen:
+                continue
+            seen.add(key)
+            if _breaks_topology(e.codon, e.target_aa):
+                breaks += 1
+            else:
+                non_breaks += 1
+        return breaks, non_breaks
+
+    db = build_reassignment_db()
+
+    # 1. Lineage-collapsed: de-dup by (lineage, codon, target_aa)
+    seen_lineage: set[tuple[str, str, str]] = set()
+    lineage_events = []
+    for e in db:
+        lineage = PHYLOGENETIC_LINEAGES.get(e.table_id, f"unknown_{e.table_id}")
+        key = (lineage, e.codon, e.target_aa)
+        if key not in seen_lineage:
+            seen_lineage.add(key)
+            lineage_events.append(e)
+
+    lc_breaks, lc_non = _count_break_events(lineage_events)
+    lc_total = lc_breaks + lc_non
+    lc_rate = lc_breaks / max(lc_total, 1)
+    lc_hyper_p = float(
+        hypergeom.cdf(lc_breaks, possible_total, possible_breaks, lc_total)
+    )
+
+    # 2. Clade-exclusion sensitivity
+    clade_results = []
+    for clade_name, table_ids in CLADE_GROUPS.items():
+        excluded_tables = set(table_ids)
+        filtered = [e for e in db if e.table_id not in excluded_tables]
+        fb, fn = _count_break_events(filtered)
+        ft = fb + fn
+        if ft == 0:
+            continue
+        fr = fb / ft
+        fp = float(hypergeom.cdf(fb, possible_total, possible_breaks, ft))
+        clade_results.append(
+            {
+                "excluded_clade": clade_name,
+                "excluded_tables": sorted(table_ids),
+                "n_events_remaining": ft,
+                "creates_disc": fb,  # kept name for API symmetry with Q6
+                "rate_observed": fr,
+                "hypergeom_p": fp,
+                "significant_p05": fp < 0.05,
+            }
+        )
+
+    return {
+        "adjacency": "K4^3 = H(3,4) (nucleotide-level, encoding-independent)",
+        "definition": "Delta beta_0 > 0 (increase-in-components)",
+        "lineage_collapsed": {
+            "n_events": lc_total,
+            "creates_disc": lc_breaks,
+            "rate_observed": lc_rate,
+            "rate_possible": rate_possible,
+            "depletion_fold": rate_possible / max(lc_rate, 0.001),
+            "hypergeom_p": lc_hyper_p,
+        },
+        "clade_exclusion": clade_results,
+        "all_clade_exclusions_significant": all(
+            r["significant_p05"] for r in clade_results
+        ),
+        "seed": seed,
+        "method": (
+            "H(3,4) phylogenetic sensitivity per Sengupta et al. 2007 (J Mol "
+            "Evol 64:662-688). Uses the primary-cell adjacency (nucleotide-"
+            "level K4^3 = H(3,4)) and the increase-in-components (Delta beta_0 "
+            "> 0) topology-breaking definition. Companion H(3,4) table to the "
+            "Q_6 / new-disconnection clade-exclusion table."
+        ),
+    }
+
+
 # ====================================================================
 # Definitions audit: 2 adjacencies x 2 topology-breaking definitions
 # ====================================================================

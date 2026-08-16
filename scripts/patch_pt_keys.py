@@ -14,6 +14,8 @@ import json
 import math
 from pathlib import Path
 
+from scipy.stats import norm
+
 OUT = Path("output")
 
 stats = json.loads((OUT / "manuscript_stats.json").read_text())
@@ -106,6 +108,31 @@ evosim = json.loads((OUT / "evolutionary_simulation.json").read_text())
 phys_topo = (evosim.get("diagnostics") or {}).get("phys_topo_correlation") or {}
 if phys_topo.get("spearman_rho") is not None:
     stats["condlogit"]["phys_topo_rho"] = phys_topo["spearman_rho"]
+
+# --- add mis_median_z / mis_worst_z from inverse-normal of the p-values ---
+trna_block = stats.get("trna", {})
+for _key, _pkey in (
+    ("mis_median_z", "mis_median_p"),
+    ("mis_worst_z", "mis_worst_p"),
+    ("mis_best_z", "mis_best_p"),
+):
+    _p = trna_block.get(_pkey)
+    if _p is not None and _p not in (0, 1):
+        trna_block[_key] = float(norm.ppf(1 - _p))
+stats["trna"] = trna_block
+
+# --- lift the H(3,4) phylogenetic sensitivity into stats.phylo_k43 ---
+try:
+    phylo_k43 = json.loads((OUT / "phylogenetic_sensitivity_k43.json").read_text())
+    stats["phylo_k43"] = {
+        "adjacency": phylo_k43.get("adjacency"),
+        "definition": phylo_k43.get("definition"),
+        "all_significant": phylo_k43.get("all_clade_exclusions_significant"),
+        "lineage_collapsed": phylo_k43.get("lineage_collapsed"),
+        "clade_exclusion": phylo_k43.get("clade_exclusion"),
+    }
+except FileNotFoundError:
+    pass
 
 # --- lift classical Haig-Hurst AA-permutation null (B2b sensitivity) ---
 try:

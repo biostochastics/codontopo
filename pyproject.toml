@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codon-topo"
-version = "0.6.0"
+version = "0.6.1"
 description = "Codon Geometry Validation & Prediction Engine — algebraic structure of genetic codes in GF(2)^6"
 readme = "README.md"
 license = "CC-BY-NC-4.0"

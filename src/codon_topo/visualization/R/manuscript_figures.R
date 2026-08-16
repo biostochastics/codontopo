@@ -424,7 +424,7 @@ p4a <- ggplot(synbio_agg, aes(x = score, y = count, fill = filtration)) +
   scale_fill_manual(values = c("Both preserved" = PAL_BLUE, "Filtration broken" = PAL_ORANGE),
                     name = "Filtration") +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
-  labs(x = "Feasibility score", y = "Variants") +
+  labs(x = "Structural-preservation index S (visualization-only)", y = "Variants") +
   tc() +
   theme(legend.key.size = unit(0.25, "cm"))
 
@@ -464,8 +464,8 @@ cat_data$evidence_strength <- factor(
 # All six statuses present in output/catalogue.json are enumerated so no
 # claim silently becomes NA and disappears from the bar heights.
 status_labels <- c(
-  verified     = "Verified",
-  tested       = "Tested",
+  verified     = "Supported",
+  tested       = "Rejected",
   pending      = "Pending",
   null         = "Falsified",
   tautological = "Tautological",
