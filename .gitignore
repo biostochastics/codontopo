@@ -49,7 +49,11 @@ credentials.json
 *.pem
 *.key
 
-# --- Repository-scope release artifacts (kept: publisher_deliverable, output/*.typ, output/*.pdf, output/*.json, output/tables/, output/figures/) ---
+# --- Published bundles and publisher-facing docs (excluded from git;
+#     regenerable via `bash scripts/build_publisher_release.sh`) ---
+output/publisher_deliverable/
+docs/publisher/
+output/*.pdf
 
 # --- Hypothesis-driven test cache ---
 .hypothesis/
