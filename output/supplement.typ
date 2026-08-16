@@ -686,6 +686,19 @@ The Fisher-exact denominator convention used throughout is the *by-amino-acid su
   "literature": "lit.",
 )
 
+// Format "Saccharomyces cerevisiae" as italic "S. cerevisiae"; keep
+// single-word names as-is (italicised). Strips the trailing "_mito"/
+// "_nuclear" that some raw variant_organism strings still carry.
+#let abbrev_species(name) = {
+  let clean = name.replace("_mito", "").replace("_nuclear", "").trim()
+  let parts = clean.split(" ")
+  if parts.len() >= 2 and parts.at(0).len() > 0 {
+    emph(parts.at(0).slice(0, 1) + ". " + parts.slice(1).join(" "))
+  } else {
+    emph(clean)
+  }
+}
+
 #if prov.len() > 0 [
   #figure(
     table(
@@ -706,8 +719,8 @@ The Fisher-exact denominator convention used throughout is the *by-amino-acid su
         [*Fisher $p$*],
       ),
       ..prov.map(r => (
-        [#r.variant_short],
-        [#r.control_short],
+        [#abbrev_species(r.variant_organism)],
+        [#abbrev_species(r.control_organism)],
         [#r.reassigned_aa],
         [#text(size: 8pt)[#r.reassignment_short]],
         [#r.q6_break_marker],
@@ -740,7 +753,7 @@ The Fisher-exact denominator convention used throughout is the *by-amino-acid su
         [*Control source (class; accession or citation)*],
       ),
       ..prov.map(r => (
-        [#r.variant_short $arrow.l$ #r.control_short],
+        [#abbrev_species(r.variant_organism) $arrow.l$ #abbrev_species(r.control_organism)],
         [#r.reassigned_aa],
         [#{
           let v = upper(r.variant_compartment.at(0))

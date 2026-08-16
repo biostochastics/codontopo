@@ -49,10 +49,12 @@ credentials.json
 *.pem
 *.key
 
-# --- Published bundles and publisher-facing docs (excluded from git;
-#     regenerable via `bash scripts/build_publisher_release.sh`) ---
+# --- Compiled outputs (regenerable via `bash scripts/build_publisher_release.sh`).
+#     Kept in git: output/*.typ (manuscript, supplement, corrections ledger,
+#     response letter), output/*.json (analysis outputs), output/tables/*.csv,
+#     output/figures/*.png|*.tiff, and the markdown ledger + release notes at
+#     docs/publisher/. Excluded: compiled PDFs and the published-bundle folder. ---
 output/publisher_deliverable/
-docs/publisher/
 output/*.pdf
 
 # --- Hypothesis-driven test cache ---
